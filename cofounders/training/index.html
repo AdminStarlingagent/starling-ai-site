@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cofounders — Training Schedule</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink: '#050607',
+          panel: '#0B0E10',
+          panel2: '#11161A',
+          cyan: '#1FD8E6',
+          cyanbright: '#65EAF2',
+          line: '#1E262B',
+          text: '#E9EEF0',
+          muted: '#899298',
+        },
+        fontFamily: {
+          display: ['Archivo', 'system-ui', 'sans-serif'],
+          body: ['Inter', 'system-ui', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: #050607;
+    background-image:
+      radial-gradient(120% 80% at 50% -10%, rgba(31,216,230,0.10), transparent 60%),
+      linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
+    background-size: auto, 46px 46px, 46px 46px;
+    color: #E9EEF0;
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .font-display { font-family: 'Archivo', sans-serif; }
+  .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+  .clock-glow { text-shadow: 0 0 18px rgba(31,216,230,0.45); }
+
+  /* Live pulse dot */
+  .live-dot { position: relative; }
+  .live-dot::before {
+    content: ''; position: absolute; inset: -5px; border-radius: 9999px;
+    background: rgba(31,216,230,0.55); animation: pulsering 1.8s ease-out infinite;
+  }
+  @keyframes pulsering {
+    0%   { transform: scale(0.6); opacity: 0.8; }
+    100% { transform: scale(2.2); opacity: 0; }
+  }
+
+  /* Session cards */
+  .card {
+    position: relative; background: #0B0E10; border: 1px solid #1E262B;
+    border-radius: 14px; overflow: hidden;
+    transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+  }
+  .card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: linear-gradient(#1FD8E6, #1FD8E6); opacity: .5; transition: opacity .22s ease;
+  }
+  .card:hover {
+    transform: translateY(-4px); border-color: rgba(31,216,230,0.5);
+    box-shadow: 0 14px 40px -18px rgba(31,216,230,0.55);
+  }
+  .card:hover::before { opacity: 1; }
+  .card.is-live {
+    border-color: rgba(31,216,230,0.85);
+    box-shadow: 0 0 0 1px rgba(31,216,230,0.5), 0 16px 46px -20px rgba(31,216,230,0.7);
+  }
+  .card.is-live::before { opacity: 1; width: 4px; }
+
+  /* Join buttons */
+  .btn-join {
+    display: inline-flex; align-items: center; gap: .5rem; font-family: 'Archivo', sans-serif;
+    font-weight: 700; font-size: .82rem; letter-spacing: .04em; text-transform: uppercase;
+    padding: .6rem 1rem; border-radius: 9px; transition: all .18s ease; white-space: nowrap;
+  }
+  .btn-ghost { color: #1FD8E6; border: 1px solid rgba(31,216,230,0.4); background: transparent; }
+  .btn-ghost:hover { border-color: #1FD8E6; background: rgba(31,216,230,0.08); }
+  .btn-solid { color: #04181B; background: #1FD8E6; border: 1px solid #1FD8E6; }
+  .btn-solid:hover { background: #65EAF2; box-shadow: 0 8px 24px -10px rgba(31,216,230,0.8); }
+  .btn-join .arrow { transition: transform .18s ease; }
+  .btn-join:hover .arrow { transform: translateX(3px); }
+
+  /* Chips */
+  .chip {
+    display: inline-flex; align-items: center; gap: .4rem; font-family: 'JetBrains Mono', monospace;
+    font-size: .62rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    padding: .25rem .5rem; border-radius: 6px;
+  }
+  .chip-live { color: #04181B; background: #1FD8E6; }
+  .chip-next { color: #1FD8E6; border: 1px solid rgba(31,216,230,0.45); }
+  .chip-note { color: #899298; border: 1px solid #1E262B; }
+
+  /* Zone toggle */
+  .zone-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: .72rem; font-weight: 700; letter-spacing: .1em;
+    padding: .4rem .75rem; border-radius: 7px; color: #899298; transition: all .15s ease;
+  }
+  .zone-btn.active { color: #04181B; background: #1FD8E6; }
+  .zone-btn:not(.active):hover { color: #E9EEF0; background: rgba(255,255,255,0.04); }
+
+  /* Reveal on load */
+  .reveal { opacity: 0; transform: translateY(10px); animation: rise .5s ease forwards; }
+  @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+
+  :focus-visible { outline: 2px solid #1FD8E6; outline-offset: 2px; border-radius: 4px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { animation: none; opacity: 1; transform: none; }
+    .live-dot::before { animation: none; }
+    .card { transition: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body class="min-h-screen">
+
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-7">
+
+    <!-- Top bar: wordmark + live clock -->
+    <header class="flex items-center justify-between gap-4 pb-7 border-b border-line">
+      <div class="flex items-center gap-3">
+        <svg width="38" height="38" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <circle cx="20" cy="20" r="18.5" stroke="#1FD8E6" stroke-width="1.6"/>
+          <text x="20" y="20" text-anchor="middle" dominant-baseline="central"
+                font-family="Archivo, sans-serif" font-weight="800" font-size="13" fill="#1FD8E6"
+                letter-spacing="0.5">CO</text>
+        </svg>
+        <span class="font-display font-extrabold tracking-[0.18em] text-sm sm:text-base">COFOUNDERS</span>
+      </div>
+      <div class="text-right">
+        <div class="font-mono text-cyan clock-glow text-lg sm:text-2xl leading-none" id="clock">--:--:--</div>
+        <div class="font-mono text-[10px] sm:text-xs text-muted tracking-[0.2em] mt-1" id="clock-label">CENTRAL</div>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="pt-9 pb-7">
+      <p class="font-mono text-cyan text-xs tracking-[0.3em] mb-3">LIVE COACHING · ROLE PLAY · DIAL SESSIONS</p>
+      <h1 class="font-display font-black leading-[0.92] tracking-tight text-5xl sm:text-7xl">
+        TRAINING<br/><span class="text-cyan">SCHEDULE</span>
+      </h1>
+      <p class="text-muted mt-5 max-w-xl text-[15px] leading-relaxed">
+        Every call the team runs each week, in one place. See what's live right now, what's up next, and jump straight into the room.
+      </p>
+    </section>
+
+    <!-- Status board (signature) -->
+    <section id="status-board"
+      class="reveal bg-panel2 border border-line rounded-2xl px-5 py-5 sm:px-7 sm:py-6 mb-9"
+      style="animation-delay:.05s">
+      <!-- populated by JS -->
+      <div class="text-muted font-mono text-sm">Checking the schedule…</div>
+    </section>
+
+    <!-- Zone toggle -->
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+      <div class="flex items-center gap-1 bg-panel border border-line rounded-xl p-1">
+        <button class="zone-btn" data-zone="PT">PT</button>
+        <button class="zone-btn active" data-zone="CT">CT</button>
+        <button class="zone-btn" data-zone="ET">ET</button>
+      </div>
+      <p class="font-mono text-[11px] text-muted tracking-wider">
+        TIMES SHOWN IN <span id="zone-readout" class="text-cyan">CENTRAL</span> · CALLS RUN ON CENTRAL TIME
+      </p>
+    </div>
+
+    <!-- Daily -->
+    <section class="mb-12">
+      <div class="flex items-center gap-3 mb-5">
+        <span class="w-2 h-2 rounded-full bg-cyan"></span>
+        <h2 class="font-display font-extrabold text-xl tracking-wide">DAILY</h2>
+        <span class="font-mono text-xs text-muted tracking-widest">MON–FRI · CORE REPS</span>
+        <span class="flex-1 h-px bg-line ml-2"></span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="daily-grid"></div>
+    </section>
+
+    <!-- Weekly -->
+    <section class="mb-14">
+      <div class="flex items-center gap-3 mb-5">
+        <span class="w-2 h-2 rounded-full bg-cyan"></span>
+        <h2 class="font-display font-extrabold text-xl tracking-wide">WEEKLY CLASSES</h2>
+        <span class="font-mono text-xs text-muted tracking-widest">BY THE DAY</span>
+        <span class="flex-1 h-px bg-line ml-2"></span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="weekly-grid"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-line pt-6 pb-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <p class="text-muted text-xs max-w-md leading-relaxed">
+        Times are listed as published by Cofounders. Sessions can change — confirm with your team lead if a room looks off.
+      </p>
+      <p class="font-mono text-[10px] text-muted tracking-[0.18em]">
+        ASSEMBLED FOR THE JASON AGUIRRE GROUP · eXp REALTY
+      </p>
+    </footer>
+
+  </div>
+
+<script>
+  // ---- Session data (single source of truth) ----
+  // Zoom rooms on 9207040289 share one passcode — the ?pwd= link makes them one-click.
+  // The two 89247419100 links are the bare format; if they prompt for a passcode,
+  // swap in the full ...?pwd= link from a mentor email.
+  const sessions = [
+    // DAILY (Mon–Fri)
+    { id:'breakfast', group:'daily', eyebrow:'MON–FRI', order:1,
+      title:'Breakfast Club — Sales Role Play', host:'Chad Cooley', platform:'Zoom',
+      desc:'Your sales gym. Master the conversation to lead generate, convert, and handle objections — building the reps and systems behind more listings and buyers.',
+      times:{ PT:'7:30–8:00 AM', CT:'9:30–10:00 AM', ET:'10:30–11:00 AM' }, ctStart:9.5, ctEnd:10,
+      url:'https://us02web.zoom.us/j/89247419100' },
+
+    { id:'paidinfull', group:'daily', eyebrow:'MON–FRI', order:2,
+      title:'Paid In Full — Open Dial Session', host:'Blake Gleiberman', platform:'Zoom',
+      desc:'Open dial session — call every lead source alongside your peers. Show up three hours a day. Accountability equals execution.',
+      times:{ PT:'8:00–11:00 AM', CT:'10:00 AM–1:00 PM', ET:'11:00 AM–2:00 PM' }, ctStart:10, ctEnd:13,
+      url:'https://us02web.zoom.us/j/89247419100' },
+
+    { id:'agentsupport', group:'daily', eyebrow:'MON–FRI', order:3,
+      title:'Agent Support Call', host:'Michelle Wilson & Chad Cooley', platform:'Zoom',
+      desc:'Build your road map and align resources to your goals with Michelle and Cooley. Set aside every morning — jump in any day you need a hand.',
+      times:{ PT:'8:30–9:00 AM', CT:'10:30–11:00 AM', ET:'11:30 AM–12:00 PM' }, ctStart:10.5, ctEnd:11,
+      url:'https://us06web.zoom.us/j/6107019685' },
+
+    // WEEKLY
+    { id:'builders', group:'weekly', day:'mon', eyebrow:'MONDAY', order:1,
+      title:"Builder's Club", host:'Michelle Wilson & Chad Cooley', platform:'Zoom',
+      desc:'Leverage the platform to build passive income and attract agents. The exact system to duplicate — with live agent-attraction role play and objection handling.',
+      times:{ PT:'12:00–1:00 PM', CT:'2:00–3:00 PM', ET:'3:00–4:00 PM' }, ctStart:14, ctEnd:15,
+      url:'https://us02web.zoom.us/j/9207040289?pwd=Zmk5WjE5cUo2cElKWFp4MXNQM3J0UT09' },
+
+    { id:'newagent', group:'weekly', day:'mon', eyebrow:'MONDAY', order:2,
+      title:'New Agent Education / Live Scenario Workshop', host:'James Hemphill', platform:'Google Meet',
+      desc:'New to real estate? Our top mentor breaks down the industry, introduces key vendors and partners, and works live scenarios and Q&A so you can learn and go.',
+      times:{ PT:'1:00–2:00 PM', CT:'3:00–4:00 PM', ET:'4:00–5:00 PM' }, ctStart:15, ctEnd:16,
+      url:'https://meet.google.com/pbz-ette-rzk' },
+
+    { id:'masterclass', group:'weekly', day:'tue', eyebrow:'TUESDAY', order:1,
+      title:'Weekly Master Class', host:'Michelle Wilson & Chad Cooley', platform:'Zoom',
+      desc:'The pulse of the market and the buyer/seller conversations moving business forward. Twice a month, mega agents share the exact systems, scripts, and blueprints.',
+      times:{ PT:'11:00 AM–12:00 PM', CT:'1:00–2:00 PM', ET:'2:00–3:00 PM' }, ctStart:13, ctEnd:14,
+      url:'https://us02web.zoom.us/j/9207040289?pwd=Zmk5WjE5cUo2cElKWFp4MXNQM3J0UT09' },
+
+    { id:'conversion', group:'weekly', day:'wed', eyebrow:'WEDNESDAY', order:1,
+      title:'Conversion King', host:'Chris Hardee', platform:'Zoom',
+      desc:'Listing presentation mastery. The structure, the pricing strategy, and the closing process to convert 80%+ of every appointment you walk into.',
+      times:{ PT:'11:00 AM–12:00 PM', CT:'1:00–2:00 PM', ET:'2:00–3:00 PM' }, ctStart:13, ctEnd:14,
+      url:'https://us02web.zoom.us/j/9207040289?pwd=Zmk5WjE5cUo2cElKWFp4MXNQM3J0UT09' },
+
+    { id:'profit', group:'weekly', day:'thu', eyebrow:'THURSDAY', order:1, note:'BI-WEEKLY',
+      title:'The Profit Engine', host:'Andrew Becker', platform:'Zoom',
+      desc:'Systems and processes to set up, organize, and optimize your business — grow, scale, increase profit, and buy back your time.',
+      times:{ PT:'11:00 AM–12:00 PM', CT:'1:00–2:00 PM', ET:'2:00–3:00 PM' }, ctStart:13, ctEnd:14,
+      url:'https://us02web.zoom.us/j/9207040289?pwd=Zmk5WjE5cUo2cElKWFp4MXNQM3J0UT09' },
+  ];
+
+  const ZONES = {
+    PT: { tz:'America/Los_Angeles', label:'PACIFIC' },
+    CT: { tz:'America/Chicago',     label:'CENTRAL' },
+    ET: { tz:'America/New_York',    label:'EASTERN' },
+  };
+  const ORDER = ['sun','mon','tue','wed','thu','fri','sat'];
+  let zone = 'CT';
+
+  // ---- Helpers ----
+  function platformIcon(p){
+    return p === 'Google Meet'
+      ? '<span class="font-mono text-[11px] text-muted">◎ Google Meet</span>'
+      : '<span class="font-mono text-[11px] text-muted">▣ Zoom</span>';
+  }
+
+  function cardHTML(s){
+    const noteChip = s.note ? `<span class="chip chip-note">${s.note}</span>` : '';
+    return `
+      <article class="card p-5 flex flex-col" data-id="${s.id}">
+        <div class="flex items-start justify-between gap-2 mb-3">
+          <span class="font-mono text-[11px] text-cyan tracking-[0.16em]">${s.eyebrow}</span>
+          <span class="flex items-center gap-2" data-chip-slot>${noteChip}</span>
+        </div>
+        <div class="font-mono text-text text-lg mb-1" data-time>
+          ${s.times[zone]} <span class="text-muted text-xs">${zone}</span>
+        </div>
+        <h3 class="font-display font-bold text-[1.18rem] leading-tight mb-1.5">${s.title}</h3>
+        <div class="flex items-center gap-2 mb-3 text-xs text-muted">
+          <span>${s.host}</span><span class="text-line">·</span>${platformIcon(s.platform)}
+        </div>
+        <p class="text-muted text-[13.5px] leading-relaxed mb-5 flex-1">${s.desc}</p>
+        <a href="${s.url}" target="_blank" rel="noopener noreferrer"
+           class="btn-join btn-ghost self-start" data-join>
+          Join room <span class="arrow">→</span>
+        </a>
+      </article>`;
+  }
+
+  function renderGrids(){
+    const daily = sessions.filter(s => s.group === 'daily').sort((a,b)=>a.order-b.order);
+    const weekly = sessions.filter(s => s.group === 'weekly')
+      .sort((a,b)=> (ORDER.indexOf(a.day)-ORDER.indexOf(b.day)) || (a.order-b.order));
+    document.getElementById('daily-grid').innerHTML = daily.map(cardHTML).join('');
+    document.getElementById('weekly-grid').innerHTML = weekly.map(cardHTML).join('');
+  }
+
+  function refreshCardTimes(){
+    document.querySelectorAll('[data-id]').forEach(el=>{
+      const s = sessions.find(x=>x.id===el.dataset.id);
+      el.querySelector('[data-time]').innerHTML =
+        `${s.times[zone]} <span class="text-muted text-xs">${zone}</span>`;
+    });
+  }
+
+  // Current time in a given zone -> {dayKey, hours(decimal), hhmmss}
+  function nowIn(tz){
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: tz, weekday:'short', hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false
+    }).formatToParts(new Date());
+    const get = t => parts.find(p=>p.type===t)?.value;
+    let h = parseInt(get('hour'),10); if (h === 24) h = 0;
+    const m = parseInt(get('minute'),10), sec = parseInt(get('second'),10);
+    return {
+      dayKey: get('weekday').toLowerCase().slice(0,3),
+      hours: h + m/60 + sec/3600,
+      hhmmss: `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`
+    };
+  }
+
+  function isScheduledOn(s, dayKey){
+    if (s.group === 'daily') return ['mon','tue','wed','thu','fri'].includes(dayKey);
+    return s.day === dayKey;
+  }
+
+  function relTime(deltaHours){
+    const mins = Math.round(deltaHours*60);
+    if (mins < 60) return `in ${mins} min`;
+    const h = Math.floor(mins/60), m = mins%60;
+    return m ? `in ${h}h ${m}m` : `in ${h}h`;
+  }
+
+  function updateClock(){
+    const n = nowIn(ZONES[zone].tz);
+    document.getElementById('clock').textContent = n.hhmmss;
+    document.getElementById('clock-label').textContent = ZONES[zone].label;
+  }
+
+  function updateStatus(){
+    const ct = nowIn('America/Chicago');          // logic always anchored to Central
+    const todayIdx = ORDER.indexOf(ct.dayKey);
+
+    // live = scheduled today AND within window
+    const live = sessions.filter(s => isScheduledOn(s, ct.dayKey) && ct.hours >= s.ctStart && ct.hours < s.ctEnd);
+
+    // next = soonest not-yet-started occurrence within 7 days
+    let next = null, nextDelta = Infinity;
+    for (let off = 0; off <= 7; off++){
+      const dayKey = ORDER[(todayIdx + off) % 7];
+      const todays = sessions.filter(s => isScheduledOn(s, dayKey)).sort((a,b)=>a.ctStart-b.ctStart);
+      for (const s of todays){
+        const delta = off*24 + s.ctStart - ct.hours;
+        if (delta > 0.0001 && delta < nextDelta){ nextDelta = delta; next = s; }
+      }
+      if (next && off >= 1) break; // found in a future day, no need to scan further
+      if (next && off === 0) break;
+    }
+
+    // reset card chips/state
+    document.querySelectorAll('[data-id]').forEach(el=>{
+      el.classList.remove('is-live');
+      const s = sessions.find(x=>x.id===el.dataset.id);
+      el.querySelector('[data-chip-slot]').innerHTML = s.note ? `<span class="chip chip-note">${s.note}</span>` : '';
+      const join = el.querySelector('[data-join]');
+      join.classList.remove('btn-solid'); join.classList.add('btn-ghost');
+    });
+
+    // mark live cards
+    live.forEach(s=>{
+      const el = document.querySelector(`[data-id="${s.id}"]`);
+      if (!el) return;
+      el.classList.add('is-live');
+      el.querySelector('[data-chip-slot]').innerHTML =
+        `<span class="chip chip-live"><span class="w-1.5 h-1.5 rounded-full bg-[#04181B] inline-block"></span>LIVE</span>`;
+      const join = el.querySelector('[data-join]');
+      join.classList.remove('btn-ghost'); join.classList.add('btn-solid');
+    });
+
+    // mark next card (only if not currently live)
+    if (next && !live.includes(next)){
+      const el = document.querySelector(`[data-id="${next.id}"]`);
+      if (el && !el.classList.contains('is-live')){
+        const slot = el.querySelector('[data-chip-slot]');
+        slot.innerHTML = `<span class="chip chip-next">UP NEXT</span>` + slot.innerHTML;
+      }
+    }
+
+    // build status board
+    const board = document.getElementById('status-board');
+    let html = '';
+
+    if (live.length){
+      const items = live.map(s => `
+        <div class="flex flex-wrap items-center justify-between gap-3 py-2">
+          <div class="min-w-0">
+            <div class="font-display font-bold text-lg leading-tight truncate">${s.title}</div>
+            <div class="font-mono text-xs text-muted mt-0.5">${s.times[zone]} ${zone} · ${s.host}</div>
+          </div>
+          <a href="${s.url}" target="_blank" rel="noopener noreferrer" class="btn-join btn-solid">Join now <span class="arrow">→</span></a>
+        </div>`).join('<div class="h-px bg-line my-1"></div>');
+
+      html = `
+        <div class="flex items-center gap-2.5 mb-3">
+          <span class="live-dot inline-block w-2.5 h-2.5 rounded-full bg-cyan"></span>
+          <span class="font-mono text-cyan text-xs tracking-[0.25em]">LIVE NOW</span>
+        </div>
+        ${items}`;
+      if (next && !live.includes(next)){
+        html += `
+          <div class="h-px bg-line mt-3 mb-3"></div>
+          <div class="font-mono text-[11px] text-muted tracking-wider">
+            UP NEXT · <span class="text-text">${next.title}</span> · ${next.times[zone]} ${zone} · ${relTime(nextDelta)}
+          </div>`;
+      }
+    } else if (next){
+      html = `
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div class="min-w-0">
+            <div class="flex items-center gap-2.5 mb-2">
+              <span class="inline-block w-2.5 h-2.5 rounded-full bg-muted"></span>
+              <span class="font-mono text-muted text-xs tracking-[0.25em]">UP NEXT · ${relTime(nextDelta).toUpperCase()}</span>
+            </div>
+            <div class="font-display font-bold text-xl leading-tight">${next.title}</div>
+            <div class="font-mono text-xs text-muted mt-1">${next.eyebrow} · ${next.times[zone]} ${zone} · ${next.host}</div>
+          </div>
+          <a href="${next.url}" target="_blank" rel="noopener noreferrer" class="btn-join btn-ghost">Open room <span class="arrow">→</span></a>
+        </div>`;
+    } else {
+      html = `<div class="font-mono text-sm text-muted tracking-wider">No sessions scheduled in the next few days.</div>`;
+    }
+
+    board.innerHTML = html;
+  }
+
+  // ---- Zone toggle wiring ----
+  document.querySelectorAll('.zone-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.zone-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      zone = btn.dataset.zone;
+      document.getElementById('zone-readout').textContent = ZONES[zone].label;
+      refreshCardTimes();
+      updateClock();
+      updateStatus();
+    });
+  });
+
+  // ---- Init ----
+  renderGrids();
+  updateClock();
+  updateStatus();
+  setInterval(updateClock, 1000);
+  setInterval(updateStatus, 30000);
+</script>
+</body>
+</html>
