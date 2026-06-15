@@ -17,8 +17,8 @@
       extend: {
         colors: {
           ink:   { DEFAULT:'#0C0D10', 900:'#0C0D10', 850:'#101218', 800:'#15171E', 700:'#1C1F28', 600:'#272B36' },
-          gold:  { DEFAULT:'#D7B36B', 200:'#F0E2C2', 300:'#E7CE95', 400:'#D7B36B', 500:'#C99B45', 600:'#A87E33' },
-          azure: { DEFAULT:'#5E9BFF', 300:'#9DC0FF', 400:'#5E9BFF', 500:'#3D82F5' },
+          cyan:  { DEFAULT:'#22E3DA', 200:'#BFF8F3', 300:'#7DEFE8', 400:'#22E3DA', 500:'#10C6BD', 600:'#0CA59D' },
+          teal: { DEFAULT:'#15A9A1', 300:'#5FD6CE', 400:'#15A9A1', 500:'#0E837D' },
           mist:  '#E9EBF1',
         },
         fontFamily: {
@@ -26,8 +26,8 @@
           sans: ['Inter','system-ui','-apple-system','sans-serif'],
         },
         boxShadow: {
-          'glow-gold': '0 0 50px -12px rgba(215,179,107,0.55)',
-          'glow-azure': '0 0 50px -14px rgba(94,155,255,0.5)',
+          'glow-cyan': '0 0 50px -12px rgba(34,227,218,0.55)',
+          'glow-teal': '0 0 50px -14px rgba(21,169,161,0.5)',
           'card': '0 1px 0 0 rgba(255,255,255,0.04) inset, 0 30px 60px -30px rgba(0,0,0,0.7)',
         },
       }
@@ -41,13 +41,13 @@
 
   .font-display { font-family: 'Fraunces', Georgia, serif; letter-spacing: -0.02em; font-optical-sizing: auto; }
 
-  /* gold gradient text */
-  .text-gradient-gold {
-    background: linear-gradient(92deg, #F0E2C2 0%, #D7B36B 45%, #C99B45 100%);
+  /* cyan gradient text */
+  .text-gradient-cyan {
+    background: linear-gradient(92deg, #BFF8F3 0%, #22E3DA 45%, #10C6BD 100%);
     -webkit-background-clip: text; background-clip: text; color: transparent;
   }
-  .text-gradient-azure {
-    background: linear-gradient(92deg, #9DC0FF 0%, #5E9BFF 100%);
+  .text-gradient-teal {
+    background: linear-gradient(92deg, #5FD6CE 0%, #15A9A1 100%);
     -webkit-background-clip: text; background-clip: text; color: transparent;
   }
 
@@ -78,7 +78,7 @@
   .marquee { animation: scroll 34s linear infinite; }
   @keyframes scroll { from { transform: translateX(0);} to { transform: translateX(-50%);} }
 
-  a:focus-visible, button:focus-visible { outline: 2px solid #D7B36B; outline-offset: 2px; border-radius: 6px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid #22E3DA; outline-offset: 2px; border-radius: 6px; }
 
   @media (prefers-reduced-motion: reduce) {
     .reveal { opacity:1 !important; transform:none !important; transition:none; }
@@ -89,13 +89,13 @@
 </style>
 </head>
 
-<body class="bg-ink-900 text-mist font-sans antialiased selection:bg-gold-400/30 selection:text-white">
+<body class="bg-ink-900 text-mist font-sans antialiased selection:bg-cyan-400/30 selection:text-white">
 
 <!-- ambient background -->
 <div aria-hidden="true" class="pointer-events-none fixed inset-0 z-0">
   <div class="absolute inset-0 bg-grid"></div>
-  <div class="absolute -top-40 left-1/2 h-[640px] w-[1100px] -translate-x-1/2 rounded-full bg-gold-500/12 blur-[140px]"></div>
-  <div class="absolute top-[420px] -left-40 h-[420px] w-[520px] rounded-full bg-azure-500/10 blur-[150px]"></div>
+  <div class="absolute -top-40 left-1/2 h-[640px] w-[1100px] -translate-x-1/2 rounded-full bg-cyan-500/12 blur-[140px]"></div>
+  <div class="absolute top-[420px] -left-40 h-[420px] w-[520px] rounded-full bg-teal-500/10 blur-[150px]"></div>
 </div>
 
 <!-- ============ NAV ============ -->
@@ -105,8 +105,8 @@
     <a href="#top" class="group flex items-center gap-2.5">
       <span class="grid h-9 w-9 place-items-center">
         <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="3" y="7" width="17" height="17" rx="4.5" stroke="#D7B36B" stroke-width="2.2"/>
-          <rect x="14" y="10" width="17" height="17" rx="4.5" fill="#0C0D10" stroke="#5E9BFF" stroke-width="2.2"/>
+          <rect x="3" y="7" width="17" height="17" rx="4.5" stroke="#22E3DA" stroke-width="2.2"/>
+          <rect x="14" y="10" width="17" height="17" rx="4.5" fill="#0C0D10" stroke="#15A9A1" stroke-width="2.2"/>
         </svg>
       </span>
       <span class="font-display text-[22px] font-700 leading-none text-white">CoFounders</span>
@@ -125,7 +125,7 @@
     <div class="hidden items-center gap-2 md:flex">
       <!-- TODO: point to CoFounders CRM login URL -->
       <a href="#" class="rounded-lg px-3.5 py-2 text-sm font-medium text-mist/80 transition hover:text-white">Log in</a>
-      <a href="#pricing" class="rounded-lg bg-gold-400 px-4 py-2 text-sm font-bold text-ink-900 shadow-glow-gold transition hover:bg-gold-300">Get Started</a>
+      <a href="#pricing" class="rounded-lg bg-cyan-400 px-4 py-2 text-sm font-bold text-ink-900 shadow-glow-cyan transition hover:bg-cyan-300">Get Started</a>
     </div>
 
     <!-- mobile button -->
@@ -144,7 +144,7 @@
       <a href="#integrations" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-mist/80 transition hover:bg-white/5 hover:text-white">Integrations</a>
       <div class="flex items-center gap-2 pt-2">
         <a href="#" class="flex-1 rounded-lg px-3 py-2.5 text-center text-sm font-medium text-mist/80 transition hover:bg-white/5 hover:text-white">Log in</a>
-        <a href="#pricing" class="flex-1 rounded-lg bg-gold-400 px-3 py-2.5 text-center text-sm font-bold text-ink-900">Get Started</a>
+        <a href="#pricing" class="flex-1 rounded-lg bg-cyan-400 px-3 py-2.5 text-center text-sm font-bold text-ink-900">Get Started</a>
       </div>
     </div>
   </div>
@@ -155,14 +155,14 @@
   <!-- ============ HERO ============ -->
   <section class="mx-auto max-w-7xl px-5 pt-10 sm:px-8 sm:pt-16">
     <div class="mx-auto max-w-4xl text-center">
-      <div class="reveal mx-auto inline-flex items-center gap-2 rounded-full border border-gold-400/25 bg-gold-400/5 px-3.5 py-1.5 text-[13px] font-medium text-gold-200">
-        <span class="h-1.5 w-1.5 rounded-full bg-gold-400"></span>
+      <div class="reveal mx-auto inline-flex items-center gap-2 rounded-full border border-cyan-400/25 bg-cyan-400/5 px-3.5 py-1.5 text-[13px] font-medium text-cyan-200">
+        <span class="h-1.5 w-1.5 rounded-full bg-cyan-400"></span>
         The AI growth engine for CoFounders agents
       </div>
 
       <h1 class="reveal mt-7 font-display text-[2.7rem] font-600 leading-[1.04] text-white sm:text-6xl lg:text-[4.6rem] lg:leading-[1.02]">
         Every lead worked.<br>
-        <span class="text-gradient-gold">Every appointment booked.</span>
+        <span class="text-gradient-cyan">Every appointment booked.</span>
       </h1>
 
       <p class="reveal mx-auto mt-6 max-w-2xl text-base leading-relaxed text-mist/65 sm:text-lg">
@@ -172,7 +172,7 @@
       </p>
 
       <div class="reveal mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-        <a href="#pricing" class="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gold-400 px-6 py-3.5 text-base font-bold text-ink-900 shadow-glow-gold transition hover:bg-gold-300 sm:w-auto">
+        <a href="#pricing" class="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-cyan-400 px-6 py-3.5 text-base font-bold text-ink-900 shadow-glow-cyan transition hover:bg-cyan-300 sm:w-auto">
           Get Started
           <svg width="18" height="18" fill="none" viewBox="0 0 24 24" class="transition group-hover:translate-x-0.5"><path stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/></svg>
         </a>
@@ -186,15 +186,15 @@
     <!-- real CoFounders stats -->
     <div class="reveal mx-auto mt-14 grid max-w-3xl grid-cols-3 divide-x divide-white/10 rounded-2xl border border-white/10 bg-ink-850/60">
       <div class="px-3 py-5 text-center sm:py-6">
-        <div class="font-display text-2xl font-700 text-white sm:text-4xl">810<span class="text-gold-400">+</span></div>
+        <div class="font-display text-2xl font-700 text-white sm:text-4xl">810<span class="text-cyan-400">+</span></div>
         <div class="mt-1 text-[11px] font-semibold uppercase tracking-wider text-mist/45 sm:text-xs">Agent Partners</div>
       </div>
       <div class="px-3 py-5 text-center sm:py-6">
-        <div class="font-display text-2xl font-700 text-white sm:text-4xl">4,900<span class="text-gold-400">+</span></div>
+        <div class="font-display text-2xl font-700 text-white sm:text-4xl">4,900<span class="text-cyan-400">+</span></div>
         <div class="mt-1 text-[11px] font-semibold uppercase tracking-wider text-mist/45 sm:text-xs">YTD Transactions</div>
       </div>
       <div class="px-3 py-5 text-center sm:py-6">
-        <div class="font-display text-2xl font-700 text-white sm:text-4xl">$2.1B<span class="text-gold-400">+</span></div>
+        <div class="font-display text-2xl font-700 text-white sm:text-4xl">$2.1B<span class="text-cyan-400">+</span></div>
         <div class="mt-1 text-[11px] font-semibold uppercase tracking-wider text-mist/45 sm:text-xs">YTD Volume</div>
       </div>
     </div>
@@ -220,7 +220,7 @@
         <!-- conversation -->
         <div class="space-y-3 p-5 sm:p-7">
           <div class="b flex items-center gap-2 text-[12px] text-mist/40">
-            <span class="rounded-full bg-azure-500/15 px-2 py-0.5 font-semibold text-azure-300">New lead · Zillow</span>
+            <span class="rounded-full bg-teal-500/15 px-2 py-0.5 font-semibold text-teal-300">New lead · Zillow</span>
             <span>responded in 0:08</span>
           </div>
 
@@ -232,8 +232,8 @@
           </div>
           <!-- AI -->
           <div class="b flex justify-end">
-            <div class="max-w-[82%] rounded-2xl rounded-br-md border border-gold-400/25 bg-gradient-to-br from-gold-400/20 to-gold-500/5 px-3.5 py-2.5 text-[14px] leading-relaxed text-white">
-              Hi Jordan! Yes it is 🙌 Would you like to see it this week? I have <span class="font-semibold text-gold-200">Thursday 5:30pm</span> or <span class="font-semibold text-gold-200">Saturday 11:00am</span> open.
+            <div class="max-w-[82%] rounded-2xl rounded-br-md border border-cyan-400/25 bg-gradient-to-br from-cyan-400/20 to-cyan-500/5 px-3.5 py-2.5 text-[14px] leading-relaxed text-white">
+              Hi Jordan! Yes it is 🙌 Would you like to see it this week? I have <span class="font-semibold text-cyan-200">Thursday 5:30pm</span> or <span class="font-semibold text-cyan-200">Saturday 11:00am</span> open.
             </div>
           </div>
           <!-- incoming -->
@@ -244,8 +244,8 @@
           </div>
           <!-- AI -->
           <div class="b flex justify-end">
-            <div class="max-w-[82%] rounded-2xl rounded-br-md border border-gold-400/25 bg-gradient-to-br from-gold-400/20 to-gold-500/5 px-3.5 py-2.5 text-[14px] leading-relaxed text-white">
-              You're booked for <span class="font-semibold text-gold-200">Sat 11:00am</span> ✅ I'll text a reminder and the address. Quick one — what's most important in your next home?
+            <div class="max-w-[82%] rounded-2xl rounded-br-md border border-cyan-400/25 bg-gradient-to-br from-cyan-400/20 to-cyan-500/5 px-3.5 py-2.5 text-[14px] leading-relaxed text-white">
+              You're booked for <span class="font-semibold text-cyan-200">Sat 11:00am</span> ✅ I'll text a reminder and the address. Quick one — what's most important in your next home?
             </div>
           </div>
           <!-- typing -->
@@ -261,7 +261,7 @@
         <!-- lead panel -->
         <div class="border-t border-white/10 bg-ink-800/50 p-5 sm:p-6 md:border-l md:border-t-0">
           <div class="flex items-center gap-3">
-            <div class="grid h-11 w-11 place-items-center rounded-full bg-gradient-to-br from-gold-400 to-gold-600 font-display text-base font-700 text-ink-900">JD</div>
+            <div class="grid h-11 w-11 place-items-center rounded-full bg-gradient-to-br from-cyan-400 to-cyan-600 font-display text-base font-700 text-ink-900">JD</div>
             <div>
               <div class="text-sm font-semibold text-white">Jordan Diaz</div>
               <div class="text-[12px] text-mist/45">New buyer lead</div>
@@ -273,7 +273,7 @@
             <div class="flex justify-between"><dt class="text-mist/45">Status</dt><dd class="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[12px] font-semibold text-emerald-300">Appointment set</dd></div>
             <div class="flex justify-between"><dt class="text-mist/45">Assigned to</dt><dd class="font-medium text-mist/85">You</dd></div>
           </dl>
-          <div class="mt-5 rounded-xl border border-gold-400/20 bg-gold-400/[0.06] p-3 text-[12.5px] leading-relaxed text-gold-100">
+          <div class="mt-5 rounded-xl border border-cyan-400/20 bg-cyan-400/[0.06] p-3 text-[12.5px] leading-relaxed text-cyan-100">
             Booked &amp; logged automatically — synced to your calendar and CRM.
           </div>
         </div>
@@ -312,7 +312,7 @@
   <!-- ============ SOLUTIONS ============ -->
   <section id="solutions" class="mx-auto mt-24 max-w-7xl px-5 sm:mt-32 sm:px-8">
     <div class="mx-auto max-w-2xl text-center">
-      <p class="reveal text-xs font-bold uppercase tracking-[0.28em] text-gold-400">One engine</p>
+      <p class="reveal text-xs font-bold uppercase tracking-[0.28em] text-cyan-400">One engine</p>
       <h2 class="reveal mt-3 font-display text-3xl font-600 leading-tight text-white sm:text-5xl">Every kind of agent.</h2>
       <p class="reveal mt-4 text-base text-mist/60">Solo, team, or brokerage — the same engine works your leads, your way.</p>
     </div>
@@ -320,15 +320,15 @@
     <div class="mt-12 grid gap-5 md:grid-cols-3">
       <!-- solo -->
       <div class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-7">
-        <div class="grid h-11 w-11 place-items-center rounded-xl bg-gold-400/10 text-gold-300">
+        <div class="grid h-11 w-11 place-items-center rounded-xl bg-cyan-400/10 text-cyan-300">
           <svg width="22" height="22" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm6 8a6 6 0 0 0-12 0"/></svg>
         </div>
         <h3 class="mt-5 font-display text-xl font-600 text-white">Solo agents</h3>
         <p class="mt-2 text-[14.5px] leading-relaxed text-mist/60">Never miss another lead. Your AI replies, qualifies, and books showings while you're with clients — so your pipeline keeps moving when you can't.</p>
       </div>
       <!-- teams -->
-      <div class="reveal rounded-2xl border border-gold-400/30 bg-gradient-to-b from-gold-400/[0.07] to-transparent p-7">
-        <div class="grid h-11 w-11 place-items-center rounded-xl bg-gold-400/15 text-gold-300">
+      <div class="reveal rounded-2xl border border-cyan-400/30 bg-gradient-to-b from-cyan-400/[0.07] to-transparent p-7">
+        <div class="grid h-11 w-11 place-items-center rounded-xl bg-cyan-400/15 text-cyan-300">
           <svg width="22" height="22" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm7 0a3 3 0 1 0 0-6M3 19a6 6 0 0 1 12 0m1.5-6A6 6 0 0 1 21 19"/></svg>
         </div>
         <h3 class="mt-5 font-display text-xl font-600 text-white">Teams</h3>
@@ -336,7 +336,7 @@
       </div>
       <!-- brokerages -->
       <div class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-7">
-        <div class="grid h-11 w-11 place-items-center rounded-xl bg-azure-500/10 text-azure-300">
+        <div class="grid h-11 w-11 place-items-center rounded-xl bg-teal-500/10 text-teal-300">
           <svg width="22" height="22" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 21V5l8-3 8 3v16M9 21v-5h6v5M8 9h.01M12 9h.01M16 9h.01"/></svg>
         </div>
         <h3 class="mt-5 font-display text-xl font-600 text-white">Brokerages &amp; team leaders</h3>
@@ -348,7 +348,7 @@
   <!-- ============ PRICING ============ -->
   <section id="pricing" class="mx-auto mt-24 max-w-7xl px-5 sm:mt-32 sm:px-8">
     <div class="mx-auto max-w-2xl text-center">
-      <p class="reveal text-xs font-bold uppercase tracking-[0.28em] text-gold-400">Pricing</p>
+      <p class="reveal text-xs font-bold uppercase tracking-[0.28em] text-cyan-400">Pricing</p>
       <h2 class="reveal mt-3 font-display text-3xl font-600 leading-tight text-white sm:text-5xl">Sign up in minutes.</h2>
       <p class="reveal mt-4 text-base text-mist/60">Start self-serve on any plan below. Want leads delivered too? That tier is built around a split you arrange directly with CoFounders.</p>
     </div>
@@ -363,14 +363,14 @@
           <span class="font-display text-4xl font-700 text-white">$50</span>
           <span class="text-sm text-mist/45">/mo</span>
         </div>
-        <p class="mt-1 text-[12px] font-medium text-gold-300">30-day free trial</p>
+        <p class="mt-1 text-[12px] font-medium text-cyan-300">30-day free trial</p>
         <!-- TODO: CRM checkout link -->
         <a href="#" class="mt-6 rounded-xl border border-white/15 bg-white/[0.03] px-4 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-white/[0.08]">Start free trial</a>
         <ul class="mt-6 space-y-2.5 text-[13.5px] text-mist/65">
-          <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> AI CRM &amp; smart pipeline</li>
-          <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> Lead capture from your sites</li>
-          <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> Contact &amp; deal management</li>
-          <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> Mobile app</li>
+          <li class="flex gap-2.5"><span class="mt-0.5 text-cyan-400">✓</span> AI CRM &amp; smart pipeline</li>
+          <li class="flex gap-2.5"><span class="mt-0.5 text-cyan-400">✓</span> Lead capture from your sites</li>
+          <li class="flex gap-2.5"><span class="mt-0.5 text-cyan-400">✓</span> Contact &amp; deal management</li>
+          <li class="flex gap-2.5"><span class="mt-0.5 text-cyan-400">✓</span> Mobile app</li>
         </ul>
       </div>
 
@@ -386,17 +386,17 @@
         <!-- TODO: Standard checkout link -->
         <a href="#" class="mt-6 rounded-xl border border-white/15 bg-white/[0.03] px-4 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-white/[0.08]">Get Started</a>
         <ul class="mt-6 space-y-2.5 text-[13.5px] text-mist/65">
-          <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> Everything in CRM</li>
-          <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> AI SMS that replies in seconds</li>
-          <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> 24/7 appointment booking</li>
-          <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> Core automations, done for you</li>
+          <li class="flex gap-2.5"><span class="mt-0.5 text-cyan-400">✓</span> Everything in CRM</li>
+          <li class="flex gap-2.5"><span class="mt-0.5 text-cyan-400">✓</span> AI SMS that replies in seconds</li>
+          <li class="flex gap-2.5"><span class="mt-0.5 text-cyan-400">✓</span> 24/7 appointment booking</li>
+          <li class="flex gap-2.5"><span class="mt-0.5 text-cyan-400">✓</span> Core automations, done for you</li>
         </ul>
       </div>
 
       <!-- Core (popular) -->
-      <div class="reveal relative flex flex-col rounded-2xl bg-gradient-to-b from-gold-400 via-gold-500 to-gold-600 p-px shadow-glow-gold">
+      <div class="reveal relative flex flex-col rounded-2xl bg-gradient-to-b from-cyan-400 via-cyan-500 to-cyan-600 p-px shadow-glow-cyan">
         <div class="flex flex-col rounded-[15px] bg-ink-850 p-6 h-full">
-          <span class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gold-400 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-ink-900">Most popular</span>
+          <span class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-cyan-400 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-ink-900">Most popular</span>
           <h3 class="font-display text-lg font-600 text-white">Core</h3>
           <p class="mt-1 text-[13px] text-mist/50">The full multi-channel engine.</p>
           <div class="mt-5 flex items-baseline gap-1">
@@ -405,32 +405,32 @@
           </div>
           <p class="mt-1 text-[12px] text-mist/40">No onboarding cost</p>
           <!-- TODO: Core checkout link -->
-          <a href="#" class="mt-6 rounded-xl bg-gold-400 px-4 py-2.5 text-center text-sm font-bold text-ink-900 transition hover:bg-gold-300">Get Started</a>
+          <a href="#" class="mt-6 rounded-xl bg-cyan-400 px-4 py-2.5 text-center text-sm font-bold text-ink-900 transition hover:bg-cyan-300">Get Started</a>
           <ul class="mt-6 space-y-2.5 text-[13.5px] text-mist/75">
-            <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> Everything in Standard</li>
-            <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> AI across SMS, email &amp; social</li>
-            <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> Database reactivation campaigns</li>
-            <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> Bilingual (English &amp; Spanish)</li>
-            <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> Priority support</li>
+            <li class="flex gap-2.5"><span class="mt-0.5 text-cyan-400">✓</span> Everything in Standard</li>
+            <li class="flex gap-2.5"><span class="mt-0.5 text-cyan-400">✓</span> AI across SMS, email &amp; social</li>
+            <li class="flex gap-2.5"><span class="mt-0.5 text-cyan-400">✓</span> Database reactivation campaigns</li>
+            <li class="flex gap-2.5"><span class="mt-0.5 text-cyan-400">✓</span> Bilingual (English &amp; Spanish)</li>
+            <li class="flex gap-2.5"><span class="mt-0.5 text-cyan-400">✓</span> Priority support</li>
           </ul>
         </div>
       </div>
 
       <!-- Leads / Revenue share — NO PRICE -->
-      <div class="reveal relative flex flex-col overflow-hidden rounded-2xl border border-azure-400/40 bg-gradient-to-b from-azure-500/[0.08] to-transparent p-6">
-        <span class="absolute right-4 top-4 rounded-full bg-azure-500/15 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-azure-300">Leads included</span>
+      <div class="reveal relative flex flex-col overflow-hidden rounded-2xl border border-teal-400/40 bg-gradient-to-b from-teal-500/[0.08] to-transparent p-6">
+        <span class="absolute right-4 top-4 rounded-full bg-teal-500/15 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-teal-300">Leads included</span>
         <h3 class="font-display text-lg font-600 text-white">Producer</h3>
         <p class="mt-1 text-[13px] text-mist/50">We bring the leads. You close.</p>
         <div class="mt-5">
-          <span class="font-display text-3xl font-700 text-gradient-azure">Let's talk</span>
+          <span class="font-display text-3xl font-700 text-gradient-teal">Let's talk</span>
         </div>
         <p class="mt-1 text-[12px] text-mist/45">Split arranged per agent — no flat price</p>
-        <a href="https://calendly.com/michellewilson-exp" target="_blank" rel="noopener" class="mt-6 rounded-xl bg-azure-500 px-4 py-2.5 text-center text-sm font-bold text-white transition hover:bg-azure-400">Talk to CoFounders</a>
+        <a href="https://calendly.com/michellewilson-exp" target="_blank" rel="noopener" class="mt-6 rounded-xl bg-teal-500 px-4 py-2.5 text-center text-sm font-bold text-white transition hover:bg-teal-400">Talk to CoFounders</a>
         <ul class="mt-6 space-y-2.5 text-[13.5px] text-mist/65">
-          <li class="flex gap-2.5"><span class="mt-0.5 text-azure-400">✓</span> Everything in Core</li>
-          <li class="flex gap-2.5"><span class="mt-0.5 text-azure-400">✓</span> Done-for-you leads into your AI</li>
-          <li class="flex gap-2.5"><span class="mt-0.5 text-azure-400">✓</span> Custom lead funnels built for you</li>
-          <li class="flex gap-2.5"><span class="mt-0.5 text-azure-400">✓</span> Performance-based — pay on results</li>
+          <li class="flex gap-2.5"><span class="mt-0.5 text-teal-400">✓</span> Everything in Core</li>
+          <li class="flex gap-2.5"><span class="mt-0.5 text-teal-400">✓</span> Done-for-you leads into your AI</li>
+          <li class="flex gap-2.5"><span class="mt-0.5 text-teal-400">✓</span> Custom lead funnels built for you</li>
+          <li class="flex gap-2.5"><span class="mt-0.5 text-teal-400">✓</span> Performance-based — pay on results</li>
         </ul>
       </div>
     </div>
@@ -440,7 +440,7 @@
   <!-- ============ FEATURES ============ -->
   <section id="features" class="mx-auto mt-24 max-w-7xl px-5 sm:mt-32 sm:px-8">
     <div class="mx-auto max-w-2xl text-center">
-      <p class="reveal text-xs font-bold uppercase tracking-[0.28em] text-gold-400">The platform</p>
+      <p class="reveal text-xs font-bold uppercase tracking-[0.28em] text-cyan-400">The platform</p>
       <h2 class="reveal mt-3 font-display text-3xl font-600 leading-tight text-white sm:text-5xl">Leverage that never clocks out.</h2>
       <p class="reveal mt-4 text-base text-mist/60">The systems CoFounders teaches — running automatically, every hour you can't.</p>
     </div>
@@ -448,32 +448,32 @@
     <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
       <!-- card -->
       <div class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
-        <div class="grid h-10 w-10 place-items-center rounded-lg bg-gold-400/10 text-gold-300"><svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m13 2-9 12h7l-2 8 9-12h-7l2-8Z"/></svg></div>
+        <div class="grid h-10 w-10 place-items-center rounded-lg bg-cyan-400/10 text-cyan-300"><svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m13 2-9 12h7l-2 8 9-12h-7l2-8Z"/></svg></div>
         <h3 class="mt-4 text-base font-bold text-white">Instant first response</h3>
         <p class="mt-1.5 text-[14px] leading-relaxed text-mist/60">Every new lead gets a real reply in seconds — the single biggest driver of who actually books.</p>
       </div>
       <div class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
-        <div class="grid h-10 w-10 place-items-center rounded-lg bg-gold-400/10 text-gold-300"><svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8 2v4m8-4v4M3 10h18M5 6h14a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z"/></svg></div>
+        <div class="grid h-10 w-10 place-items-center rounded-lg bg-cyan-400/10 text-cyan-300"><svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8 2v4m8-4v4M3 10h18M5 6h14a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z"/></svg></div>
         <h3 class="mt-4 text-base font-bold text-white">Books appointments 24/7</h3>
         <p class="mt-1.5 text-[14px] leading-relaxed text-mist/60">The AI offers real times from your calendar, confirms, and sends reminders — no back-and-forth.</p>
       </div>
       <div class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
-        <div class="grid h-10 w-10 place-items-center rounded-lg bg-gold-400/10 text-gold-300"><svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-3-6.7M21 4v4h-4"/></svg></div>
+        <div class="grid h-10 w-10 place-items-center rounded-lg bg-cyan-400/10 text-cyan-300"><svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-3-6.7M21 4v4h-4"/></svg></div>
         <h3 class="mt-4 text-base font-bold text-white">Reactivates your database</h3>
         <p class="mt-1.5 text-[14px] leading-relaxed text-mist/60">Old leads and your sphere get worked automatically — turning a cold list into booked conversations.</p>
       </div>
       <div class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
-        <div class="grid h-10 w-10 place-items-center rounded-lg bg-azure-500/10 text-azure-300"><svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h6m-9 8 3-3h9a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v13Z"/></svg></div>
+        <div class="grid h-10 w-10 place-items-center rounded-lg bg-teal-500/10 text-teal-300"><svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h6m-9 8 3-3h9a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v13Z"/></svg></div>
         <h3 class="mt-4 text-base font-bold text-white">Talks like you do</h3>
         <p class="mt-1.5 text-[14px] leading-relaxed text-mist/60">Trained on your scripts and voice across SMS, email, and social — and fluent in English and Spanish.</p>
       </div>
       <div class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
-        <div class="grid h-10 w-10 place-items-center rounded-lg bg-azure-500/10 text-azure-300"><svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg></div>
+        <div class="grid h-10 w-10 place-items-center rounded-lg bg-teal-500/10 text-teal-300"><svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg></div>
         <h3 class="mt-4 text-base font-bold text-white">See what's working</h3>
         <p class="mt-1.5 text-[14px] leading-relaxed text-mist/60">Speed-to-lead, appointments set, and pipeline movement — for you or across your whole team.</p>
       </div>
       <div class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
-        <div class="grid h-10 w-10 place-items-center rounded-lg bg-azure-500/10 text-azure-300"><svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg></div>
+        <div class="grid h-10 w-10 place-items-center rounded-lg bg-teal-500/10 text-teal-300"><svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg></div>
         <h3 class="mt-4 text-base font-bold text-white">Yours, white-labeled</h3>
         <p class="mt-1.5 text-[14px] leading-relaxed text-mist/60">Runs under the CoFounders brand for your whole roster — same engine, your name on it.</p>
       </div>
@@ -483,128 +483,128 @@
     <!-- ============ AGENT TRAINING ============ -->
   <section id="training" class="mx-auto mt-24 max-w-7xl px-5 sm:mt-32 sm:px-8">
     <div class="mx-auto max-w-2xl text-center">
-      <p class="reveal text-xs font-bold uppercase tracking-[0.28em] text-gold-400">Agent training</p>
+      <p class="reveal text-xs font-bold uppercase tracking-[0.28em] text-cyan-400">Agent training</p>
       <h2 class="reveal mt-3 font-display text-3xl font-600 leading-tight text-white sm:text-5xl">Live coaching, every single day.</h2>
-      <p class="reveal mt-4 text-base text-mist/60">The CoFounders training calendar — daily sales role play, conversion mastery, and done-with-you systems. To join any live session, email <a href="mailto:michelle.wilson@exprealty.com" class="font-medium text-gold-300 underline-offset-2 hover:underline">michelle.wilson@exprealty.com</a>.</p>
+      <p class="reveal mt-4 text-base text-mist/60">The CoFounders training calendar — daily sales role play, conversion mastery, and done-with-you systems. To join any live session, email <a href="mailto:michelle.wilson@exprealty.com" class="font-medium text-cyan-300 underline-offset-2 hover:underline">michelle.wilson@exprealty.com</a>.</p>
     </div>
     <div class="mt-12 grid gap-4 md:grid-cols-2">
       <article class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
         <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <span class="rounded-full bg-gold-400/15 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-gold-300">Mon–Fri</span>
+          <span class="rounded-full bg-cyan-400/15 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-cyan-300">Mon–Fri</span>
           <span class="text-[12px] text-mist/45">7:30–8:00a PST · 9:30a CST · 10:30a EST</span>
         </div>
         <h3 class="mt-3 font-display text-lg font-600 leading-snug text-white">Breakfast Club — Daily Sales Role Play</h3>
-        <p class="mt-0.5 text-[13px] font-medium text-gold-300">with Chad Cooley</p>
+        <p class="mt-0.5 text-[13px] font-medium text-cyan-300">with Chad Cooley</p>
         <p class="mt-2.5 text-[13.5px] leading-relaxed text-mist/60">Your daily sales gym — master lead-gen conversations, handle objections, and build the systems and confidence to push production through the roof. It translates straight into listings, buyers, and database.</p>
       </article>
       <article class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
         <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <span class="rounded-full bg-gold-400/15 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-gold-300">Mon–Fri</span>
+          <span class="rounded-full bg-cyan-400/15 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-cyan-300">Mon–Fri</span>
           <span class="text-[12px] text-mist/45">8:00–11:00a PST · 10:00a CST · 11:00a EST</span>
         </div>
         <h3 class="mt-3 font-display text-lg font-600 leading-snug text-white">Paid in Full</h3>
-        <p class="mt-0.5 text-[13px] font-medium text-gold-300">with Blake Gleiberman</p>
+        <p class="mt-0.5 text-[13px] font-medium text-cyan-300">with Blake Gleiberman</p>
         <p class="mt-2.5 text-[13.5px] leading-relaxed text-mist/60">Show up three hours a day and get everything you want. An open dial session to call every lead source alongside your peers. Accountability equals execution.</p>
       </article>
       <article class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
         <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <span class="rounded-full bg-gold-400/15 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-gold-300">Mon–Fri</span>
+          <span class="rounded-full bg-cyan-400/15 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-cyan-300">Mon–Fri</span>
           <span class="text-[12px] text-mist/45">8:30–9:00a PST · 10:30a CST · 11:30a EST</span>
         </div>
         <h3 class="mt-3 font-display text-lg font-600 leading-snug text-white">Agent Support Call</h3>
-        <p class="mt-0.5 text-[13px] font-medium text-gold-300">with Michelle Wilson & Chad Cooley</p>
+        <p class="mt-0.5 text-[13px] font-medium text-cyan-300">with Michelle Wilson & Chad Cooley</p>
         <p class="mt-2.5 text-[13.5px] leading-relaxed text-mist/60">Michelle and Chad personally help you build a roadmap and align the resources to support your business — set aside every morning. Bring your questions any day.</p>
       </article>
       <article class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
         <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <span class="rounded-full border border-azure-400/30 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-azure-300">Mon</span>
+          <span class="rounded-full border border-teal-400/30 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-teal-300">Mon</span>
           <span class="text-[12px] text-mist/45">12:00–1:00p PST · 2:00p CST · 3:00p EST</span>
         </div>
         <h3 class="mt-3 font-display text-lg font-600 leading-snug text-white">Builder's Club</h3>
-        <p class="mt-0.5 text-[13px] font-medium text-gold-300">with Michelle Wilson & Chad Cooley</p>
+        <p class="mt-0.5 text-[13px] font-medium text-cyan-300">with Michelle Wilson & Chad Cooley</p>
         <p class="mt-2.5 text-[13.5px] leading-relaxed text-mist/60">For agents leveraging the platform to build passive income and help other agents. Learn the exact system to duplicate the process, with live agent-attraction role play and objection handling.</p>
       </article>
       <article class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
         <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <span class="rounded-full border border-azure-400/30 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-azure-300">Mon</span>
+          <span class="rounded-full border border-teal-400/30 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-teal-300">Mon</span>
           <span class="text-[12px] text-mist/45">1:00–2:00p PST · 2:00p CST · 3:00p EST</span>
         </div>
         <h3 class="mt-3 font-display text-lg font-600 leading-snug text-white">New Agent Education / Live Scenario Workshop</h3>
-        <p class="mt-0.5 text-[13px] font-medium text-gold-300">with James Hemphill</p>
+        <p class="mt-0.5 text-[13px] font-medium text-cyan-300">with James Hemphill</p>
         <p class="mt-2.5 text-[13.5px] leading-relaxed text-mist/60">New to real estate? Our top mentor covers the ins and outs of the industry, introduces key vendors and partners, and works through live scenarios and questions together.</p>
       </article>
       <article class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
         <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <span class="rounded-full border border-azure-400/30 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-azure-300">Tue</span>
+          <span class="rounded-full border border-teal-400/30 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-teal-300">Tue</span>
           <span class="text-[12px] text-mist/45">11:00a–12:00p PST · 1:00p CST · 2:00p EST</span>
         </div>
         <h3 class="mt-3 font-display text-lg font-600 leading-snug text-white">Weekly Master Class</h3>
-        <p class="mt-0.5 text-[13px] font-medium text-gold-300">with Michelle Wilson & Chad Cooley</p>
+        <p class="mt-0.5 text-[13px] font-medium text-cyan-300">with Michelle Wilson & Chad Cooley</p>
         <p class="mt-2.5 text-[13.5px] leading-relaxed text-mist/60">Each week we read the market and the buyer and seller conversations that move business forward, with systems to apply immediately. Twice a month, mega agents share their exact scripts and blueprints.</p>
       </article>
       <article class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
         <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <span class="rounded-full border border-azure-400/30 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-azure-300">Tue</span>
+          <span class="rounded-full border border-teal-400/30 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-teal-300">Tue</span>
           <span class="text-[12px] text-mist/45">12:30–1:30p PST · 2:30p CST · 3:30p EST</span>
         </div>
         <h3 class="mt-3 font-display text-lg font-600 leading-snug text-white">Onboarding Orientation</h3>
-        <p class="mt-0.5 text-[13px] font-medium text-gold-300">with Michelle Wilson</p>
+        <p class="mt-0.5 text-[13px] font-medium text-cyan-300">with Michelle Wilson</p>
         <p class="mt-2.5 text-[13.5px] leading-relaxed text-mist/60">You've joined one of the largest companies in the country. This three-part series gets you operational fast — what you need, where to find it, and the tech that makes you money now. Plug in for three weeks to launch.</p>
       </article>
       <article class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
         <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <span class="rounded-full border border-azure-400/30 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-azure-300">Wed</span>
+          <span class="rounded-full border border-teal-400/30 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-teal-300">Wed</span>
           <span class="text-[12px] text-mist/45">11:00a–12:00p PST · 1:00p CST · 2:00p EST</span>
         </div>
         <h3 class="mt-3 font-display text-lg font-600 leading-snug text-white">Conversion King — Listing Presentation Mastery</h3>
-        <p class="mt-0.5 text-[13px] font-medium text-gold-300">with Chris Hardee</p>
+        <p class="mt-0.5 text-[13px] font-medium text-cyan-300">with Chris Hardee</p>
         <p class="mt-2.5 text-[13.5px] leading-relaxed text-mist/60">Learn to list like a super producer. Master the structure, skills, pricing strategy, and close to convert 80%+ of the appointments you go on. There are levels to this game.</p>
       </article>
       <article class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
         <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <span class="rounded-full border border-azure-400/30 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-azure-300">Thu</span>
+          <span class="rounded-full border border-teal-400/30 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-teal-300">Thu</span>
           <span class="text-[12px] text-mist/45">11:00a–12:00p PST · 1:00p CST · 2:00p EST</span>
         </div>
         <h3 class="mt-3 font-display text-lg font-600 leading-snug text-white">New Agent Education / Live Scenario Workshop</h3>
-        <p class="mt-0.5 text-[13px] font-medium text-gold-300">with James Hemphill</p>
+        <p class="mt-0.5 text-[13px] font-medium text-cyan-300">with James Hemphill</p>
         <p class="mt-2.5 text-[13.5px] leading-relaxed text-mist/60">A second weekly session for newer agents — industry fundamentals, vendor and partner introductions, and live scenario navigation so you learn together.</p>
       </article>
       <article class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
         <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <span class="rounded-full border border-azure-400/30 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-azure-300">Thu</span>
+          <span class="rounded-full border border-teal-400/30 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-teal-300">Thu</span>
           <span class="text-[12px] text-mist/45">11:00a–12:00p PST · 1:00p CST · 2:00p EST</span>
         </div>
         <h3 class="mt-3 font-display text-lg font-600 leading-snug text-white">Listing Conversion Platform — Attraction Webinar</h3>
-        <p class="mt-0.5 text-[13px] font-medium text-gold-300">with Michelle Wilson</p>
+        <p class="mt-0.5 text-[13px] font-medium text-cyan-300">with Michelle Wilson</p>
         <p class="mt-2.5 text-[13.5px] leading-relaxed text-mist/60">A live attraction webinar for the whole network, showcasing the eXp Realty opportunity and the exclusive benefits of partnering with CoFounders. Invite guest agents — your agent-attraction tool.</p>
       </article>
       <article class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
         <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <span class="rounded-full border border-azure-400/30 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-azure-300">Thu</span>
+          <span class="rounded-full border border-teal-400/30 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-teal-300">Thu</span>
           <span class="text-[12px] text-mist/45">11:00a PST · 1:00p CST · 2:00p EST</span>
         </div>
         <h3 class="mt-3 font-display text-lg font-600 leading-snug text-white">The Profit Engine (Bi-Weekly)</h3>
-        <p class="mt-0.5 text-[13px] font-medium text-gold-300">with Andrew Becker</p>
+        <p class="mt-0.5 text-[13px] font-medium text-cyan-300">with Andrew Becker</p>
         <p class="mt-2.5 text-[13.5px] leading-relaxed text-mist/60">Systems and processes expert Andrew Becker walks you through setting up, organizing, and optimizing your business to grow, scale, increase profit, and buy back your time.</p>
       </article>
     </div>
     <div class="reveal mx-auto mt-7 flex max-w-2xl flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[13px] text-mist/45">
-      <span class="inline-flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-gold-400"></span> Daily (Mon–Fri)</span>
-      <span class="inline-flex items-center gap-1.5"><span class="h-2 w-2 rounded-full border border-azure-400"></span> Weekly</span>
+      <span class="inline-flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-cyan-400"></span> Daily (Mon–Fri)</span>
+      <span class="inline-flex items-center gap-1.5"><span class="h-2 w-2 rounded-full border border-teal-400"></span> Weekly</span>
       <span>· Times shown PST / CST / EST</span>
     </div>
   </section>
 
   <!-- ============ COFOUNDERS FIT BAND ============ -->
   <section class="mx-auto mt-24 max-w-5xl px-5 sm:mt-32 sm:px-8">
-    <div class="reveal overflow-hidden rounded-3xl border border-gold-400/25 bg-gradient-to-br from-gold-400/[0.10] via-ink-850 to-azure-500/[0.08] p-8 text-center sm:p-14">
-      <p class="text-xs font-bold uppercase tracking-[0.28em] text-gold-300">Built on a One Mission Mindset</p>
+    <div class="reveal overflow-hidden rounded-3xl border border-cyan-400/25 bg-gradient-to-br from-cyan-400/[0.10] via-ink-850 to-teal-500/[0.08] p-8 text-center sm:p-14">
+      <p class="text-xs font-bold uppercase tracking-[0.28em] text-cyan-300">Built on a One Mission Mindset</p>
       <h2 class="mx-auto mt-4 max-w-3xl font-display text-2xl font-500 leading-snug text-white sm:text-[2.4rem] sm:leading-[1.18]">
         CoFounders gives agents the coaching, systems, and leadership to scale.
-        This is the technology layer — <span class="text-gradient-gold">the leverage that works your leads while you live your life.</span>
+        This is the technology layer — <span class="text-gradient-cyan">the leverage that works your leads while you live your life.</span>
       </h2>
       <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-        <a href="#pricing" class="inline-flex w-full items-center justify-center rounded-xl bg-gold-400 px-6 py-3.5 text-base font-bold text-ink-900 shadow-glow-gold transition hover:bg-gold-300 sm:w-auto">Get Started</a>
+        <a href="#pricing" class="inline-flex w-full items-center justify-center rounded-xl bg-cyan-400 px-6 py-3.5 text-base font-bold text-ink-900 shadow-glow-cyan transition hover:bg-cyan-300 sm:w-auto">Get Started</a>
         <a href="https://calendly.com/michellewilson-exp" target="_blank" rel="noopener" class="inline-flex w-full items-center justify-center rounded-xl border border-white/15 bg-white/[0.03] px-6 py-3.5 text-base font-semibold text-white transition hover:bg-white/[0.07] sm:w-auto">Book a Demo</a>
       </div>
     </div>
@@ -613,11 +613,11 @@
   <!-- ============ FINAL CTA ============ -->
   <section class="mx-auto mt-24 max-w-4xl px-5 text-center sm:mt-32 sm:px-8">
     <h2 class="reveal font-display text-4xl font-600 leading-[1.05] text-white sm:text-6xl">
-      Put your leverage<br><span class="text-gradient-gold">on autopilot.</span>
+      Put your leverage<br><span class="text-gradient-cyan">on autopilot.</span>
     </h2>
     <p class="reveal mx-auto mt-5 max-w-xl text-base text-mist/60">Join the CoFounders agents turning leads into booked appointments — automatically, around the clock.</p>
     <div class="reveal mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-      <a href="#pricing" class="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gold-400 px-7 py-4 text-base font-bold text-ink-900 shadow-glow-gold transition hover:bg-gold-300 sm:w-auto">
+      <a href="#pricing" class="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-cyan-400 px-7 py-4 text-base font-bold text-ink-900 shadow-glow-cyan transition hover:bg-cyan-300 sm:w-auto">
         Get Started
         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" class="transition group-hover:translate-x-0.5"><path stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/></svg>
       </a>
@@ -634,8 +634,8 @@
       <div>
         <div class="flex items-center gap-2.5">
           <svg width="30" height="30" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="3" y="7" width="17" height="17" rx="4.5" stroke="#D7B36B" stroke-width="2.2"/>
-            <rect x="14" y="10" width="17" height="17" rx="4.5" fill="#0C0D10" stroke="#5E9BFF" stroke-width="2.2"/>
+            <rect x="3" y="7" width="17" height="17" rx="4.5" stroke="#22E3DA" stroke-width="2.2"/>
+            <rect x="14" y="10" width="17" height="17" rx="4.5" fill="#0C0D10" stroke="#15A9A1" stroke-width="2.2"/>
           </svg>
           <span class="font-display text-xl font-700 text-white">CoFounders</span>
         </div>
