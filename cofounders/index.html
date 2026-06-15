@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CoFounders — AI CRM &amp; Lead Engine for Agents</title>
+<meta name="description" content="The AI growth engine for CoFounders agents. Engage every lead in seconds, book appointments 24/7, and reactivate your database across text, email, and social — built for solo agents, teams, and brokerages." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink:   { DEFAULT:'#0C0D10', 900:'#0C0D10', 850:'#101218', 800:'#15171E', 700:'#1C1F28', 600:'#272B36' },
+          gold:  { DEFAULT:'#D7B36B', 200:'#F0E2C2', 300:'#E7CE95', 400:'#D7B36B', 500:'#C99B45', 600:'#A87E33' },
+          azure: { DEFAULT:'#5E9BFF', 300:'#9DC0FF', 400:'#5E9BFF', 500:'#3D82F5' },
+          mist:  '#E9EBF1',
+        },
+        fontFamily: {
+          display: ['Fraunces','Georgia','serif'],
+          sans: ['Inter','system-ui','-apple-system','sans-serif'],
+        },
+        boxShadow: {
+          'glow-gold': '0 0 50px -12px rgba(215,179,107,0.55)',
+          'glow-azure': '0 0 50px -14px rgba(94,155,255,0.5)',
+          'card': '0 1px 0 0 rgba(255,255,255,0.04) inset, 0 30px 60px -30px rgba(0,0,0,0.7)',
+        },
+      }
+    }
+  }
+</script>
+
+<style>
+  :root { color-scheme: dark; }
+  body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+
+  .font-display { font-family: 'Fraunces', Georgia, serif; letter-spacing: -0.02em; font-optical-sizing: auto; }
+
+  /* gold gradient text */
+  .text-gradient-gold {
+    background: linear-gradient(92deg, #F0E2C2 0%, #D7B36B 45%, #C99B45 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .text-gradient-azure {
+    background: linear-gradient(92deg, #9DC0FF 0%, #5E9BFF 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+
+  /* ambient background: fine grid + warm glow */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, #000 35%, transparent 80%);
+            mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, #000 35%, transparent 80%);
+  }
+
+  /* scroll reveal */
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* chat bubble entrance */
+  @keyframes pop { from { opacity:0; transform: translateY(8px) scale(.98);} to {opacity:1; transform:none;} }
+  .chat-in.in .b { opacity:0; animation: pop .5s cubic-bezier(.2,.7,.2,1) forwards; }
+  .chat-in.in .b:nth-child(1){ animation-delay:.05s } .chat-in.in .b:nth-child(2){ animation-delay:.5s }
+  .chat-in.in .b:nth-child(3){ animation-delay:1.0s } .chat-in.in .b:nth-child(4){ animation-delay:1.5s }
+  .chat-in.in .b:nth-child(5){ animation-delay:2.0s } .chat-in.in .b:nth-child(6){ animation-delay:2.5s }
+
+  @keyframes blink { 0%,80%,100%{opacity:.25} 40%{opacity:1} }
+  .dot{ animation: blink 1.2s infinite both } .dot:nth-child(2){animation-delay:.2s} .dot:nth-child(3){animation-delay:.4s}
+
+  .marquee { animation: scroll 34s linear infinite; }
+  @keyframes scroll { from { transform: translateX(0);} to { transform: translateX(-50%);} }
+
+  a:focus-visible, button:focus-visible { outline: 2px solid #D7B36B; outline-offset: 2px; border-radius: 6px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity:1 !important; transform:none !important; transition:none; }
+    .chat-in .b { opacity:1 !important; animation:none !important; }
+    .marquee { animation: none; } .dot { animation: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+
+<body class="bg-ink-900 text-mist font-sans antialiased selection:bg-gold-400/30 selection:text-white">
+
+<!-- ambient background -->
+<div aria-hidden="true" class="pointer-events-none fixed inset-0 z-0">
+  <div class="absolute inset-0 bg-grid"></div>
+  <div class="absolute -top-40 left-1/2 h-[640px] w-[1100px] -translate-x-1/2 rounded-full bg-gold-500/12 blur-[140px]"></div>
+  <div class="absolute top-[420px] -left-40 h-[420px] w-[520px] rounded-full bg-azure-500/10 blur-[150px]"></div>
+</div>
+
+<!-- ============ NAV ============ -->
+<header class="relative z-40">
+  <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
+    <!-- brand -->
+    <a href="#top" class="group flex items-center gap-2.5">
+      <span class="grid h-9 w-9 place-items-center">
+        <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="7" width="17" height="17" rx="4.5" stroke="#D7B36B" stroke-width="2.2"/>
+          <rect x="14" y="10" width="17" height="17" rx="4.5" fill="#0C0D10" stroke="#5E9BFF" stroke-width="2.2"/>
+        </svg>
+      </span>
+      <span class="font-display text-[22px] font-700 leading-none text-white">CoFounders</span>
+    </a>
+
+    <!-- center links -->
+    <div class="hidden items-center gap-8 md:flex">
+      <a href="#features" class="text-sm font-medium text-mist/70 transition hover:text-white">Features</a>
+      <a href="#solutions" class="text-sm font-medium text-mist/70 transition hover:text-white">Solutions</a>
+      <a href="#pricing" class="text-sm font-medium text-mist/70 transition hover:text-white">Pricing</a>
+      <a href="#integrations" class="text-sm font-medium text-mist/70 transition hover:text-white">Integrations</a>
+    </div>
+
+    <!-- utility -->
+    <div class="hidden items-center gap-2 md:flex">
+      <!-- TODO: point to CoFounders CRM login URL -->
+      <a href="#" class="rounded-lg px-3.5 py-2 text-sm font-medium text-mist/80 transition hover:text-white">Log in</a>
+      <a href="#pricing" class="rounded-lg bg-gold-400 px-4 py-2 text-sm font-bold text-ink-900 shadow-glow-gold transition hover:bg-gold-300">Get Started</a>
+    </div>
+
+    <!-- mobile button -->
+    <button id="menuBtn" aria-label="Open menu" class="md:hidden rounded-lg p-2 text-mist/80 hover:bg-white/5">
+      <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </nav>
+
+  <!-- mobile menu -->
+  <div id="mobileMenu" class="hidden border-y border-white/10 bg-ink-850/95 backdrop-blur md:hidden">
+    <div class="mx-auto max-w-7xl space-y-1 px-5 py-4">
+      <a href="#features" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-mist/80 transition hover:bg-white/5 hover:text-white">Features</a>
+      <a href="#solutions" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-mist/80 transition hover:bg-white/5 hover:text-white">Solutions</a>
+      <a href="#pricing" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-mist/80 transition hover:bg-white/5 hover:text-white">Pricing</a>
+      <a href="#integrations" class="block rounded-lg px-3 py-2.5 text-sm font-medium text-mist/80 transition hover:bg-white/5 hover:text-white">Integrations</a>
+      <div class="flex items-center gap-2 pt-2">
+        <a href="#" class="flex-1 rounded-lg px-3 py-2.5 text-center text-sm font-medium text-mist/80 transition hover:bg-white/5 hover:text-white">Log in</a>
+        <a href="#pricing" class="flex-1 rounded-lg bg-gold-400 px-3 py-2.5 text-center text-sm font-bold text-ink-900">Get Started</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="top" class="relative z-10">
+
+  <!-- ============ HERO ============ -->
+  <section class="mx-auto max-w-7xl px-5 pt-10 sm:px-8 sm:pt-16">
+    <div class="mx-auto max-w-4xl text-center">
+      <div class="reveal mx-auto inline-flex items-center gap-2 rounded-full border border-gold-400/25 bg-gold-400/5 px-3.5 py-1.5 text-[13px] font-medium text-gold-200">
+        <span class="h-1.5 w-1.5 rounded-full bg-gold-400"></span>
+        The AI growth engine for CoFounders agents
+      </div>
+
+      <h1 class="reveal mt-7 font-display text-[2.7rem] font-600 leading-[1.04] text-white sm:text-6xl lg:text-[4.6rem] lg:leading-[1.02]">
+        Every lead worked.<br>
+        <span class="text-gradient-gold">Every appointment booked.</span>
+      </h1>
+
+      <p class="reveal mx-auto mt-6 max-w-2xl text-base leading-relaxed text-mist/65 sm:text-lg">
+        CoFounders AI answers every new lead in seconds, books appointments around the clock, and reactivates
+        your database across text, email, and social — so you list more and chase less.
+        Built for our 810+ agents, teams, and brokerages.
+      </p>
+
+      <div class="reveal mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <a href="#pricing" class="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gold-400 px-6 py-3.5 text-base font-bold text-ink-900 shadow-glow-gold transition hover:bg-gold-300 sm:w-auto">
+          Get Started
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" class="transition group-hover:translate-x-0.5"><path stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/></svg>
+        </a>
+        <a href="https://calendly.com/michellewilson-exp" target="_blank" rel="noopener" class="inline-flex w-full items-center justify-center rounded-xl border border-white/15 bg-white/[0.03] px-6 py-3.5 text-base font-semibold text-white transition hover:bg-white/[0.07] sm:w-auto">
+          Book a Demo
+        </a>
+      </div>
+      <p class="reveal mt-4 text-[13px] text-mist/45">30-day free trial on the CRM plan · No long-term contracts · Cancel anytime</p>
+    </div>
+
+    <!-- real CoFounders stats -->
+    <div class="reveal mx-auto mt-14 grid max-w-3xl grid-cols-3 divide-x divide-white/10 rounded-2xl border border-white/10 bg-ink-850/60">
+      <div class="px-3 py-5 text-center sm:py-6">
+        <div class="font-display text-2xl font-700 text-white sm:text-4xl">810<span class="text-gold-400">+</span></div>
+        <div class="mt-1 text-[11px] font-semibold uppercase tracking-wider text-mist/45 sm:text-xs">Agent Partners</div>
+      </div>
+      <div class="px-3 py-5 text-center sm:py-6">
+        <div class="font-display text-2xl font-700 text-white sm:text-4xl">4,900<span class="text-gold-400">+</span></div>
+        <div class="mt-1 text-[11px] font-semibold uppercase tracking-wider text-mist/45 sm:text-xs">YTD Transactions</div>
+      </div>
+      <div class="px-3 py-5 text-center sm:py-6">
+        <div class="font-display text-2xl font-700 text-white sm:text-4xl">$2.1B<span class="text-gold-400">+</span></div>
+        <div class="mt-1 text-[11px] font-semibold uppercase tracking-wider text-mist/45 sm:text-xs">YTD Volume</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CHAT MOCKUP (signature) ============ -->
+  <section class="mx-auto mt-16 max-w-5xl px-5 sm:mt-24 sm:px-8">
+    <div class="reveal chat-in overflow-hidden rounded-2xl border border-white/10 bg-ink-850 shadow-card">
+      <!-- window chrome -->
+      <div class="flex items-center justify-between border-b border-white/10 bg-ink-800/80 px-4 py-3">
+        <div class="flex items-center gap-1.5">
+          <span class="h-3 w-3 rounded-full bg-white/15"></span>
+          <span class="h-3 w-3 rounded-full bg-white/15"></span>
+          <span class="h-3 w-3 rounded-full bg-white/15"></span>
+        </div>
+        <div class="flex items-center gap-2 text-[12px] font-medium text-mist/55">
+          <span class="h-2 w-2 rounded-full bg-emerald-400"></span> CoFounders AI · live
+        </div>
+        <div class="w-12"></div>
+      </div>
+
+      <div class="grid gap-0 md:grid-cols-[1fr,300px]">
+        <!-- conversation -->
+        <div class="space-y-3 p-5 sm:p-7">
+          <div class="b flex items-center gap-2 text-[12px] text-mist/40">
+            <span class="rounded-full bg-azure-500/15 px-2 py-0.5 font-semibold text-azure-300">New lead · Zillow</span>
+            <span>responded in 0:08</span>
+          </div>
+
+          <!-- incoming -->
+          <div class="b flex justify-start">
+            <div class="max-w-[78%] rounded-2xl rounded-bl-md bg-white/[0.06] px-3.5 py-2.5 text-[14px] leading-relaxed text-mist/90">
+              Hi, is 4412 Oak St still available?
+            </div>
+          </div>
+          <!-- AI -->
+          <div class="b flex justify-end">
+            <div class="max-w-[82%] rounded-2xl rounded-br-md border border-gold-400/25 bg-gradient-to-br from-gold-400/20 to-gold-500/5 px-3.5 py-2.5 text-[14px] leading-relaxed text-white">
+              Hi Jordan! Yes it is 🙌 Would you like to see it this week? I have <span class="font-semibold text-gold-200">Thursday 5:30pm</span> or <span class="font-semibold text-gold-200">Saturday 11:00am</span> open.
+            </div>
+          </div>
+          <!-- incoming -->
+          <div class="b flex justify-start">
+            <div class="max-w-[78%] rounded-2xl rounded-bl-md bg-white/[0.06] px-3.5 py-2.5 text-[14px] leading-relaxed text-mist/90">
+              Saturday works for me.
+            </div>
+          </div>
+          <!-- AI -->
+          <div class="b flex justify-end">
+            <div class="max-w-[82%] rounded-2xl rounded-br-md border border-gold-400/25 bg-gradient-to-br from-gold-400/20 to-gold-500/5 px-3.5 py-2.5 text-[14px] leading-relaxed text-white">
+              You're booked for <span class="font-semibold text-gold-200">Sat 11:00am</span> ✅ I'll text a reminder and the address. Quick one — what's most important in your next home?
+            </div>
+          </div>
+          <!-- typing -->
+          <div class="b flex justify-start">
+            <div class="inline-flex items-center gap-1 rounded-2xl rounded-bl-md bg-white/[0.06] px-4 py-3">
+              <span class="dot h-1.5 w-1.5 rounded-full bg-mist/60"></span>
+              <span class="dot h-1.5 w-1.5 rounded-full bg-mist/60"></span>
+              <span class="dot h-1.5 w-1.5 rounded-full bg-mist/60"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- lead panel -->
+        <div class="border-t border-white/10 bg-ink-800/50 p-5 sm:p-6 md:border-l md:border-t-0">
+          <div class="flex items-center gap-3">
+            <div class="grid h-11 w-11 place-items-center rounded-full bg-gradient-to-br from-gold-400 to-gold-600 font-display text-base font-700 text-ink-900">JD</div>
+            <div>
+              <div class="text-sm font-semibold text-white">Jordan Diaz</div>
+              <div class="text-[12px] text-mist/45">New buyer lead</div>
+            </div>
+          </div>
+          <dl class="mt-5 space-y-3 text-[13px]">
+            <div class="flex justify-between"><dt class="text-mist/45">Source</dt><dd class="font-medium text-mist/85">Zillow</dd></div>
+            <div class="flex justify-between"><dt class="text-mist/45">First response</dt><dd class="font-medium text-emerald-300">0:08</dd></div>
+            <div class="flex justify-between"><dt class="text-mist/45">Status</dt><dd class="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[12px] font-semibold text-emerald-300">Appointment set</dd></div>
+            <div class="flex justify-between"><dt class="text-mist/45">Assigned to</dt><dd class="font-medium text-mist/85">You</dd></div>
+          </dl>
+          <div class="mt-5 rounded-xl border border-gold-400/20 bg-gold-400/[0.06] p-3 text-[12.5px] leading-relaxed text-gold-100">
+            Booked &amp; logged automatically — synced to your calendar and CRM.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ INTEGRATIONS ============ -->
+  <section id="integrations" class="mx-auto mt-20 max-w-7xl px-5 sm:mt-28 sm:px-8">
+    <p class="reveal text-center text-xs font-bold uppercase tracking-[0.28em] text-mist/40">
+      Plugs into the tools you already run
+    </p>
+    <div class="reveal relative mt-7 overflow-hidden [mask-image:linear-gradient(to_right,transparent,#000_12%,#000_88%,transparent)]">
+      <div class="marquee flex w-max items-center gap-12 whitespace-nowrap">
+        <!-- duplicated for seamless loop -->
+        <span class="text-lg font-bold text-mist/55">BoldTrail&nbsp;<span class="text-mist/30">(kvCORE)</span></span>
+        <span class="text-lg font-bold text-mist/55">Follow Up Boss</span>
+        <span class="text-lg font-bold text-mist/55">GoHighLevel</span>
+        <span class="text-lg font-bold text-mist/55">Lofty</span>
+        <span class="text-lg font-bold text-mist/55">Real Geeks</span>
+        <span class="text-lg font-bold text-mist/55">Zillow</span>
+        <span class="text-lg font-bold text-mist/55">Google Calendar</span>
+        <span class="text-lg font-bold text-mist/55">Twilio</span>
+        <span class="text-lg font-bold text-mist/55" aria-hidden="true">BoldTrail&nbsp;<span class="text-mist/30">(kvCORE)</span></span>
+        <span class="text-lg font-bold text-mist/55" aria-hidden="true">Follow Up Boss</span>
+        <span class="text-lg font-bold text-mist/55" aria-hidden="true">GoHighLevel</span>
+        <span class="text-lg font-bold text-mist/55" aria-hidden="true">Lofty</span>
+        <span class="text-lg font-bold text-mist/55" aria-hidden="true">Real Geeks</span>
+        <span class="text-lg font-bold text-mist/55" aria-hidden="true">Zillow</span>
+        <span class="text-lg font-bold text-mist/55" aria-hidden="true">Google Calendar</span>
+        <span class="text-lg font-bold text-mist/55" aria-hidden="true">Twilio</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SOLUTIONS ============ -->
+  <section id="solutions" class="mx-auto mt-24 max-w-7xl px-5 sm:mt-32 sm:px-8">
+    <div class="mx-auto max-w-2xl text-center">
+      <p class="reveal text-xs font-bold uppercase tracking-[0.28em] text-gold-400">One engine</p>
+      <h2 class="reveal mt-3 font-display text-3xl font-600 leading-tight text-white sm:text-5xl">Every kind of agent.</h2>
+      <p class="reveal mt-4 text-base text-mist/60">Solo, team, or brokerage — the same engine works your leads, your way.</p>
+    </div>
+
+    <div class="mt-12 grid gap-5 md:grid-cols-3">
+      <!-- solo -->
+      <div class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-7">
+        <div class="grid h-11 w-11 place-items-center rounded-xl bg-gold-400/10 text-gold-300">
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm6 8a6 6 0 0 0-12 0"/></svg>
+        </div>
+        <h3 class="mt-5 font-display text-xl font-600 text-white">Solo agents</h3>
+        <p class="mt-2 text-[14.5px] leading-relaxed text-mist/60">Never miss another lead. Your AI replies, qualifies, and books showings while you're with clients — so your pipeline keeps moving when you can't.</p>
+      </div>
+      <!-- teams -->
+      <div class="reveal rounded-2xl border border-gold-400/30 bg-gradient-to-b from-gold-400/[0.07] to-transparent p-7">
+        <div class="grid h-11 w-11 place-items-center rounded-xl bg-gold-400/15 text-gold-300">
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm7 0a3 3 0 1 0 0-6M3 19a6 6 0 0 1 12 0m1.5-6A6 6 0 0 1 21 19"/></svg>
+        </div>
+        <h3 class="mt-5 font-display text-xl font-600 text-white">Teams</h3>
+        <p class="mt-2 text-[14.5px] leading-relaxed text-mist/60">Route every new lead to the right agent in seconds, keep every pipeline warm with automated follow-up, and see team-wide activity and appointments in one place.</p>
+      </div>
+      <!-- brokerages -->
+      <div class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-7">
+        <div class="grid h-11 w-11 place-items-center rounded-xl bg-azure-500/10 text-azure-300">
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 21V5l8-3 8 3v16M9 21v-5h6v5M8 9h.01M12 9h.01M16 9h.01"/></svg>
+        </div>
+        <h3 class="mt-5 font-display text-xl font-600 text-white">Brokerages &amp; team leaders</h3>
+        <p class="mt-2 text-[14.5px] leading-relaxed text-mist/60">Roll the platform out to your whole roster under your own brand, then track speed-to-lead and production across the organization — leverage without the overhead.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRICING ============ -->
+  <section id="pricing" class="mx-auto mt-24 max-w-7xl px-5 sm:mt-32 sm:px-8">
+    <div class="mx-auto max-w-2xl text-center">
+      <p class="reveal text-xs font-bold uppercase tracking-[0.28em] text-gold-400">Pricing</p>
+      <h2 class="reveal mt-3 font-display text-3xl font-600 leading-tight text-white sm:text-5xl">Sign up in minutes.</h2>
+      <p class="reveal mt-4 text-base text-mist/60">Start self-serve on any plan below. Want leads delivered too? That tier is built around a split you arrange directly with CoFounders.</p>
+    </div>
+
+    <div class="mt-12 grid gap-5 lg:grid-cols-4">
+
+      <!-- CRM -->
+      <div class="reveal flex flex-col rounded-2xl border border-white/10 bg-ink-850/60 p-6">
+        <h3 class="font-display text-lg font-600 text-white">CRM</h3>
+        <p class="mt-1 text-[13px] text-mist/50">Stop leads from slipping.</p>
+        <div class="mt-5 flex items-baseline gap-1">
+          <span class="font-display text-4xl font-700 text-white">$50</span>
+          <span class="text-sm text-mist/45">/mo</span>
+        </div>
+        <p class="mt-1 text-[12px] font-medium text-gold-300">30-day free trial</p>
+        <!-- TODO: CRM checkout link -->
+        <a href="#" class="mt-6 rounded-xl border border-white/15 bg-white/[0.03] px-4 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-white/[0.08]">Start free trial</a>
+        <ul class="mt-6 space-y-2.5 text-[13.5px] text-mist/65">
+          <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> AI CRM &amp; smart pipeline</li>
+          <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> Lead capture from your sites</li>
+          <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> Contact &amp; deal management</li>
+          <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> Mobile app</li>
+        </ul>
+      </div>
+
+      <!-- Standard -->
+      <div class="reveal flex flex-col rounded-2xl border border-white/10 bg-ink-850/60 p-6">
+        <h3 class="font-display text-lg font-600 text-white">Standard</h3>
+        <p class="mt-1 text-[13px] text-mist/50">Add the AI that texts back.</p>
+        <div class="mt-5 flex items-baseline gap-1">
+          <span class="font-display text-4xl font-700 text-white">$299</span>
+          <span class="text-sm text-mist/45">/mo</span>
+        </div>
+        <p class="mt-1 text-[12px] text-mist/40">No setup fee</p>
+        <!-- TODO: Standard checkout link -->
+        <a href="#" class="mt-6 rounded-xl border border-white/15 bg-white/[0.03] px-4 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-white/[0.08]">Get Started</a>
+        <ul class="mt-6 space-y-2.5 text-[13.5px] text-mist/65">
+          <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> Everything in CRM</li>
+          <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> AI SMS that replies in seconds</li>
+          <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> 24/7 appointment booking</li>
+          <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> Core automations, done for you</li>
+        </ul>
+      </div>
+
+      <!-- Core (popular) -->
+      <div class="reveal relative flex flex-col rounded-2xl bg-gradient-to-b from-gold-400 via-gold-500 to-gold-600 p-px shadow-glow-gold">
+        <div class="flex flex-col rounded-[15px] bg-ink-850 p-6 h-full">
+          <span class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gold-400 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-ink-900">Most popular</span>
+          <h3 class="font-display text-lg font-600 text-white">Core</h3>
+          <p class="mt-1 text-[13px] text-mist/50">The full multi-channel engine.</p>
+          <div class="mt-5 flex items-baseline gap-1">
+            <span class="font-display text-4xl font-700 text-white">$699</span>
+            <span class="text-sm text-mist/45">/mo</span>
+          </div>
+          <p class="mt-1 text-[12px] text-mist/40">+ onboarding</p>
+          <!-- TODO: Core checkout link -->
+          <a href="#" class="mt-6 rounded-xl bg-gold-400 px-4 py-2.5 text-center text-sm font-bold text-ink-900 transition hover:bg-gold-300">Get Started</a>
+          <ul class="mt-6 space-y-2.5 text-[13.5px] text-mist/75">
+            <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> Everything in Standard</li>
+            <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> AI across SMS, email &amp; social</li>
+            <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> Database reactivation campaigns</li>
+            <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> Bilingual (English &amp; Spanish)</li>
+            <li class="flex gap-2.5"><span class="mt-0.5 text-gold-400">✓</span> Priority support</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Leads / Revenue share — NO PRICE -->
+      <div class="reveal relative flex flex-col overflow-hidden rounded-2xl border border-azure-400/40 bg-gradient-to-b from-azure-500/[0.08] to-transparent p-6">
+        <span class="absolute right-4 top-4 rounded-full bg-azure-500/15 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-azure-300">Leads included</span>
+        <h3 class="font-display text-lg font-600 text-white">Producer</h3>
+        <p class="mt-1 text-[13px] text-mist/50">We bring the leads. You close.</p>
+        <div class="mt-5">
+          <span class="font-display text-3xl font-700 text-gradient-azure">Let's talk</span>
+        </div>
+        <p class="mt-1 text-[12px] text-mist/45">Split arranged per agent — no flat price</p>
+        <a href="https://calendly.com/michellewilson-exp" target="_blank" rel="noopener" class="mt-6 rounded-xl bg-azure-500 px-4 py-2.5 text-center text-sm font-bold text-white transition hover:bg-azure-400">Talk to CoFounders</a>
+        <ul class="mt-6 space-y-2.5 text-[13.5px] text-mist/65">
+          <li class="flex gap-2.5"><span class="mt-0.5 text-azure-400">✓</span> Everything in Core</li>
+          <li class="flex gap-2.5"><span class="mt-0.5 text-azure-400">✓</span> Done-for-you leads into your AI</li>
+          <li class="flex gap-2.5"><span class="mt-0.5 text-azure-400">✓</span> Custom lead funnels built for you</li>
+          <li class="flex gap-2.5"><span class="mt-0.5 text-azure-400">✓</span> Performance-based — pay on results</li>
+        </ul>
+      </div>
+    </div>
+    <p class="reveal mt-6 text-center text-[13px] text-mist/40">All plans billed monthly · Cancel anytime · Annual billing available on request</p>
+  </section>
+
+  <!-- ============ FEATURES ============ -->
+  <section id="features" class="mx-auto mt-24 max-w-7xl px-5 sm:mt-32 sm:px-8">
+    <div class="mx-auto max-w-2xl text-center">
+      <p class="reveal text-xs font-bold uppercase tracking-[0.28em] text-gold-400">The platform</p>
+      <h2 class="reveal mt-3 font-display text-3xl font-600 leading-tight text-white sm:text-5xl">Leverage that never clocks out.</h2>
+      <p class="reveal mt-4 text-base text-mist/60">The systems CoFounders teaches — running automatically, every hour you can't.</p>
+    </div>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <!-- card -->
+      <div class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
+        <div class="grid h-10 w-10 place-items-center rounded-lg bg-gold-400/10 text-gold-300"><svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m13 2-9 12h7l-2 8 9-12h-7l2-8Z"/></svg></div>
+        <h3 class="mt-4 text-base font-bold text-white">Instant first response</h3>
+        <p class="mt-1.5 text-[14px] leading-relaxed text-mist/60">Every new lead gets a real reply in seconds — the single biggest driver of who actually books.</p>
+      </div>
+      <div class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
+        <div class="grid h-10 w-10 place-items-center rounded-lg bg-gold-400/10 text-gold-300"><svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8 2v4m8-4v4M3 10h18M5 6h14a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z"/></svg></div>
+        <h3 class="mt-4 text-base font-bold text-white">Books appointments 24/7</h3>
+        <p class="mt-1.5 text-[14px] leading-relaxed text-mist/60">The AI offers real times from your calendar, confirms, and sends reminders — no back-and-forth.</p>
+      </div>
+      <div class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
+        <div class="grid h-10 w-10 place-items-center rounded-lg bg-gold-400/10 text-gold-300"><svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-3-6.7M21 4v4h-4"/></svg></div>
+        <h3 class="mt-4 text-base font-bold text-white">Reactivates your database</h3>
+        <p class="mt-1.5 text-[14px] leading-relaxed text-mist/60">Old leads and your sphere get worked automatically — turning a cold list into booked conversations.</p>
+      </div>
+      <div class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
+        <div class="grid h-10 w-10 place-items-center rounded-lg bg-azure-500/10 text-azure-300"><svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h6m-9 8 3-3h9a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v13Z"/></svg></div>
+        <h3 class="mt-4 text-base font-bold text-white">Talks like you do</h3>
+        <p class="mt-1.5 text-[14px] leading-relaxed text-mist/60">Trained on your scripts and voice across SMS, email, and social — and fluent in English and Spanish.</p>
+      </div>
+      <div class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
+        <div class="grid h-10 w-10 place-items-center rounded-lg bg-azure-500/10 text-azure-300"><svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg></div>
+        <h3 class="mt-4 text-base font-bold text-white">See what's working</h3>
+        <p class="mt-1.5 text-[14px] leading-relaxed text-mist/60">Speed-to-lead, appointments set, and pipeline movement — for you or across your whole team.</p>
+      </div>
+      <div class="reveal rounded-2xl border border-white/10 bg-ink-850/60 p-6">
+        <div class="grid h-10 w-10 place-items-center rounded-lg bg-azure-500/10 text-azure-300"><svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg></div>
+        <h3 class="mt-4 text-base font-bold text-white">Yours, white-labeled</h3>
+        <p class="mt-1.5 text-[14px] leading-relaxed text-mist/60">Runs under the CoFounders brand for your whole roster — same engine, your name on it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ COFOUNDERS FIT BAND ============ -->
+  <section class="mx-auto mt-24 max-w-5xl px-5 sm:mt-32 sm:px-8">
+    <div class="reveal overflow-hidden rounded-3xl border border-gold-400/25 bg-gradient-to-br from-gold-400/[0.10] via-ink-850 to-azure-500/[0.08] p-8 text-center sm:p-14">
+      <p class="text-xs font-bold uppercase tracking-[0.28em] text-gold-300">Built on a One Mission Mindset</p>
+      <h2 class="mx-auto mt-4 max-w-3xl font-display text-2xl font-500 leading-snug text-white sm:text-[2.4rem] sm:leading-[1.18]">
+        CoFounders gives agents the coaching, systems, and leadership to scale.
+        This is the technology layer — <span class="text-gradient-gold">the leverage that works your leads while you live your life.</span>
+      </h2>
+      <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <a href="#pricing" class="inline-flex w-full items-center justify-center rounded-xl bg-gold-400 px-6 py-3.5 text-base font-bold text-ink-900 shadow-glow-gold transition hover:bg-gold-300 sm:w-auto">Get Started</a>
+        <a href="https://calendly.com/michellewilson-exp" target="_blank" rel="noopener" class="inline-flex w-full items-center justify-center rounded-xl border border-white/15 bg-white/[0.03] px-6 py-3.5 text-base font-semibold text-white transition hover:bg-white/[0.07] sm:w-auto">Book a Demo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FINAL CTA ============ -->
+  <section class="mx-auto mt-24 max-w-4xl px-5 text-center sm:mt-32 sm:px-8">
+    <h2 class="reveal font-display text-4xl font-600 leading-[1.05] text-white sm:text-6xl">
+      Put your leverage<br><span class="text-gradient-gold">on autopilot.</span>
+    </h2>
+    <p class="reveal mx-auto mt-5 max-w-xl text-base text-mist/60">Join the CoFounders agents turning leads into booked appointments — automatically, around the clock.</p>
+    <div class="reveal mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+      <a href="#pricing" class="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gold-400 px-7 py-4 text-base font-bold text-ink-900 shadow-glow-gold transition hover:bg-gold-300 sm:w-auto">
+        Get Started
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" class="transition group-hover:translate-x-0.5"><path stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/></svg>
+      </a>
+      <a href="https://calendly.com/michellewilson-exp" target="_blank" rel="noopener" class="inline-flex w-full items-center justify-center rounded-xl border border-white/15 bg-white/[0.03] px-7 py-4 text-base font-semibold text-white transition hover:bg-white/[0.07] sm:w-auto">Book a Demo</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="relative z-10 mt-24 border-t border-white/10 sm:mt-32">
+  <div class="mx-auto max-w-7xl px-5 py-12 sm:px-8">
+    <div class="grid gap-10 md:grid-cols-[1.4fr,1fr,1fr,1fr]">
+      <div>
+        <div class="flex items-center gap-2.5">
+          <svg width="30" height="30" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="7" width="17" height="17" rx="4.5" stroke="#D7B36B" stroke-width="2.2"/>
+            <rect x="14" y="10" width="17" height="17" rx="4.5" fill="#0C0D10" stroke="#5E9BFF" stroke-width="2.2"/>
+          </svg>
+          <span class="font-display text-xl font-700 text-white">CoFounders</span>
+        </div>
+        <p class="mt-4 max-w-xs text-[14px] leading-relaxed text-mist/55">The community that grows you — now with an AI engine that works your leads around the clock.</p>
+      </div>
+
+      <div>
+        <h4 class="text-[13px] font-bold uppercase tracking-wider text-mist/40">Platform</h4>
+        <ul class="mt-4 space-y-2.5 text-[14px] text-mist/65">
+          <li><a href="#features" class="transition hover:text-white">Features</a></li>
+          <li><a href="#solutions" class="transition hover:text-white">Solutions</a></li>
+          <li><a href="#pricing" class="transition hover:text-white">Pricing</a></li>
+          <li><a href="#integrations" class="transition hover:text-white">Integrations</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-[13px] font-bold uppercase tracking-wider text-mist/40">Company</h4>
+        <ul class="mt-4 space-y-2.5 text-[14px] text-mist/65">
+          <li><a href="https://cofoundersgroup.com/why-exp-realty/" target="_blank" rel="noopener" class="transition hover:text-white">Why eXp Realty</a></li>
+          <li><a href="https://cofoundersgroup.com/agent-training/" target="_blank" rel="noopener" class="transition hover:text-white">Agent Training</a></li>
+          <li><a href="https://cofoundersgroup.com/contact" target="_blank" rel="noopener" class="transition hover:text-white">Contact</a></li>
+          <li><a href="https://cofoundersgroup.com/member-login/" target="_blank" rel="noopener" class="transition hover:text-white">Member Login</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-[13px] font-bold uppercase tracking-wider text-mist/40">Connect</h4>
+        <ul class="mt-4 space-y-2.5 text-[14px] text-mist/65">
+          <li><a href="https://www.facebook.com/michelle.wilson.7186" target="_blank" rel="noopener" class="transition hover:text-white">Facebook</a></li>
+          <li><a href="https://www.instagram.com/michellewilsonexp" target="_blank" rel="noopener" class="transition hover:text-white">Instagram</a></li>
+          <li><a href="https://www.linkedin.com/in/michellewilsonexp" target="_blank" rel="noopener" class="transition hover:text-white">LinkedIn</a></li>
+          <li><a href="https://www.youtube.com/@MichelleWilsonRE/videos" target="_blank" rel="noopener" class="transition hover:text-white">YouTube</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-[13px] text-mist/40 sm:flex-row">
+      <p>© CoFounders. All rights reserved.</p>
+      <p>Engages leads in seconds · Books 24/7 · Built for agents, teams &amp; brokerages</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // mobile menu
+  const btn = document.getElementById('menuBtn');
+  const menu = document.getElementById('mobileMenu');
+  btn?.addEventListener('click', () => menu.classList.toggle('hidden'));
+  menu?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => menu.classList.add('hidden')));
+
+  // scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.reveal, .chat-in').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
