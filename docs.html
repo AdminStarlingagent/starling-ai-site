@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#060B16">
+<title>Documentation — Starling AI</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20rx%3D%229%22%20fill%3D%22%23060B16%22/%3E%3Cpath%20d%3D%22M20%208%20L7%2031%20L20%2023%20Z%22%20fill%3D%22%238E97F0%22/%3E%3Cpath%20d%3D%22M20%208%20L33%2031%20L20%2023%20Z%22%20fill%3D%22%23FF6F61%22/%3E%3C/svg%3E">
+<meta name="description" content="Starling AI documentation hub — getting started, integrations, the AI agent, conversations, pipelines, and billing.">
+<meta name="robots" content="index,follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060B16; --surface:#0B1322; --surface-2:#111B2E;
+  --ink:#EAEEF7; --body:#B6C0D6; --muted:#7E8AA4;
+  --coral:#FF6F61; --periwinkle:#8E97F0; --line:rgba(255,255,255,.09);
+  --maxw:760px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--body);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:17px; line-height:1.75; -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+.skip{position:absolute;left:-9999px;top:0;background:var(--coral);color:#0a0e18;padding:10px 16px;border-radius:8px;z-index:100}
+.skip:focus{left:16px;top:16px}
+a{color:var(--coral);text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--periwinkle);outline-offset:3px;border-radius:4px}
+.topbar{height:3px;background:linear-gradient(90deg,var(--coral),var(--periwinkle))}
+.nav{position:sticky;top:0;z-index:50;background:rgba(6,11,22,.82);
+  backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line)}
+.nav-in{max-width:1080px;margin:0 auto;padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+.brand .bird{flex:none}
+.brand span{color:var(--periwinkle);font-weight:600}
+.nav-links{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.nav-links a{color:var(--muted);font-size:14.5px;font-weight:500;padding:7px 12px;border-radius:8px}
+.nav-links a:hover{color:var(--ink);background:rgba(255,255,255,.05);text-decoration:none}
+.nav-links a[aria-current="page"]{color:var(--ink);background:rgba(142,151,240,.14)}
+.nav-links .home{color:var(--coral)}
+.hero-glow{position:relative}
+.hero-glow:before{content:"";position:absolute;inset:-40% -20% auto;height:340px;
+  background:radial-gradient(60% 100% at 50% 0,rgba(142,151,240,.16),transparent 70%);
+  pointer-events:none}
+main{max-width:var(--maxw);margin:0 auto;padding:56px 24px 24px;position:relative}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;margin:0 0 14px;
+  font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--periwinkle)}
+.eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--coral)}
+.doc h1{color:var(--ink);font-size:clamp(26px,4.5vw,38px);line-height:1.18;
+  letter-spacing:-.02em;font-weight:800;margin:0 0 18px;max-width:22ch}
+.doc h1:after{content:"";display:block;width:64px;height:3px;margin-top:18px;
+  background:linear-gradient(90deg,var(--coral),var(--periwinkle));border-radius:2px}
+.doc .lede{font-size:18.5px;color:var(--body)}
+.doc h2{color:var(--ink);font-size:21px;font-weight:700;letter-spacing:-.01em;
+  margin:44px 0 14px;padding-top:8px;scroll-margin-top:84px}
+.doc h2:first-of-type{margin-top:34px}
+.doc h3{color:var(--ink);font-size:17.5px;font-weight:650;margin:26px 0 10px}
+.doc p{margin:0 0 16px}
+.doc strong{color:var(--ink);font-weight:680}
+.doc em{color:var(--body)}
+.doc ul,.doc ol{margin:0 0 18px;padding-left:1.35em}
+.doc li{margin:0 0 9px}
+.doc ul li::marker{color:var(--coral)}
+.doc ol li::marker{color:var(--periwinkle);font-weight:600}
+.doc hr{border:0;border-top:1px solid var(--line);margin:34px 0}
+.doc a{border-bottom:1px solid rgba(255,111,97,.4)}
+.doc a:hover{border-bottom-color:var(--coral);text-decoration:none}
+.doc h1 + p{color:var(--body)}
+.doc table{width:100%;border-collapse:collapse;margin:8px 0 24px;font-size:15px}
+.doc th,.doc td{border:1px solid var(--line);padding:11px 14px;text-align:left;vertical-align:top}
+.doc thead th{background:var(--surface-2);color:var(--ink);font-weight:650}
+.doc tbody tr:nth-child(odd){background:rgba(255,255,255,.018)}
+.doc blockquote{margin:0 0 20px;padding:2px 0 2px 18px;border-left:3px solid var(--periwinkle);color:var(--body)}
+/* status component list */
+.status-list{list-style:none;margin:18px 0 8px;padding:0}
+.status-list li{display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;border:1px solid var(--line);border-radius:10px;margin:0 0 10px;background:var(--surface)}
+.status-ok{display:inline-flex;align-items:center;gap:8px;color:#34d399;font-size:14px;font-weight:600}
+.status-ok:before{content:"";width:9px;height:9px;border-radius:50%;background:#34d399}
+.card-grid{display:grid;gap:14px;grid-template-columns:1fr 1fr;margin:8px 0 8px}
+.card{border:1px solid var(--line);border-radius:12px;padding:18px 18px;background:var(--surface)}
+.card h3{margin:0 0 6px;color:var(--ink)}
+.card p{margin:0;color:var(--muted);font-size:14.5px}
+@media (max-width:560px){
+  body{font-size:16px}
+  main{padding:40px 20px 16px}
+  .nav-in{padding:12px 18px}
+  .doc h2{font-size:19.5px}
+  .card-grid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{
+  body{background:#fff;color:#111;font-size:11.5pt}
+  .nav,.topbar,footer,.hero-glow:before,.eyebrow,.skip{display:none!important}
+  main{max-width:none;padding:0}
+  .doc h1,.doc h2,.doc h3,.doc strong{color:#000}
+  .doc a{color:#000;border:0}
+  .doc th,.doc td{border-color:#999}
+  .doc thead th{background:#eee}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<div class="topbar"></div>
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="/"><svg class="bird" width="28" height="28" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M20 6 L5 32 L20 23 Z" fill="var(--periwinkle)"/>
+  <path d="M20 6 L35 32 L20 23 Z" fill="var(--coral)"/>
+  <path d="M20 23 L13 30 L20 27 Z" fill="var(--periwinkle)" opacity="0.55"/>
+  <path d="M20 23 L27 30 L20 27 Z" fill="var(--coral)" opacity="0.55"/>
+</svg><span style="color:var(--ink)">Starling</span>&nbsp;<span>AI</span></a>
+    <nav class="nav-links" aria-label="Pages"><a href="/" class="home">Back to site</a><a href="/terms">Terms</a><a href="/privacy">Privacy</a></nav>
+  </div>
+</header>
+<div class="hero-glow">
+  <main id="content">
+    <p class="eyebrow"><span class="dot"></span>Resources · Documentation</p>
+    <article class="doc">
+<h1 id="documentation">Documentation</h1>
+<p>Guides and references for getting the most out of Starling AI. This
+hub is organized by topic — and our team is happy to walk you through
+any of it directly.</p>
+<div class="card-grid">
+<div class="card">
+<h3>
+Getting started
+</h3>
+<p>
+Set up your account, import your database, and send your first AI
+follow-up.
+</p>
+</div>
+<div class="card">
+<h3>
+Integrations
+</h3>
+<p>
+Connect Follow Up Boss, GoHighLevel, Lofty, Real Geeks, calendar, and
+messaging.
+</p>
+</div>
+<div class="card">
+<h3>
+The AI agent
+</h3>
+<p>
+Configure tone, scripts, qualification, and bilingual replies.
+</p>
+</div>
+<div class="card">
+<h3>
+Inbox &amp; conversations
+</h3>
+<p>
+Work SMS, email, and social DMs in one unified thread.
+</p>
+</div>
+<div class="card">
+<h3>
+Pipelines &amp; smart lists
+</h3>
+<p>
+Organize contacts with stages, tags, and saved views.
+</p>
+</div>
+<div class="card">
+<h3>
+Billing &amp; plans
+</h3>
+<p>
+Manage your subscription, plan, and invoices.
+</p>
+</div>
+</div>
+<h2 id="need-a-hand">Need a hand?</h2>
+<p>Detailed step-by-step articles are being expanded. In the meantime,
+the <a href="/help">Help Center</a> answers the most common questions,
+the <a href="/migration">Migration Guide</a> covers moving from Follow
+Up Boss, and you can always reach our team at <a
+href="mailto:admin@starlingagent.com">admin@starlingagent.com</a> or <a
+href="https://calendly.com/starlingagent/30min">book onboarding</a>.</p>
+<blockquote>
+Note for the Starling team: link each card above to a real article as
+you publish it.
+</blockquote>
+
+    </article>
+  </main>
+</div>
+<footer>
+  <div class="foot-in" style="border-top:1px solid var(--line);max-width:1080px;margin:0 auto;padding:34px 24px;display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;justify-content:space-between">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;color:var(--ink);font-weight:700"><svg class="bird" width="22" height="22" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M20 6 L5 32 L20 23 Z" fill="var(--periwinkle)"/>
+  <path d="M20 6 L35 32 L20 23 Z" fill="var(--coral)"/>
+  <path d="M20 23 L13 30 L20 27 Z" fill="var(--periwinkle)" opacity="0.55"/>
+  <path d="M20 23 L27 30 L20 27 Z" fill="var(--coral)" opacity="0.55"/>
+</svg><span>Starling AI</span></div>
+      <p style="color:var(--muted);font-size:13.5px;line-height:1.7;max-width:340px">Starling AI LLC — Texas, United States.<br>
+        <a href="mailto:admin@starlingagent.com" style="color:var(--body)">admin@starlingagent.com</a> · (832)&nbsp;808-6483</p>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:8px;font-size:14px" aria-label="Footer">
+      <a href="/" style="color:var(--muted)">Back to Starling AI</a>
+      <a href="/terms" style="color:var(--muted)">Terms of Service</a>
+      <a href="/privacy" style="color:var(--muted)">Privacy Policy</a>
+    </nav>
+  </div>
+  <div style="border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:12.5px;padding:16px 24px">© 2026 Starling AI LLC. All rights reserved.</div>
+</footer>
+</body>
+</html>
