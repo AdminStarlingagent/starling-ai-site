@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#060B16">
+<title>Terms of Service — Starling AI</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20rx%3D%229%22%20fill%3D%22%23060B16%22/%3E%3Cpath%20d%3D%22M20%208%20L7%2031%20L20%2023%20Z%22%20fill%3D%22%238E97F0%22/%3E%3Cpath%20d%3D%22M20%208%20L33%2031%20L20%2023%20Z%22%20fill%3D%22%23FF6F61%22/%3E%3C/svg%3E">
+<meta name="description" content="Starling AI LLC Terms of Service and Membership Agreement, including Exhibit A — Client Consent Capture Requirements.">
+<meta name="robots" content="index,follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060B16; --surface:#0B1322; --surface-2:#111B2E;
+  --ink:#EAEEF7; --body:#B6C0D6; --muted:#7E8AA4;
+  --coral:#FF6F61; --periwinkle:#8E97F0; --line:rgba(255,255,255,.09);
+  --maxw:760px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--body);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:17px; line-height:1.75; -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+.skip{position:absolute;left:-9999px;top:0;background:var(--coral);color:#0a0e18;padding:10px 16px;border-radius:8px;z-index:100}
+.skip:focus{left:16px;top:16px}
+a{color:var(--coral);text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--periwinkle);outline-offset:3px;border-radius:4px}
+
+/* top gradient hairline */
+.topbar{height:3px;background:linear-gradient(90deg,var(--coral),var(--periwinkle))}
+
+/* sticky nav */
+.nav{position:sticky;top:0;z-index:50;background:rgba(6,11,22,.82);
+  backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line)}
+.nav-in{max-width:1080px;margin:0 auto;padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+.brand .bird{flex:none}
+.brand b{font-weight:700}
+.brand span{color:var(--periwinkle);font-weight:600}
+.nav-links{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.nav-links a{color:var(--muted);font-size:14.5px;font-weight:500;padding:7px 12px;border-radius:8px}
+.nav-links a:hover{color:var(--ink);background:rgba(255,255,255,.05);text-decoration:none}
+.nav-links a[aria-current="page"]{color:var(--ink);background:rgba(142,151,240,.14)}
+.nav-links .home{color:var(--coral)}
+
+/* atmosphere behind the title */
+.hero-glow{position:relative}
+.hero-glow:before{content:"";position:absolute;inset:-40% -20% auto;height:340px;
+  background:radial-gradient(60% 100% at 50% 0,rgba(142,151,240,.16),transparent 70%);
+  pointer-events:none}
+
+main{max-width:var(--maxw);margin:0 auto;padding:56px 24px 24px;position:relative}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;margin:0 0 14px;
+  font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--periwinkle)}
+.eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--coral)}
+
+/* document typography */
+.doc h1{color:var(--ink);font-size:clamp(26px,4.5vw,38px);line-height:1.18;
+  letter-spacing:-.02em;font-weight:800;margin:0 0 18px;max-width:22ch}
+.doc h1:after{content:"";display:block;width:64px;height:3px;margin-top:18px;
+  background:linear-gradient(90deg,var(--coral),var(--periwinkle));border-radius:2px}
+.doc h2{color:var(--ink);font-size:21px;font-weight:700;letter-spacing:-.01em;
+  margin:44px 0 14px;padding-top:8px;scroll-margin-top:84px}
+.doc h2:first-of-type{margin-top:34px}
+.doc h3{color:var(--ink);font-size:17.5px;font-weight:650;margin:26px 0 10px}
+.doc p{margin:0 0 16px}
+.doc strong{color:var(--ink);font-weight:680}
+.doc em{color:var(--body)}
+.doc ul,.doc ol{margin:0 0 18px;padding-left:1.35em}
+.doc li{margin:0 0 9px}
+.doc ul li::marker{color:var(--coral)}
+.doc ol li::marker{color:var(--periwinkle);font-weight:600}
+.doc hr{border:0;border-top:1px solid var(--line);margin:34px 0}
+.doc a{border-bottom:1px solid rgba(255,111,97,.4)}
+.doc a:hover{border-bottom-color:var(--coral);text-decoration:none}
+
+/* the three meta lines right under H1 (Texas LLC / Version / Effective / Updated) */
+.doc h1 + p{color:var(--body)}
+
+/* tables (Exhibit A quick reference) */
+.doc table{width:100%;border-collapse:collapse;margin:8px 0 24px;font-size:15px}
+.doc th,.doc td{border:1px solid var(--line);padding:11px 14px;text-align:left;vertical-align:top}
+.doc thead th{background:var(--surface-2);color:var(--ink);font-weight:650}
+.doc tbody tr:nth-child(odd){background:rgba(255,255,255,.018)}
+
+/* footer */
+footer{border-top:1px solid var(--line);margin-top:48px;background:#070C18}
+.foot-in{max-width:1080px;margin:0 auto;padding:34px 24px;
+  display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;justify-content:space-between}
+.foot-brand{display:flex;align-items:center;gap:10px;color:var(--ink);font-weight:700}
+.foot-meta{color:var(--muted);font-size:13.5px;line-height:1.7;max-width:340px}
+.foot-meta a{color:var(--body)}
+.foot-links{display:flex;flex-direction:column;gap:8px;font-size:14px}
+.foot-links a{color:var(--muted)}
+.foot-links a:hover{color:var(--ink);text-decoration:none}
+.foot-bottom{border-top:1px solid var(--line);text-align:center;
+  color:var(--muted);font-size:12.5px;padding:16px 24px}
+
+@media (max-width:560px){
+  body{font-size:16px}
+  main{padding:40px 20px 16px}
+  .nav-in{padding:12px 18px}
+  .doc h2{font-size:19.5px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* print / save-as-PDF */
+@media print{
+  body{background:#fff;color:#111;font-size:11.5pt}
+  .nav,.topbar,footer,.hero-glow:before,.eyebrow,.skip{display:none!important}
+  main{max-width:none;padding:0}
+  .doc h1,.doc h2,.doc h3,.doc strong{color:#000}
+  .doc a{color:#000;border:0}
+  .doc th,.doc td{border-color:#999}
+  .doc thead th{background:#eee}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<div class="topbar"></div>
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="/"><svg class="bird" width="28" height="28" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M20 6 L5 32 L20 23 Z" fill="var(--periwinkle)"/>
+  <path d="M20 6 L35 32 L20 23 Z" fill="var(--coral)"/>
+  <path d="M20 23 L13 30 L20 27 Z" fill="var(--periwinkle)" opacity="0.55"/>
+  <path d="M20 23 L27 30 L20 27 Z" fill="var(--coral)" opacity="0.55"/>
+</svg><b>Starling</b>&nbsp;<span>AI</span></a>
+    <nav class="nav-links" aria-label="Legal"><a href="/" class="home">Back to site</a><a href="/terms" aria-current="page">Terms</a><a href="/privacy">Privacy</a></nav>
+  </div>
+</header>
+<div class="hero-glow">
+  <main id="content">
+    <p class="eyebrow"><span class="dot"></span>Legal · Terms of Service</p>
+    <article class="doc">
+<h1
+id="starling-ai-llc-terms-of-service-and-membership-agreement">STARLING
+AI LLC — TERMS OF SERVICE AND MEMBERSHIP AGREEMENT</h1>
+<p><strong>Starling AI LLC</strong>, a Texas Limited Liability
+Company</p>
+<p><strong>Version 3.0</strong></p>
+<p><strong>Effective Date:</strong> As of the date of acceptance via
+checkout, registration, electronic signature, or execution of an Order
+Form.</p>
+<p><strong>Last Updated:</strong> 6/24/2026</p>
+<p>This Terms of Service and Membership Agreement (this
+<strong>“Agreement”</strong>) is a binding contract entered into by and
+between <strong>Starling AI LLC</strong>, a Texas limited liability
+company (<strong>“Provider,” “Starling AI,” “we,” “us,”</strong> or
+<strong>“our”</strong>), and the business entity or individual
+subscribing to or accessing the Services (<strong>“Client,”
+“you,”</strong> or <strong>“your”</strong>). Provider and Client are
+each a <strong>“Party”</strong> and together the
+<strong>“Parties.”</strong></p>
+<p>This Agreement governs your access to and use of the Starling AI
+platform, including the Starling AI customer relationship management
+(“CRM”) software, AI-powered messaging and automation agents, workflow
+automation, lead provision services (where applicable to your Plan), and
+all related software, features, integrations, and offerings
+(collectively, the <strong>“Services”</strong>).</p>
+<p><strong>PLEASE READ THIS AGREEMENT CAREFULLY. IT CONTAINS A BINDING
+ARBITRATION PROVISION, A CLASS-ACTION WAIVER, A JURY-TRIAL WAIVER, AND
+LIMITATIONS ON OUR LIABILITY. BY CLICKING “I AGREE,” CHECKING AN
+ACCEPTANCE BOX ON A CHECKOUT OR REGISTRATION PAGE, EXECUTING AN ORDER
+FORM, OR ACCESSING OR USING THE SERVICES, YOU ACKNOWLEDGE THAT YOU HAVE
+READ, UNDERSTOOD, AND AGREE TO BE BOUND BY THIS AGREEMENT. IF YOU ARE
+ACCEPTING ON BEHALF OF AN ENTITY, YOU REPRESENT THAT YOU ARE AUTHORIZED
+TO BIND THAT ENTITY. IF YOU DO NOT AGREE, DO NOT ACCESS OR USE THE
+SERVICES.</strong></p>
+<h2 id="definitions">1. DEFINITIONS</h2>
+<p><strong>1.1 “Order Form”</strong> means any order page, checkout
+page, subscription confirmation, sign-up flow, or written or electronic
+order document through which Client selects and subscribes to a Plan and
+through which the commercial terms of Client’s subscription are
+presented and accepted.</p>
+<p><strong>1.2 “Pricing Page”</strong> means the then-current pages,
+screens, and descriptions published by Provider (including on Provider’s
+website at starlingagent.com and within the Services) that describe the
+available Plans, tiers, features, fees, billing frequencies, included
+usage allotments, and included Lead volumes.</p>
+<p><strong>1.3 “Plan”</strong> means the specific subscription tier,
+package, or service level selected by Client via an Order Form, together
+with the features, usage allotments, billing frequency (e.g., monthly or
+annual), fees, and any included Lead volume associated with that tier as
+described on the applicable Order Form and Pricing Page at the time of
+subscription or renewal.</p>
+<p><strong>1.4 “Services”</strong> has the meaning given in the
+introductory paragraph and includes any one or more of the following
+components made available under Client’s Plan: (a) the Starling AI CRM
+and related software; (b) AI-powered messaging, conversation, and
+automation agents (the <strong>“AI Agent”</strong>); (c) workflow
+automation and integration functionality; and (d) Lead provision
+services, in each case only to the extent included in Client’s selected
+Plan.</p>
+<p><strong>1.5 “Execution”</strong> means one completed workflow run,
+automation step, AI Agent action, message processed or generated, API
+call, or other unit of usage performed by the Services, as such unit is
+defined, metered, and allotted under Client’s Plan. The specific
+definition, metering method, and included quantity of Executions are set
+forth on the applicable Order Form and Pricing Page.</p>
+<p><strong>1.6 “Lead”</strong> means contact information for a
+prospective customer, buyer, seller, borrower, or other prospect made
+available to Client by Provider as part of a Plan that includes Lead
+provision. The definition, sourcing, criteria, format, delivery method,
+and included quantity of Leads are set forth on the applicable Order
+Form and Pricing Page, and Provider reserves the right to adjust any of
+the foregoing in its discretion on a prospective basis.</p>
+<p><strong>1.7 “Client Data”</strong> means all data, content, records,
+contacts, and materials that Client (or its Authorized Users or End
+Users) inputs, uploads, imports, transmits, or generates through use of
+the Services, and includes AI Outputs.</p>
+<p><strong>1.8 “AI Output”</strong> means any content, message, text,
+summary, recommendation, or other output generated by the AI Agent or
+the Services.</p>
+<p><strong>1.9 “End User”</strong> means any third party (including
+Client’s customers, prospects, contacts, and leads) with whom Client
+communicates or interacts through the Services.</p>
+<p><strong>1.10 “End-User Data”</strong> means data and content relating
+to End Users that is collected, generated, processed, or transmitted
+through the Services in connection with Client’s use, including the
+content of messages and conversations.</p>
+<p><strong>1.11 “Authorized User”</strong> means an employee,
+contractor, agent, or other individual whom Client permits to access or
+use the Services under Client’s account.</p>
+<p><strong>1.12 “Subprocessor”</strong> means a third-party vendor or
+service provider engaged by Provider to process data or provide
+functionality in support of the Services (for example, hosting,
+database, telephony/messaging, and large language model providers).</p>
+<h2 id="the-services-and-license-grant">2. THE SERVICES AND LICENSE
+GRANT</h2>
+<p><strong>2.1 Description of Services.</strong> Provider offers a
+configurable platform that may include CRM software, AI-powered
+automation and messaging agents, workflow automation, integrations, and
+(for applicable Plans) Lead provision. The specific components,
+features, and functionality available to Client are determined solely by
+the Plan Client selects, as described on the applicable Order Form and
+Pricing Page. <strong>Provider is not obligated to provide any feature,
+component, or service that is not included in Client’s selected
+Plan.</strong></p>
+<p><strong>2.2 License Grant.</strong> Subject to Client’s continuous
+compliance with this Agreement and payment of all applicable fees,
+Provider grants Client a limited, non-exclusive, non-transferable,
+non-sublicensable, revocable license to access and use the Services
+during the Term, solely for Client’s internal business purposes and in
+accordance with this Agreement, the Order Form, and any applicable
+documentation.</p>
+<p><strong>2.3 Plan-Based Access.</strong> Client’s access to features,
+usage allotments, included Lead volume (if any), and billing frequency
+is governed by the Plan selected on the Order Form and described on the
+Pricing Page. Different Plans and tiers provide different features and
+allotments. Provider may offer, modify, rename, restructure, add, or
+discontinue Plans and tiers from time to time, and such changes apply
+prospectively as described in Section 3.13.</p>
+<p><strong>2.4 Usage Allotments; Hard Caps; No Overages.</strong> Usage
+allotments (including Executions and, where applicable, Leads) are hard
+caps based on Client’s selected Plan, unless the Order Form expressly
+provides for overage billing. If Client reaches an applicable allotment
+or cap, the affected Services may pause, throttle, or queue until the
+next Billing Cycle or until Client upgrades to a higher Plan.
+<strong>Provider is not liable for any business interruption, lost
+opportunity, or other harm resulting from Client reaching or exceeding
+its Plan allotments or caps.</strong></p>
+<p><strong>2.5 Modifications to the Services.</strong> Provider
+continuously develops and improves the Services. Provider may, in its
+discretion, modify, update, enhance, add, or discontinue features,
+functionality, integrations, or components of the Services. Provider
+will use commercially reasonable efforts to provide notice of material
+adverse changes to core functionality. Provider has no liability to
+Client or any third party for any modification, suspension, or
+discontinuance of any feature, except as expressly stated in this
+Agreement.</p>
+<p><strong>2.6 Beta and Experimental Features.</strong> Provider may
+make pre-release, beta, trial, or experimental features available
+(“<strong>Beta Features</strong>”). Beta Features are provided “AS IS”
+and “AS AVAILABLE,” may be modified or withdrawn at any time, and are
+excluded from any commitment, warranty, or service level. Client uses
+Beta Features at its own risk.</p>
+<p><strong>2.7 Third-Party Services and Integrations.</strong> The
+Services may interoperate with, or rely upon, third-party products,
+platforms, APIs, and services (including, by way of example and without
+limitation, CRM, telephony/messaging, hosting, database, payment, and
+large language model providers). Client’s use of any third-party service
+is governed by that third party’s own terms and policies, and Client is
+responsible for complying with them and for maintaining any third-party
+accounts or registrations required for Client’s use. <strong>Provider
+does not control and is not responsible for third-party services,
+including any outage, latency, error, change, suspension, deprecation,
+or data handling by such third parties.</strong></p>
+<p><strong>2.8 Authorized Users and Account Security.</strong> Client is
+responsible for all activity occurring under its account and for the
+acts and omissions of its Authorized Users and End Users as if they were
+Client’s own. Client shall keep account credentials confidential,
+maintain reasonable security, and promptly notify Provider of any
+unauthorized access or use.</p>
+<p><strong>2.9 Business Use Only.</strong> Client represents and
+warrants that it is accessing and using the Services solely for business
+or commercial purposes and not as an individual consumer for personal,
+family, or household purposes.</p>
+<p><strong>2.10 Resellers, White-Label, and Sub-Accounts.</strong> If
+Client is authorized by Provider to resell, rebrand, white-label, or
+provide access to the Services to its own customers, sub-accounts, or
+end clients (each, a <strong>“Downstream User”</strong>): (a) Client
+does so only under a separate written reseller, partner, or white-label
+arrangement with Provider, and remains fully responsible for all acts,
+omissions, fees, and compliance of its Downstream Users as if they were
+Client’s own; (b) Client shall bind each Downstream User to written
+terms that are at least as protective of Provider as this Agreement,
+including the disclaimers, limitations of liability, compliance
+obligations, and indemnities herein, and that name Provider as a
+third-party beneficiary of such terms; (c) <strong>no contractual
+relationship or privity exists between Provider and any Downstream
+User</strong>, and Downstream Users have no direct rights against
+Provider; and (d) Client shall indemnify Provider for any claim brought
+by or arising from a Downstream User. Absent express written
+authorization, Client may not resell, sublicense, or provide the
+Services to any third party.</p>
+<h2 id="plans-fees-and-billing">3. PLANS, FEES, AND BILLING</h2>
+<p><strong>3.1 Plans and Fees Set by Order Form and Pricing
+Page.</strong> Client subscribes to a Plan as selected on the applicable
+Order Form. <strong>The monthly or annual fees, onboarding or setup
+fees, billing frequency, included quantity of Executions and other
+usage, included quantity of Leads (if any), and all other commercial
+terms applicable to Client’s subscription are those displayed on the
+applicable Order Form and Pricing Page at the time Client subscribes or
+renews, and those terms are incorporated into and form a part of this
+Agreement by reference.</strong> Provider may offer monthly and annual
+(or other) billing options, and may offer discounts (including discounts
+for annual or longer-term commitments), in each case as described on the
+Order Form and Pricing Page.</p>
+<p><strong>3.2 Billing Cycle.</strong> The <strong>“Billing
+Cycle”</strong> corresponds to the billing frequency of Client’s Plan
+(e.g., monthly or annual). For a monthly Plan, the Billing Cycle begins
+on the subscription date and renews on the same day each subsequent
+month. For an annual or other term Plan, the Billing Cycle begins on the
+subscription date and renews at the end of each applicable term.
+<strong>All fees are billed in advance</strong> for the upcoming Billing
+Cycle unless the Order Form expressly states otherwise.</p>
+<p><strong>3.3 Free Trials.</strong> If Provider offers a free or
+discounted trial, the trial applies only for the period and on the terms
+stated on the Order Form or Pricing Page. <strong>Unless Client cancels
+before the end of the trial period, the subscription automatically
+converts to a paid subscription and Client’s payment method on file will
+be charged the applicable fees.</strong> During any trial, the Services
+are provided “AS IS” without any warranty or service level. Upon
+expiration of a trial that does not convert, Provider may suspend access
+and delete or de-identify Client Data in the ordinary course.</p>
+<p><strong>3.4 Automatic Renewal.</strong> <strong>CLIENT’S SUBSCRIPTION
+AUTOMATICALLY RENEWS</strong> at the end of each Billing Cycle for a
+successive Billing Cycle of the same length, at the then-current fees
+and terms, unless Client cancels in accordance with Section 5 before the
+start of the next Billing Cycle. By subscribing, Client authorizes
+Provider to charge the applicable renewal fees automatically.</p>
+<p><strong>3.5 Payment Authorization.</strong> Client authorizes
+Provider (and its payment processors) to automatically charge Client’s
+payment method on file for all fees, taxes, and charges due under this
+Agreement, including initial fees, renewal fees, onboarding or setup
+fees, approved overages, and any other amounts owed. Client agrees to
+provide accurate, current, and complete payment information and to keep
+it updated.</p>
+<p><strong>3.6 Failed Payments; Suspension; Late Charges.</strong> If
+any charge is declined, fails, or is not paid when due, Provider may, in
+its discretion: (a) retry the charge; (b) suspend or limit the Services
+until payment is received; and/or (c) assess a late fee and interest on
+past-due amounts at the lesser of 1.5% per month or the maximum rate
+permitted by law, plus reasonable reactivation fees. Client remains
+liable for all fees accruing during any period of suspension for
+non-payment. Suspension or termination for non-payment does not relieve
+Client of the obligation to pay amounts owed.</p>
+<p><strong>3.7 No Overages Unless Specified.</strong> Except as
+expressly provided on the Order Form, Client will not be charged for
+usage exceeding Plan allotments; instead, the applicable Services may
+pause or throttle as described in Section 2.4. Where overage billing is
+expressly offered, overages are billed at the rates stated on the Order
+Form or Pricing Page.</p>
+<p><strong>3.8 Usage Records.</strong> Provider’s measurements and
+records of Client’s usage of the Services (including Executions and Lead
+delivery) are conclusive and authoritative for billing and all other
+purposes, absent manifest error.</p>
+<p><strong>3.9 No Refunds.</strong> <strong>ALL FEES ARE
+NON-REFUNDABLE,</strong> including monthly fees, annual or prepaid term
+fees, onboarding fees, setup fees, customization fees, and Lead-related
+fees, and including amounts attributable to any unused portion of a
+Billing Cycle, any unused Executions or other allotments, and any period
+during which the Services were suspended due to Client’s breach or
+non-payment. <strong>For annual or other prepaid term Plans,
+cancellation does not entitle Client to any refund or proration of
+prepaid fees</strong>, and any discount associated with an annual or
+longer-term commitment is conditioned on Client maintaining the
+subscription for the full committed term.</p>
+<p><strong>3.10 No Setoff.</strong> Client shall pay all amounts owed
+without setoff, deduction, recoupment, or counterclaim. Client may not
+withhold or reduce payment based on any dispute, performance claim, or
+alleged service issue.</p>
+<p><strong>3.11 Taxes.</strong> Fees are exclusive of all applicable
+taxes, including sales, use, and similar taxes (such as Texas sales tax
+on taxable software-as-a-service). Client is responsible for all such
+taxes (other than taxes on Provider’s net income), and Provider may
+collect and remit such taxes where required, adding them to Client’s
+charges.</p>
+<p><strong>3.12 Chargebacks.</strong> Before initiating any chargeback
+or payment dispute, Client agrees to first contact Provider in good
+faith to resolve the issue. Initiating a chargeback for properly owed
+fees is a breach of this Agreement and may result in immediate
+suspension or termination. Client is responsible for any fees, costs,
+and expenses Provider incurs in connection with an unwarranted
+chargeback, in addition to the disputed amount.</p>
+<p><strong>3.13 Changes to Fees and Terms.</strong> Provider may change
+its fees, Plans, allotments, Lead volumes, features, and the terms of
+this Agreement from time to time. For changes that materially and
+adversely affect Client, Provider will provide at least <strong>thirty
+(30) days’ notice</strong> (email or in-product notice is sufficient).
+Changes take effect upon renewal or upon the stated effective date.
+<strong>Client’s continued use of the Services after the effective date
+constitutes acceptance.</strong> Renewals are governed by the fees and
+terms then in effect and displayed on the Order Form and Pricing
+Page.</p>
+<h2 id="customization-and-professional-services">4. CUSTOMIZATION AND
+PROFESSIONAL SERVICES</h2>
+<p>Any request for custom integrations (for example, custom API
+connections, advanced database or workflow architecture, or bespoke
+automation logic), specialized configuration, or “white glove” or
+implementation services beyond the standard features of Client’s Plan is
+subject to a separate written quote, statement of work, or order, and
+must be approved in writing by both Parties. Customization and
+professional-services fees are billed in advance, are non-refundable,
+and are in addition to subscription fees. Unless expressly agreed in
+writing, all custom work, configurations, and deliverables created by
+Provider remain Provider’s intellectual property as set forth in Section
+6.</p>
+<h2 id="term-renewal-and-termination">5. TERM, RENEWAL, AND
+TERMINATION</h2>
+<p><strong>5.1 Term.</strong> This Agreement begins on the Effective
+Date and continues for the subscription term stated on the Order Form
+(e.g., monthly or annual), and through each renewal term, until
+terminated in accordance with this Section (the
+<strong>“Term”</strong>).</p>
+<p><strong>5.2 Automatic Renewal.</strong> Subscriptions renew
+automatically as described in Section 3.4 unless cancelled in accordance
+with Section 5.3.</p>
+<p><strong>5.3 Cancellation by Client.</strong> Client may cancel its
+subscription by providing written notice through the support portal or
+designated cancellation method <strong>before the start of the next
+Billing Cycle.</strong> Cancellation stops future renewals. For monthly
+Plans, the Services continue through the end of the current paid Billing
+Cycle and then terminate. <strong>For annual or other prepaid term
+Plans, cancellation stops renewal at the end of the committed term; it
+does not shorten the committed term or entitle Client to any refund or
+proration.</strong></p>
+<p><strong>5.4 Termination and Suspension by Provider.</strong> Provider
+may suspend or terminate this Agreement or Client’s access to the
+Services, in whole or in part, immediately and in its discretion, upon:
+(a) Client’s non-payment; (b) Client’s material breach of this
+Agreement, including any violation of Section 8 (Client Responsibilities
+and Compliance); (c) Client’s transmission of prohibited content
+(Section 8.6); (d) actual or suspected fraudulent, unlawful, abusive, or
+harmful use, or any complaint or pattern of conduct that Provider
+reasonably believes creates legal or carrier-compliance risk; (e) a
+requirement of law, a Subprocessor, or a carrier; or (f) for Plans that
+include Provider-supplied Leads, Provider’s determination in its sole
+and absolute discretion that Client is failing to adequately work,
+respond to, or maintain a professional standard of care with provided
+Leads (including failure to execute timely follow-up). Provider invests
+significant resources and brand equity in Lead generation, and Client
+agrees to maintain a high standard of professional quality, promptness,
+and ethical conduct in handling Leads.</p>
+<p><strong>5.5 Effect of Termination.</strong> Upon termination: (a)
+Client’s license and access to the Services end; (b) Client remains
+responsible for all fees accrued through the effective date of
+termination; (c) no refunds or prorations will be issued; and (d) for a
+limited period following termination (as Provider may make available),
+Client may request export of Client Data, after which Provider may
+delete or de-identify Client Data in the ordinary course, subject to
+Section 6 and any retained rights described therein.</p>
+<p><strong>5.6 Survival.</strong> Sections 1, 3 (as to accrued amounts),
+4, 5.5, 6, 7, 8.6–8.12, 9, 10, 11, and 12, and any other provision that
+by its nature should survive, survive termination or expiration of this
+Agreement.</p>
+<h2 id="data-privacy-and-ai-training">6. DATA, PRIVACY, AND AI
+TRAINING</h2>
+<p><strong>6.1 Client Data Ownership.</strong> As between the Parties,
+Client retains all right, title, and interest in and to Client Data,
+subject to the licenses granted in this Agreement.</p>
+<p><strong>6.2 Provider Intellectual Property.</strong> As between the
+Parties, Provider owns and retains all right, title, and interest in and
+to the Services and all related software, AI models and architecture,
+workflows, automations, prompts, templates, system messages, code,
+configurations, methodologies, know-how, and all improvements thereto
+(collectively, <strong>“Provider IP”</strong>). No rights are granted to
+Client except the limited license in Section 2.2. Client shall not
+acquire any ownership interest in Provider IP by virtue of this
+Agreement or any use of the Services.</p>
+<p><strong>6.3 License to Operate the Services.</strong> Client grants
+Provider a worldwide, non-exclusive, royalty-free license to host, copy,
+process, store, transmit, display, and otherwise use Client Data and
+End-User Data as necessary to provide, maintain, secure, and support the
+Services and to perform Provider’s obligations and exercise its rights
+under this Agreement.</p>
+<p><strong>6.4 CONSENT TO AI TRAINING AND SERVICE
+IMPROVEMENT.</strong></p>
+<p><strong>CLIENT EXPRESSLY ACKNOWLEDGES AND AGREES THAT PROVIDER MAY
+USE CLIENT DATA AND END-USER DATA — INCLUDING THE CONTENT OF MESSAGES,
+CONVERSATIONS, INTERACTIONS, AND OTHER DATA PASSED THROUGH OR GENERATED
+BY THE AI AGENT AND THE SERVICES — TO DEVELOP, TRAIN, FINE-TUNE, TEST,
+EVALUATE, AND IMPROVE PROVIDER’S ARTIFICIAL INTELLIGENCE MODELS,
+PROMPTS, WORKFLOWS, AND THE SERVICES.</strong> This license to train and
+improve survives termination of this Agreement with respect to data
+already processed and any resulting model improvements. Client
+represents that it has the authority to grant this license and that it
+has obtained all consents and provided all notices required for
+Provider’s use as described in Section 6.6.</p>
+<p><strong>6.5 No Sale; No Third-Party Disclosure; Confidential
+Treatment.</strong> Notwithstanding Section 6.4, <strong>Provider will
+not sell Client Data or End-User Data, and will not disclose, license,
+or make available the identifiable content of Client Data or End-User
+Data to unrelated third parties for those third parties’ own independent
+or marketing purposes.</strong> Provider’s use of data to train and
+improve its models and Services will be conducted in a manner designed
+so that one client’s confidential Client Data and End-User Data is not
+exposed or made available in identifiable form to another client through
+the Services. Provider may disclose Client Data and End-User Data only:
+(a) to Subprocessors as needed to provide, secure, and improve the
+Services; (b) as required by law, legal process, or governmental
+request; (c) to enforce this Agreement or protect rights, safety, or
+property; or (d) in connection with a merger, acquisition, financing, or
+sale of assets (subject to confidentiality obligations consistent with
+this Section).</p>
+<p><strong>6.6 Client Privacy Obligations and Warranties.</strong>
+Client is solely responsible for the lawfulness of its collection, use,
+and processing of Client Data and End-User Data and for its instructions
+to Provider. <strong>Client represents and warrants that it has provided
+all required notices and obtained all required consents, permissions,
+and lawful bases — from its End Users and any other applicable persons —
+necessary for (a) Provider to process Client Data and End-User Data to
+provide the Services, and (b) Provider to use such data to train and
+improve its AI models and the Services as described in Section 6.4,
+including under all applicable privacy, data protection, and
+communications laws.</strong> Client shall maintain its own privacy
+policy and disclosures consistent with these obligations.</p>
+<p><strong>6.7 Controller/Processor Roles.</strong> To the extent
+applicable privacy laws (such as the GDPR or CCPA/CPRA) apply, Client
+acts as the “controller” (or “business”) and Provider acts as the
+“processor” (or “service provider”) with respect to End-User Data
+processed on Client’s behalf to provide the Services. Where required,
+the Parties will enter into a separate Data Processing Addendum, which
+is incorporated by reference when executed.</p>
+<p><strong>6.8 AI Outputs.</strong> As between the Parties, AI Outputs
+generated for Client are treated as Client Data and subject to the
+licenses in this Agreement. <strong>Provider makes no warranty that AI
+Outputs are accurate, complete, current, original, non-infringing, or
+unique, and Client acknowledges that, due to the nature of generative
+AI, the Services may generate the same or substantially similar outputs
+for Provider or for other clients.</strong> Client’s use of AI Outputs
+must comply with the acceptable use, content, and usage policies of the
+underlying AI and large language model providers, and Client is
+responsible for such compliance.</p>
+<p><strong>6.9 Aggregated and De-Identified Data.</strong> Provider may
+create and use aggregated, anonymized, statistical, and de-identified
+data derived from use of the Services (data that does not identify
+Client, any Authorized User, or any End User) for any lawful business
+purpose, including analytics, benchmarking, and improving and marketing
+the Services. Provider owns all such aggregated and de-identified
+data.</p>
+<p><strong>6.10 Feedback License.</strong> If Client provides any
+suggestions, feature requests, evaluations, or other feedback regarding
+the Services (<strong>“Feedback”</strong>), Client grants Provider a
+perpetual, irrevocable, worldwide, royalty-free, fully sublicensable
+license to use, incorporate, and exploit such Feedback for any purpose,
+without compensation or attribution.</p>
+<p><strong>6.11 Subprocessors.</strong> Client authorizes Provider to
+engage Subprocessors to provide and support the Services. Provider
+remains responsible for its Subprocessors’ performance of the Services
+to the extent required by applicable law.</p>
+<p><strong>6.12 Privacy Policy.</strong> Client’s and End Users’ use of
+the Services is also subject to Provider’s Privacy Policy, available at
+starlingagent.com/privacy, which is incorporated by reference. In the
+event of a conflict between this Agreement and the Privacy Policy
+regarding processing of personal data, this Agreement controls as
+between the Parties unless the Privacy Policy expressly states
+otherwise.</p>
+<p><strong>6.13 Security; Client Backups.</strong> Provider implements
+commercially reasonable administrative, technical, and organizational
+measures designed to protect Client Data. <strong>However, no method of
+transmission or storage is completely secure, and Provider does not
+warrant that the Services will be free from unauthorized access, loss,
+or other security incidents. Client is responsible for maintaining its
+own backups and copies of Client Data, and Provider is not liable for
+any loss, corruption, or deletion of Client Data.</strong></p>
+<h2 id="disclaimers-ai-and-results">7. DISCLAIMERS; AI AND RESULTS</h2>
+<p><strong>7.1 “AS IS” Basis.</strong> <strong>THE SERVICES, INCLUDING
+THE AI AGENT, LEADS, AND ALL CONTENT AND OUTPUTS, ARE PROVIDED “AS IS”
+AND “AS AVAILABLE,” WITHOUT WARRANTIES OF ANY KIND. TO THE FULLEST
+EXTENT PERMITTED BY LAW, PROVIDER DISCLAIMS ALL WARRANTIES, EXPRESS,
+IMPLIED, OR STATUTORY, INCLUDING IMPLIED WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT, AND ANY
+WARRANTIES ARISING FROM COURSE OF DEALING OR USAGE OF
+TRADE.</strong></p>
+<p><strong>7.2 No Professional or Regulated Advice.</strong> The
+Services are software tools. <strong>Provider is not a law firm,
+financial advisor, tax advisor, real estate brokerage, mortgage lender
+or broker, insurance agency, or other licensed or regulated
+professional, and the Services do not provide legal, financial, tax,
+real estate, mortgage, insurance, or other professional or regulated
+advice.</strong> AI Outputs and other content generated by the Services
+are not a substitute for professional judgment or the advice of an
+appropriately licensed professional. Client is solely responsible for
+obtaining its own professional advice and for all decisions and
+communications made in connection with its business.</p>
+<p><strong>7.3 Nature of AI; Hallucinations; Verification.</strong>
+Client acknowledges that artificial intelligence is probabilistic and
+may generate output that is inaccurate, incomplete, outdated, offensive,
+biased, “hallucinated,” or otherwise inappropriate or unsuitable for
+Client’s intended use. <strong>Client is solely responsible for
+reviewing, supervising, and verifying all AI Outputs before relying on,
+transmitting, or acting on them</strong>, including before sending any
+AI-generated communication to any End User.</p>
+<p><strong>7.4 No Liability for AI Outputs.</strong> <strong>PROVIDER IS
+NOT LIABLE FOR ANY ACT, OMISSION, ERROR, OR OUTPUT OF THE AI AGENT OR
+THE SERVICES, OR FOR ANY DECISION MADE OR ACTION TAKEN (OR NOT TAKEN) BY
+CLIENT, AN END USER, OR ANY OTHER PERSON IN RELIANCE ON SUCH
+OUTPUT.</strong> Without limitation, Provider is not responsible or
+liable for any lost, delayed, or unsuccessful transaction, sale,
+appointment, lead, client, or business opportunity, or for any other
+loss, arising from or relating to AI Agent responses or any other output
+or behavior of the Services.</p>
+<p><strong>7.5 No Guarantee of Results.</strong> <strong>PROVIDER MAKES
+NO GUARANTEE, REPRESENTATION, OR WARRANTY REGARDING ANY BUSINESS RESULT,
+OUTCOME, REVENUE, RETURN ON INVESTMENT, RESPONSE RATE, CONVERSION RATE,
+APPOINTMENT, OR CLOSED TRANSACTION.</strong> Any examples, statistics,
+testimonials, or performance figures provided in marketing materials are
+illustrative only, are not a promise or warranty of future results, and
+do not form part of this Agreement.</p>
+<p><strong>7.6 Lead Provision Disclaimer.</strong> For Plans that
+include Provider-supplied Leads, <strong>Leads are provided “AS IS” and
+“AS AVAILABLE,” and Provider makes no representation, warranty, or
+guarantee regarding the quality, accuracy, completeness, validity,
+responsiveness, conversion potential, or exclusivity of any
+Lead.</strong> Provider does not guarantee that any Lead will result in
+contact, a conversation, an appointment, a transaction, or revenue.
+Provider is responsible only for delivery of Lead data in accordance
+with the Plan, and not for any outcome. Working leads requires
+significant effort by Client.</p>
+<p><strong>7.7 Upstream Dependencies.</strong> The Services depend on
+third-party large language models, APIs, hosting, telephony/messaging,
+and other infrastructure. <strong>Provider is not responsible for any
+outage, latency, error, change, deprecation, suspension, content
+moderation, or data handling caused by such third parties.</strong></p>
+<p><strong>7.8 No Uptime or Service-Level Guarantee.</strong> Unless a
+separate written service-level agreement is expressly executed, the
+Services are provided without any uptime, availability, or performance
+guarantee. Provider may perform scheduled or emergency maintenance and
+may impose reasonable technical limits.</p>
+<h2 id="client-responsibilities-and-compliance">8. CLIENT
+RESPONSIBILITIES AND COMPLIANCE</h2>
+<p><strong>8.1 General Legal Compliance.</strong> Client is solely
+responsible for ensuring that its use of the Services complies with all
+applicable local, state, federal, and international laws, rules, and
+regulations. Client shall not use the Services for any unlawful,
+fraudulent, deceptive, harmful, or abusive purpose.</p>
+<p><strong>8.2 Industry and Regulated-Activity Compliance;
+Licensing.</strong> The Services are general-purpose tools usable across
+many industries and business types. <strong>Client is solely responsible
+for complying with all laws, regulations, licensing requirements, and
+professional and ethical rules applicable to Client’s particular
+industry, profession, products, services, and communications</strong>,
+and for holding and maintaining all licenses, registrations, and
+authorizations required for Client’s business. This includes, without
+limitation and as applicable to Client, rules governing real estate,
+mortgage and lending, insurance, automotive sales and financing, debt
+and credit services, and any other regulated activity, as well as all
+advertising, disclosure, recordkeeping, and consumer-protection
+requirements applicable to Client. Provider does not monitor Client’s
+communications for compliance and assumes no responsibility for Client’s
+regulatory obligations.</p>
+<p><strong>8.3 Platform Provider; Client Is the Sender and
+Initiator.</strong> <strong>Provider is a technology and software
+provider. Client is solely responsible for determining and controlling
+the recipients, content, timing, frequency, and consent status of all
+communications (including SMS, voice, and email) created, scheduled,
+generated, or transmitted through the Services. As between the Parties,
+Client is the “sender,” “initiator,” and “caller” of all such
+communications for purposes of the Telephone Consumer Protection Act
+(“TCPA”) and all analogous federal and state laws, and Provider acts
+solely as a technology provider at Client’s direction.</strong> This
+allocation applies <strong>even where Provider hosts, provisions,
+configures, registers, or administers messaging, telephony, or number
+infrastructure (including third-party services such as Twilio) on
+Client’s behalf or at Client’s request</strong>; such administration is
+a technical and administrative service performed on Client’s
+instructions and does not make Provider the sender, initiator, or caller
+of any communication or the party responsible for consent.</p>
+<p><strong>8.4 Messaging, Telephone, and Email Compliance.</strong>
+Client is solely responsible for compliance with all laws and carrier
+and platform requirements governing electronic communications, including
+without limitation: the TCPA; the CAN-SPAM Act; the Telemarketing Sales
+Rule (TSR); the National and applicable state Do Not Call (DNC)
+registries; <strong>and all applicable state-law analogues, including
+state telephone-solicitation and “mini-TCPA” statutes (such as the
+Florida Telephone Solicitation Act and similar laws in other
+states)</strong>; and all applicable carrier and messaging-platform
+requirements (including, where applicable, A2P 10DLC brand and campaign
+registration, content and throughput rules, and opt-out/opt-in handling
+such as STOP and HELP keyword support). Client is responsible for
+obtaining and maintaining any required registrations, for honoring all
+opt-out requests, and for maintaining records of consent.</p>
+<p><strong>8.5 Messaging Registration (A2P 10DLC).</strong> Where
+Client’s use involves application-to-person messaging, Client is
+responsible for ensuring that its messaging brand and campaigns are
+properly registered and compliant. <strong>To the extent Provider
+performs or facilitates such registration on Client’s behalf, Client
+authorizes Provider to do so, designates Client as the responsible
+“brand,” and represents and warrants that all information provided for
+registration (including business information, use-case descriptions,
+sample messages, opt-in language, and consent flows) is accurate,
+complete, and compliant.</strong> Client is responsible for any
+consequences of inaccurate or non-compliant registration
+information.</p>
+<p><strong>8.6 Call Recording and Two-Party Consent.</strong> Client
+acknowledges that the Services may include features that record or
+transcribe voice conversations and that many jurisdictions require the
+consent of all parties before recording (“two-party” or “all-party”
+consent laws). <strong>Client warrants that, prior to any recording, it
+will configure the Services and its processes to provide all legally
+required disclosures and obtain all required consents from call
+participants. Client assumes full responsibility and liability for any
+failure to do so.</strong></p>
+<p><strong>8.7 Prohibited Content and Acceptable Use.</strong> Client
+shall not use the Services to transmit, generate, or facilitate content
+that is prohibited by mobile carriers, messaging platforms, or
+applicable law, including content within the “SHAFT” categories
+(Sex/adult content, Hate speech, Alcohol, Firearms, and Tobacco) and
+high-risk financial categories (such as payday loans, debt collection,
+and gambling), in each case except as expressly permitted by Provider,
+applicable carriers, and applicable law. Client further shall not, and
+shall not permit any Authorized User or third party to: (a) reverse
+engineer, decompile, or attempt to derive the source code, models, or
+underlying structure of the Services, except to the extent this
+restriction is prohibited by law; (b) resell, sublicense, rent, lease,
+or provide the Services to third parties except as expressly authorized
+in writing by Provider (including under any applicable white-label or
+reseller terms); (c) use the Services to build or assist in building a
+competing product or service; (d) scrape, harvest, or extract data from
+the Services except as expressly permitted; (e) circumvent usage caps,
+security, or access controls; (f) upload malware or interfere with the
+integrity or performance of the Services; or (g) infringe any
+intellectual property, privacy, or other rights of any person.
+<strong>Provider may suppress, block, or refuse to transmit any
+communication, and may suspend or terminate the Services immediately, if
+Provider believes Client has transmitted prohibited content or otherwise
+violated this Section, in each case without liability to
+Client.</strong></p>
+<p><strong>8.8 Consent and Compliance for Client-Sourced
+Contacts.</strong></p>
+<p>  <strong>(a) Definition.</strong> A <strong>“Client-Sourced
+Contact”</strong> means any telephone number, contact, or recipient that
+Client uploads, imports, syncs, enters, or otherwise provides or makes
+available through the Services and that was not supplied to Client by
+Provider as a Lead.</p>
+<p>  <strong>(b) Sole Responsibility.</strong> Client is solely and
+exclusively responsible for obtaining, maintaining, and documenting all
+consents, permissions, and lawful bases required to contact each
+Client-Sourced Contact through the Services. Provider makes no
+determination regarding, and bears no responsibility for, the consent
+status of any Client-Sourced Contact.</p>
+<p>  <strong>(c) Consent Representation and Warranty.</strong> Client
+represents, warrants, and covenants that, before any communication is
+sent to a Client-Sourced Contact through the Services, Client has
+obtained from that contact all consent required by applicable law for
+the type of communication sent, including (i) “prior express written
+consent” as defined by the TCPA and FCC rules for any marketing,
+advertising, or autodialed or AI-generated message, and (ii) any consent
+required under applicable state law (including state
+telephone-solicitation and “mini-TCPA” statutes); and that such consent
+(A) runs to Client as the sender and to Provider’s AI Agent and the
+Services acting at Client’s direction, (B) is evidenced by records
+sufficient to satisfy the applicable legal standard, and (C) remains
+valid and has not been revoked as of the time each communication is
+sent.</p>
+<p>  <strong>(d) Continuing Compliance; Scrubbing.</strong> Client is
+responsible on an ongoing basis for honoring all opt-out and revocation
+requests, suppressing contacts who revoke consent, and scrubbing
+Client-Sourced Contacts against applicable Do Not Call lists and for
+reassigned or disconnected numbers. Consent obtained at the time of
+upload does not relieve Client of the obligation to ensure that consent
+remains valid for each communication sent.</p>
+<p>  <strong>(e) Prohibited Lists.</strong> Client shall not upload,
+import, or contact through the Services any “cold,” purchased, rented,
+scraped, harvested, or third-party-sourced list, or any contact for
+which Client lacks the consent required by this Section.</p>
+<p>  <strong>(f) No Verification by Provider; No Reliance.</strong>
+Client acknowledges that Provider does not, and has no obligation to,
+review, verify, validate, monitor, or vet the consent status, source, or
+legality of any Client-Sourced Contact, and that Client is not relying
+on Provider for any determination regarding TCPA, DNC, state-law, or
+other consent or compliance matters. Any consent-related feature
+Provider may make available (such as opt-out keyword handling) is
+offered as a convenience only, does not shift responsibility to
+Provider, and does not relieve Client of its obligations under this
+Section.</p>
+<p>  <strong>(g) Records; Burden of Proof.</strong> Client shall create
+and retain records evidencing the consent and compliance basis for each
+Client-Sourced Contact for no less than five (5) years, and shall
+provide such records to Provider promptly upon request. As between the
+Parties, the burden of demonstrating valid consent for any
+Client-Sourced Contact rests solely and entirely with Client.</p>
+<p>  <strong>(h) Compliant Capture.</strong> Where Client collects
+consent through its own forms, landing pages, or other mechanisms,
+Client shall use clear and conspicuous disclosures and affirmative
+(unchecked) opt-in mechanisms that satisfy applicable law and that
+conform to the requirements set forth in <strong>Exhibit A (Client
+Consent Capture Requirements)</strong>, and shall not pre-check consent
+boxes or bury consent language.</p>
+<p>  <strong>(i) Indemnification.</strong> Without limiting Section
+8.12, Client shall indemnify, defend, and hold harmless the Provider
+Indemnitees from and against any Claim arising out of or relating to
+Client-Sourced Contacts or Client’s breach of this Section, including
+any Claim under the TCPA, state telephone-solicitation or “mini-TCPA”
+laws, or DNC rules, or arising from a lack of required consent.
+<strong>This indemnification obligation is not subject to the limitation
+of liability in Section 9.2.</strong></p>
+<p>  <strong>(j) Suspension.</strong> Provider may suspend or terminate
+Client’s access, or refuse to transmit any communication, if Provider
+reasonably believes Client is contacting Client-Sourced Contacts without
+required consent or otherwise in violation of this Section, in each case
+without liability to Client.</p>
+<p><strong>8.9 Provider-Supplied Leads.</strong> For Leads supplied by
+Provider under a Plan, Provider uses commercially reasonable efforts to
+source Leads through opt-in marketing channels. <strong>However,
+Provider makes no warranty regarding the applicability of the DNC
+registry or specific TCPA, state-law, consent, or licensing requirements
+to Client’s particular business or entity, and Client is solely
+responsible for ensuring that its outreach to any Provider-supplied Lead
+— whether via the AI Agent or manually — complies with the TCPA,
+applicable state laws, DNC rules, and all other applicable
+laws.</strong> Client remains responsible for honoring all opt-out and
+revocation requests with respect to Provider-supplied Leads.</p>
+<p><strong>8.10 AI Disclosure / “Bot” Laws.</strong> Client shall use
+the Services in compliance with all applicable laws governing automated
+communications and disclosure of artificial intelligence (“bot” laws).
+Where required by law, Client shall ensure that the AI Agent discloses
+to End Users that they are interacting with an artificial intelligence
+(for example, “I am an AI assistant for [Client Name]”).</p>
+<p><strong>8.11 Insurance.</strong> For Plans that include the AI
+Agent’s messaging functionality and/or Provider-supplied Leads (or where
+otherwise required on the Order Form), Client shall, at its own expense,
+maintain commercially reasonable insurance appropriate to its business,
+including commercial general liability insurance and, to the extent
+available, technology errors-and-omissions and/or cyber-liability
+insurance, <strong>including, where available, coverage for claims
+arising under the TCPA and similar communications statutes.</strong>
+Upon Provider’s reasonable request, Client shall provide a certificate
+evidencing such coverage.</p>
+<p><strong>8.12 Indemnification.</strong></p>
+<p>  <strong>(a) Indemnity.</strong> Client shall indemnify, defend, and
+hold harmless Provider and its members, managers, officers, employees,
+agents, and Subprocessors (collectively, the <strong>“Provider
+Indemnitees”</strong>) from and against any and all claims, demands,
+actions, investigations, liabilities, damages, fines, penalties,
+settlements, costs, and expenses (including reasonable attorneys’ fees
+and costs of defense) (collectively, <strong>“Claims”</strong>) arising
+out of or relating to: (i) Client’s violation of any law, including the
+TCPA, CAN-SPAM, TSR, DNC, state telephone-solicitation or “mini-TCPA”
+laws, carrier or A2P requirements, wiretapping/recording, privacy, or
+industry-specific or licensing laws; (ii) Client’s failure to obtain
+required consents or provide required notices or disclosures (including
+those described in Sections 6.6, 8.4, 8.5, 8.6, and 8.8); (iii) any
+Client Data, End-User Data, AI Output, or content generated,
+transmitted, scheduled, or initiated by or for Client through the
+Services; (iv) Client’s communications with, or treatment of, any End
+User; (v) Client’s reliance on, or use of, any AI Output; (vi) any
+Downstream User or Client’s resale or provision of the Services; (vii)
+Client’s breach of this Agreement; or (viii) any fraudulent, unlawful,
+or unauthorized use of the Services by Client, its Authorized Users,
+Downstream Users, or End Users.</p>
+<p>  <strong>(b) Procedure.</strong> Provider will provide Client with
+notice of a Claim for which it seeks indemnification (provided that any
+failure or delay in notice relieves Client only to the extent it is
+actually and materially prejudiced). <strong>Provider may, at its
+option, control the defense and settlement of any Claim with counsel of
+its choice at Client’s expense, or permit Client to assume the defense
+with counsel reasonably acceptable to Provider while Provider
+participates with its own counsel.</strong> Client may not settle any
+Claim, or consent to any judgment or relief, in a manner that imposes
+any liability, payment, admission, or obligation on, or that does not
+include a full and unconditional release of, any Provider Indemnitee,
+without Provider’s prior written consent.</p>
+<h2 id="limitation-of-liability">9. LIMITATION OF LIABILITY</h2>
+<p><strong>9.1 Exclusion of Damages.</strong> <strong>TO THE FULLEST
+EXTENT PERMITTED BY LAW, PROVIDER SHALL NOT BE LIABLE FOR ANY INDIRECT,
+INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE DAMAGES, OR
+FOR ANY LOSS OF PROFITS, REVENUE, BUSINESS, GOODWILL, DATA, OR
+ANTICIPATED SAVINGS, OR FOR ANY LOST, DELAYED, OR UNSUCCESSFUL
+TRANSACTION OR OPPORTUNITY, ARISING OUT OF OR RELATING TO THIS AGREEMENT
+OR THE SERVICES, WHETHER BASED IN CONTRACT, TORT, STRICT LIABILITY, OR
+OTHERWISE, AND EVEN IF PROVIDER HAS BEEN ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGES.</strong></p>
+<p><strong>9.2 Liability Cap.</strong> <strong>TO THE FULLEST EXTENT
+PERMITTED BY LAW, PROVIDER’S TOTAL AGGREGATE LIABILITY ARISING OUT OF OR
+RELATING TO THIS AGREEMENT OR THE SERVICES SHALL NOT EXCEED THE TOTAL
+FEES ACTUALLY PAID BY CLIENT TO PROVIDER IN THE SIX (6) MONTHS
+IMMEDIATELY PRECEDING THE EVENT GIVING RISE TO THE CLAIM.</strong></p>
+<p><strong>9.3 Allocation.</strong> The limitations in this Section
+reflect the allocation of risk between the Parties and are an essential
+basis of the bargain. They apply notwithstanding the failure of
+essential purpose of any limited remedy.</p>
+<p><strong>9.4 Exclusions from Limitations.</strong> The limitations and
+exclusions in Sections 9.1 and 9.2 do not apply to, and shall not limit:
+(a) Client’s obligation to pay fees and other amounts owed under this
+Agreement; (b) Client’s indemnification obligations under Section 8.12;
+(c) Client’s breach of the license restrictions or Acceptable Use
+provisions (Sections 2.2 and 8.7); (d) Client’s breach of its
+confidentiality obligations; or (e) Client’s infringement or
+misappropriation of Provider IP. Liability arising from the foregoing is
+not subject to the cap in Section 9.2.</p>
+<h2 id="confidentiality">10. CONFIDENTIALITY</h2>
+<p><strong>10.1 Definition.</strong> <strong>“Confidential
+Information”</strong> means non-public information disclosed by one
+Party (the “Disclosing Party”) to the other (the “Receiving Party”) that
+is designated as confidential or that reasonably should be understood to
+be confidential, including Provider IP, the non-public features and
+pricing of the Services, Client Data, and business and technical
+information. Confidential Information does not include information that
+is or becomes public through no fault of the Receiving Party, was
+rightfully known without obligation of confidentiality, is independently
+developed without use of the Confidential Information, or is rightfully
+obtained from a third party without restriction.</p>
+<p><strong>10.2 Obligations.</strong> The Receiving Party shall: (a) use
+the Disclosing Party’s Confidential Information only to exercise its
+rights and perform its obligations under this Agreement; (b) protect it
+using at least reasonable care; and (c) not disclose it except to its
+personnel, advisors, and Subprocessors who need to know it and are bound
+by confidentiality obligations. The Receiving Party may disclose
+Confidential Information as required by law or legal process, provided
+it gives reasonable notice where lawful.</p>
+<h2 id="dispute-resolution">11. DISPUTE RESOLUTION</h2>
+<p><strong>11.1 Governing Law.</strong> This Agreement is governed by
+the laws of the State of Texas, without regard to its conflict-of-laws
+principles. The Federal Arbitration Act governs the interpretation and
+enforcement of Section 11.3.</p>
+<p><strong>11.2 Venue.</strong> Subject to Section 11.3, any permitted
+legal action and any arbitration shall be conducted in <strong>Denton
+County, Texas</strong>, and the Parties consent to the exclusive
+jurisdiction and venue of the state and federal courts located there (or
+serving that county).</p>
+<p><strong>11.3 Binding Arbitration; Class Waiver.</strong> Except for
+claims described in Section 11.4, any dispute, claim, or controversy
+arising out of or relating to this Agreement or the Services shall be
+resolved exclusively by final and binding arbitration administered by
+the American Arbitration Association (AAA) under its Commercial
+Arbitration Rules, conducted in the location specified in Section 11.2
+(or, by agreement, by videoconference). Judgment on the award may be
+entered in any court of competent jurisdiction. <strong>THE PARTIES
+WAIVE ANY RIGHT TO PARTICIPATE IN A CLASS, COLLECTIVE, CONSOLIDATED, OR
+REPRESENTATIVE ACTION OR ARBITRATION, AND THE ARBITRATOR MAY NOT
+CONSOLIDATE CLAIMS OR PRESIDE OVER ANY FORM OF CLASS, COLLECTIVE, OR
+REPRESENTATIVE PROCEEDING.</strong> This class, collective,
+consolidated, and representative waiver is a material and
+<strong>non-severable</strong> part of the agreement to arbitrate. If
+this waiver is held unenforceable or invalid as to any claim or remedy,
+then the agreement to arbitrate shall be null and void in its entirety
+as to that claim, and that claim shall instead be resolved in court in
+the venue specified in Section 11.2; in no event shall any class,
+collective, consolidated, or representative proceeding be conducted in
+arbitration.</p>
+<p><strong>11.4 Injunctive Relief.</strong> Notwithstanding Section
+11.3, either Party may seek temporary or preliminary injunctive or other
+equitable relief in a court of competent jurisdiction to protect its
+intellectual property or Confidential Information or to enforce Section
+8.7, without waiving the arbitration agreement.</p>
+<p><strong>11.5 WAIVER OF JURY TRIAL.</strong> <strong>TO THE FULLEST
+EXTENT PERMITTED BY LAW, EACH PARTY KNOWINGLY, VOLUNTARILY, AND
+IRREVOCABLY WAIVES ANY RIGHT TO A TRIAL BY JURY IN ANY ACTION OR
+PROCEEDING ARISING OUT OF OR RELATING TO THIS AGREEMENT OR THE SERVICES
+THAT IS HEARD IN COURT.</strong></p>
+<p><strong>11.6 Time to Bring Claims.</strong> <strong>EXCEPT WHERE A
+LONGER MINIMUM PERIOD IS REQUIRED BY APPLICABLE LAW, ANY CLAIM OR CAUSE
+OF ACTION ARISING OUT OF OR RELATING TO THIS AGREEMENT OR THE SERVICES
+MUST BE COMMENCED WITHIN TWO (2) YEARS AFTER THE CLAIM OR CAUSE OF
+ACTION ACCRUES, OR IT IS PERMANENTLY BARRED.</strong> Where applicable
+law does not permit a two-year period, the shortest period permitted by
+applicable law applies.</p>
+<p><strong>11.7 Attorneys’ Fees.</strong> In any arbitration or legal
+proceeding arising out of or relating to this Agreement, the prevailing
+Party is entitled to recover its reasonable attorneys’ fees and costs,
+to the extent permitted by law.</p>
+<h2 id="miscellaneous">12. MISCELLANEOUS</h2>
+<p><strong>12.1 Entire Agreement; Order of Precedence.</strong> This
+Agreement, together with the applicable Order Form, Pricing Page terms,
+Privacy Policy, any exhibits or schedules attached to or incorporated by
+reference into this Agreement (including Exhibit A — Client Consent
+Capture Requirements), and any executed Data Processing Addendum,
+reseller/partner agreement, or statement of work, constitutes the entire
+agreement between the Parties regarding the Services and supersedes all
+prior agreements, understandings, and communications. In the event of a
+conflict, the following order of precedence applies: (a) a mutually
+executed statement of work, Data Processing Addendum, or
+reseller/partner agreement, for its subject matter; then (b) the Order
+Form and Pricing Page terms, with respect to <strong>commercial
+terms</strong> (such as fees, billing frequency, allotments, and Lead
+volumes); then (c) this Agreement, with respect to all <strong>legal
+terms</strong>.</p>
+<p><strong>12.2 Non-Reliance.</strong> Client acknowledges and agrees
+that, in entering into this Agreement and subscribing to the Services,
+it has not relied on any representation, warranty, statement, promise,
+projection, demonstration, testimonial, performance figure, or assurance
+of any kind that is not expressly set forth in this Agreement, and that
+no such extrinsic statement forms any part of this Agreement.</p>
+<p><strong>12.3 Changes to this Agreement.</strong> Provider may amend
+this Agreement as described in Section 3.13. The “Last Updated” date
+reflects the most recent version.</p>
+<p><strong>12.4 Severability.</strong> If any provision is held invalid
+or unenforceable, it will be modified to the minimum extent necessary to
+make it enforceable, and the remaining provisions remain in full force
+and effect (subject to the non-severability of the class waiver as
+expressly provided in Section 11.3).</p>
+<p><strong>12.5 Assignment.</strong> Client may not assign or transfer
+this Agreement, in whole or in part, without Provider’s prior written
+consent; any attempted assignment in violation is void. Provider may
+assign this Agreement without restriction, including in connection with
+a merger, acquisition, reorganization, financing, or sale of assets.
+This Agreement binds and benefits the Parties’ permitted successors and
+assigns.</p>
+<p><strong>12.6 No Third-Party Beneficiaries.</strong> Except for the
+Provider Indemnitees (Section 8.12) and Provider as a third-party
+beneficiary of downstream terms (Section 2.10), this Agreement confers
+no rights or remedies on any person other than the Parties.</p>
+<p><strong>12.7 Force Majeure.</strong> Provider is not liable for any
+delay or failure to perform caused by events beyond its reasonable
+control, including acts of God, natural disasters, epidemics, war,
+terrorism, civil unrest, labor disputes, power or internet failures,
+third-party service or carrier failures, cyberattacks, denial-of-service
+attacks, and governmental actions.</p>
+<p><strong>12.8 Independent Contractors.</strong> The Parties are
+independent contractors. This Agreement does not create any partnership,
+joint venture, agency, fiduciary, or employment relationship.</p>
+<p><strong>12.9 Export and Sanctions Compliance.</strong> Client
+represents and warrants that it and its principals are not subject to
+U.S. sanctions or located in an embargoed jurisdiction, are not on any
+U.S. government restricted-party list, and will comply with all
+applicable export-control and economic-sanctions laws in using the
+Services.</p>
+<p><strong>12.10 Notices.</strong> Provider may provide notices to
+Client by email to the address associated with Client’s account or by
+in-product notice. Client shall provide notices to Provider through the
+support portal or at admin@starlingagent.com or by mail to Starling AI
+LLC at its principal office or registered address. Notices are effective
+upon delivery.</p>
+<p><strong>12.11 No Waiver.</strong> No failure or delay by either Party
+in exercising any right is a waiver of that right. Any waiver must be in
+writing.</p>
+<p><strong>12.12 Electronic Records and Signatures.</strong> Client
+consents to transact electronically and agrees that its electronic
+acceptance (including clicking “I Agree,” checking a box, or executing
+an Order Form electronically) constitutes a valid and binding signature
+and that electronic records satisfy any requirement that records be in
+writing.</p>
+<p><strong>12.13 Counterparts.</strong> This Agreement (and any Order
+Form) may be executed or accepted in counterparts, including
+electronically, each of which is deemed an original and all of which
+together constitute one instrument.</p>
+<p><strong>12.14 Headings.</strong> Headings are for convenience only
+and do not affect interpretation.</p>
+<p><strong>12.15 WAIVER OF CERTAIN CONSUMER RIGHTS (TEXAS
+DTPA).</strong></p>
+<p><strong>TO THE EXTENT PERMITTED BY AND IN ACCORDANCE WITH SECTION
+17.42 OF THE TEXAS BUSINESS &amp; COMMERCE CODE, CLIENT WAIVES ITS
+RIGHTS UNDER THE DECEPTIVE TRADE PRACTICES–CONSUMER PROTECTION ACT,
+SECTION 17.41 ET SEQ., TEXAS BUSINESS &amp; COMMERCE CODE, A LAW THAT
+GIVES CONSUMERS SPECIAL RIGHTS AND PROTECTIONS. AFTER CONSULTATION WITH
+AN ATTORNEY OF CLIENT’S OWN SELECTION, CLIENT VOLUNTARILY CONSENTS TO
+THIS WAIVER. CLIENT REPRESENTS THAT IT IS NOT IN A SIGNIFICANTLY
+DISPARATE BARGAINING POSITION AND THAT THIS WAIVER IS GIVEN KNOWINGLY
+AND VOLUNTARILY.</strong></p>
+<p><em>By accepting this Agreement, Client acknowledges that it has read
+and understood it and agrees to be bound by its terms.</em></p>
+<p><strong>Starling AI LLC</strong> — Texas</p>
+<h2 id="exhibit-a-client-consent-capture-requirements">EXHIBIT A —
+CLIENT CONSENT CAPTURE REQUIREMENTS</h2>
+<p>These Client Consent Capture Requirements are incorporated into and
+form part of the Agreement pursuant to Section 8.8(h). They set the
+<strong>minimum</strong> standards Client must meet whenever Client
+collects consent to contact any Client-Sourced Contact through the
+Services. Applicable state law may impose stricter requirements;
+<strong>Client is responsible for meeting the strictest standard
+applicable to each recipient.</strong> Capitalized terms have the
+meanings given in the Agreement.</p>
+<h3 id="required-disclosure-content">1. Required Disclosure Content</h3>
+<p>Every consent mechanism Client uses must clearly and conspicuously
+present, in plain language and <strong>before</strong> the person
+submits their phone number, all of the following:</p>
+<ul>
+<li><p>That the person agrees to receive text messages from
+<strong>[Client’s Business Name]</strong> at the mobile number
+provided;</p></li>
+<li><p>That messages may be sent using <strong>automated technology
+and/or artificial intelligence</strong>;</p></li>
+<li><p>That <strong>consent is not a condition of any
+purchase</strong>;</p></li>
+<li><p>That <strong>message frequency varies</strong> (or
+recurs);</p></li>
+<li><p>That <strong>message and data rates may apply</strong>;</p></li>
+<li><p>How to opt out (<strong>Reply STOP</strong>) and get help
+(<strong>Reply HELP</strong>); and</p></li>
+<li><p>A link to Client’s SMS/messaging terms and <strong>Privacy
+Policy</strong>.</p></li>
+</ul>
+<h3 id="model-opt-in-language-drop-in">2. Model Opt-In Language
+(drop-in)</h3>
+<p>Place the following next to an <strong>unchecked</strong> checkbox
+the person must actively select:</p>
+<p>☐ By checking this box, I agree to receive recurring automated and
+AI-generated marketing and informational text messages from
+<strong>[Business Name]</strong> at the mobile number I provide. Consent
+is not a condition of purchase. Message frequency varies. Message and
+data rates may apply. Reply STOP to unsubscribe or HELP for help. See
+our [Terms] and [Privacy Policy].</p>
+<p><strong>Optional timing enhancement.</strong> Client may add the
+phrase <em>“including messages sent at any time of day”</em> after
+<em>“text messages”</em> if Client intends to send messages outside 8:00
+a.m.–9:00 p.m. local time. Note: the interaction between consent and
+“quiet hours” restrictions is currently unsettled and actively
+litigated. Provider recommends the conservative approach of sending
+<strong>unprompted</strong> messages only between 8:00 a.m. and 9:00
+p.m. in the recipient’s local time, while permitting <strong>direct
+replies</strong> to a recipient-initiated message at any hour.</p>
+<h3 id="form-mechanics-mandatory">3. Form Mechanics (mandatory)</h3>
+<ul>
+<li><p><strong>Affirmative opt-in.</strong> An unchecked checkbox (or
+equivalent affirmative action) the person must actively select.
+<strong>No pre-checked boxes.</strong></p></li>
+<li><p><strong>Conspicuous.</strong> Legible, positioned near the
+phone-number field and submit button — not hidden in fine print,
+footers, hyperlinks, or a wall of text.</p></li>
+<li><p><strong>Not deceptively bundled.</strong> Consent to texts must
+not be hidden inside unrelated agreements, and must not be required to
+complete a purchase or access the form.</p></li>
+<li><p><strong>Single, named sender.</strong> Identify the specific
+business that will send the messages.</p></li>
+<li><p><strong>Matching number.</strong> The number entered is the
+number to which consent applies.</p></li>
+</ul>
+<h3
+id="records-to-keep-per-section-8.8g-retain-at-least-five-5-years">4.
+Records to Keep (per Section 8.8(g)) — retain at least five (5)
+years</h3>
+<ul>
+<li><p>Date and time of consent;</p></li>
+<li><p>The <strong>exact disclosure text and version</strong> shown to
+the person;</p></li>
+<li><p>The opt-in method and the page, URL, or form used;</p></li>
+<li><p>IP address and/or device identifier, where available;</p></li>
+<li><p>The phone number; and</p></li>
+<li><p>Evidence of the affirmative action (e.g., a log capturing the
+checkbox state).</p></li>
+</ul>
+<h3 id="ongoing-obligations">5. Ongoing Obligations</h3>
+<ul>
+<li><p>Honor <strong>STOP</strong>/opt-out and any reasonable revocation
+request promptly; suppress and do not re-contact.</p></li>
+<li><p>Do <strong>not</strong> upload or contact cold, purchased,
+rented, scraped, or third-party-sourced lists.</p></li>
+<li><p>Scrub against applicable <strong>Do Not Call</strong> lists and
+for <strong>reassigned or disconnected</strong> numbers.</p></li>
+<li><p>Confirm consent remains valid (not revoked) <strong>before each
+send</strong>.</p></li>
+</ul>
+<h3 id="prohibited">6. Prohibited</h3>
+<ul>
+<li><p>Pre-checked consent boxes;</p></li>
+<li><p>Burying consent language in fine print or unrelated
+terms;</p></li>
+<li><p>Treating a single bundled consent as consent for multiple
+unrelated businesses;</p></li>
+<li><p>Conditioning a purchase or form submission on consent;
+and</p></li>
+<li><p>Importing or texting any contact Client did not collect with
+consent meeting these requirements.</p></li>
+</ul>
+<h3 id="quick-reference">7. Quick Reference</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Compliant</th>
+<th>Not compliant</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Unchecked box the user clicks</td>
+<td>Pre-checked box, or “by submitting you agree” with no box</td>
+</tr>
+<tr class="even">
+<td>Discloses automated/AI texts, STOP/HELP, rates, “not a condition of
+purchase”</td>
+<td>Generic “we’ll contact you”</td>
+</tr>
+<tr class="odd">
+<td>Names the single sending business</td>
+<td>Links to a list of many partners as a bundle</td>
+</tr>
+<tr class="even">
+<td>Consent records stored with timestamp + disclosure version</td>
+<td>No record of what the user saw or did</td>
+</tr>
+<tr class="odd">
+<td>Numbers the Client collected via this flow</td>
+<td>Purchased / scraped / third-party lists</td>
+</tr>
+</tbody>
+</table>
+<p><em>Exhibit A is part of the Agreement. Client’s failure to meet
+these requirements is a breach of Section 8.8 and is subject to the
+indemnification and other provisions of the Agreement.</em></p>
+
+    </article>
+  </main>
+</div>
+<footer>
+  <div class="foot-in">
+    <div>
+      <div class="foot-brand"><svg class="bird" width="22" height="22" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M20 6 L5 32 L20 23 Z" fill="var(--periwinkle)"/>
+  <path d="M20 6 L35 32 L20 23 Z" fill="var(--coral)"/>
+  <path d="M20 23 L13 30 L20 27 Z" fill="var(--periwinkle)" opacity="0.55"/>
+  <path d="M20 23 L27 30 L20 27 Z" fill="var(--coral)" opacity="0.55"/>
+</svg><span>Starling AI</span></div>
+      <p class="foot-meta">Starling AI LLC — Texas, United States.<br>
+        <a href="mailto:admin@starlingagent.com">admin@starlingagent.com</a> · (832)&nbsp;808-6483</p>
+    </div>
+    <nav class="foot-links" aria-label="Footer">
+      <a href="/">Back to Starling AI</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="/privacy">Privacy Policy</a>
+    </nav>
+  </div>
+  <div class="foot-bottom">© 2026 Starling AI LLC. All rights reserved.</div>
+</footer>
+</body>
+</html>
