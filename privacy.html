@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#060B16">
+<title>Privacy Policy — Starling AI</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20rx%3D%229%22%20fill%3D%22%23060B16%22/%3E%3Cpath%20d%3D%22M20%208%20L7%2031%20L20%2023%20Z%22%20fill%3D%22%238E97F0%22/%3E%3Cpath%20d%3D%22M20%208%20L33%2031%20L20%2023%20Z%22%20fill%3D%22%23FF6F61%22/%3E%3C/svg%3E">
+<meta name="description" content="Starling AI LLC Privacy Policy — how we collect, use, share, and protect information across our website and platform.">
+<meta name="robots" content="index,follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060B16; --surface:#0B1322; --surface-2:#111B2E;
+  --ink:#EAEEF7; --body:#B6C0D6; --muted:#7E8AA4;
+  --coral:#FF6F61; --periwinkle:#8E97F0; --line:rgba(255,255,255,.09);
+  --maxw:760px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--body);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:17px; line-height:1.75; -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+.skip{position:absolute;left:-9999px;top:0;background:var(--coral);color:#0a0e18;padding:10px 16px;border-radius:8px;z-index:100}
+.skip:focus{left:16px;top:16px}
+a{color:var(--coral);text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--periwinkle);outline-offset:3px;border-radius:4px}
+
+/* top gradient hairline */
+.topbar{height:3px;background:linear-gradient(90deg,var(--coral),var(--periwinkle))}
+
+/* sticky nav */
+.nav{position:sticky;top:0;z-index:50;background:rgba(6,11,22,.82);
+  backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line)}
+.nav-in{max-width:1080px;margin:0 auto;padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+.brand .bird{flex:none}
+.brand b{font-weight:700}
+.brand span{color:var(--periwinkle);font-weight:600}
+.nav-links{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.nav-links a{color:var(--muted);font-size:14.5px;font-weight:500;padding:7px 12px;border-radius:8px}
+.nav-links a:hover{color:var(--ink);background:rgba(255,255,255,.05);text-decoration:none}
+.nav-links a[aria-current="page"]{color:var(--ink);background:rgba(142,151,240,.14)}
+.nav-links .home{color:var(--coral)}
+
+/* atmosphere behind the title */
+.hero-glow{position:relative}
+.hero-glow:before{content:"";position:absolute;inset:-40% -20% auto;height:340px;
+  background:radial-gradient(60% 100% at 50% 0,rgba(142,151,240,.16),transparent 70%);
+  pointer-events:none}
+
+main{max-width:var(--maxw);margin:0 auto;padding:56px 24px 24px;position:relative}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;margin:0 0 14px;
+  font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--periwinkle)}
+.eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--coral)}
+
+/* document typography */
+.doc h1{color:var(--ink);font-size:clamp(26px,4.5vw,38px);line-height:1.18;
+  letter-spacing:-.02em;font-weight:800;margin:0 0 18px;max-width:22ch}
+.doc h1:after{content:"";display:block;width:64px;height:3px;margin-top:18px;
+  background:linear-gradient(90deg,var(--coral),var(--periwinkle));border-radius:2px}
+.doc h2{color:var(--ink);font-size:21px;font-weight:700;letter-spacing:-.01em;
+  margin:44px 0 14px;padding-top:8px;scroll-margin-top:84px}
+.doc h2:first-of-type{margin-top:34px}
+.doc h3{color:var(--ink);font-size:17.5px;font-weight:650;margin:26px 0 10px}
+.doc p{margin:0 0 16px}
+.doc strong{color:var(--ink);font-weight:680}
+.doc em{color:var(--body)}
+.doc ul,.doc ol{margin:0 0 18px;padding-left:1.35em}
+.doc li{margin:0 0 9px}
+.doc ul li::marker{color:var(--coral)}
+.doc ol li::marker{color:var(--periwinkle);font-weight:600}
+.doc hr{border:0;border-top:1px solid var(--line);margin:34px 0}
+.doc a{border-bottom:1px solid rgba(255,111,97,.4)}
+.doc a:hover{border-bottom-color:var(--coral);text-decoration:none}
+
+/* the three meta lines right under H1 (Texas LLC / Version / Effective / Updated) */
+.doc h1 + p{color:var(--body)}
+
+/* tables (Exhibit A quick reference) */
+.doc table{width:100%;border-collapse:collapse;margin:8px 0 24px;font-size:15px}
+.doc th,.doc td{border:1px solid var(--line);padding:11px 14px;text-align:left;vertical-align:top}
+.doc thead th{background:var(--surface-2);color:var(--ink);font-weight:650}
+.doc tbody tr:nth-child(odd){background:rgba(255,255,255,.018)}
+
+/* footer */
+footer{border-top:1px solid var(--line);margin-top:48px;background:#070C18}
+.foot-in{max-width:1080px;margin:0 auto;padding:34px 24px;
+  display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;justify-content:space-between}
+.foot-brand{display:flex;align-items:center;gap:10px;color:var(--ink);font-weight:700}
+.foot-meta{color:var(--muted);font-size:13.5px;line-height:1.7;max-width:340px}
+.foot-meta a{color:var(--body)}
+.foot-links{display:flex;flex-direction:column;gap:8px;font-size:14px}
+.foot-links a{color:var(--muted)}
+.foot-links a:hover{color:var(--ink);text-decoration:none}
+.foot-bottom{border-top:1px solid var(--line);text-align:center;
+  color:var(--muted);font-size:12.5px;padding:16px 24px}
+
+@media (max-width:560px){
+  body{font-size:16px}
+  main{padding:40px 20px 16px}
+  .nav-in{padding:12px 18px}
+  .doc h2{font-size:19.5px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* print / save-as-PDF */
+@media print{
+  body{background:#fff;color:#111;font-size:11.5pt}
+  .nav,.topbar,footer,.hero-glow:before,.eyebrow,.skip{display:none!important}
+  main{max-width:none;padding:0}
+  .doc h1,.doc h2,.doc h3,.doc strong{color:#000}
+  .doc a{color:#000;border:0}
+  .doc th,.doc td{border-color:#999}
+  .doc thead th{background:#eee}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<div class="topbar"></div>
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="/"><svg class="bird" width="28" height="28" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M20 6 L5 32 L20 23 Z" fill="var(--periwinkle)"/>
+  <path d="M20 6 L35 32 L20 23 Z" fill="var(--coral)"/>
+  <path d="M20 23 L13 30 L20 27 Z" fill="var(--periwinkle)" opacity="0.55"/>
+  <path d="M20 23 L27 30 L20 27 Z" fill="var(--coral)" opacity="0.55"/>
+</svg><b>Starling</b>&nbsp;<span>AI</span></a>
+    <nav class="nav-links" aria-label="Legal"><a href="/" class="home">Back to site</a><a href="/terms">Terms</a><a href="/privacy" aria-current="page">Privacy</a></nav>
+  </div>
+</header>
+<div class="hero-glow">
+  <main id="content">
+    <p class="eyebrow"><span class="dot"></span>Legal · Privacy Policy</p>
+    <article class="doc">
+<h1 id="starling-ai-llc-privacy-policy">STARLING AI LLC — PRIVACY
+POLICY</h1>
+<p><strong>Starling AI LLC</strong>, a Texas Limited Liability
+Company</p>
+<p><strong>Effective Date:</strong> June 25, 2026</p>
+<p><strong>Last Updated:</strong> June 25, 2026</p>
+<p>This Privacy Policy explains how <strong>Starling AI LLC</strong>
+(<strong>“Starling AI,” “we,” “us,”</strong> or <strong>“our”</strong>)
+collects, uses, discloses, and protects information in connection with
+our website at starlingagent.com (the <strong>“Site”</strong>) and the
+Starling AI platform, including our CRM software, AI-powered messaging
+and automation agents, workflow automation, integrations, and related
+services (collectively, the <strong>“Services”</strong>).</p>
+<p>Starling AI provides a business-to-business platform. Capitalized
+terms not defined here have the meanings given in our <a
+href="/terms">Terms of Service and Membership Agreement</a> (the
+<strong>“Agreement”</strong>). This Privacy Policy is incorporated into
+the Agreement. If there is a conflict between this Privacy Policy and
+the Agreement regarding the processing of personal data, the Agreement
+controls as between Starling AI and our Clients unless this Privacy
+Policy expressly states otherwise.</p>
+<h2 id="who-this-policy-covers">1. Who This Policy Covers</h2>
+<p>This Policy applies to:</p>
+<ul>
+<li><strong>Visitors</strong> to our Site;</li>
+<li><strong>Clients</strong> — the businesses and individuals who
+subscribe to or access the Services, and their Authorized Users;
+and</li>
+<li><strong>End Users</strong> — the contacts, leads, prospects, and
+other individuals our Clients communicate with or manage through the
+Services.</li>
+</ul>
+<p><strong>Important for End Users.</strong> When our Clients use the
+Services to manage their own contacts and send communications, the
+Client — not Starling AI — decides what data is collected, how it is
+used, and who is contacted. In that context, the Client acts as the
+“controller” (or “business”) and Starling AI acts as a “processor” (or
+“service provider”) that handles data on the Client’s behalf and under
+the Client’s instructions. <strong>If you are an End User and want to
+access, correct, or delete your information, or stop receiving messages,
+please contact the business that is communicating with you.</strong> You
+can also reply <strong>STOP</strong> to any text message to opt out, or
+<strong>HELP</strong> for help. We will route requests we receive to the
+responsible Client where appropriate.</p>
+<h2 id="information-we-collect">2. Information We Collect</h2>
+<p><strong>2.1 Information You Provide to Us.</strong> When you create
+an account, subscribe to a Plan, register a messaging brand or campaign,
+contact support, or otherwise interact with us, we may collect: your
+name, business name, email address, phone number, billing and business
+address, account credentials, the business and use-case information you
+provide for messaging registration (such as A2P 10DLC brand and campaign
+details), and the contents of your communications with us.</p>
+<p><strong>2.2 Payment Information.</strong> Subscription and other fees
+are processed through our third-party payment processor (Stripe). We do
+not store full payment card numbers on our systems. Our payment
+processor handles your card and billing details in accordance with its
+own terms and privacy policy and applicable payment-card security
+standards.</p>
+<p><strong>2.3 Client Data and End-User Data.</strong> In using the
+Services, Clients input, upload, import, sync, generate, and transmit
+data — including contacts, lead information, notes, pipeline and
+appointment data, and the content of messages and conversations (across
+SMS, email, and social channels). This includes <strong>End-User
+Data</strong>: information relating to the End Users our Clients
+communicate with, such as names, phone numbers, email addresses, message
+content, and conversation history. Starling AI processes this data
+<strong>on behalf of and at the direction of the Client</strong>.</p>
+<p><strong>2.4 Information from Integrations.</strong> When a Client
+connects a third-party account or service to the Services — for example,
+a CRM (such as Follow Up Boss, GoHighLevel, Lofty, or Real Geeks), a
+calendar or email provider (such as Google), or telephony/messaging
+infrastructure (such as Twilio) — we receive and process information
+from those services as needed to provide the connected functionality,
+and only with the Client’s authorization. Our use of information
+received from Google APIs adheres to the Google API Services User Data
+Policy, including its Limited Use requirements.</p>
+<p><strong>2.5 Information Collected Automatically.</strong> When you
+use the Site or Services, we and our service providers may automatically
+collect technical and usage information, such as IP address, device and
+browser type, operating system, pages and features accessed, dates and
+times of access, referring URLs, and similar log and analytics data. We
+use cookies and similar technologies for authentication, security,
+preferences, and analytics (see Section 8).</p>
+<h2 id="how-we-use-information">3. How We Use Information</h2>
+<p>We use the information described above to:</p>
+<ul>
+<li><strong>Provide and operate the Services</strong>, including
+engaging, qualifying, and following up with leads; booking appointments;
+routing conversations; and syncing data across connected systems;</li>
+<li><strong>Process transactions and billing</strong>, including
+subscription fees, renewals, and applicable taxes;</li>
+<li><strong>Provide support</strong> and respond to your requests;</li>
+<li><strong>Secure the Services</strong>, prevent fraud and abuse, and
+enforce our Agreement and policies;</li>
+<li><strong>Develop, train, fine-tune, test, evaluate, and
+improve</strong> our artificial-intelligence models, prompts, workflows,
+and the Services (see Section 4);</li>
+<li><strong>Analyze usage</strong> and generate aggregated and
+de-identified statistics and benchmarks;</li>
+<li><strong>Communicate with you</strong> about your account, service
+updates, security notices, and — where permitted — products and
+features; and</li>
+<li><strong>Comply with law</strong> and respond to lawful requests and
+legal process.</li>
+</ul>
+<h2 id="artificial-intelligence-and-model-improvement">4. Artificial
+Intelligence and Model Improvement</h2>
+<p>The Services use artificial intelligence, including third-party large
+language models, to generate messages and other outputs. To operate and
+improve the Services, <strong>Starling AI may use Client Data and
+End-User Data — including the content of messages, conversations,
+interactions, and other data passed through or generated by the AI Agent
+and the Services — to develop, train, fine-tune, test, evaluate, and
+improve our AI models, prompts, workflows, and the
+Services.</strong></p>
+<p>We conduct this activity in a manner designed so that one Client’s
+identifiable Client Data and End-User Data is not exposed or made
+available in identifiable form to another Client through the Services.
+This use may continue after a Client’s subscription ends with respect to
+data already processed and any resulting model improvements.</p>
+<p>Clients are responsible for providing all required notices and
+obtaining all required consents and lawful bases from their End Users
+for this processing, as described in the Agreement. AI-generated outputs
+may be inaccurate, incomplete, or otherwise unsuitable, and should be
+reviewed before being relied upon or transmitted.</p>
+<h2 id="how-we-share-information">5. How We Share Information</h2>
+<p><strong>We do not sell Client Data or End-User Data.</strong> We do
+not disclose, license, or make available the identifiable content of
+Client Data or End-User Data to unrelated third parties for those third
+parties’ own independent or marketing purposes. We share information
+only as follows:</p>
+<p><strong>5.1 Service Providers (Subprocessors).</strong> We share
+information with vendors that help us provide and support the Services,
+bound by obligations to protect it and to use it only to provide their
+services to us. These include providers of:</p>
+<ul>
+<li><strong>Hosting and cloud infrastructure;</strong></li>
+<li><strong>Database and storage</strong> (such as Supabase);</li>
+<li><strong>Telephony and messaging</strong> (such as Twilio);</li>
+<li><strong>Large language model and AI providers;</strong></li>
+<li><strong>Payment processing</strong> (such as Stripe);</li>
+<li><strong>Authentication and integrations</strong> (such as Google);
+and</li>
+<li><strong>Analytics and operational tooling.</strong></li>
+</ul>
+<p><strong>5.2 At the Client’s Direction.</strong> For Clients, we share
+and transmit data as the Client directs through its use and
+configuration of the Services, including to the third-party systems the
+Client connects and the recipients the Client chooses to contact.</p>
+<p><strong>5.3 Legal and Safety.</strong> We may disclose information
+where required by law, regulation, legal process, or governmental
+request, or where we believe disclosure is necessary to enforce our
+Agreement, protect the rights, property, or safety of Starling AI, our
+Clients, or others, or to detect, prevent, or address fraud, security,
+or technical issues.</p>
+<p><strong>5.4 Business Transfers.</strong> If Starling AI is involved
+in a merger, acquisition, financing, reorganization, or sale of assets,
+information may be transferred as part of that transaction, subject to
+confidentiality protections consistent with this Policy.</p>
+<p><strong>5.5 Aggregated and De-Identified Data.</strong> We may create
+and use aggregated, anonymized, statistical, and de-identified
+information (which does not identify any Client, Authorized User, or End
+User) for any lawful business purpose, including analytics,
+benchmarking, and improving and marketing the Services.</p>
+<h2 id="sms-messaging-and-your-opt-out-rights">6. SMS, Messaging, and
+Your Opt-Out Rights</h2>
+<p>The Services enable our Clients to send SMS, voice, and email
+communications to their own contacts. As between Starling AI and the
+Client, the <strong>Client</strong> determines the recipients, content,
+timing, and consent status of those communications and is the sender for
+purposes of the Telephone Consumer Protection Act (TCPA) and analogous
+laws; Starling AI acts as a technology provider at the Client’s
+direction.</p>
+<p><strong>No mobile opt-in data is shared with third parties.</strong>
+Phone numbers, SMS opt-in, and consent information collected for
+messaging are <strong>not</strong> sold or shared with any third parties
+or affiliates for their own marketing purposes, and consent is never
+shared with third parties.</p>
+<p>If you receive messages through the Services, you can <strong>reply
+STOP</strong> at any time to opt out of further messages, or
+<strong>reply HELP</strong> for assistance. Message frequency varies,
+and message and data rates may apply. Opt-out and revocation requests
+are honored by the responsible Client; if you contact us directly, we
+will route your request to that Client where appropriate.</p>
+<h2 id="data-retention">7. Data Retention</h2>
+<p>We retain information for as long as needed to provide the Services,
+operate our business, comply with our legal obligations, resolve
+disputes, and enforce our agreements. For Clients, we retain Client Data
+and End-User Data for the duration of the subscription and, following
+termination, for a limited period during which the Client may request
+export, after which we may delete or de-identify the data in the
+ordinary course, subject to the Agreement and any data we are required
+or permitted to retain.</p>
+<h2 id="cookies-and-analytics">8. Cookies and Analytics</h2>
+<p>Our Site and Services use cookies and similar technologies to keep
+you signed in, remember preferences, secure the Services, and understand
+usage so we can improve performance. Most browsers let you control or
+block cookies through their settings; blocking some cookies may affect
+how the Site and Services function. Where required, we honor applicable
+browser-based opt-out preference signals.</p>
+<h2 id="security">9. Security</h2>
+<p>We implement commercially reasonable administrative, technical, and
+organizational measures designed to protect information.
+<strong>However, no method of transmission or storage is completely
+secure, and we cannot guarantee that the Services will be free from
+unauthorized access, loss, or other security incidents.</strong> Clients
+are responsible for maintaining the security of their account
+credentials and for keeping their own backups and copies of Client
+Data.</p>
+<h2 id="your-privacy-rights-and-choices">10. Your Privacy Rights and
+Choices</h2>
+<p>Depending on where you live and your relationship with us, you may
+have rights regarding your personal information. <strong>Where Starling
+AI processes End-User Data on behalf of a Client, the Client controls
+that data; please direct your request to the Client.</strong> For
+personal information we control (for example, our Client account and
+Site-visitor information), you may have the rights described below.</p>
+<p><strong>10.1 California (CCPA/CPRA).</strong> California residents
+may have the right to know what personal information we collect, use,
+and disclose; to access and delete personal information; to correct
+inaccurate personal information; and to be free from discrimination for
+exercising these rights. <strong>We do not “sell” or “share” personal
+information</strong> as those terms are defined under California law,
+and we do not use sensitive personal information for purposes that would
+trigger a right to limit. To exercise these rights, contact us using the
+details in Section 14.</p>
+<p><strong>10.2 EU/UK/EEA (GDPR).</strong> Where the GDPR or UK GDPR
+applies, individuals may have rights to access, rectify, erase,
+restrict, or object to processing of their personal data, and to data
+portability. Where we process End-User Data on a Client’s behalf, the
+Client is the controller and individuals should direct requests to the
+Client. Where required, Starling AI and the Client will enter into a
+Data Processing Addendum.</p>
+<p><strong>10.3 How to Exercise Your Rights.</strong> You may submit a
+request using the contact details in Section 14. We will respond
+consistent with applicable law and may need to verify your identity
+before fulfilling certain requests. You may use an authorized agent
+where permitted by law.</p>
+<h2 id="childrens-privacy">11. Children’s Privacy</h2>
+<p>The Site and Services are intended for businesses and are
+<strong>not</strong> directed to children, and are not intended for use
+by individuals under 18 for personal, family, or household purposes. We
+do not knowingly collect personal information directly from children. If
+you believe a child has provided us personal information, please contact
+us so we can take appropriate action.</p>
+<h2 id="international-data-transfers">12. International Data
+Transfers</h2>
+<p>Starling AI is based in the United States, and we and our service
+providers process information in the United States and potentially other
+countries. If you access the Services from outside the United States,
+you understand that your information may be transferred to, stored, and
+processed in the United States, where data-protection laws may differ
+from those in your jurisdiction.</p>
+<h2 id="changes-to-this-privacy-policy">13. Changes to This Privacy
+Policy</h2>
+<p>We may update this Privacy Policy from time to time. When we do, we
+will revise the “Last Updated” date above, and, where required, provide
+additional notice. Your continued use of the Site or Services after an
+update takes effect constitutes acceptance of the revised Policy.</p>
+<h2 id="contact-us">14. Contact Us</h2>
+<p>If you have questions about this Privacy Policy or our privacy
+practices, or wish to exercise a privacy right, contact us:</p>
+<p><strong>Starling AI LLC</strong> Texas, United States Email:
+admin@starlingagent.com Phone: (832) 808-6483</p>
+
+    </article>
+  </main>
+</div>
+<footer>
+  <div class="foot-in">
+    <div>
+      <div class="foot-brand"><svg class="bird" width="22" height="22" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M20 6 L5 32 L20 23 Z" fill="var(--periwinkle)"/>
+  <path d="M20 6 L35 32 L20 23 Z" fill="var(--coral)"/>
+  <path d="M20 23 L13 30 L20 27 Z" fill="var(--periwinkle)" opacity="0.55"/>
+  <path d="M20 23 L27 30 L20 27 Z" fill="var(--coral)" opacity="0.55"/>
+</svg><span>Starling AI</span></div>
+      <p class="foot-meta">Starling AI LLC — Texas, United States.<br>
+        <a href="mailto:admin@starlingagent.com">admin@starlingagent.com</a> · (832)&nbsp;808-6483</p>
+    </div>
+    <nav class="foot-links" aria-label="Footer">
+      <a href="/">Back to Starling AI</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="/privacy">Privacy Policy</a>
+    </nav>
+  </div>
+  <div class="foot-bottom">© 2026 Starling AI LLC. All rights reserved.</div>
+</footer>
+</body>
+</html>
