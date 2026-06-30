@@ -284,9 +284,9 @@
       <span class="brand__mark" role="img" aria-label="Starling AI"></span>
       <div class="brand__name">Starling AI <span>· Agent Setup</span></div>
     </div>
-    <a class="help" href="tel:+18328086483">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13 1.05.36 2.07.7 3.06a2 2 0 0 1-.45 2.11L8.09 10.91a16 16 0 0 0 6 6l2.02-1.27a2 2 0 0 1 2.11-.45c.99.34 2.01.57 3.06.7A2 2 0 0 1 22 16.92Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Need a hand? (832) 808-6483
+    <a class="help" href="mailto:Admin@starlingagent.com">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Need a hand? Admin@starlingagent.com
     </a>
   </div>
 </header>
@@ -331,8 +331,11 @@
         <div class="chips">
           <label class="chip"><input type="radio" name="Industry" value="Real estate agent" checked><span class="chip__label">🏡 Real estate</span></label>
           <label class="chip"><input type="radio" name="Industry" value="Mortgage lender"><span class="chip__label">💰 Mortgage</span></label>
-          <label class="chip"><input type="radio" name="Industry" value="Auto dealership"><span class="chip__label">🚗 Auto</span></label>
-          <label class="chip"><input type="radio" name="Industry" value="Other"><span class="chip__label">Other</span></label>
+          <label class="chip"><input type="radio" name="Industry" value="Other"><span class="chip__label">✏️ Other</span></label>
+        </div>
+        <div class="field reveal" id="industryOtherWrap" style="margin-top:14px;display:none">
+          <label for="industryOther">Tell us your industry<span class="req">*</span></label>
+          <input type="text" id="industryOther" name="Industry (other)" placeholder="e.g., Insurance, Solar, Auto sales…">
         </div>
       </fieldset>
 
@@ -515,62 +518,9 @@
       </div>
     </section>
 
-    <!-- STEP 5 — COMPLIANCE -->
-    <section class="step" data-step="5">
-      <div class="eyebrow">Module 05 · Texting compliance</div>
-      <h1 class="step-title">Make it legal to text</h1>
-      <p class="step-sub">Carriers require us to register your business before your agent can send a single text. This is the slowest approval, so it helps to get it in early.</p>
-      <div class="dots"></div>
-
-      <div class="field" data-required>
-        <label for="legalName">Legal business name<span class="req">*</span></label>
-        <input type="text" id="legalName" name="Legal business name" placeholder="Exactly as registered with the IRS/state">
-      </div>
-
-      <div class="row2">
-        <div class="field" data-required>
-          <label for="ein">EIN (business tax ID)<span class="req">*</span></label>
-          <input type="text" id="ein" name="EIN" placeholder="XX-XXXXXXX">
-        </div>
-        <div class="field" data-required>
-          <label for="website">Business website<span class="req">*</span></label>
-          <input type="url" id="website" name="Website" placeholder="https://">
-        </div>
-      </div>
-
-      <div class="field" data-required>
-        <label for="bizAddr">Business mailing address<span class="req">*</span></label>
-        <input type="text" id="bizAddr" name="Business address" placeholder="Street, City, State, ZIP">
-      </div>
-
-      <div class="row2">
-        <div class="field" data-required>
-          <label for="repName">Authorized contact name<span class="req">*</span></label>
-          <input type="text" id="repName" name="Authorized contact name" placeholder="Full name">
-        </div>
-        <div class="field" data-required>
-          <label for="repEmail">Authorized contact email<span class="req">*</span></label>
-          <input type="email" id="repEmail" name="Authorized contact email" placeholder="you@business.com">
-        </div>
-      </div>
-
-      <div class="field">
-        <label for="existingNum">Existing texting number <span style="color:var(--text-lo);font-weight:400">(optional)</span></label>
-        <input type="tel" id="existingNum" name="Existing texting number" placeholder="Leave blank and we'll provision one">
-      </div>
-
-      <div class="group" data-required-check>
-        <label class="toggle">
-          <input type="checkbox" id="optin" name="Opt-in confirmed" value="Yes, confirmed">
-          <span class="toggle__sw"></span>
-          <span class="toggle__txt">I confirm my contacts have opted in to receive texts<small>Required — keeps your agent TCPA compliant</small></span>
-        </label>
-      </div>
-    </section>
-
     <!-- STEP 6 — PARTNERS + REVIEW -->
-    <section class="step" data-step="6">
-      <div class="eyebrow">Module 06 · Partners & launch</div>
+    <section class="step" data-step="5">
+      <div class="eyebrow">Module 05 · Partners & launch</div>
       <h1 class="step-title">Connect partners, then launch</h1>
       <p class="step-sub">Add the people your agent can refer leads to. All optional — leave blank to skip.</p>
       <div class="dots"></div>
@@ -603,6 +553,14 @@
       <div class="field">
         <label for="notes">Anything else we should know? <span style="color:var(--text-lo);font-weight:400">(optional)</span></label>
         <textarea id="notes" name="Notes" placeholder="Special instructions, lead types, things to avoid…"></textarea>
+      </div>
+
+      <div class="group" data-required-check style="margin-top:4px">
+        <label class="toggle">
+          <input type="checkbox" id="optin" name="Opt-in confirmed" value="Yes, confirmed">
+          <span class="toggle__sw"></span>
+          <span class="toggle__txt">I confirm my contacts have opted in to receive texts<small>Required so your agent only messages people who agreed to hear from you — it keeps you compliant with texting laws (TCPA) and protects your number from carrier blocks.</small></span>
+        </label>
       </div>
 
       <div class="err-banner" id="errBanner">Something went wrong sending your setup. Please try again, or email <b>Admin@starlingagent.com</b>.</div>
@@ -649,8 +607,7 @@
         <li class="build__item" data-b="2"><span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="#0B0E1A" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Coverage</li>
         <li class="build__item" data-b="3"><span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="#0B0E1A" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Voice</li>
         <li class="build__item" data-b="4"><span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="#0B0E1A" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Scheduling</li>
-        <li class="build__item" data-b="5"><span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="#0B0E1A" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Compliance</li>
-        <li class="build__item" data-b="6"><span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="#0B0E1A" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Launch</li>
+        <li class="build__item" data-b="5"><span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="#0B0E1A" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Launch</li>
       </ul>
     </div>
     <div class="powered">⌁ STARLING AI · app.starlingagent.com</div>
@@ -669,7 +626,7 @@
     <li><span class="n">2</span><div>We submit your carrier registration so your agent can text leads (this kicks off right away).</div></li>
     <li><span class="n">3</span><div>You get a quick message from Jason to review your agent's wording before it goes live.</div></li>
   </ul>
-  <p class="done-foot">Questions in the meantime? Call or text Jason at <a href="tel:+18328086483">(832) 808-6483</a>.</p>
+  <p class="done-foot">Questions in the meantime? Email us at <a href="mailto:Admin@starlingagent.com">Admin@starlingagent.com</a>.</p>
 </div>
 
 </div><!-- /shell -->
@@ -685,7 +642,7 @@
    ============================================================ */
 const ACCESS_KEY = "141e743a-9449-4980-b0dc-d37061594328";   // Web3Forms key -> delivers to the email this key is registered under
 
-const TOTAL = 6;
+const TOTAL = 5;
 let step = 1;
 
 const form     = document.getElementById('wizard');
@@ -807,7 +764,12 @@ form.addEventListener('change', e=>{
   if(e.target.name==='Appointment length') pvLen.textContent=e.target.value;
   if(e.target.name==='Default meeting type') pvType.textContent=e.target.value.replace(' call','');
   if(e.target.name==='Industry'){
-    const map={'Real estate agent':'Hi, is this home still available?','Mortgage lender':'Hi, can I still get pre-approved?','Auto dealership':'Hi, is this vehicle still available?','Other':'Hi, I saw your post — can you help?'};
+    const wrap=document.getElementById('industryOtherWrap');
+    const isOther=e.target.value==='Other';
+    wrap.style.display=isOther?'block':'none';
+    if(isOther){ wrap.setAttribute('data-required',''); }
+    else{ wrap.removeAttribute('data-required'); wrap.classList.remove('invalid'); document.getElementById('industryOther').value=''; }
+    const map={'Real estate agent':'Hi, is this home still available?','Mortgage lender':'Hi, can I still get pre-approved?','Other':'Hi, I saw your post — can you help?'};
     document.getElementById('pvLead').textContent=map[e.target.value]||map['Other'];
   }
 });
