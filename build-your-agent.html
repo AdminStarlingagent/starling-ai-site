@@ -381,6 +381,12 @@
         </select>
       </div>
 
+      <div class="field" data-required>
+        <label for="yourEmail">Your email<span class="req">*</span></label>
+        <input type="email" id="yourEmail" name="Your email" placeholder="you@business.com">
+        <span class="hint">So we can reach you about your agent setup.</span>
+      </div>
+
       <div class="row2">
         <div class="field" data-required>
           <label for="leadPhone">Number to show leads<span class="req">*</span></label>
@@ -794,7 +800,7 @@ async function sendSetup(){
     if(data[k]){ data[k]=[].concat(data[k],v).join(', '); }   // merge multi-selects
     else data[k]=v;
   }
-  if(data['Authorized contact email']) data.replyto = data['Authorized contact email'];
+  if(data['Your email']) data.replyto = data['Your email'];
 
   try{
     const res=await fetch('https://api.web3forms.com/submit',{
