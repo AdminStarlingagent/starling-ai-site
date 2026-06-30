@@ -6,6 +6,14 @@
 <title>Build Your Agent · Starling AI</title>
 <meta name="description" content="Set up your Starling AI agent in a few guided steps." />
 
+<!-- Favicons / app icons -->
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#080C17">
+
 <!-- Fonts: Bricolage Grotesque (display) · Inter (body) · Space Mono (utility) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -828,9 +836,6 @@ async function sendSetup(){
    fetch('https://formspree.io/f/yourID', { ...same options... })
    Formspree reads `data` JSON the same way — no other change needed.
 ----------------------------------- */
-
-/* favicon from the embedded logo (reuses the single CSS copy) */
-(function(){try{var u=getComputedStyle(document.documentElement).getPropertyValue('--logo').trim();var m=u.match(/url\(["']?(.*?)["']?\)/);if(m){var l=document.createElement('link');l.rel='icon';l.type='image/png';l.href=m[1];document.head.appendChild(l);}}catch(e){}})();
 
 /* init */
 paintMsg();
