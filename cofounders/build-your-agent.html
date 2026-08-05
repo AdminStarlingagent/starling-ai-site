@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Build Your Agent · CoFounders AI</title>
+<meta name="description" content="Set up your CoFounders AI agent in a few guided steps." />
+
+<!-- Favicons / app icons -->
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0C0D10">
+
+<!-- Fonts: Fraunces (display) · Inter (body) · Space Mono (utility) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Archivo:wght@700;800;900&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    /* Brand-pinned palette */
+    --navy-900:#0C0D10;
+    --navy-850:#101218;
+    --navy-800:#15171E;
+    --navy-700:#1C1F28;
+    --line:rgba(255,255,255,.08);
+    --line-soft:rgba(255,255,255,.05);
+
+    --coral:#22E3DA;
+    --coral-soft:#7DEFE8;
+    --peri:#15A9A1;
+    --peri-soft:#5FD6CE;
+    --grad:linear-gradient(135deg,#22E3DA 0%,#15A9A1 100%);
+
+    --text-hi:#F3F5FF;
+    --text-mid:#AEB6CF;
+    --text-lo:#6E769A;
+
+    --radius:16px;
+    --radius-sm:11px;
+    --ease:cubic-bezier(.22,.61,.36,1);
+
+    --display:"Fraunces",-apple-system,BlinkMacSystemFont,sans-serif;
+    --body:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    --mono:"Space Mono","SFMono-Regular",ui-monospace,monospace;
+    --logo:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%2220%22%20r%3D%2218.5%22%20fill%3D%22%23101218%22%20stroke%3D%22%231FD8E6%22%20stroke-width%3D%221.6%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2221%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22central%22%20font-family%3D%22Archivo%2CArial%2Csans-serif%22%20font-weight%3D%22800%22%20font-size%3D%2213%22%20fill%3D%22%231FD8E6%22%20letter-spacing%3D%220.5%22%3ECO%3C%2Ftext%3E%3C%2Fsvg%3E");
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--body);
+    background:var(--navy-900);
+    color:var(--text-hi);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    position:relative;
+    overflow-x:hidden;
+  }
+  /* Ambient brand glow */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(620px 480px at 88% 8%, rgba(21,169,161,.16), transparent 60%),
+      radial-gradient(560px 460px at 6% 96%, rgba(34,227,218,.13), transparent 62%);
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:30;
+    background:rgba(8,12,23,.82);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar__progress{height:3px;width:100%;background:rgba(255,255,255,.06)}
+  .topbar__fill{height:100%;width:8%;background:var(--grad);border-radius:0 3px 3px 0;transition:width .5s var(--ease)}
+  .topbar__row{
+    max-width:1180px;margin:0 auto;padding:14px 24px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+  }
+  .brand{display:flex;align-items:center;gap:11px}
+  .brand__mark{width:34px;height:34px;flex:none;display:block;background:var(--logo) center/contain no-repeat}
+  .brand__name{font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:-.01em}
+  .brand__name span{color:var(--text-lo);font-weight:500}
+  .help{
+    font-size:13px;color:var(--text-mid);text-decoration:none;
+    display:inline-flex;align-items:center;gap:7px;
+    padding:8px 13px;border:1px solid var(--line);border-radius:999px;
+    transition:border-color .2s,color .2s;white-space:nowrap;
+  }
+  .help:hover{border-color:rgba(21,169,161,.5);color:var(--text-hi)}
+  .help svg{width:14px;height:14px}
+
+  /* ---------- Layout ---------- */
+  .shell{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:40px 24px 64px}
+  .wizard{
+    display:grid;
+    grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);
+    gap:42px;align-items:start;
+  }
+
+  /* ---------- Form side ---------- */
+  .formcol{min-width:0}
+  .eyebrow{
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--peri-soft);display:flex;align-items:center;gap:10px;margin-bottom:14px;
+  }
+  .eyebrow::before{content:"";width:22px;height:1px;background:linear-gradient(90deg,var(--peri),transparent)}
+  .step-title{font-family:var(--display);font-weight:700;font-size:clamp(26px,4vw,34px);letter-spacing:-.02em;line-height:1.08}
+  .step-sub{color:var(--text-mid);font-size:15px;margin-top:10px;max-width:46ch}
+
+  .dots{display:flex;gap:8px;margin:26px 0 30px}
+  .dots__d{height:6px;flex:1;border-radius:999px;background:rgba(255,255,255,.08);transition:background .4s var(--ease)}
+  .dots__d.done{background:var(--grad)}
+  .dots__d.active{background:linear-gradient(90deg,var(--coral),rgba(34,227,218,.25))}
+
+  .step{display:none;animation:rise .45s var(--ease) both}
+  .step.is-active{display:block}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  .field{margin-bottom:20px}
+  .field > label,.group > .group__label{
+    display:block;font-size:13.5px;font-weight:500;color:var(--text-hi);margin-bottom:9px;
+  }
+  .field .hint{display:block;font-size:12.5px;color:var(--text-lo);margin-top:7px;font-weight:400}
+  .req{color:var(--coral);margin-left:2px}
+
+  input[type=text],input[type=tel],input[type=email],input[type=url],textarea,select{
+    width:100%;font-family:var(--body);font-size:15px;color:var(--text-hi);
+    background:var(--navy-800);border:1px solid var(--line);border-radius:var(--radius-sm);
+    padding:13px 15px;transition:border-color .2s,box-shadow .2s,background .2s;outline:none;
+  }
+  textarea{resize:vertical;min-height:96px;line-height:1.55}
+  input::placeholder,textarea::placeholder{color:#525B7C}
+  select{appearance:none;cursor:pointer;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%238B8DF2' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 15px center;padding-right:38px}
+  input:focus,textarea:focus,select:focus{
+    border-color:var(--peri);box-shadow:0 0 0 3px rgba(21,169,161,.18);background:var(--navy-850)
+  }
+  .field.invalid input,.field.invalid textarea,.field.invalid select{
+    border-color:var(--coral);box-shadow:0 0 0 3px rgba(34,227,218,.16)
+  }
+
+  /* Chips (single + multi) */
+  .group{margin-bottom:20px}
+  .chips{display:flex;flex-wrap:wrap;gap:9px}
+  .chip{position:relative;cursor:pointer;user-select:none}
+  .chip input{position:absolute;opacity:0;width:0;height:0}
+  .chip__label{
+    display:inline-flex;align-items:center;gap:7px;
+    font-size:13.5px;color:var(--text-mid);
+    background:var(--navy-800);border:1px solid var(--line);
+    padding:10px 15px;border-radius:999px;transition:.2s var(--ease);
+  }
+  .chip:hover .chip__label{border-color:rgba(21,169,161,.4);color:var(--text-hi)}
+  .chip input:checked + .chip__label{
+    color:#0A0E1A;font-weight:600;border-color:transparent;
+    background:var(--grad);box-shadow:0 6px 18px -8px rgba(21,169,161,.7)
+  }
+  .chip input:focus-visible + .chip__label{box-shadow:0 0 0 3px rgba(21,169,161,.3)}
+
+  /* Toggle */
+  .toggle{display:flex;align-items:center;gap:13px;cursor:pointer;padding:13px 15px;
+    background:var(--navy-800);border:1px solid var(--line);border-radius:var(--radius-sm);transition:.2s}
+  .toggle:hover{border-color:rgba(21,169,161,.4)}
+  .toggle input{position:absolute;opacity:0;width:0;height:0}
+  .toggle__sw{flex:none;width:42px;height:24px;border-radius:999px;background:#2A3350;position:relative;transition:.25s var(--ease)}
+  .toggle__sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.25s var(--ease)}
+  .toggle input:checked + .toggle__sw{background:var(--grad)}
+  .toggle input:checked + .toggle__sw::after{transform:translateX(18px)}
+  .toggle__txt{font-size:14px;color:var(--text-hi)}
+  .toggle__txt small{display:block;color:var(--text-lo);font-size:12px;font-weight:400;margin-top:1px}
+
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  fieldset{border:0}
+
+  /* Nav buttons */
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:34px;padding-top:24px;border-top:1px solid var(--line-soft)}
+  .btn{font-family:var(--body);font-size:15px;font-weight:600;cursor:pointer;border:0;border-radius:999px;
+    padding:13px 26px;transition:.2s var(--ease);display:inline-flex;align-items:center;gap:9px}
+  .btn:focus-visible{outline:2px solid var(--peri);outline-offset:3px}
+  .btn--ghost{background:transparent;color:var(--text-mid);border:1px solid var(--line)}
+  .btn--ghost:hover{color:var(--text-hi);border-color:rgba(255,255,255,.25)}
+  .btn--ghost[disabled]{opacity:0;pointer-events:none}
+  .btn--primary{background:var(--grad);color:#0A0E1A;box-shadow:0 10px 28px -12px rgba(21,169,161,.8)}
+  .btn--primary:hover{transform:translateY(-1px);box-shadow:0 14px 32px -12px rgba(21,169,161,.9)}
+  .btn--primary svg{width:16px;height:16px}
+  .btn[aria-busy=true]{pointer-events:none;opacity:.75}
+
+  .err-banner{display:none;margin-top:18px;padding:13px 15px;border-radius:var(--radius-sm);
+    background:rgba(34,227,218,.1);border:1px solid rgba(34,227,218,.35);color:#FFC8C1;font-size:13.5px}
+  .err-banner.show{display:block}
+
+  /* ---------- Preview side ---------- */
+  .preview{position:sticky;top:96px}
+  .pcard{
+    background:linear-gradient(180deg,rgba(22,31,56,.9),rgba(13,17,32,.92));
+    border:1px solid var(--line);border-radius:22px;padding:22px;overflow:hidden;position:relative;
+  }
+  .pcard::before{content:"";position:absolute;top:-40%;right:-30%;width:70%;height:70%;
+    background:radial-gradient(circle,rgba(21,169,161,.22),transparent 70%);pointer-events:none}
+  .agent-head{display:flex;align-items:center;gap:12px;position:relative}
+  .agent-av{width:46px;height:46px;border-radius:13px;flex:none;
+    background:radial-gradient(120% 120% at 30% 20%,#1B2440,#0C1124);
+    border:1px solid var(--line);display:grid;place-items:center}
+  .agent-av__img{width:34px;height:34px;background:var(--logo) center/contain no-repeat}
+  .agent-meta h3{font-family:var(--display);font-weight:600;font-size:16.5px;letter-spacing:-.01em;line-height:1.1}
+  .agent-meta .sub{font-size:12px;color:var(--text-lo);margin-top:2px}
+  .status{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;
+    text-transform:uppercase;color:#7FE3BD;margin-top:5px}
+  .status .dot{width:6px;height:6px;border-radius:50%;background:#5FE0B0;box-shadow:0 0 8px #5FE0B0}
+
+  .thread{margin-top:20px;display:flex;flex-direction:column;gap:10px;min-height:150px}
+  .bubble{max-width:84%;font-size:13.5px;line-height:1.5;padding:11px 14px;border-radius:15px;word-wrap:break-word}
+  .bubble--in{align-self:flex-start;background:var(--navy-700);color:var(--text-mid);border-bottom-left-radius:5px}
+  .bubble--out{align-self:flex-end;color:#0B0E1A;background:var(--grad);border-bottom-right-radius:5px;
+    box-shadow:0 8px 22px -12px rgba(21,169,161,.8)}
+  .typing{align-self:flex-end;display:flex;gap:4px;padding:12px 15px;background:var(--grad);border-radius:15px;border-bottom-right-radius:5px}
+  .typing span{width:6px;height:6px;border-radius:50%;background:rgba(11,14,26,.65);animation:blink 1.3s infinite}
+  .typing span:nth-child(2){animation-delay:.18s}.typing span:nth-child(3){animation-delay:.36s}
+  @keyframes blink{0%,60%,100%{opacity:.3}30%{opacity:1}}
+
+  .pcard__foot{margin-top:18px;padding-top:15px;border-top:1px solid var(--line-soft);
+    display:flex;flex-wrap:wrap;gap:7px}
+  .tag{font-family:var(--mono);font-size:10.5px;color:var(--text-lo);background:var(--navy-850);
+    border:1px solid var(--line);border-radius:999px;padding:5px 10px}
+  .tag b{color:var(--peri-soft);font-weight:400}
+
+  /* Build progress */
+  .build{margin-top:22px;background:rgba(13,17,32,.6);border:1px solid var(--line);border-radius:18px;padding:18px 20px}
+  .build__h{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-lo);margin-bottom:14px}
+  .build__list{list-style:none;display:flex;flex-direction:column;gap:11px}
+  .build__item{display:flex;align-items:center;gap:11px;font-size:13.5px;color:var(--text-lo);transition:color .3s}
+  .build__item .mk{width:20px;height:20px;border-radius:50%;flex:none;border:1.5px solid var(--line);
+    display:grid;place-items:center;transition:.3s var(--ease)}
+  .build__item .mk svg{width:11px;height:11px;opacity:0;transition:opacity .2s}
+  .build__item.done{color:var(--text-hi)}
+  .build__item.done .mk{background:var(--grad);border-color:transparent}
+  .build__item.done .mk svg{opacity:1}
+  .build__item.active{color:var(--text-hi)}
+  .build__item.active .mk{border-color:var(--coral);box-shadow:0 0 0 3px rgba(34,227,218,.15)}
+
+  .powered{margin-top:16px;text-align:center;font-size:11px;color:var(--text-lo);font-family:var(--mono);letter-spacing:.08em}
+
+  /* ---------- Success ---------- */
+  .done-screen{display:none;text-align:center;max-width:560px;margin:30px auto;animation:rise .5s var(--ease) both}
+  .done-screen.show{display:block}
+  .done-badge{width:84px;height:84px;margin:0 auto 26px;border-radius:24px;background:var(--grad);
+    display:grid;place-items:center;box-shadow:0 20px 50px -18px rgba(21,169,161,.9)}
+  .done-badge svg{width:42px;height:42px}
+  .done-screen h2{font-family:var(--display);font-weight:700;font-size:clamp(28px,5vw,38px);letter-spacing:-.02em}
+  .done-screen p{color:var(--text-mid);font-size:15.5px;margin-top:14px}
+  .next-list{text-align:left;margin:30px auto 0;max-width:430px;display:flex;flex-direction:column;gap:12px}
+  .next-list li{list-style:none;display:flex;gap:13px;align-items:flex-start;font-size:14px;color:var(--text-mid);
+    background:var(--navy-800);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .next-list .n{font-family:var(--mono);font-size:12px;color:#0B0E1A;background:var(--grad);min-width:24px;height:24px;
+    border-radius:7px;display:grid;place-items:center;font-weight:700;flex:none}
+  .done-foot{margin-top:30px;font-size:13.5px;color:var(--text-lo)}
+  .done-foot a{color:var(--peri-soft);text-decoration:none;font-weight:600}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:880px){
+    .wizard{grid-template-columns:1fr;gap:26px}
+    .preview{position:static;order:-1}
+    .build{display:none}
+    .thread{min-height:0}
+    .row2{grid-template-columns:1fr}
+    .nav{flex-direction:row}
+    .btn{padding:13px 20px;font-size:14.5px}
+    .shell{padding:26px 18px 56px}
+    .topbar__row{padding:12px 18px}
+    .help{display:none}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ TOP BAR ============ -->
+<header class="topbar">
+  <div class="topbar__progress"><div class="topbar__fill" id="bar"></div></div>
+  <div class="topbar__row">
+    <div class="brand">
+      <span class="brand__mark" role="img" aria-label="CoFounders AI"></span>
+      <div class="brand__name">CoFounders <span>· Agent Setup</span></div>
+    </div>
+    <a class="help" href="mailto:Admin@starlingagent.com">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Need a hand? Admin@starlingagent.com
+    </a>
+  </div>
+</header>
+
+<div class="shell">
+
+<!-- ============ WIZARD ============ -->
+<form class="wizard" id="wizard" novalidate>
+
+  <!-- ----- FORM COLUMN ----- -->
+  <div class="formcol">
+
+    <!-- honeypot -->
+    <input type="checkbox" name="botcheck" id="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+
+    <!-- STEP 1 — IDENTITY -->
+    <section class="step is-active" data-step="1">
+      <div class="eyebrow">Module 01 · Identity</div>
+      <h1 class="step-title">Meet your agent</h1>
+      <p class="step-sub">First, tell us who your agent represents. This is how it introduces itself to every new lead.</p>
+      <div class="dots" id="dots"></div>
+
+      <div class="field" data-required>
+        <label for="introName">How should your agent introduce itself?<span class="req">*</span></label>
+        <input type="text" id="introName" name="Intro line" placeholder="e.g., Taylor with Tailored Realty" autocomplete="off">
+        <span class="hint">Use your first name + business. Your agent will be nicknamed from this.</span>
+      </div>
+
+      <div class="row2">
+        <div class="field" data-required>
+          <label for="bizName">Team or business name<span class="req">*</span></label>
+          <input type="text" id="bizName" name="Business name" placeholder="Tailored Realty">
+        </div>
+        <div class="field" data-required>
+          <label for="brokerage">Brokerage<span class="req">*</span></label>
+          <input type="text" id="brokerage" name="Brokerage" placeholder="e.g., eXp Realty">
+        </div>
+      </div>
+
+      <fieldset class="group" data-required data-chip="Industry">
+        <div class="group__label">What does your agent do?<span class="req">*</span></div>
+        <div class="chips">
+          <label class="chip"><input type="radio" name="Industry" value="Real estate agent" checked><span class="chip__label">🏡 Real estate</span></label>
+          <label class="chip"><input type="radio" name="Industry" value="Mortgage lender"><span class="chip__label">💰 Mortgage</span></label>
+          <label class="chip"><input type="radio" name="Industry" value="Other"><span class="chip__label">✏️ Other</span></label>
+        </div>
+        <div class="field reveal" id="industryOtherWrap" style="margin-top:14px;display:none">
+          <label for="industryOther">Tell us your industry<span class="req">*</span></label>
+          <input type="text" id="industryOther" name="Industry (other)" placeholder="e.g., Insurance, Solar, Auto sales…">
+        </div>
+      </fieldset>
+
+      <fieldset class="group" data-required data-chip="Languages">
+        <div class="group__label">Which languages should it speak?<span class="req">*</span></div>
+        <div class="chips">
+          <label class="chip"><input type="radio" name="Languages" value="English" checked><span class="chip__label">English</span></label>
+          <label class="chip"><input type="radio" name="Languages" value="Spanish"><span class="chip__label">Spanish</span></label>
+          <label class="chip"><input type="radio" name="Languages" value="Bilingual (EN/ES)"><span class="chip__label">Bilingual 🇲🇽🇺🇸</span></label>
+        </div>
+      </fieldset>
+
+      <div class="group">
+        <label class="toggle">
+          <input type="checkbox" name="Works with ITIN buyers" value="Yes">
+          <span class="toggle__sw"></span>
+          <span class="toggle__txt">I work with ITIN buyers<small>Lets your agent mention ITIN-friendly options</small></span>
+        </label>
+      </div>
+    </section>
+
+    <!-- STEP 2 — COVERAGE -->
+    <section class="step" data-step="2">
+      <div class="eyebrow">Module 02 · Coverage</div>
+      <h1 class="step-title">Where you work</h1>
+      <p class="step-sub">Your market and the numbers your agent uses to reach you and your leads.</p>
+      <div class="dots"></div>
+
+      <div class="field" data-required>
+        <label for="markets">Primary city or markets you serve<span class="req">*</span></label>
+        <input type="text" id="markets" name="Markets served" placeholder="Houston, Spring, The Woodlands">
+      </div>
+
+      <div class="field" data-required>
+        <label for="tz">Your time zone<span class="req">*</span></label>
+        <select id="tz" name="Time zone">
+          <option value="Central Time (America/Chicago)">Central Time</option>
+          <option value="Eastern Time (America/New_York)">Eastern Time</option>
+          <option value="Mountain Time (America/Denver)">Mountain Time</option>
+          <option value="Pacific Time (America/Los_Angeles)">Pacific Time</option>
+          <option value="Arizona (America/Phoenix)">Arizona (no DST)</option>
+          <option value="Hawaii (Pacific/Honolulu)">Hawaii</option>
+        </select>
+      </div>
+
+      <div class="field" data-required>
+        <label for="yourEmail">Your email<span class="req">*</span></label>
+        <input type="email" id="yourEmail" name="Your email" placeholder="you@business.com">
+        <span class="hint">So we can reach you about your agent setup.</span>
+      </div>
+
+      <div class="row2">
+        <div class="field" data-required>
+          <label for="leadPhone">Number to show leads<span class="req">*</span></label>
+          <input type="tel" id="leadPhone" name="Lead-facing phone" placeholder="(832) 555-0199">
+        </div>
+        <div class="field" data-required>
+          <label for="alertCell">Cell for booking alerts<span class="req">*</span></label>
+          <input type="tel" id="alertCell" name="Booking alert cell" placeholder="(832) 555-0142">
+          <span class="hint">We text you the second a meeting is booked.</span>
+        </div>
+      </div>
+
+      <fieldset class="group" data-required data-chip="Default meeting type">
+        <div class="group__label">Default meeting type<span class="req">*</span></div>
+        <div class="chips">
+          <label class="chip"><input type="radio" name="Default meeting type" value="Phone call" checked><span class="chip__label">📞 Phone call</span></label>
+          <label class="chip"><input type="radio" name="Default meeting type" value="Video"><span class="chip__label">🎥 Video</span></label>
+          <label class="chip"><input type="radio" name="Default meeting type" value="In person"><span class="chip__label">🤝 In person</span></label>
+        </div>
+      </fieldset>
+
+      <div class="field">
+        <label for="office">Office address <span style="color:var(--text-lo);font-weight:400">(optional)</span></label>
+        <input type="text" id="office" name="Office address" placeholder="Shown to leads only if you'd like">
+      </div>
+    </section>
+
+    <!-- STEP 3 — VOICE -->
+    <section class="step" data-step="3">
+      <div class="eyebrow">Module 03 · Voice</div>
+      <h1 class="step-title">Your agent's voice</h1>
+      <p class="step-sub">Write the very first text it sends a new lead. Watch the preview — that's your agent talking.</p>
+      <div class="dots"></div>
+
+      <div class="field" data-required>
+        <label for="firstMsg">First text to a new lead<span class="req">*</span></label>
+        <textarea id="firstMsg" name="First message" maxlength="320">Hi! Thanks for reaching out — I'd love to help you find the right home. To get started, what area are you looking in?</textarea>
+        <span class="hint"><span id="charCount">0</span>/320 · We'll polish the wording with you before launch.</span>
+      </div>
+
+      <fieldset class="group" data-chip="Lead sources">
+        <div class="group__label">Where do your leads come from?</div>
+        <div class="chips">
+          <label class="chip"><input type="checkbox" name="Lead sources" value="TikTok"><span class="chip__label">TikTok</span></label>
+          <label class="chip"><input type="checkbox" name="Lead sources" value="Instagram"><span class="chip__label">Instagram</span></label>
+          <label class="chip"><input type="checkbox" name="Lead sources" value="Facebook"><span class="chip__label">Facebook</span></label>
+          <label class="chip"><input type="checkbox" name="Lead sources" value="Website"><span class="chip__label">Website</span></label>
+          <label class="chip"><input type="checkbox" name="Lead sources" value="Zillow"><span class="chip__label">Zillow</span></label>
+          <label class="chip"><input type="checkbox" name="Lead sources" value="Realtor.com"><span class="chip__label">Realtor.com</span></label>
+          <label class="chip"><input type="checkbox" name="Lead sources" value="Google"><span class="chip__label">Google</span></label>
+          <label class="chip"><input type="checkbox" name="Lead sources" value="Referrals"><span class="chip__label">Referrals</span></label>
+        </div>
+      </fieldset>
+    </section>
+
+    <!-- STEP 4 — SCHEDULING -->
+    <section class="step" data-step="4">
+      <div class="eyebrow">Module 04 · Scheduling</div>
+      <h1 class="step-title">When it can book</h1>
+      <p class="step-sub">Set the windows your agent can offer. It will never book outside these.</p>
+      <div class="dots"></div>
+
+      <fieldset class="group" data-chip="Days available">
+        <div class="group__label">Days it can book</div>
+        <div class="chips">
+          <label class="chip"><input type="checkbox" name="Days available" value="Mon" checked><span class="chip__label">Mon</span></label>
+          <label class="chip"><input type="checkbox" name="Days available" value="Tue" checked><span class="chip__label">Tue</span></label>
+          <label class="chip"><input type="checkbox" name="Days available" value="Wed" checked><span class="chip__label">Wed</span></label>
+          <label class="chip"><input type="checkbox" name="Days available" value="Thu" checked><span class="chip__label">Thu</span></label>
+          <label class="chip"><input type="checkbox" name="Days available" value="Fri" checked><span class="chip__label">Fri</span></label>
+          <label class="chip"><input type="checkbox" name="Days available" value="Sat" checked><span class="chip__label">Sat</span></label>
+          <label class="chip"><input type="checkbox" name="Days available" value="Sun"><span class="chip__label">Sun</span></label>
+        </div>
+      </fieldset>
+
+      <div class="row2">
+        <div class="field">
+          <label for="hStart">Earliest time</label>
+          <input type="time" id="hStart" name="Hours start" value="09:00">
+        </div>
+        <div class="field">
+          <label for="hEnd">Latest time</label>
+          <input type="time" id="hEnd" name="Hours end" value="19:00">
+        </div>
+      </div>
+
+      <fieldset class="group" data-chip="Appointment length">
+        <div class="group__label">Appointment length</div>
+        <div class="chips">
+          <label class="chip"><input type="radio" name="Appointment length" value="15 min"><span class="chip__label">15 min</span></label>
+          <label class="chip"><input type="radio" name="Appointment length" value="30 min" checked><span class="chip__label">30 min</span></label>
+          <label class="chip"><input type="radio" name="Appointment length" value="45 min"><span class="chip__label">45 min</span></label>
+          <label class="chip"><input type="radio" name="Appointment length" value="60 min"><span class="chip__label">60 min</span></label>
+        </div>
+      </fieldset>
+
+      <div class="row2">
+        <fieldset class="group" data-chip="Minimum notice">
+          <div class="group__label">Minimum notice</div>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="Minimum notice" value="1 hour"><span class="chip__label">1 hr</span></label>
+            <label class="chip"><input type="radio" name="Minimum notice" value="2 hours" checked><span class="chip__label">2 hrs</span></label>
+            <label class="chip"><input type="radio" name="Minimum notice" value="4 hours"><span class="chip__label">4 hrs</span></label>
+          </div>
+        </fieldset>
+        <fieldset class="group" data-chip="Booking window">
+          <div class="group__label">How far ahead</div>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="Booking window" value="14 days"><span class="chip__label">14 days</span></label>
+            <label class="chip"><input type="radio" name="Booking window" value="30 days" checked><span class="chip__label">30 days</span></label>
+            <label class="chip"><input type="radio" name="Booking window" value="60 days"><span class="chip__label">60 days</span></label>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="group">
+        <label class="toggle">
+          <input type="checkbox" name="Allow same-day booking" value="Yes">
+          <span class="toggle__sw"></span>
+          <span class="toggle__txt">Allow same-day appointments<small>Off means the earliest slot is tomorrow</small></span>
+        </label>
+      </div>
+
+      <div class="field">
+        <label for="holidays">Holidays or blackout dates <span style="color:var(--text-lo);font-weight:400">(optional)</span></label>
+        <input type="text" id="holidays" name="Blackout dates" placeholder="e.g., Dec 24–25, Jul 4">
+      </div>
+
+      <div class="group">
+        <label class="toggle">
+          <input type="checkbox" name="Use own Google Calendar" value="Yes">
+          <span class="toggle__sw"></span>
+          <span class="toggle__txt">Book into my own Google Calendar instead<small>We'll send a connect link after setup</small></span>
+        </label>
+      </div>
+    </section>
+
+    <!-- STEP 6 — PARTNERS + REVIEW -->
+    <section class="step" data-step="5">
+      <div class="eyebrow">Module 05 · Partners & launch</div>
+      <h1 class="step-title">Connect partners, then launch</h1>
+      <p class="step-sub">Add the people your agent can refer leads to. All optional — leave blank to skip.</p>
+      <div class="dots"></div>
+
+      <div class="row2">
+        <div class="field">
+          <label for="lenderName">Preferred lender</label>
+          <input type="text" id="lenderName" name="Lender name" placeholder="Name">
+        </div>
+        <div class="field">
+          <label for="lenderLink">Lender application link</label>
+          <input type="url" id="lenderLink" name="Lender link" placeholder="https://">
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label for="creditName">Credit repair partner</label>
+          <input type="text" id="creditName" name="Credit repair name" placeholder="Name">
+        </div>
+        <div class="field">
+          <label for="creditLink">Credit repair link</label>
+          <input type="url" id="creditLink" name="Credit repair link" placeholder="https://">
+        </div>
+      </div>
+      <div class="field">
+        <label for="refLink">Agent referral link</label>
+        <input type="url" id="refLink" name="Agent referral link" placeholder="https://">
+      </div>
+
+      <div class="field">
+        <label for="notes">Anything else we should know? <span style="color:var(--text-lo);font-weight:400">(optional)</span></label>
+        <textarea id="notes" name="Notes" placeholder="Special instructions, lead types, things to avoid…"></textarea>
+      </div>
+
+      <div class="group" data-required-check style="margin-top:4px">
+        <label class="toggle">
+          <input type="checkbox" id="optin" name="Opt-in confirmed" value="Yes, confirmed">
+          <span class="toggle__sw"></span>
+          <span class="toggle__txt">I confirm my contacts have opted in to receive texts<small>Required so your agent only messages people who agreed to hear from you — it keeps you compliant with texting laws (TCPA) and protects your number from carrier blocks.</small></span>
+        </label>
+      </div>
+
+      <div class="err-banner" id="errBanner">Something went wrong sending your setup. Please try again, or email <b>Admin@starlingagent.com</b>.</div>
+    </section>
+
+    <!-- NAV -->
+    <div class="nav">
+      <button type="button" class="btn btn--ghost" id="backBtn" disabled>← Back</button>
+      <button type="button" class="btn btn--primary" id="nextBtn">
+        Continue
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ----- PREVIEW COLUMN ----- -->
+  <aside class="preview" aria-hidden="true">
+    <div class="pcard">
+      <div class="agent-head">
+        <div class="agent-av"><span class="agent-av__img" aria-hidden="true"></span></div>
+        <div class="agent-meta">
+          <h3 id="pvName">Your agent</h3>
+          <div class="sub" id="pvBiz">Powered by CoFounders</div>
+          <div class="status"><span class="dot"></span> Online · replies in seconds</div>
+        </div>
+      </div>
+
+      <div class="thread">
+        <div class="bubble bubble--in" id="pvLead">Hi, is this still available?</div>
+        <div class="bubble bubble--out" id="pvMsg"></div>
+      </div>
+
+      <div class="pcard__foot">
+        <span class="tag">Lang · <b id="pvLang">English</b></span>
+        <span class="tag">Books · <b id="pvLen">30 min</b></span>
+        <span class="tag">Type · <b id="pvType">Phone</b></span>
+      </div>
+    </div>
+
+    <div class="build">
+      <div class="build__h">Build progress</div>
+      <ul class="build__list" id="buildList">
+        <li class="build__item" data-b="1"><span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="#0B0E1A" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Identity</li>
+        <li class="build__item" data-b="2"><span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="#0B0E1A" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Coverage</li>
+        <li class="build__item" data-b="3"><span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="#0B0E1A" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Voice</li>
+        <li class="build__item" data-b="4"><span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="#0B0E1A" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Scheduling</li>
+        <li class="build__item" data-b="5"><span class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="#0B0E1A" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Launch</li>
+      </ul>
+    </div>
+    <div class="powered">⌁ COFOUNDERS · app.starlingagent.com</div>
+  </aside>
+</form>
+
+<!-- ============ SUCCESS ============ -->
+<div class="done-screen" id="doneScreen">
+  <div class="done-badge">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#0B0E1A" stroke-width="2.6"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+  <h2 id="doneTitle">Your agent is on its way</h2>
+  <p>We've got everything we need to start building. Here's what happens next:</p>
+  <ul class="next-list">
+    <li><span class="n">1</span><div>We connect your CRM, calendar, and texting number — nothing technical needed from you.</div></li>
+    <li><span class="n">2</span><div>We submit your carrier registration so your agent can text leads (this kicks off right away).</div></li>
+    <li><span class="n">3</span><div>You get a quick message from Jason to review your agent's wording before it goes live.</div></li>
+  </ul>
+  <p class="done-foot">Questions in the meantime? Email us at <a href="mailto:Admin@starlingagent.com">Admin@starlingagent.com</a>.</p>
+</div>
+
+</div><!-- /shell -->
+
+<script>
+/* ============================================================
+   COFOUNDERS — Agent Setup Wizard
+   ------------------------------------------------------------
+   1) Get a free access key (no signup): https://web3forms.com
+      Enter the email where you want submissions delivered,
+      then paste the key below.
+   2) Prefer Formspree/Getform/Basin? See sendSetup() at the bottom.
+   ============================================================ */
+const ACCESS_KEY = "141e743a-9449-4980-b0dc-d37061594328";   // Web3Forms key -> delivers to the email this key is registered under
+
+const TOTAL = 5;
+let step = 1;
+
+const form     = document.getElementById('wizard');
+const bar      = document.getElementById('bar');
+const backBtn  = document.getElementById('backBtn');
+const nextBtn  = document.getElementById('nextBtn');
+const errBanner= document.getElementById('errBanner');
+
+/* ---- Build the step dots inside every step ---- */
+document.querySelectorAll('.dots').forEach(d=>{
+  for(let i=1;i<=TOTAL;i++){
+    const s=document.createElement('span');
+    s.className='dots__d';s.dataset.d=i;d.appendChild(s);
+  }
+});
+
+/* ---- Render current state ---- */
+function render(){
+  document.querySelectorAll('.step').forEach(s=>{
+    s.classList.toggle('is-active', +s.dataset.step===step);
+  });
+  bar.style.width = (step/TOTAL*100) + '%';
+  backBtn.disabled = step===1;
+
+  if(step===TOTAL){
+    nextBtn.innerHTML = 'Build my agent <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  }else{
+    nextBtn.innerHTML = 'Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  }
+
+  document.querySelectorAll('.dots__d').forEach(d=>{
+    const n=+d.dataset.d;
+    d.classList.toggle('done', n<step);
+    d.classList.toggle('active', n===step);
+  });
+  document.querySelectorAll('.build__item').forEach(it=>{
+    const n=+it.dataset.b;
+    it.classList.toggle('done', n<step);
+    it.classList.toggle('active', n===step);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ---- Validation for the current step ---- */
+function validateStep(){
+  let ok=true, firstBad=null;
+  const cur=document.querySelector('.step[data-step="'+step+'"]');
+
+  cur.querySelectorAll('.field[data-required]').forEach(f=>{
+    const input=f.querySelector('input,textarea,select');
+    const empty=!input.value.trim();
+    f.classList.toggle('invalid', empty);
+    if(empty){ok=false;firstBad=firstBad||input;}
+  });
+  // required single-select chip groups
+  cur.querySelectorAll('.group[data-required]').forEach(g=>{
+    const name=g.dataset.chip;
+    if(!form.querySelector('input[name="'+name+'"]:checked')){ok=false;}
+  });
+  // required checkbox (opt-in)
+  cur.querySelectorAll('.group[data-required-check]').forEach(g=>{
+    const cb=g.querySelector('input[type=checkbox]');
+    if(!cb.checked){ok=false;firstBad=firstBad||cb;g.querySelector('.toggle').style.borderColor='var(--coral)';}
+    else{g.querySelector('.toggle').style.borderColor='';}
+  });
+
+  if(!ok && firstBad) firstBad.focus();
+  return ok;
+}
+
+/* clear invalid as the user types */
+form.addEventListener('input', e=>{
+  const f=e.target.closest('.field.invalid');
+  if(f && e.target.value.trim()) f.classList.remove('invalid');
+});
+
+/* ---- Nav ---- */
+nextBtn.addEventListener('click', ()=>{
+  if(!validateStep()) return;
+  if(step<TOTAL){ step++; render(); }
+  else sendSetup();
+});
+backBtn.addEventListener('click', ()=>{ if(step>1){step--;render();} });
+form.addEventListener('keydown', e=>{
+  if(e.key==='Enter' && e.target.tagName!=='TEXTAREA'){ e.preventDefault(); nextBtn.click(); }
+});
+
+/* ============ LIVE PREVIEW ============ */
+const introEl=document.getElementById('introName');
+const bizEl=document.getElementById('bizName');
+const msgEl=document.getElementById('firstMsg');
+const pvName=document.getElementById('pvName');
+const pvBiz=document.getElementById('pvBiz');
+const pvMsg=document.getElementById('pvMsg');
+const pvLang=document.getElementById('pvLang');
+const pvLen=document.getElementById('pvLen');
+const pvType=document.getElementById('pvType');
+const charCount=document.getElementById('charCount');
+
+function nickname(v){
+  if(!v.trim()) return 'Your agent';
+  // take the part before " with " / " at ", else first word
+  let base=v.split(/\s+with\s+|\s+at\s+/i)[0].trim();
+  base=base.split(/\s+/)[0];
+  return base.charAt(0).toUpperCase()+base.slice(1)+' AI';
+}
+function paintMsg(){
+  const t=msgEl.value.trim();
+  pvMsg.textContent = t || 'Your first message will show here…';
+  pvMsg.style.opacity = t? '1':'.55';
+  charCount.textContent = msgEl.value.length;
+}
+introEl.addEventListener('input', ()=> pvName.textContent=nickname(introEl.value));
+bizEl.addEventListener('input', ()=> pvBiz.textContent = bizEl.value.trim()? bizEl.value.trim()+' · CoFounders AI' : 'Powered by CoFounders');
+msgEl.addEventListener('input', paintMsg);
+
+form.addEventListener('change', e=>{
+  if(e.target.name==='Languages') pvLang.textContent=e.target.value.replace(' (EN/ES)','');
+  if(e.target.name==='Appointment length') pvLen.textContent=e.target.value;
+  if(e.target.name==='Default meeting type') pvType.textContent=e.target.value.replace(' call','');
+  if(e.target.name==='Industry'){
+    const wrap=document.getElementById('industryOtherWrap');
+    const isOther=e.target.value==='Other';
+    wrap.style.display=isOther?'block':'none';
+    if(isOther){ wrap.setAttribute('data-required',''); }
+    else{ wrap.removeAttribute('data-required'); wrap.classList.remove('invalid'); document.getElementById('industryOther').value=''; }
+    const map={'Real estate agent':'Hi, is this home still available?','Mortgage lender':'Hi, can I still get pre-approved?','Other':'Hi, I saw your post — can you help?'};
+    document.getElementById('pvLead').textContent=map[e.target.value]||map['Other'];
+  }
+});
+
+/* ============ SUBMIT ============ */
+async function sendSetup(){
+  errBanner.classList.remove('show');
+  if(document.getElementById('botcheck').checked) return;   // honeypot
+
+  nextBtn.setAttribute('aria-busy','true');
+  nextBtn.innerHTML='Building…';
+
+  // Build a clean, readable payload from every named field
+  const fd=new FormData(form);
+  const data={
+    access_key: ACCESS_KEY,
+    subject: '🐦 New CoFounders AI Agent Build — ' + (fd.get('Business name')||'New client'),
+    from_name: 'CoFounders AI — Agent Setup'
+  };
+  for (const [k,v] of fd.entries()){
+    if(k==='botcheck') continue;
+    if(data[k]){ data[k]=[].concat(data[k],v).join(', '); }   // merge multi-selects
+    else data[k]=v;
+  }
+  if(data['Your email']) data.replyto = data['Your email'];
+
+  try{
+    const res=await fetch('https://api.web3forms.com/submit',{
+      method:'POST',
+      headers:{'Content-Type':'application/json',Accept:'application/json'},
+      body:JSON.stringify(data)
+    });
+    const out=await res.json();
+    if(out.success){
+      document.getElementById('wizard').style.display='none';
+      const nm=nickname(introEl.value);
+      document.getElementById('doneTitle').textContent = nm==='Your agent'? 'Your agent is on its way' : nm+' is on its way';
+      document.getElementById('doneScreen').classList.add('show');
+      window.scrollTo({top:0,behavior:'smooth'});
+    }else{ throw new Error(out.message||'Submission failed'); }
+  }catch(err){
+    errBanner.classList.add('show');
+    nextBtn.removeAttribute('aria-busy');
+    nextBtn.innerHTML='Build my agent';
+    if(step!==TOTAL){ step=TOTAL; render(); }
+  }
+}
+/* ---- Formspree alternative ----
+   Replace the fetch URL above with your Formspree endpoint, e.g.
+   fetch('https://formspree.io/f/yourID', { ...same options... })
+   Formspree reads `data` JSON the same way — no other change needed.
+----------------------------------- */
+
+/* init */
+paintMsg();
+render();
+</script>
+<script src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="6a4dc540a633f298628d0a79" data-source="WEB_USER"></script>
+</body>
+</html>
