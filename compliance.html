@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A2P 10DLC Compliance Registration — Starling AI</title>
+<meta name="description" content="Register your business and messaging campaign so your Starling AI texts stay compliant and keep delivering.">
+
+<!-- ==========================================================
+  STARLING SETUP — one thing left before the form delivers:
+  ACCESS KEY: replace YOUR_WEB3FORMS_ACCESS_KEY below (free at
+  web3forms.com — the key controls which inbox receives submissions).
+  Submissions arrive by email — archive every one; each is your
+  consent-attestation evidence for that client.
+=========================================================== -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --navy:#080C17;
+  --panel:#0D1322;
+  --panel-2:#111A30;
+  --line:#232D4A;
+  --ink:#EDF0FA;
+  --muted:#98A2C3;
+  --coral:#F15368;
+  --peri:#868BDF;
+  --peri-deep:#5A5FB0;
+  --blush:#FFA0A8;
+  --radius:14px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+body{
+  margin:0;
+  background:var(--navy);
+  color:var(--ink);
+  font-family:'IBM Plex Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:780px;margin:0 auto;padding:0 20px}
+
+/* ---------- header ---------- */
+header{padding:28px 0 0}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;width:max-content}
+.wordmark{font-family:'Poppins',sans-serif;font-weight:700;font-size:20px;letter-spacing:.2px}
+.wordmark .ai{color:var(--peri)}
+
+/* ---------- hero ---------- */
+.hero{padding:44px 0 8px}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--peri);margin:0 0 14px;
+}
+h1{
+  font-family:'Poppins',sans-serif;font-weight:700;
+  font-size:clamp(28px,5vw,40px);line-height:1.15;margin:0 0 16px;
+}
+.hero p.lede{color:var(--muted);max-width:62ch;margin:0 0 22px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 8px}
+.chip{
+  font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink);
+  border:1px solid var(--line);border-radius:999px;padding:7px 13px;background:var(--panel);
+}
+.chip b{color:var(--blush);font-weight:500}
+
+/* ---------- section cards with origami fold ---------- */
+.card{
+  position:relative;background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--radius);padding:30px 28px;margin:26px 0;
+}
+.card::before{
+  content:"";position:absolute;top:-1px;right:-1px;width:30px;height:30px;
+  background:var(--navy);clip-path:polygon(0 0,100% 0,100% 100%);
+}
+.card::after{
+  content:"";position:absolute;top:-1px;right:-1px;width:30px;height:30px;
+  background:linear-gradient(135deg,#B7BBF2 0%,var(--peri) 48%,var(--peri-deep) 100%);
+  clip-path:polygon(0 0,100% 100%,0 100%);
+  filter:drop-shadow(-2px 2px 3px rgba(0,0,0,.4));
+}
+.sec-head{margin:0 0 6px;display:flex;align-items:baseline;gap:12px}
+.sec-num{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--peri);letter-spacing:.1em}
+.sec-head h2{font-family:'Poppins',sans-serif;font-weight:600;font-size:21px;margin:0}
+.sec-sub{color:var(--muted);font-size:14.5px;margin:0 0 22px}
+
+/* ---------- fields ---------- */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid .full{grid-column:1 / -1}
+@media (max-width:640px){ .grid{grid-template-columns:1fr} }
+label.fl{display:block;font-weight:500;font-size:14.5px;margin:0 0 6px}
+.req{color:var(--coral)}
+.hint{display:block;font-weight:400;color:var(--muted);font-size:13px;margin-top:2px;line-height:1.5}
+input[type=text],input[type=email],input[type=tel],input[type=url],select,textarea{
+  width:100%;background:#0A101F;border:1px solid var(--line);border-radius:10px;
+  color:var(--ink);padding:11px 13px;font:inherit;font-size:15px;
+}
+textarea{min-height:110px;resize:vertical}
+.mono{font-family:'IBM Plex Mono',monospace;font-size:14px}
+input::placeholder,textarea::placeholder{color:#5B6485}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible{
+  outline:2px solid var(--peri);outline-offset:2px;border-color:var(--peri);
+}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 20px) 55%,calc(100% - 14px) 55%;background-size:6px 6px;background-repeat:no-repeat;padding-right:38px}
+fieldset{border:0;padding:0;margin:0 0 8px}
+legend{font-weight:500;font-size:14.5px;padding:0;margin:0 0 8px}
+.check{display:flex;gap:11px;align-items:flex-start;padding:7px 0;font-size:15px}
+.check input{margin-top:4px;width:17px;height:17px;accent-color:var(--peri);flex:none}
+.field{margin:0 0 18px}
+.hide{display:none !important}
+
+/* ---------- callouts ---------- */
+.callout{border-left:3px solid var(--peri);background:rgba(134,139,223,.08);border-radius:0 10px 10px 0;padding:13px 16px;font-size:14px;color:var(--ink);margin:12px 0}
+.callout.warn{border-left-color:var(--coral);background:rgba(241,83,104,.08)}
+.callout b{font-weight:600}
+
+/* ---------- clause copy block ---------- */
+.clause{
+  background:#0A101F;border:1px dashed var(--peri-deep);border-radius:10px;
+  padding:14px 15px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;line-height:1.6;color:var(--blush);
+  display:flex;gap:14px;align-items:flex-start;justify-content:space-between;margin:10px 0 8px;
+}
+.clause button{
+  flex:none;font:inherit;font-size:12px;color:var(--navy);background:var(--peri);
+  border:0;border-radius:7px;padding:6px 12px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-weight:600;
+}
+
+/* ---------- SMS preview (signature element) ---------- */
+.sms-preview{margin-top:12px;background:#0A101F;border:1px solid var(--line);border-radius:12px;padding:16px}
+.sms-preview .pv-label{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.bubble{
+  max-width:85%;background:linear-gradient(160deg,var(--peri) 0%,var(--peri-deep) 100%);
+  color:#fff;border-radius:16px 16px 16px 4px;padding:10px 14px;font-size:14.5px;line-height:1.5;
+  min-height:20px;white-space:pre-wrap;word-wrap:break-word;
+}
+.bubble:empty::before{content:"Your first sample message appears here…";color:rgba(255,255,255,.55)}
+.pv-meta{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);margin:10px 0 0}
+.pv-meta .ok{color:#8BE0B0}
+.pv-meta .warnc{color:var(--blush)}
+
+/* ---------- attestations ---------- */
+.attest{list-style:none;margin:0;padding:0}
+.attest li{border-top:1px solid var(--line);padding:14px 0}
+.attest li:first-child{border-top:0;padding-top:4px}
+.attest label{display:flex;gap:13px;align-items:flex-start;font-size:14.5px;line-height:1.6;cursor:pointer}
+.attest input{margin-top:4px;width:18px;height:18px;accent-color:var(--coral);flex:none}
+.attest b{font-weight:600;color:var(--ink)}
+.attest a{color:var(--peri)}
+
+/* ---------- signature & submit ---------- */
+.sig-consent{border:1px solid var(--line);border-radius:10px;background:#0A101F;padding:13px 15px;margin:6px 0 0}
+button.submit{
+  font-family:'Poppins',sans-serif;font-weight:600;font-size:16px;
+  background:var(--coral);color:#fff;border:0;border-radius:12px;
+  padding:15px 30px;cursor:pointer;width:100%;margin-top:8px;
+}
+button.submit:disabled{opacity:.55;cursor:wait}
+@media (prefers-reduced-motion: no-preference){
+  button.submit{transition:transform .12s ease,box-shadow .12s ease}
+  button.submit:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 24px rgba(241,83,104,.35)}
+}
+.form-status{min-height:24px;margin-top:12px;font-size:14.5px;color:var(--coral)}
+
+/* ---------- success ---------- */
+#success{text-align:left}
+#success h2{font-family:'Poppins',sans-serif;font-weight:700;font-size:26px;margin:0 0 10px}
+#success ol{margin:14px 0 0;padding-left:22px;color:var(--muted)}
+#success ol li{margin:9px 0;padding-left:4px}
+#success ol li b{color:var(--ink);font-weight:600}
+.success-mark{
+  width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--peri) 0%,var(--peri-deep) 100%);margin:0 0 18px;
+  font-size:24px;color:#fff;
+}
+
+/* ---------- footer ---------- */
+footer{padding:36px 0 48px;border-top:1px solid var(--line);margin-top:44px}
+footer .row{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;font-size:14px;color:var(--muted)}
+footer .fine{font-size:12.5px;color:#6B7494;margin-top:14px;max-width:70ch;line-height:1.6}
+footer a{color:var(--peri);text-decoration:none}
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <a class="brand" href="/" aria-label="Starling AI home">
+    <svg width="34" height="34" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M20 6 L5 32 L20 23 Z" fill="#868BDF"/>
+      <path d="M20 6 L35 32 L20 23 Z" fill="#F15368"/>
+      <path d="M20 23 L13 30 L20 27 Z" fill="#868BDF" opacity="0.55"/>
+      <path d="M20 23 L27 30 L20 27 Z" fill="#F15368" opacity="0.55"/>
+    </svg>
+    <div class="wordmark">Starling <span class="ai">AI</span></div>
+  </a>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="eyebrow">Carrier compliance · A2P 10DLC</p>
+    <h1>Register your business to text legally</h1>
+    <p class="lede">U.S. mobile carriers require every business that texts from a 10-digit number to register who they are and how their contacts agreed to hear from them. This form gives us what we need to register your brand and messaging campaign with the carriers — so your texts keep delivering instead of getting filtered.</p>
+    <div class="chips">
+      <span class="chip">≈ 10 minutes</span>
+      <span class="chip">Have ready: <b>EIN</b> · <b>website URL</b> · <b>privacy policy link</b></span>
+    </div>
+  </section>
+
+  <form id="a2pForm" novalidate>
+    <!-- Web3Forms config -->
+    <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY">
+    <input type="hidden" name="from_name" value="Starling AI Compliance Form">
+    <input type="hidden" name="subject" id="subjectField" value="A2P Compliance Submission — Starling AI">
+    <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display:none" aria-hidden="true">
+
+    <!-- ============ 01 BUSINESS IDENTITY ============ -->
+    <section class="card" aria-labelledby="s1">
+      <div class="sec-head"><span class="sec-num">01</span><h2 id="s1">Business identity</h2></div>
+      <p class="sec-sub">Exactly as registered with the IRS — carriers reject mismatches.</p>
+
+      <div class="grid">
+        <div class="field full">
+          <label class="fl" for="legalName">Legal business name <span class="req">*</span>
+            <span class="hint">As it appears on your IRS documents (CP 575 / SS-4).</span></label>
+          <input type="text" id="legalName" name="Legal Business Name" required autocomplete="organization">
+        </div>
+        <div class="field">
+          <label class="fl" for="dba">Brand / DBA name shown in texts</label>
+          <input type="text" id="dba" name="DBA or Brand Name" placeholder="If different from legal name">
+        </div>
+        <div class="field">
+          <label class="fl" for="entityType">Business type <span class="req">*</span></label>
+          <select id="entityType" name="Business Entity Type" required>
+            <option value="" selected disabled>Select…</option>
+            <option>LLC</option>
+            <option>Corporation</option>
+            <option>Partnership</option>
+            <option>Non-profit</option>
+            <option>Sole proprietor (no EIN yet)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="fl" for="ein">EIN / Tax ID <span class="req" id="einReq">*</span>
+            <span class="hint" id="einHint">Must match IRS records digit-for-digit.</span></label>
+          <input type="text" class="mono" id="ein" name="EIN" inputmode="numeric" placeholder="12-3456789" maxlength="10" required>
+        </div>
+        <div class="field">
+          <label class="fl" for="vertical">Industry <span class="req">*</span></label>
+          <select id="vertical" name="Industry" required>
+            <option>Real Estate</option>
+            <option>Mortgage &amp; Lending</option>
+            <option>Insurance</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field full" id="solePropNote" hidden>
+          <div class="callout">Sole proprietors register under the carriers' <b>Sole Proprietor track</b>: one phone number, lower daily message limits, and your mobile number below will be verified with a one-time code. When you form an LLC later, we can upgrade your registration.</div>
+        </div>
+        <div class="field full">
+          <label class="fl" for="addr">Business street address <span class="req">*</span></label>
+          <input type="text" id="addr" name="Business Street Address" required autocomplete="street-address">
+        </div>
+        <div class="field">
+          <label class="fl" for="city">City <span class="req">*</span></label>
+          <input type="text" id="city" name="City" required autocomplete="address-level2">
+        </div>
+        <div class="field">
+          <label class="fl" for="state">State <span class="req">*</span></label>
+          <select id="state" name="State" required>
+            <option value="" selected disabled>Select…</option>
+            <option>AL</option><option>AK</option><option>AZ</option><option>AR</option><option>CA</option>
+            <option>CO</option><option>CT</option><option>DE</option><option>DC</option><option>FL</option>
+            <option>GA</option><option>HI</option><option>ID</option><option>IL</option><option>IN</option>
+            <option>IA</option><option>KS</option><option>KY</option><option>LA</option><option>ME</option>
+            <option>MD</option><option>MA</option><option>MI</option><option>MN</option><option>MS</option>
+            <option>MO</option><option>MT</option><option>NE</option><option>NV</option><option>NH</option>
+            <option>NJ</option><option>NM</option><option>NY</option><option>NC</option><option>ND</option>
+            <option>OH</option><option>OK</option><option>OR</option><option>PA</option><option>PR</option>
+            <option>RI</option><option>SC</option><option>SD</option><option>TN</option><option>TX</option>
+            <option>UT</option><option>VT</option><option>VA</option><option>WA</option><option>WV</option>
+            <option>WI</option><option>WY</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="fl" for="zip">ZIP <span class="req">*</span></label>
+          <input type="text" id="zip" name="ZIP" required inputmode="numeric" autocomplete="postal-code" maxlength="10">
+        </div>
+        <div class="field">
+          <label class="fl" for="hasWebsite">Do you have a business website? <span class="req">*</span></label>
+          <select id="hasWebsite" name="Has A Website" required>
+            <option value="" selected disabled>Select…</option>
+            <option value="Yes">Yes — it's live</option>
+            <option value="No">No — I need one built</option>
+          </select>
+        </div>
+        <div class="field full" id="websiteWrap">
+          <label class="fl" for="website">Business website <span class="req">*</span>
+            <span class="hint">Must be live and clearly yours. Carriers visit it.</span></label>
+          <input type="url" id="website" name="Business Website" required placeholder="https://" autocomplete="url">
+        </div>
+        <div class="field full hide" id="buildWrap">
+          <div class="callout"><b>No website? We've got you.</b> Starling can build a compliance-ready website for your business on your Starling CRM — your own domain, real business pages, a privacy policy with the required SMS clause, and a lead form that captures consent with timestamps straight into your CRM. Carriers expect a live website that matches your business before they approve texting, so we'll complete your registration as soon as it's up. This is an additional one-time service — we'll send your quote before any work begins.</div>
+          <div class="grid" style="margin-top:12px">
+            <div class="field">
+              <label class="fl" for="ownsDomain">Do you already own a domain name? <span class="req">*</span></label>
+              <select id="ownsDomain" name="Owns A Domain" disabled>
+                <option value="" selected disabled>Select…</option>
+                <option value="Yes">Yes — I own a domain</option>
+                <option value="No">No — help me get one</option>
+              </select>
+            </div>
+            <div class="field hide" id="domainWrap">
+              <label class="fl" for="existingDomain">Your domain</label>
+              <input type="text" id="existingDomain" name="Existing Domain" placeholder="yourbusiness.com" disabled>
+            </div>
+          </div>
+          <label class="check"><input type="checkbox" id="buildRequest" name="Website Build Requested" value="Yes" disabled>
+            <span><b>Build my compliance website.</b> I understand this is an additional one-time service (quoted before any work begins), that the website and its policies will be published as my business's own on my domain, and that I'll review and approve everything before it's submitted for carrier registration. <span class="req">*</span></span></label>
+        </div>
+        <div class="field full"><hr style="border:0;border-top:1px solid var(--line);margin:6px 0 2px"></div>
+        <div class="field">
+          <label class="fl" for="repName">Authorized representative <span class="req">*</span></label>
+          <input type="text" id="repName" name="Authorized Rep Name" required autocomplete="name" placeholder="Full name">
+        </div>
+        <div class="field">
+          <label class="fl" for="repTitle">Title <span class="req">*</span></label>
+          <input type="text" id="repTitle" name="Authorized Rep Title" required placeholder="Owner, Broker, Team Lead…">
+        </div>
+        <div class="field">
+          <label class="fl" for="repEmail">Work email <span class="req">*</span></label>
+          <input type="email" id="repEmail" name="email" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label class="fl" for="repPhone">Mobile phone <span class="req">*</span>
+            <span class="hint">Used for carrier verification if required.</span></label>
+          <input type="tel" id="repPhone" name="Authorized Rep Mobile" required autocomplete="tel" placeholder="(832) 555-0123">
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 02 MESSAGING PROGRAM ============ -->
+    <section class="card" aria-labelledby="s2">
+      <div class="sec-head"><span class="sec-num">02</span><h2 id="s2">Your messaging program</h2></div>
+      <p class="sec-sub">What you'll text about, and roughly how much. Carriers review this word-for-word.</p>
+
+      <div class="field">
+        <label class="fl" for="useCase">What will you text your contacts about? <span class="req">*</span></label>
+        <textarea id="useCase" name="Messaging Use Case" required placeholder="Example: Follow up with new buyer and seller leads, answer their questions, schedule showings and appointments, and send occasional listing updates."></textarea>
+      </div>
+
+      <div class="field">
+        <label class="fl" for="volume">Estimated monthly volume <span class="req">*</span></label>
+        <select id="volume" name="Estimated Monthly Volume" required>
+          <option value="" selected disabled>Select…</option>
+          <option>Under 1,000 messages</option>
+          <option>1,000 – 10,000 messages</option>
+          <option>10,000 – 50,000 messages</option>
+          <option>50,000+ messages</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="fl" for="samples">Sample messages (2–3) <span class="req">*</span>
+          <span class="hint">Write real examples, one per paragraph. Include your business name in each, and end at least one with "Reply STOP to opt out."</span></label>
+        <textarea id="samples" class="mono" name="Sample Messages" required rows="6" placeholder="Hi Maria, it's Alex with Bluebonnet Realty — you asked about 4310 Elm St. Are you still looking in the $300s? Reply STOP to opt out."></textarea>
+        <div class="sms-preview">
+          <p class="pv-label">Live preview — first sample</p>
+          <div class="bubble" id="bubble"></div>
+          <p class="pv-meta" id="pvMeta" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <fieldset class="field">
+        <legend>Message contents</legend>
+        <label class="check"><input type="checkbox" id="hasLinks" data-extra="Messages Include Links" value="Yes"> My messages will include web links</label>
+        <div class="field hide" id="linkDomainWrap" style="margin:4px 0 4px 28px">
+          <label class="fl" for="linkDomain">What domain will the links use?</label>
+          <input type="url" id="linkDomain" name="Link Domain" placeholder="https://yourdomain.com">
+          <span class="hint">Links must use your own branded domain. Public shorteners like bit.ly get carrier-filtered.</span>
+        </div>
+        <label class="check"><input type="checkbox" id="hasPhone" data-extra="Messages Include Phone Number" value="Yes"> My messages will include a phone number</label>
+      </fieldset>
+    </section>
+
+    <!-- ============ 03 LEAD SOURCES & CONSENT ============ -->
+    <section class="card" aria-labelledby="s3">
+      <div class="sec-head"><span class="sec-num">03</span><h2 id="s3">Lead sources &amp; consent</h2></div>
+      <p class="sec-sub">Where your contacts come from, and how they said yes to texts. This is the part that protects you.</p>
+
+      <fieldset class="field">
+        <legend>Where do your leads and contacts come from? <span class="req">*</span></legend>
+        <label class="check"><input type="checkbox" class="src" data-source="My website lead forms"> My website lead forms</label>
+        <label class="check"><input type="checkbox" class="src" data-source="Facebook / Instagram lead ads"> Facebook / Instagram lead ads</label>
+        <label class="check"><input type="checkbox" class="src" data-source="Zillow, Realtor.com, or other portals"> Zillow, Realtor.com, or other portals</label>
+        <label class="check"><input type="checkbox" class="src" data-source="Open house / paper sign-in sheets"> Open house / paper sign-in sheets</label>
+        <label class="check"><input type="checkbox" class="src" data-source="Referrals and past clients"> Referrals and past clients</label>
+        <label class="check"><input type="checkbox" class="src" id="srcPurchased" data-source="Purchased or third-party lists"> Purchased or third-party lists</label>
+        <label class="check"><input type="checkbox" class="src" id="srcOther" data-source="Other"> Other</label>
+        <div class="field hide" id="otherWrap" style="margin:4px 0 0 28px">
+          <input type="text" id="otherSource" name="Other Lead Source" placeholder="Describe the source">
+        </div>
+        <div class="callout warn hide" id="purchasedWarn">
+          <b>Purchased, rented, or scraped lists can't be texted through Starling.</b> Carriers treat them as spam and suspend campaigns, and the TCPA allows $500–$1,500 in damages <i>per text</i>. Contacts from these lists stay excluded until they opt in to hear from your business directly.
+        </div>
+      </fieldset>
+
+      <div class="field">
+        <label class="fl" for="optinMethod">How do contacts agree to receive texts from you? <span class="req">*</span></label>
+        <textarea id="optinMethod" name="Opt-In Method Description" required placeholder="Example: Leads complete the home-search form on bluebonnetrealty.com. The form states they agree to receive text messages from Bluebonnet Realty and links to our privacy policy."></textarea>
+        <span class="hint">Portal leads (Zillow, Realtor.com): confirm the portal's consent language covers texts from <b>your</b> business — not just from the portal.</span>
+      </div>
+
+      <div class="callout hide" id="noSiteNote">Since we're building your website, we'll create your opt-in page and privacy policy (with the required SMS clause) as part of it — and your Starling lead form becomes your documented, timestamped consent capture going forward.</div>
+
+      <div class="grid" id="consentUrlsWrap">
+        <div class="field">
+          <label class="fl" for="optinUrl">Where consent is collected (URL) <span class="req">*</span>
+            <span class="hint">The exact page with your form. Carriers click this.</span></label>
+          <input type="url" id="optinUrl" name="Opt-In Page URL" required placeholder="https://">
+        </div>
+        <div class="field">
+          <label class="fl" for="optinShot">Screenshot of the opt-in form (link)
+            <span class="hint">Optional — a Google Drive or Dropbox share link works.</span></label>
+          <input type="url" id="optinShot" name="Opt-In Screenshot Link" placeholder="https://">
+        </div>
+      </div>
+
+      <div class="field" id="privacyWrap">
+        <label class="fl" for="privacyUrl">Privacy policy URL <span class="req">*</span></label>
+        <input type="url" id="privacyUrl" name="Privacy Policy URL" required placeholder="https://">
+        <div class="clause">
+          <span id="clauseText">Text messaging opt-in data and consent (including phone numbers collected for SMS purposes) will not be shared with or sold to third parties or affiliates for marketing or promotional purposes.</span>
+          <button type="button" id="copyClause">Copy</button>
+        </div>
+        <label class="check"><input type="checkbox" id="clauseCheck" name="Privacy Policy Has SMS Clause" value="Confirmed" required> My privacy policy is live at the URL above and includes this SMS data-sharing clause (or equivalent). <span class="req">*</span></label>
+        <span class="hint">Carriers now reject campaigns whose privacy policy is missing this sentence. Paste it in if you don't have it.</span>
+      </div>
+
+      <div class="field">
+        <label class="fl" for="consentRecords">Do you have records of consent for your existing contacts? <span class="req">*</span></label>
+        <select id="consentRecords" name="Consent Records Status" required>
+          <option value="" selected disabled>Select…</option>
+          <option>Yes — timestamped records for every contact</option>
+          <option>Partially — records for some contacts</option>
+          <option>No / not sure</option>
+        </select>
+        <div class="callout hide" id="recordsNote">No problem — but outbound texting only activates for contacts with proof of consent. We'll help you set up capture going forward and segment out anything undocumented.</div>
+      </div>
+    </section>
+
+    <!-- ============ 04 LEGAL ATTESTATIONS ============ -->
+    <section class="card" aria-labelledby="s4">
+      <div class="sec-head"><span class="sec-num">04</span><h2 id="s4">Legal attestations</h2></div>
+      <p class="sec-sub">Read each one — you're certifying these on behalf of your business. All are required.</p>
+
+      <ul class="attest">
+        <li><label><input type="checkbox" name="Attestation 1 - Prior Express Written Consent" value="Agreed" required>
+          <span><b>Consent before contact.</b> Every contact I upload, sync, or allow Starling to text has given prior express written consent to receive text messages from my business (for example, through a lead form with clear SMS-consent language) before any message is sent.</span></label></li>
+
+        <li><label><input type="checkbox" name="Attestation 2 - No Purchased Lists" value="Agreed" required>
+          <span><b>List provenance.</b> I will not upload or sync purchased, rented, scraped, or co-registered contact lists. For leads from portals or third-party vendors, I have verified their consent language covers text messages from my business specifically.</span></label></li>
+
+        <li><label><input type="checkbox" name="Attestation 3 - Consent Records" value="Agreed" required>
+          <span><b>Proof on request.</b> I keep proof of consent (timestamp, source, and the consent language shown) for every contact, will retain it for at least 4 years, and will produce it within 5 business days if Starling AI, Twilio, a carrier, or a regulator asks.</span></label></li>
+
+        <li><label><input type="checkbox" name="Attestation 4 - Opt-Out Handling" value="Agreed" required>
+          <span><b>Opt-outs are final.</b> I will honor every opt-out immediately and permanently, and will not re-add, re-upload, or text contacts who have opted out.</span></label></li>
+
+        <li><label><input type="checkbox" name="Attestation 5 - Content and Law" value="Agreed" required>
+          <span><b>Lawful content and timing.</b> My messages will comply with the TCPA, applicable state telemarketing laws (including Florida's and Texas SB 140's text-message rules), CTIA guidelines, and carrier policies — including quiet-hour restrictions and the ban on SHAFT-C content (sex, hate, alcohol, firearms, tobacco, cannabis).</span></label></li>
+
+        <li><label><input type="checkbox" name="Attestation 6 - Sender of Record" value="Agreed" required>
+          <span><b>I am the sender.</b> I am the sender and initiator of all messages sent through my account. Starling AI LLC provides software, automation, and phone-number management services at my direction and on my behalf.</span></label></li>
+
+        <li><label><input type="checkbox" name="Attestation 7 - Indemnification" value="Agreed" required>
+          <span><b>Indemnification.</b> I will defend, indemnify, and hold harmless Starling AI LLC and its officers, employees, and agents from any claims, damages, fines, penalties, or expenses (including reasonable attorneys' fees) arising from my contact lists, my consent practices, or messages sent at my direction.</span></label></li>
+
+        <li><label><input type="checkbox" name="Attestation 8 - Suspension Rights" value="Agreed" required>
+          <span><b>Suspension for violations.</b> I understand Starling AI LLC, Twilio, or the mobile carriers may pause or terminate my messaging without liability if my traffic draws spam complaints, high opt-out rates, or suspected violations.</span></label></li>
+
+        <li><label><input type="checkbox" name="Attestation 9 - Accuracy and Terms" value="Agreed" required>
+          <span><b>Accuracy &amp; terms.</b> Everything in this form is true, accurate, and complete. I understand inaccurate information can cause carrier rejection or account suspension, and I agree to Starling AI's <a href="/terms" target="_blank" rel="noopener">Terms of Service</a> and <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a>.</span></label></li>
+      </ul>
+    </section>
+
+    <!-- ============ 05 ELECTRONIC SIGNATURE ============ -->
+    <section class="card" aria-labelledby="s5">
+      <div class="sec-head"><span class="sec-num">05</span><h2 id="s5">Electronic signature</h2></div>
+      <p class="sec-sub">Signed by the authorized representative named above.</p>
+
+      <div class="grid">
+        <div class="field">
+          <label class="fl" for="sigName">Full legal name <span class="req">*</span></label>
+          <input type="text" id="sigName" name="Signature - Full Name" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label class="fl" for="sigTitle">Title <span class="req">*</span></label>
+          <input type="text" id="sigTitle" name="Signature - Title" required>
+        </div>
+        <div class="field full">
+          <label class="fl" for="sigDate">Date</label>
+          <input type="text" class="mono" id="sigDate" name="Signature - Date" readonly>
+        </div>
+      </div>
+      <div class="sig-consent">
+        <label class="check" style="padding:0"><input type="checkbox" name="E-Signature Consent" value="Agreed" required>
+          <span>Typing my name above constitutes my electronic signature. I intend it to bind me and the business named in Section 01 to the certifications in this form, consistent with the U.S. E-SIGN Act. <span class="req">*</span></span></label>
+      </div>
+
+      <button class="submit" type="submit" id="submitBtn">Submit for compliance review</button>
+      <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+      <noscript><p class="form-status">This form needs JavaScript enabled to submit.</p></noscript>
+    </section>
+  </form>
+
+  <!-- ============ SUCCESS ============ -->
+  <section class="card hide" id="success" aria-live="polite">
+    <div class="success-mark">✓</div>
+    <h2>Submitted for review</h2>
+    <p style="color:var(--muted);margin:0">Here's what happens next:</p>
+    <ol>
+      <li><b>We review your submission</b> — usually within 1 business day. We'll email you if anything needs a fix.</li>
+      <li class="hide" id="successBuild"><b>We send your website quote</b> — once you approve it, we build your site on your Starling CRM. Carrier registration starts the moment it's live.</li>
+      <li><b>We register your brand and campaign</b> with the carriers through Twilio and The Campaign Registry.</li>
+      <li><b>Carriers approve</b> — typically 1–7 business days; campaign vetting can occasionally take longer.</li>
+      <li><b>Your number goes live</b> and Starling starts engaging your leads.</li>
+    </ol>
+    <div class="callout" style="margin-top:18px">Keep collecting and retaining proof of consent for every contact — you've certified you can produce it on request.</div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="row">
+      <span>Starling AI LLC</span>
+      <a href="https://starlingagent.com">starlingagent.com</a>
+      <span>(832) 808-6483</span>
+    </div>
+    <p class="fine">Starling AI LLC provides software and phone-number management services. You remain the sender of record for messages sent at your direction. Submitting this form does not itself constitute carrier approval. This page supports compliance intake and is not legal advice.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var form = document.getElementById('a2pForm');
+
+  /* ----- signature date (display + hidden ISO timestamp) ----- */
+  var sigDate = document.getElementById('sigDate');
+  sigDate.value = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+
+  /* ----- EIN mask + sole-prop conditional ----- */
+  var ein = document.getElementById('ein');
+  ein.addEventListener('input', function(){
+    var d = this.value.replace(/\D/g,'').slice(0,9);
+    this.value = d.length > 2 ? d.slice(0,2) + '-' + d.slice(2) : d;
+  });
+  var entity = document.getElementById('entityType');
+  var solePropNote = document.getElementById('solePropNote');
+  var einReq = document.getElementById('einReq');
+  var einHint = document.getElementById('einHint');
+  entity.addEventListener('change', function(){
+    var sole = this.value.indexOf('Sole proprietor') === 0;
+    solePropNote.hidden = !sole;
+    ein.required = !sole;
+    einReq.style.visibility = sole ? 'hidden' : 'visible';
+    einHint.textContent = sole
+      ? 'Optional for sole proprietors — leave blank if you don\u2019t have one.'
+      : 'Must match IRS records digit-for-digit.';
+  });
+
+  /* ----- website branch: has one vs. Starling builds it ----- */
+  var hasWebsite = document.getElementById('hasWebsite');
+  function setOn(el, on){
+    el.classList.toggle('hide', !on);
+    el.querySelectorAll('input,select,textarea').forEach(function(f){ f.disabled = !on; });
+  }
+  hasWebsite.addEventListener('change', function(){
+    var needsSite = this.value === 'No';
+    setOn(document.getElementById('websiteWrap'), !needsSite);
+    setOn(document.getElementById('consentUrlsWrap'), !needsSite);
+    setOn(document.getElementById('privacyWrap'), !needsSite);
+    setOn(document.getElementById('buildWrap'), needsSite);
+    document.getElementById('noSiteNote').classList.toggle('hide', !needsSite);
+    document.getElementById('buildRequest').required = needsSite;
+    document.getElementById('ownsDomain').required = needsSite;
+    if (needsSite){
+      /* keep the domain input in sync with the domain-ownership answer */
+      document.getElementById('existingDomain').disabled = document.getElementById('ownsDomain').value !== 'Yes';
+    }
+  });
+  document.getElementById('ownsDomain').addEventListener('change', function(){
+    var owns = this.value === 'Yes';
+    document.getElementById('domainWrap').classList.toggle('hide', !owns);
+    document.getElementById('existingDomain').disabled = !owns;
+  });
+
+  /* ----- reveal toggles ----- */
+  function toggle(elId, wrapId){
+    document.getElementById(elId).addEventListener('change', function(){
+      document.getElementById(wrapId).classList.toggle('hide', !this.checked);
+    });
+  }
+  toggle('hasLinks','linkDomainWrap');
+  toggle('srcOther','otherWrap');
+  toggle('srcPurchased','purchasedWarn');
+
+  var records = document.getElementById('consentRecords');
+  records.addEventListener('change', function(){
+    document.getElementById('recordsNote').classList.toggle('hide', this.value.indexOf('Yes') === 0);
+  });
+
+  /* ----- copy privacy clause ----- */
+  var copyBtn = document.getElementById('copyClause');
+  copyBtn.addEventListener('click', function(){
+    var text = document.getElementById('clauseText').textContent.trim();
+    function done(){ copyBtn.textContent = 'Copied ✓'; setTimeout(function(){ copyBtn.textContent = 'Copy'; }, 1600); }
+    if (navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done); }
+    else {
+      var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta);
+      ta.select(); document.execCommand('copy'); document.body.removeChild(ta); done();
+    }
+  });
+
+  /* ----- live SMS preview with GSM-7 segment math ----- */
+  var samples = document.getElementById('samples');
+  var bubble = document.getElementById('bubble');
+  var pvMeta = document.getElementById('pvMeta');
+  var GSM = "@£$¥èéùìòÇ\nØø\rÅåΔ_ΦΓΛΩΠΨΣΘΞÆæßÉ !\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑܧ¿abcdefghijklmnopqrstuvwxyzäöñüà";
+  var GSM_EXT = "^{}\\[~]|€";
+  function segmentInfo(text){
+    var isGsm = true, units = 0;
+    for (var i = 0; i < text.length; i++){
+      var ch = text[i];
+      if (GSM.indexOf(ch) > -1){ units += 1; }
+      else if (GSM_EXT.indexOf(ch) > -1){ units += 2; }
+      else { isGsm = false; break; }
+    }
+    if (!isGsm){
+      var len = text.length;
+      return { enc:'Unicode', chars: len, segs: len === 0 ? 0 : (len <= 70 ? 1 : Math.ceil(len / 67)) };
+    }
+    return { enc:'GSM-7', chars: units, segs: units === 0 ? 0 : (units <= 160 ? 1 : Math.ceil(units / 153)) };
+  }
+  function updatePreview(){
+    var first = samples.value.split(/\n\s*\n/)[0].trim();
+    bubble.textContent = first;
+    if (!first){ pvMeta.textContent = ''; return; }
+    var s = segmentInfo(first);
+    var cls = (s.segs <= 1 && s.enc === 'GSM-7') ? 'ok' : 'warnc';
+    pvMeta.innerHTML = s.chars + ' chars · <span class="' + cls + '">' + s.segs + ' segment' + (s.segs === 1 ? '' : 's') + ' · ' + s.enc + '</span>' + (s.enc === 'Unicode' ? ' — an emoji or special character switched this to Unicode (70 chars/segment)' : '');
+  }
+  samples.addEventListener('input', updatePreview);
+  updatePreview();
+
+  /* ----- submit ----- */
+  var btn = document.getElementById('submitBtn');
+  var statusEl = document.getElementById('formStatus');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    statusEl.textContent = '';
+
+    var srcs = Array.prototype.slice.call(document.querySelectorAll('.src:checked')).map(function(c){ return c.getAttribute('data-source'); });
+    if (srcs.length === 0){
+      statusEl.textContent = 'Select at least one lead source in Section 03.';
+      document.getElementById('s3').scrollIntoView({behavior:'smooth', block:'start'});
+      return;
+    }
+    if (!form.checkValidity()){ form.reportValidity(); return; }
+
+    var fd = new FormData(form);
+    var subj = 'A2P Compliance — ' + document.getElementById('legalName').value.trim();
+    if (hasWebsite.value === 'No') subj += ' — NEEDS WEBSITE';
+    fd.set('subject', subj);
+    fd.append('Lead Sources', srcs.join(', '));
+    document.querySelectorAll('[data-extra]').forEach(function(c){ if (c.checked) fd.append(c.getAttribute('data-extra'), c.value); });
+    fd.append('Signed At (ISO)', new Date().toISOString());
+    fd.append('Page URL', window.location.href);
+
+    btn.disabled = true;
+    btn.textContent = 'Submitting…';
+
+    fetch('https://api.web3forms.com/submit', { method:'POST', body: fd })
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (data.success){
+          if (hasWebsite.value === 'No') document.getElementById('successBuild').classList.remove('hide');
+          form.classList.add('hide');
+          var ok = document.getElementById('success');
+          ok.classList.remove('hide');
+          ok.scrollIntoView({behavior:'smooth', block:'start'});
+        } else {
+          throw new Error(data.message || 'Submission failed');
+        }
+      })
+      .catch(function(){
+        statusEl.textContent = 'Something went wrong sending your form. Check your connection and try again — your answers are still here.';
+        btn.disabled = false;
+        btn.textContent = 'Submit for compliance review';
+      });
+  });
+})();
+</script>
+<script src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="6a4dc540a633f298628d0a79" data-source="WEB_USER"></script>
+</body>
+</html>
