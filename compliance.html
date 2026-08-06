@@ -565,6 +565,19 @@ footer a{color:var(--peri);text-decoration:none}
       : 'Must match IRS records digit-for-digit.';
   });
 
+  /* ----- forgive bare domains: auto-add https:// to URL fields ----- */
+  function normalizeUrls(){
+    document.querySelectorAll('input[type=url]').forEach(function(f){
+      var v = f.value.trim();
+      if (v && !/^[a-z][a-z0-9+.-]*:\/\//i.test(v)) f.value = 'https://' + v;
+      else if (v !== f.value) f.value = v;
+    });
+  }
+  document.querySelectorAll('input[type=url]').forEach(function(f){
+    f.addEventListener('blur', normalizeUrls);
+    f.addEventListener('change', normalizeUrls);
+  });
+
   /* ----- website branch: has one vs. Starling builds it ----- */
   var hasWebsite = document.getElementById('hasWebsite');
   function setOn(el, on){
@@ -656,6 +669,7 @@ footer a{color:var(--peri);text-decoration:none}
   form.addEventListener('submit', function(e){
     e.preventDefault();
     statusEl.textContent = '';
+    normalizeUrls();
 
     var srcs = Array.prototype.slice.call(document.querySelectorAll('.src:checked')).map(function(c){ return c.getAttribute('data-source'); });
     if (srcs.length === 0){
