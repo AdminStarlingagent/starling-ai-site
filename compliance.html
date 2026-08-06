@@ -163,7 +163,7 @@ button.submit:disabled{opacity:.55;cursor:wait}
   button.submit{transition:transform .12s ease,box-shadow .12s ease}
   button.submit:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 24px rgba(241,83,104,.35)}
 }
-.form-status{min-height:24px;margin-top:12px;font-size:14.5px;color:var(--coral)}
+.form-status{min-height:24px;margin-top:12px;font-size:15px;font-weight:600;color:var(--coral)}
 
 /* ---------- success ---------- */
 #success{text-align:left}
@@ -667,7 +667,7 @@ footer a{color:var(--peri);text-decoration:none}
     var srcs = Array.prototype.slice.call(document.querySelectorAll('.src:checked')).map(function(c){ return c.getAttribute('data-source'); });
     if (srcs.length === 0){
       statusEl.textContent = 'Select at least one lead source in Section 03.';
-      document.getElementById('s3').scrollIntoView({behavior:'smooth', block:'start'});
+      try { document.getElementById('s3').scrollIntoView({behavior:'smooth', block:'start'}); } catch(e){}
       return;
     }
     if (!form.checkValidity()){ form.reportValidity(); return; }
@@ -692,13 +692,15 @@ footer a{color:var(--peri);text-decoration:none}
           form.classList.add('hide');
           var ok = document.getElementById('success');
           ok.classList.remove('hide');
-          ok.scrollIntoView({behavior:'smooth', block:'start'});
+          try { ok.scrollIntoView({behavior:'smooth', block:'start'}); } catch(e){}
         } else {
           throw new Error(data.message || 'Submission failed');
         }
       })
-      .catch(function(){
-        statusEl.textContent = 'Something went wrong sending your form. Check your connection and try again — your answers are still here.';
+      .catch(function(err){
+        var reason = (err && err.message && err.message !== 'Failed to fetch') ? err.message : 'Network error — check your connection.';
+        statusEl.textContent = 'Submission failed: ' + reason + ' Your answers are still here — fix and resubmit, or call us at (832) 808-6483.';
+        if (window.console && console.error) console.error('Compliance form error:', err);
         btn.disabled = false;
         btn.textContent = 'Submit for compliance review';
       });
