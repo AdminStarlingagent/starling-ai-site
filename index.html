@@ -472,6 +472,14 @@
       <p class="text-xs font-bold uppercase tracking-[0.25em] text-peri-400">Plans &amp; Pricing</p>
       <h2 class="mt-4 font-display text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-[2.75rem] lg:leading-[1.1]">Choose your pricing plan.</h2>
       <p class="mt-5 text-lg leading-relaxed text-slate-400">Start with the CRM free for 30 days — add AI firepower when you're ready. Cancel anytime. Your data stays yours.</p>
+      <div class="reveal mt-7 flex flex-wrap items-center justify-center gap-3">
+        <span id="billMonthlyLbl" class="text-sm font-semibold text-white">Monthly</span>
+        <button id="billToggle" type="button" role="switch" aria-checked="false" aria-label="Toggle annual billing" class="relative h-7 w-14 rounded-full bg-white/10 ring-1 ring-inset ring-white/15 transition hover:bg-white/5">
+          <span id="billKnob" class="absolute rounded-full bg-coral-500 shadow-glow-coral transition-transform duration-200" style="left:4px;top:4px;width:20px;height:20px"></span>
+        </button>
+        <span id="billYearlyLbl" class="text-sm font-semibold text-slate-500">Yearly</span>
+        <span class="whitespace-nowrap rounded-full bg-emerald-500/10 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-emerald-300 ring-1 ring-inset ring-emerald-500/25">Get 2 months free</span>
+      </div>
     </div>
 
     <!-- Pricing grid -->
@@ -485,12 +493,12 @@
         </div>
         <p class="mt-2.5 text-sm leading-relaxed text-slate-400">The full Starling CRM — no AI executions. Get your database moved in and humming.</p>
         <div class="mt-6 flex items-baseline gap-1.5">
-          <span class="font-display text-4xl font-extrabold leading-none tracking-tight text-white">$50</span>
+          <span class="font-display text-4xl font-extrabold leading-none tracking-tight text-white" data-price-m="$50" data-price-y="$42">$50</span>
           <span class="text-sm font-medium text-slate-500">/mo</span>
         </div>
+        <p class="billed-note mt-1 hidden text-[13px] font-semibold text-emerald-300">Billed annually · 2 months free</p>
         <p class="mt-2 text-xs text-slate-500">Free for 30 days, then $50/mo.</p>
-        <a href="https://buy.stripe.com/6oUbIUe1ec2Ac0d0sg5EY0X" class="mt-6 inline-flex w-full items-center justify-center rounded-xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/10">Start Free Trial</a>
-        <a href="https://buy.stripe.com/7sY28kaP27Mk8O1a2Q5EY0Y" class="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 px-5 py-2.5 text-xs font-semibold text-slate-400 transition duration-300 hover:border-white/20 hover:bg-white/5 hover:text-white">Pay annually <span class="whitespace-nowrap rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-300 ring-1 ring-inset ring-emerald-500/25">2 months free</span></a>
+        <a href="https://buy.stripe.com/6oUbIUe1ec2Ac0d0sg5EY0X" data-bill-m="https://buy.stripe.com/6oUbIUe1ec2Ac0d0sg5EY0X" data-bill-y="https://buy.stripe.com/7sY28kaP27Mk8O1a2Q5EY0Y" class="mt-6 inline-flex w-full items-center justify-center rounded-xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/10">Start Free Trial</a>
         <ul class="mt-7 space-y-3 text-sm text-slate-300">
           <li class="flex gap-3"><svg class="mt-0.5 h-4 w-4 shrink-0 text-peri-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>Full CRM — contacts, pipelines &amp; smart lists</li>
           <li class="flex gap-3"><svg class="mt-0.5 h-4 w-4 shrink-0 text-peri-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>Unified inbox — SMS, email &amp; social</li>
@@ -506,9 +514,10 @@
         <h3 class="font-display text-base font-bold text-white">Starling AI Standard</h3>
         <p class="mt-2.5 text-sm leading-relaxed text-slate-400">Seamless AI follow-up for solo agents ready to stop chasing leads by hand.</p>
         <div class="mt-6 flex items-baseline gap-1.5">
-          <span class="font-display text-4xl font-extrabold leading-none tracking-tight text-white">$299</span>
+          <span class="font-display text-4xl font-extrabold leading-none tracking-tight text-white" data-price-m="$299" data-price-y="$249">$299</span>
           <span class="text-sm font-medium text-slate-500">/mo</span>
         </div>
+        <p class="billed-note mt-1 hidden text-[13px] font-semibold text-emerald-300">Billed annually · 2 months free</p>
         <div class="mt-3 space-y-2 rounded-xl border border-white/10 bg-white/[0.03] p-3.5">
           <div class="flex items-start gap-2.5 text-xs leading-snug text-slate-200">
             <svg class="mt-px h-4 w-4 shrink-0 text-emerald-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
@@ -519,9 +528,8 @@
             <span><span class="font-bold text-white">+$400 one-time</span> only if you connect your own 3rd-party CRM.</span>
           </div>
         </div>
-        <a href="https://buy.stripe.com/bJe7sEcXafeM9S5caY5EY0Z" class="mt-6 inline-flex w-full items-center justify-center rounded-xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/10">Get Started — Monthly</a>
+        <a href="https://buy.stripe.com/bJe7sEcXafeM9S5caY5EY0Z" data-bill-m="https://buy.stripe.com/bJe7sEcXafeM9S5caY5EY0Z" data-bill-y="https://buy.stripe.com/9B628k0ao9Us4xLb6U5EY10" class="mt-6 inline-flex w-full items-center justify-center rounded-xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/10">Get Started</a>
         <a href="https://buy.stripe.com/5kQ14g6yM8QoaW98YM5EY0w" class="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 px-5 py-2.5 text-xs font-semibold text-slate-400 transition duration-300 hover:border-white/20 hover:bg-white/5 hover:text-white">Bring your own CRM <span class="whitespace-nowrap rounded-full bg-white/5 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-slate-300 ring-1 ring-inset ring-white/15">+$400 setup</span></a>
-        <a href="https://buy.stripe.com/9B628k0ao9Us4xLb6U5EY10" class="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 px-5 py-2.5 text-xs font-semibold text-slate-400 transition duration-300 hover:border-white/20 hover:bg-white/5 hover:text-white">Pay annually <span class="whitespace-nowrap rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-300 ring-1 ring-inset ring-emerald-500/25">2 months free</span></a>
         <ul class="mt-7 space-y-3 text-sm text-slate-300">
           <li class="flex gap-3 font-semibold text-white"><svg class="mt-0.5 h-4 w-4 shrink-0 text-peri-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>Everything in CRM Only, plus:</li>
           <li class="flex gap-3"><svg class="mt-0.5 h-4 w-4 shrink-0 text-peri-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>1,000 AI executions / month</li>
@@ -545,12 +553,12 @@
           <h3 class="font-display text-base font-bold text-white">Starling AI Core</h3>
           <p class="mt-2.5 text-sm leading-relaxed text-slate-400">5x the AI firepower for teams running serious lead volume.</p>
           <div class="mt-6 flex items-baseline gap-1.5">
-            <span class="font-display text-4xl font-extrabold leading-none tracking-tight text-white">$599</span>
+            <span class="font-display text-4xl font-extrabold leading-none tracking-tight text-white" data-price-m="$599" data-price-y="$499">$599</span>
             <span class="text-sm font-medium text-slate-500">/mo</span>
           </div>
+        <p class="billed-note mt-1 hidden text-[13px] font-semibold text-emerald-300">Billed annually · 2 months free</p>
           <p class="mt-2 text-xs text-slate-500">No onboarding fee.</p>
-          <a href="https://buy.stripe.com/eVq3coaP28QoaW9gre5EY11" class="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-coral-500 px-5 py-3 text-sm font-bold text-white shadow-glow-coral transition duration-300 hover:-translate-y-0.5 hover:bg-coral-400">Get Started — Monthly</a>
-          <a href="https://buy.stripe.com/9B600c4qEfeM7JX1wk5EY12" class="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/15 px-5 py-2.5 text-xs font-semibold text-slate-300 transition duration-300 hover:border-white/30 hover:bg-white/5 hover:text-white">Pay annually <span class="whitespace-nowrap rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-300 ring-1 ring-inset ring-emerald-500/25">2 months free</span></a>
+          <a href="https://buy.stripe.com/eVq3coaP28QoaW9gre5EY11" data-bill-m="https://buy.stripe.com/eVq3coaP28QoaW9gre5EY11" data-bill-y="https://buy.stripe.com/9B600c4qEfeM7JX1wk5EY12" class="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-coral-500 px-5 py-3 text-sm font-bold text-white shadow-glow-coral transition duration-300 hover:-translate-y-0.5 hover:bg-coral-400">Get Started</a>
           <ul class="mt-7 space-y-3 text-sm text-slate-300">
           <li class="flex gap-3 font-semibold text-white"><svg class="mt-0.5 h-4 w-4 shrink-0 text-coral-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>Everything in Standard, plus:</li>
           <li class="flex gap-3 font-medium text-white"><svg class="mt-0.5 h-4 w-4 shrink-0 text-coral-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>Connect any 3rd-party CRM — integration included, no setup fee</li>
@@ -569,12 +577,12 @@
         <h3 class="font-display text-base font-bold text-white">Starling AI Producer</h3>
         <p class="mt-2.5 text-sm leading-relaxed text-slate-400">Qualified leads delivered straight to your pipeline. Starling handles the hustle — you stay focused on closing.</p>
         <div class="mt-6 flex items-baseline gap-1.5">
-          <span class="font-display text-4xl font-extrabold leading-none tracking-tight text-white">$999</span>
+          <span class="font-display text-4xl font-extrabold leading-none tracking-tight text-white" data-price-m="$999" data-price-y="$833">$999</span>
           <span class="text-sm font-medium text-slate-500">/mo</span>
         </div>
+        <p class="billed-note mt-1 hidden text-[13px] font-semibold text-emerald-300">Billed annually · 2 months free</p>
         <p class="mt-2 text-xs text-slate-500">Leads + follow-up, fully managed.</p>
-        <a href="https://buy.stripe.com/eVq14g8GU7Mkc0dej65EY13" class="mt-6 inline-flex w-full items-center justify-center rounded-xl border border-peri-500/40 bg-peri-500/10 px-5 py-3 text-sm font-semibold text-peri-300 transition duration-300 hover:-translate-y-0.5 hover:border-peri-400/60 hover:bg-peri-500/20 hover:text-white">Get Started — Monthly</a>
-        <a href="https://buy.stripe.com/5kQdR20ao6Ig8O1df25EY14" class="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 px-5 py-2.5 text-xs font-semibold text-slate-400 transition duration-300 hover:border-white/20 hover:bg-white/5 hover:text-white">Pay annually <span class="whitespace-nowrap rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-300 ring-1 ring-inset ring-emerald-500/25">2 months free</span></a>
+        <a href="https://buy.stripe.com/eVq14g8GU7Mkc0dej65EY13" data-bill-m="https://buy.stripe.com/eVq14g8GU7Mkc0dej65EY13" data-bill-y="https://buy.stripe.com/5kQdR20ao6Ig8O1df25EY14" class="mt-6 inline-flex w-full items-center justify-center rounded-xl border border-peri-500/40 bg-peri-500/10 px-5 py-3 text-sm font-semibold text-peri-300 transition duration-300 hover:-translate-y-0.5 hover:border-peri-400/60 hover:bg-peri-500/20 hover:text-white">Get Started</a>
         <ul class="mt-7 space-y-3 text-sm text-slate-300">
           <li class="flex gap-3 font-semibold text-white"><svg class="mt-0.5 h-4 w-4 shrink-0 text-peri-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>Everything in Core, plus:</li>
           <li class="flex gap-3 font-medium text-white"><svg class="mt-0.5 h-4 w-4 shrink-0 text-peri-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>Connect any 3rd-party CRM — integration included, no setup fee</li>
@@ -846,5 +854,23 @@
 </script>
 <!-- pages-deploy refresh v2 -->
 <script src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="6a4dc540a633f298628d0a79" data-source="WEB_USER"></script>
+<script>
+(function(){
+  var t=document.getElementById('billToggle');if(!t)return;
+  var knob=document.getElementById('billKnob'),lm=document.getElementById('billMonthlyLbl'),ly=document.getElementById('billYearlyLbl');
+  function setMode(y){
+    t.setAttribute('aria-checked',y?'true':'false');
+    knob.style.transform=y?'translateX(28px)':'translateX(0)';
+    lm.classList.toggle('text-white',!y);lm.classList.toggle('text-slate-500',y);
+    ly.classList.toggle('text-white',y);ly.classList.toggle('text-slate-500',!y);
+    document.querySelectorAll('[data-price-m]').forEach(function(el){el.textContent=y?el.getAttribute('data-price-y'):el.getAttribute('data-price-m');});
+    document.querySelectorAll('[data-bill-m]').forEach(function(a){a.setAttribute('href',y?a.getAttribute('data-bill-y'):a.getAttribute('data-bill-m'));});
+    document.querySelectorAll('.billed-note').forEach(function(n){n.classList.toggle('hidden',!y);});
+  }
+  var on=false;
+  t.addEventListener('click',function(){on=!on;setMode(on);});
+  setMode(false);
+})();
+</script>
 </body>
 </html>
