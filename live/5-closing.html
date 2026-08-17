@@ -1,0 +1,575 @@
+<!--
+  STARLING AI — LIVE THREAD REPLAY  (5)  ·  LENDER VERSION
+  Jason Aguirre Group · TikTok DM → pre-qual → closed · April–May 2026
+  Source: Follow Up Boss person 14904
+
+  NOTE: all lead, agent and brokerage names in this file are PSEUDONYMS.
+  The conversation text, timestamps and outcomes are unedited.
+
+  CONTROLS:  Space / → / click = next   ·   ← = back   ·   A = autoplay   ·   R = reset
+  Open in Chrome, press F11 for fullscreen, then share the window in Zoom.
+
+  ── SWITCHES AT THE TOP OF THE <script> BLOCK ─────────────────────────────
+  LOGO_DATA_URI  paste the base64 of Starling_Ai_logo.png
+  CLIENT_NAME    set to "B." to anonymize. This is a CLOSED CLIENT, not a
+                 lead — consider anonymizing or getting her okay first.
+  LANG           'en' English only · 'both' English + Spanish original · 'es' Spanish only
+  ──────────────────────────────────────────────────────────────────────────
+
+  Her income screening note is deliberately NOT in this file. Keep the FUB
+  contact panel off the shared screen.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Starling AI — TikTok DM to closing table</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;700&family=Poppins:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#080C17;
+    --navy-line:#22304F;
+    --coral:#F15368;
+    --periwinkle:#868BDF;
+    --blush:#FFA0A8;
+    --paper:#F3F1EC;
+    --paper-dim:#C9C6BE;
+
+    --brand:'Poppins',system-ui,sans-serif;
+    --speak:'Archivo',system-ui,-apple-system,sans-serif;
+    --machine:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--navy);color:var(--paper);font-family:var(--speak);
+    overflow:hidden;-webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      linear-gradient(115deg,transparent 0 48%,rgba(134,139,223,.05) 48% 48.4%,transparent 48.4%),
+      linear-gradient(-58deg,transparent 0 62%,rgba(241,83,104,.045) 62% 62.3%,transparent 62.3%),
+      radial-gradient(120% 90% at 78% 8%,rgba(134,139,223,.10),transparent 60%);
+  }
+
+  .stage{position:relative;z-index:1;height:100%;display:flex;flex-direction:column}
+
+  .top{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:24px;padding:20px 40px 16px;border-bottom:1px solid var(--navy-line);
+  }
+  .brand{display:flex;align-items:center;gap:14px}
+  .brand img{height:38px;width:auto;display:none}
+  .brand img.on{display:block}
+  .wordmark{font-family:var(--brand);font-size:24px;letter-spacing:-.02em}
+  .wordmark span{color:var(--coral)}
+  .slug{
+    font-family:var(--machine);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--periwinkle);text-align:right;line-height:1.7;
+  }
+  .slug b{color:var(--paper-dim);font-weight:400}
+
+  .split{flex:1;display:grid;grid-template-columns:1fr 370px;min-height:0}
+
+  .thread{
+    padding:24px 44px 40px;overflow-y:auto;scroll-behavior:smooth;
+    display:flex;flex-direction:column;gap:15px;
+  }
+  .thread::-webkit-scrollbar{width:0}
+
+  .row{display:flex;flex-direction:column;max-width:68%;opacity:0;transform:translateY(14px)}
+  .row.in{animation:land .42s cubic-bezier(.2,.75,.3,1) forwards}
+  @keyframes land{to{opacity:1;transform:none}}
+
+  .row.ai{align-self:flex-start;align-items:flex-start}
+  .row.lead{align-self:flex-end;align-items:flex-end}
+
+  .stamp{font-family:var(--machine);font-size:11px;letter-spacing:.1em;color:#5C6B8E;margin-bottom:6px}
+
+  .badge{
+    display:inline-block;font-family:var(--machine);font-size:10.5px;font-weight:700;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--navy);
+    background:var(--blush);padding:4px 10px;border-radius:5px;margin-bottom:9px;
+  }
+  .badge.consent{background:var(--periwinkle);color:#0A0E1A}
+
+  .bubble{font-size:18px;line-height:1.5;padding:13px 18px;border-radius:16px}
+  .ai .bubble{
+    background:var(--coral);color:#fff;border-bottom-left-radius:5px;
+    box-shadow:0 12px 34px -18px rgba(241,83,104,.9);
+  }
+  .lead .bubble{
+    background:var(--paper);color:#101624;border-bottom-right-radius:5px;
+    font-weight:600;font-size:21px;
+    box-shadow:0 12px 30px -20px rgba(0,0,0,.85);
+  }
+  /* the compliance moment gets its own weight */
+  .row.hero{max-width:76%}
+  .row.hero .bubble{
+    background:#101A33;color:var(--paper);border:1px solid var(--periwinkle);
+    border-bottom-left-radius:5px;box-shadow:0 0 46px -12px rgba(134,139,223,.55);
+  }
+  .row.hero .link{
+    display:block;margin-top:9px;font-family:var(--machine);font-size:13px;
+    color:var(--periwinkle);word-break:break-all;
+  }
+
+  .en{
+    margin-top:8px;font-size:13.5px;line-height:1.45;color:#6E7C9E;
+    max-width:54ch;
+  }
+  .en .tag{
+    font-family:var(--machine);font-size:9.5px;font-weight:700;letter-spacing:.16em;
+    color:var(--navy);background:#6E7C9E;border-radius:3px;
+    padding:2px 5px;margin-right:8px;vertical-align:1px;
+  }
+  .lead .en{text-align:right}
+
+  .note{
+    margin-top:8px;font-family:var(--machine);font-size:12.5px;line-height:1.55;
+    letter-spacing:.05em;color:var(--periwinkle);max-width:48ch;
+  }
+  .lead .note{text-align:right}
+
+  .row.system{align-self:center;align-items:center;max-width:78%}
+  .sysbox{
+    border:1px dashed var(--blush);border-radius:12px;padding:13px 24px;
+    background:rgba(255,160,168,.07);text-align:center;
+  }
+  .sysbox .k{font-family:var(--machine);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--blush)}
+  .sysbox .v{font-family:var(--machine);font-size:17px;color:var(--paper);margin-top:5px}
+
+  .rail{
+    border-left:1px solid var(--navy-line);padding:26px 28px;
+    background:linear-gradient(180deg,rgba(134,139,223,.05),transparent 55%);
+    display:flex;flex-direction:column;min-height:0;
+  }
+  .rail h2{
+    font-family:var(--machine);font-size:12px;font-weight:700;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--periwinkle);
+  }
+  .rail .sub{font-size:13px;color:#69789C;margin-top:8px;line-height:1.5}
+  .rail ol{list-style:none;margin-top:22px;display:flex;flex-direction:column;gap:17px;overflow-y:auto}
+  .rail ol::-webkit-scrollbar{width:0}
+
+  .fact{opacity:0;transform:translateX(16px);border-left:2px solid var(--navy-line);padding-left:13px}
+  .fact.in{animation:slot .5s cubic-bezier(.2,.75,.3,1) forwards}
+  @keyframes slot{to{opacity:1;transform:none;border-left-color:var(--periwinkle)}}
+  .fact .k{font-family:var(--machine);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--periwinkle)}
+  .fact .v{font-size:17px;font-weight:600;margin-top:4px;line-height:1.32}
+  .fact.hot.in{animation:slotHot .5s cubic-bezier(.2,.75,.3,1) forwards}
+  @keyframes slotHot{to{opacity:1;transform:none;border-left-color:var(--coral)}}
+
+  .railfoot{margin-top:auto;padding-top:18px;font-size:13px;color:#69789C;line-height:1.55;opacity:0;transition:opacity .6s}
+  .railfoot.on{opacity:1}
+
+  .bottom{
+    display:flex;align-items:center;gap:28px;
+    padding:15px 40px;border-top:1px solid var(--navy-line);background:rgba(8,12,23,.7);
+  }
+  .clock{display:flex;align-items:baseline;gap:12px}
+  .clock .num{
+    font-family:var(--machine);font-weight:700;font-size:38px;line-height:1;
+    color:var(--coral);font-variant-numeric:tabular-nums;
+  }
+  .clock .num.bump{animation:bump .35s ease}
+  @keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.13)}100%{transform:scale(1)}}
+  .clock .lab{font-family:var(--machine);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#5C6B8E}
+  .track{flex:1;height:3px;background:var(--navy-line);border-radius:2px;overflow:hidden}
+  .track i{display:block;height:100%;width:0;background:var(--coral);transition:width .45s ease}
+  .hint{
+    font-family:var(--machine);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:#4B5877;transition:opacity .8s;white-space:nowrap;
+  }
+  .hint.fade{opacity:0}
+
+  /* ─── closing timeline card ─── */
+  .card{
+    position:fixed;inset:0;z-index:5;background:rgba(8,12,23,.97);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:40px;opacity:0;pointer-events:none;transition:opacity .5s;
+  }
+  .card.on{opacity:1;pointer-events:auto}
+  .card h3{
+    font-family:var(--machine);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--periwinkle);margin-bottom:56px;
+  }
+  .tl{display:flex;align-items:flex-start;max-width:1000px;width:100%}
+  .tlnode{flex:1;position:relative;text-align:center;padding:0 10px}
+  .tlnode::before{
+    content:"";position:absolute;top:7px;left:50%;right:-50%;height:2px;
+    background:var(--navy-line);
+  }
+  .tlnode:last-child::before{display:none}
+  .tlnode i{
+    display:block;width:16px;height:16px;border-radius:50%;margin:0 auto 22px;
+    background:var(--navy);border:2px solid var(--periwinkle);position:relative;z-index:1;
+  }
+  .tlnode.end i{background:var(--coral);border-color:var(--coral);box-shadow:0 0 26px rgba(241,83,104,.8)}
+  .tlnode .d{
+    font-family:var(--machine);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:#5C6B8E;margin-bottom:9px;
+  }
+  .tlnode .t{font-size:19px;font-weight:600;line-height:1.35}
+  .tlnode.end .t{color:var(--coral)}
+
+  .figures{margin-top:58px;display:flex;align-items:flex-start}
+  .fig{padding:0 50px;text-align:center;border-right:1px solid var(--navy-line)}
+  .fig:last-child{border-right:0}
+  .fig .n{
+    font-family:var(--machine);font-weight:700;font-size:64px;line-height:1;
+    color:var(--paper);font-variant-numeric:tabular-nums;
+  }
+  .fig.money .n{color:var(--coral)}
+  .fig .l{
+    font-family:var(--machine);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;
+    color:#69789C;margin-top:18px;line-height:1.7;
+  }
+  .payback{
+    margin-top:26px;font-family:var(--machine);font-size:12.5px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--periwinkle);text-align:center;
+  }
+  .kicker{margin-top:30px;font-size:23px;line-height:1.5;text-align:center;max-width:34ch;color:var(--paper-dim)}
+  .kicker em{font-style:normal;color:var(--paper)}
+
+  @media (max-width:1100px){
+    .split{grid-template-columns:1fr}
+    .rail{border-left:0;border-top:1px solid var(--navy-line);max-height:34vh}
+    .row,.row.hero{max-width:92%}
+    .tl{flex-direction:column;gap:22px;max-width:340px}
+    .tlnode{text-align:left;display:flex;gap:14px;align-items:flex-start;padding:0}
+    .tlnode::before{display:none}
+    .tlnode i{margin:4px 0 0}
+    .figures{flex-direction:column;gap:34px;margin-top:40px}
+    .fig{border-right:0;padding:0}
+    .fig .n{font-size:46px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+    .row,.fact{opacity:1;transform:none}
+  }
+  :focus-visible{outline:2px solid var(--periwinkle);outline-offset:3px}
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <header class="top">
+    <div class="brand">
+      <img id="logo" alt="Starling AI">
+      <div class="wordmark">Starling <span>Ai</span></div>
+    </div>
+    <div class="slug">
+      Friday, April 3, 2026<br>
+      <b>TikTok DM · eXp Realty · conducted in Spanish</b>
+    </div>
+  </header>
+
+  <div class="split">
+    <main class="thread" id="thread" aria-live="polite"></main>
+
+    <aside class="rail">
+      <h2>What the AI learned</h2>
+      <p class="sub">She opened by asking what it takes to qualify.</p>
+      <ol id="rail"></ol>
+      <p class="railfoot" id="railfoot">Fifteen minutes of texting. The rest of the file was worked by the team.</p>
+    </aside>
+  </div>
+
+  <footer class="bottom">
+    <div class="clock">
+      <div class="num" id="elapsed">+0:00</div>
+      <div class="lab">elapsed</div>
+    </div>
+    <div class="track"><i id="bar"></i></div>
+    <div class="hint" id="hint">Space · next &nbsp;/&nbsp; ← back &nbsp;/&nbsp; A autoplay &nbsp;/&nbsp; R reset</div>
+  </footer>
+</div>
+
+<div class="card" id="card">
+  <h3>What happened after the text thread</h3>
+  <div class="tl">
+    <div class="tlnode">
+      <i></i>
+      <div><div class="d">Day 0 · Apr 3</div><div class="t">TikTok DM in,<br>call booked same day</div></div>
+    </div>
+    <div class="tlnode">
+      <i></i>
+      <div><div class="d">Day 8 · Apr 11</div><div class="t">Under contract</div></div>
+    </div>
+    <div class="tlnode">
+      <i></i>
+      <div><div class="d">Day 20 · Apr 23</div><div class="t">Loan interview<br>with lender</div></div>
+    </div>
+    <div class="tlnode end">
+      <i></i>
+      <div><div class="d">Day 54 · May 27</div><div class="t">Closed</div></div>
+    </div>
+  </div>
+  <div class="figures">
+    <div class="fig"><div class="n">54</div><div class="l">days from<br>DM to closed</div></div>
+    <div class="fig money"><div class="n" id="commission">$6,872.40</div><div class="l">commission on<br>one TikTok message</div></div>
+  </div>
+  <p class="payback" id="payback"></p>
+  <p class="kicker">The AI didn't close it. <em>It found her, qualified her, and handed her over on day zero.</em></p>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   LOGO_DATA_URI  base64 data-URI of the official PNG
+   CLIENT_NAME    "B." to anonymize — she is a closed client
+   LANG           'en' English only · 'both' English + Spanish original · 'es' Spanish only
+   ───────────────────────────────────────────────────────────── */
+const LOGO_DATA_URI = "";
+const CLIENT_NAME = "Paulina";
+const LANG = 'both';           // 'en' = English only · 'both' = English + Spanish original · 'es' = Spanish only
+const COMMISSION = 6872.40;    // set to 0 to hide the commission figure entirely
+const SHOW_PAYBACK = false;    // true = print the "pays for N months" line. Say it out loud instead if
+                               // Michelle is covering pricing right after you.
+const PLAN_PRICE = 299;        // monthly plan used for the payback math
+
+(function(){
+  const c = document.getElementById('commission');
+  if (!COMMISSION){ c.closest('.fig').remove(); }
+  else {
+    c.textContent = '$' + COMMISSION.toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2});
+    if (SHOW_PAYBACK){
+      const months = Math.floor(COMMISSION / PLAN_PRICE);
+      document.getElementById('payback').textContent =
+        'One closing covers ' + months + ' months of the platform';
+    }
+  }
+})();
+
+if (LOGO_DATA_URI) {
+  const el = document.getElementById('logo');
+  el.src = LOGO_DATA_URI;
+  el.classList.add('on');
+}
+
+const THREAD = [
+  { who:'ai', t:'2:21 PM', channel:'TikTok DM',
+    es:`Hola ${CLIENT_NAME}! Soy Jason AI con EXP Realty. Gracias por escribirme desde TikTok. Con gusto te ayudo a encontrar tu proxima casa. Para empezar, que zona te interesa mas?`,
+    en:`Hi ${CLIENT_NAME}! This is Jason AI with eXp Realty. Thanks for messaging me on TikTok. Happy to help you find your next home. To start \u2014 what area interests you most?`,
+    note:'She came from a TikTok comment, not a lead form.',
+    fact:{ k:'Source', v:'TikTok DM', hot:true } },
+
+  { who:'lead', t:'2:22 PM', es:'Cerca del 1960', en:'Near 1960',
+    fact:{ k:'Area', v:'FM 1960 corridor' } },
+
+  { who:'ai', t:'2:22 PM',
+    es:'Perfecto, esa zona tiene varias opciones y podemos encontrar algo que se ajuste a tu presupuesto y necesidades. \u00bfQuieres que te ayude a ver opciones de casas disponibles en esa \u00e1rea?',
+    en:'That area has plenty of options and we can find something that fits your budget and needs. Want me to help you look at homes available there?' },
+
+  { who:'lead', t:'2:23 PM', es:'Tambien Me gustaria saber acerca de los requisitos', en:'I\u2019d also like to know about the requirements',
+    note:'There it is. She asked the AI how to qualify.',
+    fact:{ k:'Asked about', v:'Loan requirements', hot:true } },
+
+  { who:'ai', t:'2:23 PM',
+    es:'Claro, para comprar casa normalmente se requiere mostrar ingresos, deudas actuales, identificaci\u00f3n y documentos como talonarios de pago o declaraciones de impuestos si eres independiente. \u00bfSabes qu\u00e9 tipo de ingreso tienes o prefieres que te explique qu\u00e9 documentos suelen pedir?',
+    en:'To buy a home you normally need to show income, current debts, ID, and documents like pay stubs or tax returns if you\u2019re self-employed. Do you know what type of income you have, or would you rather I explain which documents they usually ask for?' },
+  { who:'lead', t:'2:25 PM', es:'Prefiero que me expliques', en:'I\u2019d rather you explain' },
+
+  { who:'ai', t:'2:25 PM',
+    es:'Perfecto, normalmente los bancos quieren ver 2 a\u00f1os de impuestos, 2 meses de estados de cuenta y 1 mes de talonarios de pago si trabajas con W-2. Tambi\u00e9n piden identificaci\u00f3n oficial. Si eres independiente, usan las declaraciones de impuestos para verificar ingresos. \u00bfQuieres que te explique c\u00f3mo funciona la pre-calificaci\u00f3n?',
+    en:'Banks usually want 2 years of tax returns, 2 months of bank statements, and 1 month of pay stubs if you\u2019re on a W-2. They also ask for official ID. If you\u2019re self-employed they use tax returns to verify income. Want me to explain how pre-qualification works?',
+    note:'A real answer, not a deflection to "let me connect you with someone."' },
+  { who:'lead', t:'2:25 PM', es:'Si x favor', en:'Yes please' },
+
+  { who:'ai', t:'2:26 PM',
+    es:'La pre-calificaci\u00f3n es un proceso r\u00e1pido donde revisamos tu ingreso y deudas para darte un estimado de cu\u00e1nto podr\u00edas calificar sin afectar tu cr\u00e9dito. Es el primer paso para saber qu\u00e9 casas puedes buscar con confianza. \u00bfQuieres agendar una llamada corta de 10-15 minutos para hacer esta revisi\u00f3n juntos?',
+    en:'Pre-qualification is a quick process where we review your income and debts to estimate what you could qualify for, without affecting your credit. It\u2019s the first step to knowing which homes you can shop for with confidence. Want to set a short 10\u201315 minute call to go through it together?' },
+  { who:'lead', t:'2:26 PM', es:'Si', en:'Yes' },
+
+  { who:'ai', t:'2:26 PM',
+    es:'Perfecto, \u00bfqu\u00e9 d\u00eda y hora te vendr\u00eda bien para la llamada? Tengo disponibilidad esta tarde a partir de las 4:30 PM o ma\u00f1ana en la ma\u00f1ana a partir de las 9:00 AM, horario central.',
+    en:'What day and time works for the call? I have this afternoon from 4:30 PM, or tomorrow morning from 9:00 AM Central.' },
+  { who:'lead', t:'2:27 PM', es:'Hoy 4:30 pm', en:'Today 4:30 pm' },
+
+  { who:'system', t:'2:27 PM', k:'Meeting created', v:'Same day \u00b7 4:30 PM Central',
+    note:'Two hours after she first messaged.',
+    fact:{ k:'Booked', v:'Same day, 4:30 PM' } },
+
+  { who:'lead', t:'2:28 PM', es:'Necesito tener \u00e0 la Mano W2 y comprobantes de ingresos', en:'I need to have my W-2 and proof of income ready' },
+  { who:'ai', t:'2:29 PM',
+    es:'Aqu\u00ed tienes una lista b\u00e1sica: W-2 de los \u00faltimos 2 a\u00f1os, talonarios de pago recientes (al menos 1 mes), estados de cuenta bancarios de los \u00faltimos 2 meses, identificaci\u00f3n oficial vigente y si eres independiente, tus declaraciones de impuestos.',
+    en:'Here\u2019s the basic list: W-2s from the last 2 years, recent pay stubs (at least 1 month), bank statements from the last 2 months, current official ID, and if you\u2019re self-employed, your tax returns.' },
+
+  { who:'lead', t:'2:30 PM', es:'No he realizado mi income tax de este a\u00f1o todavia? Hay algun problema?', en:'I haven\u2019t done this year\u2019s income tax yet. Is that a problem?',
+    note:'The objection that stalls most first-time buyers.' },
+  { who:'ai', t:'2:30 PM',
+    es:'No te preocupes, eso pasa mucho. Si no tienes tus impuestos de este a\u00f1o, podemos usar los del a\u00f1o anterior y recibos recientes para la pre-calificaci\u00f3n. Siempre buscamos la mejor opci\u00f3n seg\u00fan tu situaci\u00f3n.',
+    en:'Don\u2019t worry, that happens a lot. If you don\u2019t have this year\u2019s taxes, we can use last year\u2019s plus recent receipts for the pre-qualification. We always look for the best option for your situation.',
+    fact:{ k:'Income docs', v:'W-2 \u00b7 current-year taxes not filed' } },
+
+  { who:'lead', t:'2:31 PM', es:'Perfecto', en:'Perfect' },
+  { who:'ai', t:'2:31 PM',
+    es:'Genial, quedamos listos para la llamada hoy a las 4:30 PM. \u00bfQuieres que te comparta el enlace para iniciar la pre-calificaci\u00f3n por si prefieres avanzar m\u00e1s r\u00e1pido?',
+    en:'Great, we\u2019re set for the call today at 4:30 PM. Want me to share the link to start the pre-qualification in case you\u2019d rather move faster?' },
+  { who:'lead', t:'2:32 PM', es:'Ok', en:'Ok' },
+
+  { who:'ai', t:'2:32 PM', hero:true, badge:'Lender consent',
+    es:'Con tu permiso, haremos una revisi\u00f3n suave de cr\u00e9dito con nuestro socio LoanDepot, no afecta tu puntaje. Al continuar, autorizas a nuestro equipo y a LoanDepot a revisar tu informaci\u00f3n y contactarte por tel\u00e9fono, mensaje o correo electr\u00f3nico. \u00bfQuieres que te ayude a llenarla o prefieres hacerlo t\u00fa?',
+    en:'With your permission, we\u2019ll run a soft credit check with our partner loanDepot \u2014 it won\u2019t affect your score. By continuing, you authorize our team and loanDepot to review your information and contact you by phone, text, or email. Want me to help you fill it out, or would you rather do it yourself?',
+    link:'loandepot.com/loan-officers/…',
+    note:'Permission asked, disclosure read, partner named, link delivered.',
+    fact:{ k:'Consent', v:'Soft-pull authorized in-thread', hot:true } },
+
+  { who:'lead', t:'2:34 PM', es:'Prefiero que me ayudes pero no tengo documentos listos todavia', en:'I\u2019d rather you help me, but my documents aren\u2019t ready yet' },
+  { who:'ai', t:'2:34 PM',
+    es:'No hay problema, podemos empezar cuando est\u00e9s listo. En la llamada te explicar\u00e9 paso a paso qu\u00e9 documentos necesitas y c\u00f3mo prepararlos.',
+    en:'No problem, we can start when you\u2019re ready. On the call I\u2019ll walk you through step by step which documents you need and how to prepare them.',
+    note:'It didn\u2019t push. The appointment was already booked.' },
+
+  { who:'lead', t:'2:35 PM', es:'Ok 77014', en:'Ok 77014',
+    fact:{ k:'ZIP', v:'77014' } },
+  { who:'ai', t:'2:35 PM',
+    es:'Perfecto, 77014 es una buena zona con opciones variadas. \u00bfQuieres que te env\u00ede algunas opciones antes o prefieres hablar de esto en la llamada?',
+    en:'77014 is a good area with a range of options. Want me to send some options beforehand, or would you rather cover it on the call?' },
+  { who:'lead', t:'2:36 PM', es:'En la llamada estaria mejor', en:'The call would be better' }
+];
+
+const START = 14*60 + 21;
+const thread = document.getElementById('thread');
+const rail   = document.getElementById('rail');
+const bar    = document.getElementById('bar');
+const card   = document.getElementById('card');
+const hint   = document.getElementById('hint');
+const railfoot = document.getElementById('railfoot');
+
+let step = 0;
+let auto = null;
+
+function mins(t){
+  const m = t.match(/(\d+):(\d+)\s*(AM|PM)/);
+  let h = parseInt(m[1],10) % 12;
+  if (m[3] === 'PM') h += 12;
+  return h*60 + parseInt(m[2],10) - START;
+}
+
+function render(i){
+  const m = THREAD[i];
+  const row = document.createElement('div');
+  row.className = 'row ' + m.who + (m.hero ? ' hero' : '');
+
+  const stamp = document.createElement('div');
+  stamp.className = 'stamp';
+  stamp.textContent = m.t + ' CT';
+  row.appendChild(stamp);
+
+  if (m.channel || m.badge){
+    const b = document.createElement('div');
+    b.className = 'badge' + (m.badge ? ' consent' : '');
+    b.textContent = m.badge || m.channel;
+    row.appendChild(b);
+  }
+
+  if (m.who === 'system'){
+    const box = document.createElement('div');
+    box.className = 'sysbox';
+    box.innerHTML = `<div class="k">${m.k}</div><div class="v">${m.v}</div>`;
+    row.appendChild(box);
+  } else {
+    const b = document.createElement('div');
+    b.className = 'bubble';
+    b.textContent = (LANG === 'es') ? m.es : m.en;
+    if (m.link){
+      const a = document.createElement('span');
+      a.className = 'link';
+      a.textContent = m.link;
+      b.appendChild(a);
+    }
+    row.appendChild(b);
+    if (LANG === 'both' && m.es){
+      const e = document.createElement('div');
+      e.className = 'en';
+      e.innerHTML = '<span class="tag">ES</span>';
+      e.appendChild(document.createTextNode(m.es));
+      row.appendChild(e);
+    }
+  }
+
+  if (m.note){
+    const n = document.createElement('div');
+    n.className = 'note';
+    n.textContent = m.note;
+    row.appendChild(n);
+  }
+
+  thread.appendChild(row);
+  requestAnimationFrame(()=> row.classList.add('in'));
+  thread.scrollTop = thread.scrollHeight;
+
+  if (m.fact){
+    const li = document.createElement('li');
+    li.className = 'fact' + (m.fact.hot ? ' hot' : '');
+    li.innerHTML = `<div class="k">${m.fact.k}</div><div class="v">${m.fact.v}</div>`;
+    rail.appendChild(li);
+    requestAnimationFrame(()=> li.classList.add('in'));
+  }
+
+  const e = mins(m.t);
+  const el = document.getElementById('elapsed');
+  el.textContent = '+' + Math.floor(e/60) + ':' + String(e%60).padStart(2,'0');
+  el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump');
+  bar.style.width = ((i+1)/THREAD.length*100) + '%';
+}
+
+function next(){
+  if (step < THREAD.length){
+    render(step++);
+    if (step === THREAD.length) railfoot.classList.add('on');
+  } else if (!card.classList.contains('on')){
+    card.classList.add('on');
+    stopAuto();
+  }
+}
+
+function back(){
+  if (card.classList.contains('on')){ card.classList.remove('on'); return; }
+  if (step === 0) return;
+  step--;
+  thread.removeChild(thread.lastChild);
+  if (THREAD[step].fact) rail.removeChild(rail.lastChild);
+  railfoot.classList.remove('on');
+  const prev = step ? mins(THREAD[step-1].t) : 0;
+  document.getElementById('elapsed').textContent =
+    '+' + Math.floor(prev/60) + ':' + String(prev%60).padStart(2,'0');
+  bar.style.width = (step/THREAD.length*100) + '%';
+}
+
+function reset(){
+  thread.innerHTML=''; rail.innerHTML='';
+  step=0; stopAuto();
+  card.classList.remove('on');
+  railfoot.classList.remove('on');
+  document.getElementById('elapsed').textContent='+0:00';
+  bar.style.width='0%';
+  hint.classList.remove('fade');
+}
+
+function stopAuto(){ if(auto){ clearInterval(auto); auto=null; } }
+function toggleAuto(){
+  if (auto) return stopAuto();
+  next();
+  auto = setInterval(next, 2500);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'Enter'){ e.preventDefault(); stopAuto(); next(); }
+  else if (e.key === 'ArrowLeft'){ e.preventDefault(); stopAuto(); back(); }
+  else if (e.key.toLowerCase() === 'a'){ toggleAuto(); }
+  else if (e.key.toLowerCase() === 'r'){ reset(); }
+});
+document.addEventListener('click', () => { stopAuto(); next(); });
+
+setTimeout(()=> hint.classList.add('fade'), 6000);
+</script>
+</body>
+</html>
