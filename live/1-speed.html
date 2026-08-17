@@ -1,0 +1,448 @@
+<!--
+  STARLING AI — LIVE THREAD REPLAY
+  Screen-share piece for the CoFounders webinar demo.
+
+  NOTE: all lead, agent and brokerage names in this file are PSEUDONYMS.
+  The conversation text, timestamps and outcomes are unedited.
+
+  CONTROLS:  Space / → / click = next   ·   ← = back   ·   A = autoplay   ·   R = reset
+  Open in Chrome, press F11 for fullscreen, then share the window in Zoom.
+
+  ── TO ADD THE OFFICIAL LOGO ──────────────────────────────────────────────
+  Paste the base64 data-URI of Starling_Ai_logo.png between the quotes on the
+  LOGO_DATA_URI line in the <script> block below. Until then the Poppins
+  wordmark shows on its own — no stand-in bird is drawn.
+  ──────────────────────────────────────────────────────────────────────────
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Starling AI — 5 minutes, no human</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;700&family=Poppins:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#080C17;
+    --navy-raised:#111A2E;
+    --navy-line:#22304F;
+    --coral:#F15368;
+    --periwinkle:#868BDF;
+    --blush:#FFA0A8;
+    --paper:#F3F1EC;
+    --paper-dim:#C9C6BE;
+
+    --brand:'Poppins',system-ui,sans-serif;
+    --speak:'Archivo',system-ui,-apple-system,sans-serif;
+    --machine:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+
+  html,body{height:100%}
+  body{
+    background:var(--navy);
+    color:var(--paper);
+    font-family:var(--speak);
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* faint origami fold field, brand motif, very low contrast */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      linear-gradient(115deg,transparent 0 48%,rgba(134,139,223,.05) 48% 48.4%,transparent 48.4%),
+      linear-gradient(-58deg,transparent 0 62%,rgba(241,83,104,.045) 62% 62.3%,transparent 62.3%),
+      radial-gradient(120% 90% at 78% 8%,rgba(134,139,223,.10),transparent 60%);
+  }
+
+  .stage{position:relative;z-index:1;height:100%;display:flex;flex-direction:column}
+
+  /* ─── header ─── */
+  .top{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:24px;padding:20px 40px 16px;border-bottom:1px solid var(--navy-line);
+  }
+  .brand{display:flex;align-items:center;gap:14px}
+  .brand img{height:38px;width:auto;display:none}
+  .brand img.on{display:block}
+  .wordmark{font-family:var(--brand);font-size:24px;letter-spacing:-.02em;color:var(--paper)}
+  .wordmark span{color:var(--coral)}
+  .slug{
+    font-family:var(--machine);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--periwinkle);text-align:right;line-height:1.7;
+  }
+  .slug b{color:var(--paper-dim);font-weight:400}
+
+  /* ─── body split ─── */
+  .split{flex:1;display:grid;grid-template-columns:1fr 400px;min-height:0}
+
+  .thread{
+    padding:28px 44px 40px;overflow-y:auto;scroll-behavior:smooth;
+    display:flex;flex-direction:column;gap:18px;
+  }
+  .thread::-webkit-scrollbar{width:0}
+
+  /* ─── bubbles ─── */
+  .row{display:flex;flex-direction:column;max-width:70%;opacity:0;transform:translateY(14px)}
+  .row.in{animation:land .42s cubic-bezier(.2,.75,.3,1) forwards}
+  @keyframes land{to{opacity:1;transform:none}}
+
+  .row.ai{align-self:flex-start;align-items:flex-start}
+  .row.lead{align-self:flex-end;align-items:flex-end}
+
+  .stamp{
+    font-family:var(--machine);font-size:11px;letter-spacing:.1em;
+    color:#5C6B8E;margin-bottom:6px;
+  }
+
+  .bubble{
+    font-size:20px;line-height:1.5;padding:15px 20px;border-radius:16px;
+  }
+  .ai .bubble{
+    background:var(--coral);color:#fff;border-bottom-left-radius:5px;
+    box-shadow:0 12px 34px -18px rgba(241,83,104,.9);
+  }
+  /* the human side is paper — the brand's own material */
+  .lead .bubble{
+    background:var(--paper);color:#101624;border-bottom-right-radius:5px;
+    font-weight:600;font-size:24px;
+    box-shadow:0 12px 30px -20px rgba(0,0,0,.85);
+  }
+
+  .note{
+    margin-top:9px;font-family:var(--machine);font-size:12.5px;line-height:1.55;
+    letter-spacing:.05em;color:var(--periwinkle);max-width:44ch;
+  }
+  .lead .note{text-align:right}
+
+  /* ─── system event ─── */
+  .row.system{align-self:center;align-items:center;max-width:78%}
+  .sysbox{
+    border:1px dashed var(--blush);border-radius:12px;padding:13px 24px;
+    background:rgba(255,160,168,.07);text-align:center;
+  }
+  .sysbox .k{
+    font-family:var(--machine);font-size:12px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--blush);
+  }
+  .sysbox .v{font-family:var(--machine);font-size:17px;color:var(--paper);margin-top:5px}
+
+  /* ─── intel rail ─── */
+  .rail{
+    border-left:1px solid var(--navy-line);padding:28px 32px;
+    background:linear-gradient(180deg,rgba(134,139,223,.05),transparent 55%);
+    display:flex;flex-direction:column;min-height:0;
+  }
+  .rail h2{
+    font-family:var(--machine);font-size:12px;font-weight:700;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--periwinkle);
+  }
+  .rail .sub{font-size:13px;color:#69789C;margin-top:8px;line-height:1.5}
+  .rail ol{list-style:none;margin-top:26px;display:flex;flex-direction:column;gap:20px;overflow-y:auto}
+  .rail ol::-webkit-scrollbar{width:0}
+
+  .fact{opacity:0;transform:translateX(16px);border-left:2px solid var(--navy-line);padding-left:14px}
+  .fact.in{animation:slot .5s cubic-bezier(.2,.75,.3,1) forwards}
+  @keyframes slot{to{opacity:1;transform:none;border-left-color:var(--periwinkle)}}
+  .fact .k{
+    font-family:var(--machine);font-size:10.5px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--periwinkle);
+  }
+  .fact .v{font-size:19px;font-weight:600;margin-top:5px;line-height:1.3}
+
+  .railfoot{margin-top:auto;padding-top:20px;font-size:13px;color:#69789C;line-height:1.55;opacity:0;transition:opacity .6s}
+  .railfoot.on{opacity:1}
+
+  /* ─── footer clock ─── */
+  .bottom{
+    display:flex;align-items:center;gap:28px;
+    padding:16px 40px;border-top:1px solid var(--navy-line);background:rgba(8,12,23,.7);
+  }
+  .clock{display:flex;align-items:baseline;gap:12px}
+  .clock .num{
+    font-family:var(--machine);font-weight:700;font-size:40px;line-height:1;
+    color:var(--coral);font-variant-numeric:tabular-nums;
+  }
+  .clock .num.bump{animation:bump .35s ease}
+  @keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.13)}100%{transform:scale(1)}}
+  .clock .lab{
+    font-family:var(--machine);font-size:11px;letter-spacing:.2em;
+    text-transform:uppercase;color:#5C6B8E;
+  }
+  .track{flex:1;height:3px;background:var(--navy-line);border-radius:2px;overflow:hidden}
+  .track i{display:block;height:100%;width:0;background:var(--coral);transition:width .45s ease}
+  .hint{
+    font-family:var(--machine);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:#4B5877;transition:opacity .8s;white-space:nowrap;
+  }
+  .hint.fade{opacity:0}
+
+  /* ─── scorecard ─── */
+  .card{
+    position:fixed;inset:0;z-index:5;background:rgba(8,12,23,.965);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:40px;opacity:0;pointer-events:none;transition:opacity .5s;
+  }
+  .card.on{opacity:1;pointer-events:auto}
+  .card h3{
+    font-family:var(--machine);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--periwinkle);margin-bottom:44px;
+  }
+  .grid{display:flex;gap:0;flex-wrap:wrap;justify-content:center}
+  .stat{padding:0 40px;text-align:center;border-right:1px solid var(--navy-line)}
+  .stat:last-child{border-right:0}
+  .stat .n{
+    font-family:var(--machine);font-weight:700;font-size:76px;line-height:1;
+    color:var(--paper);font-variant-numeric:tabular-nums;
+  }
+  .stat.zero .n{color:var(--coral)}
+  .stat .l{
+    font-family:var(--machine);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:#69789C;margin-top:16px;line-height:1.7;max-width:14ch;margin-inline:auto;
+  }
+  .kicker{
+    margin-top:56px;font-size:26px;line-height:1.5;text-align:center;max-width:24ch;
+    color:var(--paper);
+  }
+  .kicker em{font-style:normal;color:var(--coral)}
+
+  @media (max-width:1100px){
+    .split{grid-template-columns:1fr}
+    .rail{border-left:0;border-top:1px solid var(--navy-line);max-height:36vh}
+    .row{max-width:88%}
+    .stat{padding:0 22px}
+    .stat .n{font-size:52px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+    .row,.fact{opacity:1;transform:none}
+  }
+  :focus-visible{outline:2px solid var(--periwinkle);outline-offset:3px}
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <header class="top">
+    <div class="brand">
+      <img id="logo" alt="Starling AI">
+      <div class="wordmark">Starling <span>Ai</span></div>
+    </div>
+    <div class="slug">
+      Sunday, August 16, 2026<br>
+      <b id="slugline">Bright Path Homes · inbound seller lead</b>
+    </div>
+  </header>
+
+  <div class="split">
+    <main class="thread" id="thread" aria-live="polite"></main>
+
+    <aside class="rail">
+      <h2>What Alli learned</h2>
+      <p class="sub">Nobody asked these on a form. She gave them up in five minutes, to a text message.</p>
+      <ol id="rail"></ol>
+      <p class="railfoot" id="railfoot">Renee walks into Monday's appointment already knowing what she's dealing with.</p>
+    </aside>
+  </div>
+
+  <footer class="bottom">
+    <div class="clock">
+      <div class="num" id="elapsed">+0:00</div>
+      <div class="lab">elapsed</div>
+    </div>
+    <div class="track"><i id="bar"></i></div>
+    <div class="hint" id="hint">Space · next &nbsp;/&nbsp; ← back &nbsp;/&nbsp; A autoplay &nbsp;/&nbsp; R reset</div>
+  </footer>
+</div>
+
+<div class="card" id="card">
+  <h3>Five minutes on a Sunday morning</h3>
+  <div class="grid">
+    <div class="stat"><div class="n">5</div><div class="l">minutes to a booked appointment</div></div>
+    <div class="stat"><div class="n">9</div><div class="l">replies from the lead</div></div>
+    <div class="stat"><div class="n">5</div><div class="l">qualifying answers captured</div></div>
+    <div class="stat"><div class="n">1</div><div class="l">appointment written to the CRM</div></div>
+    <div class="stat zero"><div class="n">0</div><div class="l">minutes of Renee's time</div></div>
+  </div>
+  <p class="kicker">She wasn't at her desk. <em>The thread didn't wait for her.</em></p>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   1. LOGO — paste the base64 data-URI of the official PNG here.
+      Example: "data:image/png;base64,iVBORw0KGgo..."
+   2. LEAD_NAME — change to "D." if you'd rather anonymize on screen.
+   ───────────────────────────────────────────────────────────── */
+const LOGO_DATA_URI = "";
+const LEAD_NAME = "Marcus";
+
+if (LOGO_DATA_URI) {
+  const el = document.getElementById('logo');
+  el.src = LOGO_DATA_URI;
+  el.classList.add('on');
+}
+
+const THREAD = [
+  { who:'ai', t:'11:12', text:`Hi ${LEAD_NAME}, this is Alli, Assistant for Renee Carter at Bright Path Homes. Thanks for reaching out! I just received your request and wanted to make sure we got it. Are you looking to buy, sell, or both?` },
+  { who:'lead', t:'11:13', text:'sell' },
+
+  { who:'ai', t:'11:13', text:`Thanks for letting me know you're looking to sell. Just curious — what's making you think about selling right now?` },
+  { who:'lead', t:'11:13', text:'pay bills',
+    note:'The question no lead form asks.',
+    fact:{ k:'Motivation', v:'Needs to pay bills' } },
+
+  { who:'ai', t:'11:14', text:'Got it. When were you hoping to be moved by?' },
+  { who:'lead', t:'11:14', text:'1 month',
+    fact:{ k:'Timeline', v:'Out in 30 days' } },
+
+  { who:'ai', t:'11:14', text:'Thanks for sharing the timeline. Quick question — has it just been you living there or family too?' },
+  { who:'lead', t:'11:14', text:'just me',
+    note:'One decision maker. No "let me talk to my husband."',
+    fact:{ k:'Household', v:'Lives alone · sole decision maker' } },
+
+  { who:'ai', t:'11:15', text:'That helps. Where were you headed next after selling?' },
+  { who:'lead', t:'11:15', text:'woodridge',
+    note:'She just told you she\u2019s buying too.',
+    fact:{ k:'Next move', v:'Buying in Woodridge' } },
+
+  { who:'ai', t:'11:15', text:'Perfect, sounds like you have a plan. Quick Q — have you had your home listed before or is this your first time selling?' },
+  { who:'lead', t:'11:16', text:'first time selling',
+    fact:{ k:'Experience', v:'First-time seller' } },
+
+  { who:'ai', t:'11:16', text:`Got it, first time selling can feel like a lot but I'll guide you through it all. Would you be available for a quick 20-30 min call Monday at 9:00 AM or 1:00 PM Central to go over everything?` },
+  { who:'lead', t:'11:17', text:'9am monday' },
+
+  { who:'system', t:'11:17', k:'Meeting created', v:'2026-08-17T14:00:00.000Z',
+    note:'Nobody typed that in. The AI wrote it to the calendar.' },
+
+  { who:'ai', t:'11:17', text:`Perfect — I've got you down for Monday, August 17, 2026 at 9:00 AM Central with Renee. Anything else I can help with?` },
+  { who:'lead', t:'11:18', text:'central time' },
+
+  { who:'ai', t:'11:18', text:'Yes, the appointment is scheduled for 9:00 AM Central Time on Monday, August 17, 2026. Anything else I can help with?',
+    note:'A fragment, not a question. Most bots break here.' },
+  { who:'lead', t:'11:18', text:'no' },
+
+  { who:'ai', t:'11:18', text:`Great! If anything comes up or you have questions before then, just reach out. Looking forward to speaking with you Monday at 9:00 AM Central.` }
+];
+
+const START = 11*60 + 12;
+const thread = document.getElementById('thread');
+const rail   = document.getElementById('rail');
+const bar    = document.getElementById('bar');
+const card   = document.getElementById('card');
+const hint   = document.getElementById('hint');
+const railfoot = document.getElementById('railfoot');
+
+let step = 0;          // messages shown
+let auto = null;
+
+function mins(t){ const [h,m] = t.split(':').map(Number); return h*60 + m - START; }
+
+function render(i){
+  const m = THREAD[i];
+  const row = document.createElement('div');
+  row.className = 'row ' + m.who;
+
+  const stamp = document.createElement('div');
+  stamp.className = 'stamp';
+  stamp.textContent = m.t + ' AM CT';
+  row.appendChild(stamp);
+
+  if (m.who === 'system'){
+    const box = document.createElement('div');
+    box.className = 'sysbox';
+    box.innerHTML = `<div class="k">${m.k}</div><div class="v">${m.v}</div>`;
+    row.appendChild(box);
+  } else {
+    const b = document.createElement('div');
+    b.className = 'bubble';
+    b.textContent = m.text;
+    row.appendChild(b);
+  }
+
+  if (m.note){
+    const n = document.createElement('div');
+    n.className = 'note';
+    n.textContent = m.note;
+    row.appendChild(n);
+  }
+
+  thread.appendChild(row);
+  requestAnimationFrame(()=> row.classList.add('in'));
+  thread.scrollTop = thread.scrollHeight;
+
+  if (m.fact){
+    const li = document.createElement('li');
+    li.className = 'fact';
+    li.innerHTML = `<div class="k">${m.fact.k}</div><div class="v">${m.fact.v}</div>`;
+    rail.appendChild(li);
+    requestAnimationFrame(()=> li.classList.add('in'));
+  }
+
+  const e = mins(m.t);
+  const el = document.getElementById('elapsed');
+  el.textContent = '+' + Math.floor(e/60) + ':' + String(e%60).padStart(2,'0');
+  el.classList.remove('bump');
+  void el.offsetWidth;
+  el.classList.add('bump');
+  bar.style.width = ((i+1)/THREAD.length*100) + '%';
+}
+
+function next(){
+  if (step < THREAD.length){
+    render(step++);
+    if (step === THREAD.length) railfoot.classList.add('on');
+  } else if (!card.classList.contains('on')){
+    card.classList.add('on');
+    stopAuto();
+  }
+}
+
+function back(){
+  if (card.classList.contains('on')){ card.classList.remove('on'); return; }
+  if (step === 0) return;
+  step--;
+  thread.removeChild(thread.lastChild);
+  const m = THREAD[step];
+  if (m.fact) rail.removeChild(rail.lastChild);
+  railfoot.classList.remove('on');
+  const prev = step ? mins(THREAD[step-1].t) : 0;
+  document.getElementById('elapsed').textContent =
+    '+' + Math.floor(prev/60) + ':' + String(prev%60).padStart(2,'0');
+  bar.style.width = (step/THREAD.length*100) + '%';
+}
+
+function reset(){
+  thread.innerHTML=''; rail.innerHTML='';
+  step=0; stopAuto();
+  card.classList.remove('on');
+  railfoot.classList.remove('on');
+  document.getElementById('elapsed').textContent='+0:00';
+  bar.style.width='0%';
+  hint.classList.remove('fade');
+}
+
+function stopAuto(){ if(auto){ clearInterval(auto); auto=null; } }
+function toggleAuto(){
+  if (auto) return stopAuto();
+  next();
+  auto = setInterval(next, 2200);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'Enter'){ e.preventDefault(); stopAuto(); next(); }
+  else if (e.key === 'ArrowLeft'){ e.preventDefault(); stopAuto(); back(); }
+  else if (e.key.toLowerCase() === 'a'){ toggleAuto(); }
+  else if (e.key.toLowerCase() === 'r'){ reset(); }
+});
+document.addEventListener('click', () => { stopAuto(); next(); });
+
+setTimeout(()=> hint.classList.add('fade'), 6000);
+</script>
+</body>
+</html>
