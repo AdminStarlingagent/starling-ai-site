@@ -1,0 +1,480 @@
+<!--
+  STARLING AI — LIVE THREAD REPLAY  (3 of 3)
+  Riverbend Ave Real Estate · dormant lead reactivation · Fri Aug 14, 2026
+
+  NOTE: all lead, agent and brokerage names in this file are PSEUDONYMS.
+  The conversation text, timestamps and outcomes are unedited.
+
+  CONTROLS:  Space / → / click = next   ·   ← = back   ·   A = autoplay   ·   R = reset
+  Open in Chrome, press F11 for fullscreen, then share the window in Zoom.
+
+  ── SWITCHES AT THE TOP OF THE <script> BLOCK ─────────────────────────────
+  LOGO_DATA_URI   paste the base64 of Starling_Ai_logo.png (no bird is drawn without it)
+  DORMANT_FOR     "1 year" — comes from the FUB record, NOT from this thread.
+                  Set to "" to drop that stat from the scorecard.
+  ──────────────────────────────────────────────────────────────────────────
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Starling AI — she was already in the database</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;700&family=Poppins:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#080C17;
+    --navy-line:#22304F;
+    --coral:#F15368;
+    --periwinkle:#868BDF;
+    --blush:#FFA0A8;
+    --paper:#F3F1EC;
+    --paper-dim:#C9C6BE;
+
+    --brand:'Poppins',system-ui,sans-serif;
+    --speak:'Archivo',system-ui,-apple-system,sans-serif;
+    --machine:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--navy);color:var(--paper);font-family:var(--speak);
+    overflow:hidden;-webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      linear-gradient(115deg,transparent 0 48%,rgba(134,139,223,.05) 48% 48.4%,transparent 48.4%),
+      linear-gradient(-58deg,transparent 0 62%,rgba(241,83,104,.045) 62% 62.3%,transparent 62.3%),
+      radial-gradient(120% 90% at 78% 8%,rgba(134,139,223,.10),transparent 60%);
+  }
+
+  .stage{position:relative;z-index:1;height:100%;display:flex;flex-direction:column}
+
+  .top{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:24px;padding:20px 40px 16px;border-bottom:1px solid var(--navy-line);
+  }
+  .brand{display:flex;align-items:center;gap:14px}
+  .brand img{height:38px;width:auto;display:none}
+  .brand img.on{display:block}
+  .wordmark{font-family:var(--brand);font-size:24px;letter-spacing:-.02em}
+  .wordmark span{color:var(--coral)}
+  .slug{
+    font-family:var(--machine);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--periwinkle);text-align:right;line-height:1.7;
+  }
+  .slug b{color:var(--paper-dim);font-weight:400}
+
+  .split{flex:1;display:grid;grid-template-columns:1fr 400px;min-height:0}
+
+  .thread{
+    padding:26px 44px 40px;overflow-y:auto;scroll-behavior:smooth;
+    display:flex;flex-direction:column;gap:16px;
+  }
+  .thread::-webkit-scrollbar{width:0}
+
+  .row{display:flex;flex-direction:column;max-width:70%;opacity:0;transform:translateY(14px)}
+  .row.in{animation:land .42s cubic-bezier(.2,.75,.3,1) forwards}
+  @keyframes land{to{opacity:1;transform:none}}
+
+  .row.ai{align-self:flex-start;align-items:flex-start}
+  .row.lead{align-self:flex-end;align-items:flex-end}
+
+  .stamp{font-family:var(--machine);font-size:11px;letter-spacing:.1em;color:#5C6B8E;margin-bottom:6px}
+
+  /* the campaign badge — the proof this came out of a dormant list */
+  .badge{
+    display:inline-block;font-family:var(--machine);font-size:10.5px;font-weight:700;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--navy);
+    background:var(--blush);padding:4px 10px;border-radius:5px;margin-bottom:9px;
+  }
+
+  .bubble{font-size:19px;line-height:1.5;padding:14px 19px;border-radius:16px}
+  .ai .bubble{
+    background:var(--coral);color:#fff;border-bottom-left-radius:5px;
+    box-shadow:0 12px 34px -18px rgba(241,83,104,.9);
+  }
+  .lead .bubble{
+    background:var(--paper);color:#101624;border-bottom-right-radius:5px;
+    font-weight:600;font-size:23px;
+    box-shadow:0 12px 30px -20px rgba(0,0,0,.85);
+  }
+
+  /* iMessage tapback, not a message */
+  .row.reaction .bubble{
+    background:transparent;border:1px solid var(--navy-line);color:var(--paper-dim);
+    font-size:14px;font-weight:400;line-height:1.45;border-radius:14px;padding:10px 15px;
+  }
+
+  .note{
+    margin-top:9px;font-family:var(--machine);font-size:12.5px;line-height:1.55;
+    letter-spacing:.05em;color:var(--periwinkle);max-width:46ch;
+  }
+  .lead .note,.reaction .note{text-align:right}
+
+  /* silence marker */
+  .row.gap{align-self:center;max-width:100%;width:100%;align-items:center}
+  .gapline{display:flex;align-items:center;gap:16px;width:100%;padding:2px 0}
+  .gapline i{flex:1;height:1px;background:var(--navy-line)}
+  .gapline span{
+    font-family:var(--machine);font-size:11px;letter-spacing:.2em;
+    text-transform:uppercase;color:#5C6B8E;white-space:nowrap;
+  }
+
+  .row.system{align-self:center;align-items:center;max-width:78%}
+  .sysbox{
+    border:1px dashed var(--blush);border-radius:12px;padding:13px 24px;
+    background:rgba(255,160,168,.07);text-align:center;
+  }
+  .sysbox .k{font-family:var(--machine);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--blush)}
+  .sysbox .v{font-family:var(--machine);font-size:17px;color:var(--paper);margin-top:5px}
+
+  .rail{
+    border-left:1px solid var(--navy-line);padding:26px 30px;
+    background:linear-gradient(180deg,rgba(134,139,223,.05),transparent 55%);
+    display:flex;flex-direction:column;min-height:0;
+  }
+  .rail h2{
+    font-family:var(--machine);font-size:12px;font-weight:700;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--periwinkle);
+  }
+  .rail .sub{font-size:13px;color:#69789C;margin-top:8px;line-height:1.5}
+  .rail ol{list-style:none;margin-top:22px;display:flex;flex-direction:column;gap:16px;overflow-y:auto}
+  .rail ol::-webkit-scrollbar{width:0}
+
+  .fact{opacity:0;transform:translateX(16px);border-left:2px solid var(--navy-line);padding-left:13px}
+  .fact.in{animation:slot .5s cubic-bezier(.2,.75,.3,1) forwards}
+  @keyframes slot{to{opacity:1;transform:none;border-left-color:var(--periwinkle)}}
+  .fact .k{font-family:var(--machine);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--periwinkle)}
+  .fact .v{font-size:17px;font-weight:600;margin-top:4px;line-height:1.32}
+  .fact.hot.in{animation:slotHot .5s cubic-bezier(.2,.75,.3,1) forwards}
+  @keyframes slotHot{to{opacity:1;transform:none;border-left-color:var(--coral)}}
+
+  .railfoot{margin-top:auto;padding-top:18px;font-size:13px;color:#69789C;line-height:1.55;opacity:0;transition:opacity .6s}
+  .railfoot.on{opacity:1}
+
+  .bottom{
+    display:flex;align-items:center;gap:28px;
+    padding:15px 40px;border-top:1px solid var(--navy-line);background:rgba(8,12,23,.7);
+  }
+  .clock{display:flex;align-items:baseline;gap:12px}
+  .clock .num{
+    font-family:var(--machine);font-weight:700;font-size:40px;line-height:1;
+    color:var(--coral);font-variant-numeric:tabular-nums;
+  }
+  .clock .num.bump{animation:bump .35s ease}
+  @keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.13)}100%{transform:scale(1)}}
+  .clock .lab{font-family:var(--machine);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#5C6B8E}
+  .track{flex:1;height:3px;background:var(--navy-line);border-radius:2px;overflow:hidden}
+  .track i{display:block;height:100%;width:0;background:var(--coral);transition:width .45s ease}
+  .hint{
+    font-family:var(--machine);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:#4B5877;transition:opacity .8s;white-space:nowrap;
+  }
+  .hint.fade{opacity:0}
+
+  .card{
+    position:fixed;inset:0;z-index:5;background:rgba(8,12,23,.965);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:40px;opacity:0;pointer-events:none;transition:opacity .5s;
+  }
+  .card.on{opacity:1;pointer-events:auto}
+  .card h3{
+    font-family:var(--machine);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--periwinkle);margin-bottom:44px;
+  }
+  .grid{display:flex;flex-wrap:wrap;justify-content:center}
+  .stat{padding:0 36px;text-align:center;border-right:1px solid var(--navy-line)}
+  .stat:last-child{border-right:0}
+  .stat .n{
+    font-family:var(--machine);font-weight:700;font-size:72px;line-height:1;
+    color:var(--paper);font-variant-numeric:tabular-nums;
+  }
+  .stat.zero .n{color:var(--coral)}
+  .stat.cold .n{color:var(--periwinkle)}
+  .stat .l{
+    font-family:var(--machine);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:#69789C;margin-top:16px;line-height:1.7;max-width:14ch;margin-inline:auto;
+  }
+  .kicker{margin-top:56px;font-size:26px;line-height:1.5;text-align:center;max-width:27ch}
+  .kicker em{font-style:normal;color:var(--coral)}
+
+  @media (max-width:1100px){
+    .split{grid-template-columns:1fr}
+    .rail{border-left:0;border-top:1px solid var(--navy-line);max-height:36vh}
+    .row{max-width:88%}
+    .stat{padding:0 20px}
+    .stat .n{font-size:50px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+    .row,.fact{opacity:1;transform:none}
+  }
+  :focus-visible{outline:2px solid var(--periwinkle);outline-offset:3px}
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <header class="top">
+    <div class="brand">
+      <img id="logo" alt="Starling AI">
+      <div class="wordmark">Starling <span>Ai</span></div>
+    </div>
+    <div class="slug">
+      Friday, August 14, 2026<br>
+      <b>Riverbend Ave Real Estate · dormant lead</b>
+    </div>
+  </header>
+
+  <div class="split">
+    <main class="thread" id="thread" aria-live="polite"></main>
+
+    <aside class="rail">
+      <h2>What the AI learned</h2>
+      <p class="sub">From a contact who had been sitting untouched in the CRM.</p>
+      <ol id="rail"></ol>
+      <p class="railfoot" id="railfoot">None of this was new. It was in Robin's database the whole time.</p>
+    </aside>
+  </div>
+
+  <footer class="bottom">
+    <div class="clock">
+      <div class="num" id="elapsed">+0:00</div>
+      <div class="lab">elapsed</div>
+    </div>
+    <div class="track"><i id="bar"></i></div>
+    <div class="hint" id="hint">Space · next &nbsp;/&nbsp; ← back &nbsp;/&nbsp; A autoplay &nbsp;/&nbsp; R reset</div>
+  </footer>
+</div>
+
+<div class="card" id="card">
+  <h3>The lead she already had</h3>
+  <div class="grid" id="grid">
+    <div class="stat cold" id="dormantStat"><div class="n" id="dormantNum">1</div><div class="l" id="dormantLab">year since anyone reached out</div></div>
+    <div class="stat"><div class="n">19</div><div class="l">minutes from cold text to booked</div></div>
+    <div class="stat"><div class="n">2</div><div class="l">objections handled mid-thread</div></div>
+    <div class="stat"><div class="n">1</div><div class="l">listing appointment on the calendar</div></div>
+    <div class="stat zero"><div class="n">0</div><div class="l">minutes of Robin's time</div></div>
+  </div>
+  <p class="kicker">Robin didn't buy this lead. <em>She already owned it.</em></p>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   LOGO_DATA_URI   paste the base64 data-URI of the official PNG
+   LEAD_NAME       not shown on screen in this thread — kept for reference
+   DORMANT_FOR     "1 year" comes from the FUB record, not this transcript.
+                   Set to "" to drop that stat from the scorecard.
+   ───────────────────────────────────────────────────────────── */
+const LOGO_DATA_URI = "";
+const DORMANT_FOR = "1 year";
+
+if (LOGO_DATA_URI) {
+  const el = document.getElementById('logo');
+  el.src = LOGO_DATA_URI;
+  el.classList.add('on');
+}
+if (!DORMANT_FOR) {
+  document.getElementById('dormantStat').remove();
+} else {
+  const n = DORMANT_FOR.split(' ')[0];
+  const unit = DORMANT_FOR.replace(n,'').trim();
+  document.getElementById('dormantNum').textContent = n;
+  document.getElementById('dormantLab').textContent = unit + ' since anyone reached out';
+}
+
+const THREAD = [
+  { who:'ai', t:'09:01', channel:'SMS · Old Lead',
+    text:'If your target home size or layout preferences have shifted since we last talked, let me know—I can update listings to match exactly what you want. Does that sound good?',
+    note:'Nobody wrote this. It went out to a dormant list.',
+    fact:{ k:'Status', v:'Dormant contact, re-engagement campaign', hot:true } },
+
+  { who:'gap', t:'09:12', label:'11 minutes of silence' },
+
+  { who:'lead', t:'09:12', text:'What is this for?',
+    note:'The most honest reply in real estate.' },
+
+  { who:'ai', t:'09:12', text:`Could you please clarify if you're looking to buy, sell, or both? That way I can help you best.` },
+  { who:'lead', t:'09:12', text:'Sell',
+    note:'The opener pitched listings. She wants to sell. It adjusted.',
+    fact:{ k:'Intent', v:'Selling' } },
+
+  { who:'ai', t:'09:13', text:`Great to hear you're thinking about selling! Just curious, what's making you think about selling right now?` },
+  { who:'lead', t:'09:13', text:'Moving',
+    fact:{ k:'Motivation', v:'Relocating' } },
+
+  { who:'ai', t:'09:13', text:'Thanks for sharing that you\u2019re moving. Roughly when were you hoping to be moved by?' },
+  { who:'lead', t:'09:14', text:'Soon',
+    fact:{ k:'Timeline', v:'"Soon"' } },
+
+  { who:'ai', t:'09:14', text:`Good to know your timeline is soon. Have you started looking at where you'd go next?` },
+  { who:'lead', t:'09:17', text:'Yes.',
+    fact:{ k:'Next move', v:'Already searching' } },
+
+  { who:'ai', t:'09:17', text:'Perfect, that helps. How long have you been in your current home?' },
+  { who:'lead', t:'09:19', text:'Almost 11 yrs',
+    note:'Eleven years of equity. That is the whole listing appointment.',
+    fact:{ k:'Tenure', v:'Almost 11 years in the home', hot:true } },
+
+  { who:'ai', t:'09:19', text:`Thanks for sharing that you've been in your home almost 11 years. If we set up a quick 15-20 minute chat, we can walk through a net sheet and your timeline to sell. Does Monday at 10:00 AM or 2:00 PM work better?` },
+  { who:'lead', t:'09:19', text:'What company are you with?',
+    note:'A trust check, right at the close.' },
+
+  { who:'ai', t:'09:19', text:`I'm with Riverbend Ave Real Estate, working with Robin Hayes' team here. Back to your move—do you think Monday at 10:00 AM or 2:00 PM for a quick chat works better?`,
+    note:'Names the brokerage and the agent, then goes straight back to the ask.' },
+  { who:'lead', t:'09:20', text:'10am works' },
+
+  { who:'system', t:'09:20', k:'Meeting created', v:'Mon Aug 17 · 10:00 AM Central',
+    note:'Nobody typed that in. The AI wrote it to the calendar.' },
+
+  { who:'ai', t:'09:20', text:`Perfect — I've got you down for Monday, August 17, 2026 at 10:00 AM Central with Robin. Anything else I can help with?` },
+  { who:'lead', t:'09:21', text:'All good. Thank you' },
+
+  { who:'ai', t:'09:21', text:`You're welcome! If you have any questions before the meeting or need anything else, just let me know.` },
+  { who:'reaction', t:'09:21', text:'\u2661 Liked "You\u2019re welcome! If you have any questions before the meeting…"',
+    note:'A tapback, not a message. It didn\u2019t trip on it.' },
+
+  { who:'ai', t:'09:22', text:'Glad you liked it! Just confirming your appointment is Monday, August 17, 2026 at 10:00 AM Central with Robin. Let me know if anything else comes up!' }
+];
+
+const START = 9*60 + 1;
+const thread = document.getElementById('thread');
+const rail   = document.getElementById('rail');
+const bar    = document.getElementById('bar');
+const card   = document.getElementById('card');
+const hint   = document.getElementById('hint');
+const railfoot = document.getElementById('railfoot');
+
+let step = 0;
+let auto = null;
+
+function mins(t){ const [h,m] = t.split(':').map(Number); return h*60 + m - START; }
+function fmt(t){
+  const [h,m] = t.split(':').map(Number);
+  const ap = h >= 12 ? 'PM' : 'AM';
+  const hh = h % 12 === 0 ? 12 : h % 12;
+  return `${hh}:${String(m).padStart(2,'0')} ${ap} CT`;
+}
+
+function render(i){
+  const m = THREAD[i];
+  const row = document.createElement('div');
+  row.className = 'row ' + m.who;
+
+  if (m.who === 'gap'){
+    const g = document.createElement('div');
+    g.className = 'gapline';
+    g.innerHTML = `<i></i><span>${m.label}</span><i></i>`;
+    row.appendChild(g);
+  } else {
+    const stamp = document.createElement('div');
+    stamp.className = 'stamp';
+    stamp.textContent = fmt(m.t);
+    row.appendChild(stamp);
+
+    if (m.channel){
+      const b = document.createElement('div');
+      b.className = 'badge';
+      b.textContent = m.channel;
+      row.appendChild(b);
+    }
+
+    if (m.who === 'system'){
+      const box = document.createElement('div');
+      box.className = 'sysbox';
+      box.innerHTML = `<div class="k">${m.k}</div><div class="v">${m.v}</div>`;
+      row.appendChild(box);
+    } else {
+      const b = document.createElement('div');
+      b.className = 'bubble';
+      b.textContent = m.text;
+      row.appendChild(b);
+    }
+  }
+
+  if (m.note){
+    const n = document.createElement('div');
+    n.className = 'note';
+    n.textContent = m.note;
+    row.appendChild(n);
+  }
+
+  thread.appendChild(row);
+  requestAnimationFrame(()=> row.classList.add('in'));
+  thread.scrollTop = thread.scrollHeight;
+
+  if (m.fact){
+    const li = document.createElement('li');
+    li.className = 'fact' + (m.fact.hot ? ' hot' : '');
+    li.innerHTML = `<div class="k">${m.fact.k}</div><div class="v">${m.fact.v}</div>`;
+    rail.appendChild(li);
+    requestAnimationFrame(()=> li.classList.add('in'));
+  }
+
+  const e = mins(m.t);
+  const el = document.getElementById('elapsed');
+  el.textContent = '+' + Math.floor(e/60) + ':' + String(e%60).padStart(2,'0');
+  el.classList.remove('bump');
+  void el.offsetWidth;
+  el.classList.add('bump');
+  bar.style.width = ((i+1)/THREAD.length*100) + '%';
+}
+
+function next(){
+  if (step < THREAD.length){
+    render(step++);
+    if (step === THREAD.length) railfoot.classList.add('on');
+  } else if (!card.classList.contains('on')){
+    card.classList.add('on');
+    stopAuto();
+  }
+}
+
+function back(){
+  if (card.classList.contains('on')){ card.classList.remove('on'); return; }
+  if (step === 0) return;
+  step--;
+  thread.removeChild(thread.lastChild);
+  if (THREAD[step].fact) rail.removeChild(rail.lastChild);
+  railfoot.classList.remove('on');
+  const prev = step ? mins(THREAD[step-1].t) : 0;
+  document.getElementById('elapsed').textContent =
+    '+' + Math.floor(prev/60) + ':' + String(prev%60).padStart(2,'0');
+  bar.style.width = (step/THREAD.length*100) + '%';
+}
+
+function reset(){
+  thread.innerHTML=''; rail.innerHTML='';
+  step=0; stopAuto();
+  card.classList.remove('on');
+  railfoot.classList.remove('on');
+  document.getElementById('elapsed').textContent='+0:00';
+  bar.style.width='0%';
+  hint.classList.remove('fade');
+}
+
+function stopAuto(){ if(auto){ clearInterval(auto); auto=null; } }
+function toggleAuto(){
+  if (auto) return stopAuto();
+  next();
+  auto = setInterval(next, 2400);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'Enter'){ e.preventDefault(); stopAuto(); next(); }
+  else if (e.key === 'ArrowLeft'){ e.preventDefault(); stopAuto(); back(); }
+  else if (e.key.toLowerCase() === 'a'){ toggleAuto(); }
+  else if (e.key.toLowerCase() === 'r'){ reset(); }
+});
+document.addEventListener('click', () => { stopAuto(); next(); });
+
+setTimeout(()=> hint.classList.add('fade'), 6000);
+</script>
+</body>
+</html>
