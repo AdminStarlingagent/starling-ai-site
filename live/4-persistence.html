@@ -184,6 +184,25 @@
   }
   .hint.fade{opacity:0}
 
+  /* exit + card navigation */
+  .exit{
+    font-family:var(--machine);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--paper-dim);text-decoration:none;border:1px solid var(--navy-line);
+    border-radius:20px;padding:7px 13px;white-space:nowrap;margin-right:6px;
+    transition:border-color .15s,color .15s;
+  }
+  .exit:hover,.exit:focus-visible{border-color:var(--coral);color:var(--paper)}
+  .cardnav{margin-top:38px;display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+  .cardnav a{
+    font-family:var(--machine);font-size:12px;letter-spacing:.13em;text-transform:uppercase;
+    text-decoration:none;border-radius:10px;padding:14px 22px;
+    transition:transform .15s,border-color .15s;
+  }
+  .cardnav a:hover,.cardnav a:focus-visible{transform:translateY(-2px)}
+  .cardnav .ghost{color:var(--paper-dim);border:1px solid var(--navy-line)}
+  .cardnav .ghost:hover{border-color:var(--periwinkle);color:var(--paper)}
+  .cardnav .solid{background:var(--coral);color:#fff;border:1px solid var(--coral)}
+  .card{overflow-y:auto}
   .card{
     position:fixed;inset:0;z-index:5;background:rgba(8,12,23,.965);
     display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -230,6 +249,7 @@
 <div class="stage">
   <header class="top">
     <div class="brand">
+      <a class="exit" href="index.html">← All demos</a>
       <img id="logo" alt="Starling AI">
       <div class="wordmark">Starling <span>Ai</span></div>
     </div>
@@ -256,7 +276,7 @@
       <div class="lab" id="elabel">since first touch</div>
     </div>
     <div class="track"><i id="bar"></i></div>
-    <div class="hint" id="hint">Space · next &nbsp;/&nbsp; ← back &nbsp;/&nbsp; A autoplay &nbsp;/&nbsp; R reset</div>
+    <div class="hint" id="hint">Space next · ← back · A autoplay · R reset · 1–5 jump · Esc exit</div>
   </footer>
 </div>
 
@@ -270,6 +290,10 @@
     <div class="stat zero"><div class="n">0</div><div class="l">minutes of your team's time</div></div>
   </div>
   <p class="kicker">Five of those texts got nothing. <em>Number six got a yes.</em></p>
+  <div class="cardnav">
+    <a class="ghost" href="index.html">← All demos</a>
+    <a class="solid" href="5-closing.html">Next · DM to the closing table →</a>
+  </div>
 </div>
 
 <script>
@@ -516,13 +540,21 @@ function toggleAuto(){
   auto = setInterval(next, 2300);
 }
 
+const DEMOS = {'1':'1-speed.html','2':'2-depth.html','3':'3-reactivation.html','4':'4-persistence.html','5':'5-closing.html'};
+const THIS_DEMO = location.pathname.split('/').pop();
 document.addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
   if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'Enter'){ e.preventDefault(); stopAuto(); next(); }
   else if (e.key === 'ArrowLeft'){ e.preventDefault(); stopAuto(); back(); }
   else if (e.key.toLowerCase() === 'a'){ toggleAuto(); }
   else if (e.key.toLowerCase() === 'r'){ reset(); }
+  else if (e.key === 'Escape'){ window.location.href = 'index.html'; }
+  else if (DEMOS[e.key] && DEMOS[e.key] !== THIS_DEMO){ window.location.href = DEMOS[e.key]; }
 });
-document.addEventListener('click', () => { stopAuto(); next(); });
+document.addEventListener('click', e => {
+  if (e.target.closest('a')) return;
+  stopAuto(); next();
+});
 
 setTimeout(()=> hint.classList.add('fade'), 6000);
 </script>
