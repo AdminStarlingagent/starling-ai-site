@@ -1,0 +1,442 @@
+<!--
+  STARLING AI — LIVE THREAD REPLAY  (2 of 2)
+  The Vance Collective · undecided seller · Wed July 22, 2026
+
+  NOTE: all lead, agent and brokerage names in this file are PSEUDONYMS.
+  The conversation text, timestamps and outcomes are unedited.
+
+  CONTROLS:  Space / → / click = next   ·   ← = back   ·   A = autoplay   ·   R = reset
+  Open in Chrome, press F11 for fullscreen, then share the window in Zoom.
+
+  ── TWO SWITCHES AT THE TOP OF THE <script> BLOCK ─────────────────────────
+  LOGO_DATA_URI     paste the base64 of Starling_Ai_logo.png (no bird is drawn without it)
+  SHOW_DOUBLE_REPLY set false to hide the back-to-back replies at 2:29 PM
+  ──────────────────────────────────────────────────────────────────────────
+
+  Note: the CRM's Meeting Created event exported with a blank value. The time
+  shown in the system box is taken from Alli's own confirmation message.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Starling AI — the lead who wasn't sure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;700&family=Poppins:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#080C17;
+    --navy-raised:#111A2E;
+    --navy-line:#22304F;
+    --coral:#F15368;
+    --periwinkle:#868BDF;
+    --blush:#FFA0A8;
+    --paper:#F3F1EC;
+    --paper-dim:#C9C6BE;
+
+    --brand:'Poppins',system-ui,sans-serif;
+    --speak:'Archivo',system-ui,-apple-system,sans-serif;
+    --machine:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--navy);color:var(--paper);font-family:var(--speak);
+    overflow:hidden;-webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      linear-gradient(115deg,transparent 0 48%,rgba(134,139,223,.05) 48% 48.4%,transparent 48.4%),
+      linear-gradient(-58deg,transparent 0 62%,rgba(241,83,104,.045) 62% 62.3%,transparent 62.3%),
+      radial-gradient(120% 90% at 78% 8%,rgba(134,139,223,.10),transparent 60%);
+  }
+
+  .stage{position:relative;z-index:1;height:100%;display:flex;flex-direction:column}
+
+  .top{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:24px;padding:20px 40px 16px;border-bottom:1px solid var(--navy-line);
+  }
+  .brand{display:flex;align-items:center;gap:14px}
+  .brand img{height:38px;width:auto;display:none}
+  .brand img.on{display:block}
+  .wordmark{font-family:var(--brand);font-size:24px;letter-spacing:-.02em}
+  .wordmark span{color:var(--coral)}
+  .slug{
+    font-family:var(--machine);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--periwinkle);text-align:right;line-height:1.7;
+  }
+  .slug b{color:var(--paper-dim);font-weight:400}
+
+  .split{flex:1;display:grid;grid-template-columns:1fr 400px;min-height:0}
+
+  .thread{
+    padding:26px 44px 40px;overflow-y:auto;scroll-behavior:smooth;
+    display:flex;flex-direction:column;gap:16px;
+  }
+  .thread::-webkit-scrollbar{width:0}
+
+  .row{display:flex;flex-direction:column;max-width:70%;opacity:0;transform:translateY(14px)}
+  .row.in{animation:land .42s cubic-bezier(.2,.75,.3,1) forwards}
+  @keyframes land{to{opacity:1;transform:none}}
+  .row.tight{margin-top:-10px}
+  .row.tight .stamp{display:none}
+
+  .row.ai{align-self:flex-start;align-items:flex-start}
+  .row.lead{align-self:flex-end;align-items:flex-end}
+
+  .stamp{font-family:var(--machine);font-size:11px;letter-spacing:.1em;color:#5C6B8E;margin-bottom:6px}
+
+  .bubble{font-size:19px;line-height:1.5;padding:14px 19px;border-radius:16px}
+  .ai .bubble{
+    background:var(--coral);color:#fff;border-bottom-left-radius:5px;
+    box-shadow:0 12px 34px -18px rgba(241,83,104,.9);
+  }
+  .lead .bubble{
+    background:var(--paper);color:#101624;border-bottom-right-radius:5px;
+    font-weight:500;font-size:20px;
+    box-shadow:0 12px 30px -20px rgba(0,0,0,.85);
+  }
+  .lead .bubble.short{font-weight:600;font-size:24px}
+
+  .note{
+    margin-top:9px;font-family:var(--machine);font-size:12.5px;line-height:1.55;
+    letter-spacing:.05em;color:var(--periwinkle);max-width:46ch;
+  }
+  .lead .note{text-align:right}
+  .note.flag{color:var(--blush)}
+
+  .row.system{align-self:center;align-items:center;max-width:78%}
+  .sysbox{
+    border:1px dashed var(--blush);border-radius:12px;padding:13px 24px;
+    background:rgba(255,160,168,.07);text-align:center;
+  }
+  .sysbox .k{font-family:var(--machine);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--blush)}
+  .sysbox .v{font-family:var(--machine);font-size:17px;color:var(--paper);margin-top:5px}
+
+  .rail{
+    border-left:1px solid var(--navy-line);padding:26px 30px;
+    background:linear-gradient(180deg,rgba(134,139,223,.05),transparent 55%);
+    display:flex;flex-direction:column;min-height:0;
+  }
+  .rail h2{
+    font-family:var(--machine);font-size:12px;font-weight:700;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--periwinkle);
+  }
+  .rail .sub{font-size:13px;color:#69789C;margin-top:8px;line-height:1.5}
+  .rail ol{list-style:none;margin-top:20px;display:flex;flex-direction:column;gap:13px;overflow-y:auto}
+  .rail ol::-webkit-scrollbar{width:0}
+
+  .fact{opacity:0;transform:translateX(16px);border-left:2px solid var(--navy-line);padding-left:13px}
+  .fact.in{animation:slot .5s cubic-bezier(.2,.75,.3,1) forwards}
+  @keyframes slot{to{opacity:1;transform:none;border-left-color:var(--periwinkle)}}
+  .fact .k{font-family:var(--machine);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--periwinkle)}
+  .fact .v{font-size:16.5px;font-weight:600;margin-top:3px;line-height:1.32}
+  .fact.hot{border-left-color:var(--coral)}
+  .fact.hot.in{animation:slotHot .5s cubic-bezier(.2,.75,.3,1) forwards}
+  @keyframes slotHot{to{opacity:1;transform:none;border-left-color:var(--coral)}}
+
+  .railfoot{margin-top:auto;padding-top:18px;font-size:13px;color:#69789C;line-height:1.55;opacity:0;transition:opacity .6s}
+  .railfoot.on{opacity:1}
+
+  .bottom{
+    display:flex;align-items:center;gap:28px;
+    padding:15px 40px;border-top:1px solid var(--navy-line);background:rgba(8,12,23,.7);
+  }
+  .clock{display:flex;align-items:baseline;gap:12px}
+  .clock .num{
+    font-family:var(--machine);font-weight:700;font-size:40px;line-height:1;
+    color:var(--coral);font-variant-numeric:tabular-nums;
+  }
+  .clock .num.bump{animation:bump .35s ease}
+  @keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.13)}100%{transform:scale(1)}}
+  .clock .lab{font-family:var(--machine);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#5C6B8E}
+  .track{flex:1;height:3px;background:var(--navy-line);border-radius:2px;overflow:hidden}
+  .track i{display:block;height:100%;width:0;background:var(--coral);transition:width .45s ease}
+  .hint{
+    font-family:var(--machine);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:#4B5877;transition:opacity .8s;white-space:nowrap;
+  }
+  .hint.fade{opacity:0}
+
+  .card{
+    position:fixed;inset:0;z-index:5;background:rgba(8,12,23,.965);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:40px;opacity:0;pointer-events:none;transition:opacity .5s;
+  }
+  .card.on{opacity:1;pointer-events:auto}
+  .card h3{
+    font-family:var(--machine);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--periwinkle);margin-bottom:44px;
+  }
+  .grid{display:flex;flex-wrap:wrap;justify-content:center}
+  .stat{padding:0 38px;text-align:center;border-right:1px solid var(--navy-line)}
+  .stat:last-child{border-right:0}
+  .stat .n{
+    font-family:var(--machine);font-weight:700;font-size:76px;line-height:1;
+    color:var(--paper);font-variant-numeric:tabular-nums;
+  }
+  .stat.zero .n{color:var(--coral)}
+  .stat .l{
+    font-family:var(--machine);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:#69789C;margin-top:16px;line-height:1.7;max-width:14ch;margin-inline:auto;
+  }
+  .kicker{margin-top:56px;font-size:26px;line-height:1.5;text-align:center;max-width:26ch}
+  .kicker em{font-style:normal;color:var(--coral)}
+
+  @media (max-width:1100px){
+    .split{grid-template-columns:1fr}
+    .rail{border-left:0;border-top:1px solid var(--navy-line);max-height:36vh}
+    .row{max-width:88%}
+    .stat{padding:0 20px}
+    .stat .n{font-size:52px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+    .row,.fact{opacity:1;transform:none}
+  }
+  :focus-visible{outline:2px solid var(--periwinkle);outline-offset:3px}
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <header class="top">
+    <div class="brand">
+      <img id="logo" alt="Starling AI">
+      <div class="wordmark">Starling <span>Ai</span></div>
+    </div>
+    <div class="slug">
+      Wednesday, July 22, 2026<br>
+      <b>The Vance Collective · undecided seller</b>
+    </div>
+  </header>
+
+  <div class="split">
+    <main class="thread" id="thread" aria-live="polite"></main>
+
+    <aside class="rail">
+      <h2>What the AI learned</h2>
+      <p class="sub">She opened the conversation unsure she even wanted to sell.</p>
+      <ol id="rail"></ol>
+      <p class="railfoot" id="railfoot">Trevor walks into that call knowing there are three people on this decision.</p>
+    </aside>
+  </div>
+
+  <footer class="bottom">
+    <div class="clock">
+      <div class="num" id="elapsed">+0:00</div>
+      <div class="lab">elapsed</div>
+    </div>
+    <div class="track"><i id="bar"></i></div>
+    <div class="hint" id="hint">Space · next &nbsp;/&nbsp; ← back &nbsp;/&nbsp; A autoplay &nbsp;/&nbsp; R reset</div>
+  </footer>
+</div>
+
+<div class="card" id="card">
+  <h3>Twelve minutes with a lead who wasn't sure</h3>
+  <div class="grid">
+    <div class="stat"><div class="n">12</div><div class="l">minutes to a booked appointment</div></div>
+    <div class="stat"><div class="n">8</div><div class="l">qualifying answers captured</div></div>
+    <div class="stat"><div class="n">3</div><div class="l">decision makers surfaced</div></div>
+    <div class="stat"><div class="n">1</div><div class="l">same-day call, booked from her desk at work</div></div>
+    <div class="stat zero"><div class="n">0</div><div class="l">minutes of Trevor's time</div></div>
+  </div>
+  <p class="kicker">She never said she was ready to sell. <em>She booked anyway.</em></p>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   LOGO_DATA_URI      paste the base64 data-URI of the official PNG
+   LEAD_NAME          change to "N." to anonymize on screen
+   SHOW_DOUBLE_REPLY  false hides the back-to-back replies at 2:29 PM
+   ───────────────────────────────────────────────────────────── */
+const LOGO_DATA_URI = "";
+const LEAD_NAME = "Denise";
+const SHOW_DOUBLE_REPLY = true;
+
+if (LOGO_DATA_URI) {
+  const el = document.getElementById('logo');
+  el.src = LOGO_DATA_URI;
+  el.classList.add('on');
+}
+
+const RAW = [
+  { who:'ai', t:'14:17', text:`Hi ${LEAD_NAME}, this is The Vance Collective AI. I received your request and appreciate you reaching out. What locations are you considering?` },
+  { who:'lead', t:'14:17', text:'Federal way',
+    fact:{ k:'Market', v:'Federal Way, WA' } },
+
+  { who:'ai', t:'14:17', text:'Thanks for sharing Federal Way. Are you looking to buy, sell, or both there?' },
+  { who:'lead', t:'14:18', text:`Sell my sister and i own a mobile home but we're not sure if we should sell right now or wait or fixed it up`,
+    note:'Not a qualified seller. An undecided one.',
+    fact:{ k:'Property', v:'Mobile home, co-owned with her sister' } },
+
+  { who:'ai', t:'14:18', text:'Got it. What was the plan when you and your sister decided to sell the mobile home? And where would you move next if you sell now?' },
+  { who:'lead', t:'14:21', text:`My sister is living somewhere else . I'm the one living there right now .   My husband and I are not sure if we should rent again or maybe look into owning maybe a townhome . We're not sure 🤔`,
+    note:'A husband and a sister just walked into the deal.',
+    fact:{ k:'Decision makers', v:'Denise + husband + sister', hot:true } },
+
+  { who:'ai', t:'14:21', text:`Thanks for sharing that. Looks like you're weighing options on selling the mobile home and possibly buying a townhome. What's your timeline like for making a move or a decision?`,
+    note:'It played her own words back to her before asking the next question.',
+    fact:{ k:'Next move', v:'Rent again, or buy a townhome' } },
+  { who:'lead', t:'14:22', text:`Within 6months  But we weren't sure if we should invest alittle to the mobile home or just sell it like it is .`,
+    fact:{ k:'Timeline', v:'Within 6 months' } },
+
+  { who:'ai', t:'14:23', text:`Makes sense — within 6 months gives us a good window. What's the current condition of the mobile home? Are there major fixes needed or just minor updates?` },
+  { who:'lead', t:'14:27', text:`I will say its alright condition . The major is skirting need to be replaced. The ceiling needs to be replaced . I'm not sure much sense my husband is the one that knows more .  And some cosmetics`,
+    fact:{ k:'Condition', v:'Skirting, ceiling, cosmetics' } },
+
+  { who:'ai', t:'14:27', text:`Thanks for the details. Mobile homes with needed repairs like skirting and ceiling can still sell, often "as-is." Most buyers decide based on price and timing. Want to set a quick call to discuss your options and timeline?`,
+    note:'It answered the objection, then asked for the appointment.',
+    fact:{ k:'Open question', v:'Sell as-is, or repair first?', hot:true } },
+  { who:'lead', t:'14:28', text:`I'm not available right now I'm at work . I'll be off after 5  The same for Thursday and Friday`,
+    note:'"I\u2019m at work" ends most agent phone calls. Not this.',
+    fact:{ k:'Availability', v:'Weekdays after 5 PM' } },
+
+  { who:'ai', t:'14:28', text:`Thanks for letting me know. Just to confirm, you're free after 5 PM on Wednesday, Thursday, and Friday? What time works best after 5 PM?` },
+  { who:'lead', t:'14:29', text:'Today is fine after 6' },
+  { who:'lead', t:'14:29', text:'I meant to say after 5', tight:true },
+
+  { who:'ai', t:'14:29', text:'I see you are available today after 6 PM. Would 6:00 PM or 6:30 PM work better for a quick call?', dbl:true },
+  { who:'ai', t:'14:29', text:'Got it, after 5 PM today. I have 5:30 PM or 6:00 PM available for a quick call. Which works better for you?', tight:true, dbl:true,
+    flag:'She corrected herself two seconds later. Both replies went out — then it locked onto the correction.' },
+
+  { who:'lead', t:'14:29', text:'5:30 is okay 👍' },
+
+  { who:'system', t:'14:29', k:'Meeting created', v:'Today · 5:30 PM Pacific',
+    note:'Nobody typed that in. The AI wrote it to the calendar.' },
+
+  { who:'ai', t:'14:29', text:`Perfect — I've got you down for today, Wednesday, July 22, 2026 at 5:30 PM (Pacific Time) with Trevor. Anything else I can help with?` },
+  { who:'lead', t:'14:30', text:`No that's fine thanks again` },
+  { who:'ai', t:'14:30', text:'Glad to help! If anything else comes up, just reach out. Have a great day!' }
+];
+
+const THREAD = RAW.filter(m => SHOW_DOUBLE_REPLY || !m.dbl || m.flag);
+
+const START = 14*60 + 17;
+const thread = document.getElementById('thread');
+const rail   = document.getElementById('rail');
+const bar    = document.getElementById('bar');
+const card   = document.getElementById('card');
+const hint   = document.getElementById('hint');
+const railfoot = document.getElementById('railfoot');
+
+let step = 0;
+let auto = null;
+
+function mins(t){ const [h,m] = t.split(':').map(Number); return h*60 + m - START; }
+function fmt(t){
+  const [h,m] = t.split(':').map(Number);
+  const ap = h >= 12 ? 'PM' : 'AM';
+  const hh = h % 12 === 0 ? 12 : h % 12;
+  return `${hh}:${String(m).padStart(2,'0')} ${ap} CT`;
+}
+
+function render(i){
+  const m = THREAD[i];
+  const row = document.createElement('div');
+  row.className = 'row ' + m.who + (m.tight ? ' tight' : '');
+
+  const stamp = document.createElement('div');
+  stamp.className = 'stamp';
+  stamp.textContent = fmt(m.t);
+  row.appendChild(stamp);
+
+  if (m.who === 'system'){
+    const box = document.createElement('div');
+    box.className = 'sysbox';
+    box.innerHTML = `<div class="k">${m.k}</div><div class="v">${m.v}</div>`;
+    row.appendChild(box);
+  } else {
+    const b = document.createElement('div');
+    b.className = 'bubble' + (m.who === 'lead' && m.text.length < 22 ? ' short' : '');
+    b.textContent = m.text;
+    row.appendChild(b);
+  }
+
+  const noteText = m.flag || m.note;
+  if (noteText){
+    const n = document.createElement('div');
+    n.className = 'note' + (m.flag ? ' flag' : '');
+    n.textContent = noteText;
+    row.appendChild(n);
+  }
+
+  thread.appendChild(row);
+  requestAnimationFrame(()=> row.classList.add('in'));
+  thread.scrollTop = thread.scrollHeight;
+
+  if (m.fact){
+    const li = document.createElement('li');
+    li.className = 'fact' + (m.fact.hot ? ' hot' : '');
+    li.innerHTML = `<div class="k">${m.fact.k}</div><div class="v">${m.fact.v}</div>`;
+    rail.appendChild(li);
+    requestAnimationFrame(()=> li.classList.add('in'));
+  }
+
+  const e = mins(m.t);
+  const el = document.getElementById('elapsed');
+  el.textContent = '+' + Math.floor(e/60) + ':' + String(e%60).padStart(2,'0');
+  el.classList.remove('bump');
+  void el.offsetWidth;
+  el.classList.add('bump');
+  bar.style.width = ((i+1)/THREAD.length*100) + '%';
+}
+
+function next(){
+  if (step < THREAD.length){
+    render(step++);
+    if (step === THREAD.length) railfoot.classList.add('on');
+  } else if (!card.classList.contains('on')){
+    card.classList.add('on');
+    stopAuto();
+  }
+}
+
+function back(){
+  if (card.classList.contains('on')){ card.classList.remove('on'); return; }
+  if (step === 0) return;
+  step--;
+  thread.removeChild(thread.lastChild);
+  if (THREAD[step].fact) rail.removeChild(rail.lastChild);
+  railfoot.classList.remove('on');
+  const prev = step ? mins(THREAD[step-1].t) : 0;
+  document.getElementById('elapsed').textContent =
+    '+' + Math.floor(prev/60) + ':' + String(prev%60).padStart(2,'0');
+  bar.style.width = (step/THREAD.length*100) + '%';
+}
+
+function reset(){
+  thread.innerHTML=''; rail.innerHTML='';
+  step=0; stopAuto();
+  card.classList.remove('on');
+  railfoot.classList.remove('on');
+  document.getElementById('elapsed').textContent='+0:00';
+  bar.style.width='0%';
+  hint.classList.remove('fade');
+}
+
+function stopAuto(){ if(auto){ clearInterval(auto); auto=null; } }
+function toggleAuto(){
+  if (auto) return stopAuto();
+  next();
+  auto = setInterval(next, 2600);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'Enter'){ e.preventDefault(); stopAuto(); next(); }
+  else if (e.key === 'ArrowLeft'){ e.preventDefault(); stopAuto(); back(); }
+  else if (e.key.toLowerCase() === 'a'){ toggleAuto(); }
+  else if (e.key.toLowerCase() === 'r'){ reset(); }
+});
+document.addEventListener('click', () => { stopAuto(); next(); });
+
+setTimeout(()=> hint.classList.add('fade'), 6000);
+</script>
+</body>
+</html>
