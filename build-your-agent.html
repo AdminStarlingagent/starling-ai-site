@@ -145,6 +145,41 @@
   .field.invalid input,.field.invalid textarea,.field.invalid select{
     border-color:var(--coral);box-shadow:0 0 0 3px rgba(255,111,97,.16)
   }
+  .group.invalid .group__label{color:var(--coral)}
+  .group__note{
+    font-size:12.5px;line-height:1.6;color:var(--text-mid);
+    margin:-3px 0 11px;max-width:60ch
+  }
+  .group__note b{color:var(--text-hi);font-weight:600}
+  .chip__badge{
+    font-size:9px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;
+    padding:2px 6px;border-radius:999px;
+    background:rgba(255,111,97,.16);color:var(--coral-soft);
+    border:1px solid rgba(255,111,97,.35)
+  }
+  .chip input:checked + .chip__label .chip__badge{
+    background:rgba(10,14,26,.18);color:#0A0E1A;border-color:rgba(10,14,26,.25)
+  }
+  .chan{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-top:14px}
+  .chan__lbl{font-size:12.5px;color:var(--text-lo);margin-right:3px}
+  .chan__pill{
+    font-size:11.5px;font-weight:600;letter-spacing:.2px;padding:5px 11px;
+    border-radius:999px;border:1px solid var(--line);transition:.25s var(--ease)
+  }
+  .chan__pill.on{color:#0A0E1A;background:var(--grad);border-color:transparent}
+  .chan__pill.off{color:var(--text-lo);background:transparent;text-decoration:line-through;opacity:.5}
+  .callout{
+    border:1px solid var(--line);background:var(--navy-800);
+    border-radius:var(--radius-sm);padding:14px 16px;
+    font-size:13px;line-height:1.6;color:var(--text-mid)
+  }
+  .callout b{color:var(--text-hi);font-weight:600}
+  .callout--good{border-color:rgba(139,141,242,.32);background:rgba(139,141,242,.07)}
+  .callout--warn{border-color:rgba(255,111,97,.3);background:rgba(255,111,97,.06)}
+  .callout .toggle{margin-top:12px}
+  .group.invalid .chips{
+    outline:2px solid rgba(255,111,97,.38);outline-offset:7px;border-radius:12px
+  }
 
   /* Chips (single + multi) */
   .group{margin-bottom:20px}
@@ -369,7 +404,7 @@
     <section class="step" data-step="2">
       <div class="eyebrow">Module 02 · Coverage</div>
       <h1 class="step-title">Where you work</h1>
-      <p class="step-sub">Your market and the numbers your agent uses to reach you and your leads.</p>
+      <p class="step-sub">Your market, the numbers your agent uses, and the CRM your leads live in.</p>
       <div class="dots"></div>
 
       <div class="field" data-required>
@@ -413,6 +448,70 @@
           <label class="chip"><input type="radio" name="Default meeting type" value="Phone call" checked><span class="chip__label">📞 Phone call</span></label>
           <label class="chip"><input type="radio" name="Default meeting type" value="Video"><span class="chip__label">🎥 Video</span></label>
           <label class="chip"><input type="radio" name="Default meeting type" value="In person"><span class="chip__label">🤝 In person</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="group" data-required data-chip="CRM">
+        <div class="group__label">Which CRM are you using?<span class="req">*</span></div>
+        <p class="group__note">Your agent can only reach leads where your CRM can. <b>Starling CRM is the only one that lets your agent answer TikTok, Instagram and Facebook messages</b> — with every other CRM it works your texts only.</p>
+        <div class="chips">
+          <label class="chip"><input type="radio" name="CRM" value="Starling CRM (included)"><span class="chip__label">Starling CRM <span class="chip__badge">Recommended</span></span></label>
+          <label class="chip"><input type="radio" name="CRM" value="Follow Up Boss"><span class="chip__label">Follow Up Boss</span></label>
+          <label class="chip"><input type="radio" name="CRM" value="GoHighLevel"><span class="chip__label">GoHighLevel</span></label>
+          <label class="chip"><input type="radio" name="CRM" value="Lofty"><span class="chip__label">Lofty</span></label>
+          <label class="chip"><input type="radio" name="CRM" value="BoldTrail / kvCORE"><span class="chip__label">BoldTrail</span></label>
+          <label class="chip"><input type="radio" name="CRM" value="Real Geeks"><span class="chip__label">Real Geeks</span></label>
+          <label class="chip"><input type="radio" name="CRM" value="Jungo / Salesforce"><span class="chip__label">Jungo / Salesforce</span></label>
+          <label class="chip"><input type="radio" name="CRM" value="Other"><span class="chip__label">✏️ Other</span></label>
+          <label class="chip"><input type="radio" name="CRM" value="No CRM yet"><span class="chip__label">I don’t have one</span></label>
+        </div>
+
+        <div class="chan" id="chanStrip">
+          <span class="chan__lbl">Your agent will answer:</span>
+          <span class="chan__pill on">Texts</span>
+          <span class="chan__pill off" data-social>TikTok</span>
+          <span class="chan__pill off" data-social>Instagram</span>
+          <span class="chan__pill off" data-social>Facebook</span>
+        </div>
+
+        <div class="field reveal" id="crmOtherWrap" style="margin-top:14px;display:none">
+          <label for="crmOther">Which one?<span class="req">*</span></label>
+          <input type="text" id="crmOther" name="CRM (other)" placeholder="e.g., Sierra Interactive, Chime, Wise Agent…">
+        </div>
+
+        <div class="reveal" id="crmSocialWrap" style="margin-top:16px;display:none">
+          <div class="callout callout--good">
+            <b>Good call.</b> With Starling CRM your agent works your DMs the same way it works your texts — it replies to TikTok, Instagram and Facebook messages and comments in seconds, day or night, and books the appointment without you touching your phone.
+          </div>
+          <div class="group__label" style="margin-top:15px">Which accounts should we connect? <span style="color:var(--text-lo);font-weight:400">(optional)</span></div>
+          <div class="chips">
+            <label class="chip"><input type="checkbox" name="Connect social accounts" value="TikTok"><span class="chip__label">TikTok</span></label>
+            <label class="chip"><input type="checkbox" name="Connect social accounts" value="Instagram"><span class="chip__label">Instagram</span></label>
+            <label class="chip"><input type="checkbox" name="Connect social accounts" value="Facebook Page"><span class="chip__label">Facebook Page</span></label>
+          </div>
+        </div>
+
+        <div class="reveal" id="crmSwitchWrap" style="margin-top:16px;display:none">
+          <div class="callout callout--warn">
+            Your agent will work your texts in <b id="crmSwitchName">your CRM</b> — but it <b>won’t be able to reply to your TikTok, Instagram or Facebook messages</b>. Those DMs keep piling up while your agent sits on the sidelines. Starling CRM covers all of it in one inbox.
+            <label class="toggle">
+              <input type="checkbox" name="Wants Starling CRM for social" value="Yes — show me Starling CRM">
+              <span class="toggle__sw"></span>
+              <span class="toggle__txt">Show me Starling CRM<small>We’ll walk you through it on your setup call — you can keep your current CRM too.</small></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="field reveal" id="crmAccessWrap" style="margin-top:14px;display:none">
+          <label for="crmLogin">Email you log into your CRM with <span style="color:var(--text-lo);font-weight:400">(optional)</span></label>
+          <input type="email" id="crmLogin" name="CRM login email" placeholder="Leave blank if it’s the same email as above">
+          <span class="hint">To connect your agent we need admin access. We’ll email you next to add a user named <b>Starling AI</b> — or you can send an API key instead.</span>
+        </div>
+
+        <div class="reveal" id="crmNoneWrap" style="margin-top:16px;display:none">
+          <div class="callout callout--good">
+            No problem — <b>Starling CRM is included</b> with your plan, and it’s the only one that lets your agent answer TikTok, Instagram and Facebook DMs alongside your texts. We’ll set it up and load your leads for you.
+          </div>
         </div>
       </fieldset>
 
@@ -611,6 +710,7 @@
         <span class="tag">Lang · <b id="pvLang">English</b></span>
         <span class="tag">Books · <b id="pvLen">30 min</b></span>
         <span class="tag">Type · <b id="pvType">Phone</b></span>
+        <span class="tag">CRM · <b id="pvCrm">—</b></span>
       </div>
     </div>
 
@@ -714,7 +814,9 @@ function validateStep(){
   // required single-select chip groups
   cur.querySelectorAll('.group[data-required]').forEach(g=>{
     const name=g.dataset.chip;
-    if(!form.querySelector('input[name="'+name+'"]:checked')){ok=false;}
+    const missing=!form.querySelector('input[name="'+name+'"]:checked');
+    g.classList.toggle('invalid', missing);
+    if(missing){ok=false;firstBad=firstBad||g.querySelector('input[type=radio]');}
   });
   // required checkbox (opt-in)
   cur.querySelectorAll('.group[data-required-check]').forEach(g=>{
@@ -727,8 +829,19 @@ function validateStep(){
   return ok;
 }
 
+/* clear chip-group invalid state as soon as one is picked */
+form.addEventListener('change', e=>{
+  const g=e.target.closest('.group.invalid');
+  if(g) g.classList.remove('invalid');
+});
+
 /* clear invalid as the user types */
 form.addEventListener('input', e=>{
+  if(e.target.id==='crmOther'){
+    const t=e.target.value.trim();
+    document.getElementById('pvCrm').textContent = t || 'Other';
+    document.getElementById('crmSwitchName').textContent = t || 'your CRM';
+  }
   const f=e.target.closest('.field.invalid');
   if(f && e.target.value.trim()) f.classList.remove('invalid');
 });
@@ -777,6 +890,46 @@ form.addEventListener('change', e=>{
   if(e.target.name==='Languages') pvLang.textContent=e.target.value.replace(' (EN/ES)','');
   if(e.target.name==='Appointment length') pvLen.textContent=e.target.value;
   if(e.target.name==='Default meeting type') pvType.textContent=e.target.value.replace(' call','');
+  if(e.target.name==='CRM'){
+    const v=e.target.value;
+    const isOther=v==='Other';
+    const isNone=v==='No CRM yet';
+    const isStarling=v.indexOf('Starling CRM')===0;
+    const social=isStarling||isNone;
+    const otherWrap=document.getElementById('crmOtherWrap');
+    const accessWrap=document.getElementById('crmAccessWrap');
+    const noneWrap=document.getElementById('crmNoneWrap');
+    const socialWrap=document.getElementById('crmSocialWrap');
+    const switchWrap=document.getElementById('crmSwitchWrap');
+
+    otherWrap.style.display=isOther?'block':'none';
+    if(isOther){ otherWrap.setAttribute('data-required',''); }
+    else{ otherWrap.removeAttribute('data-required'); otherWrap.classList.remove('invalid'); document.getElementById('crmOther').value=''; }
+
+    accessWrap.style.display=social?'none':'block';
+    if(social){ document.getElementById('crmLogin').value=''; }
+
+    noneWrap.style.display=isNone?'block':'none';
+    socialWrap.style.display=isStarling?'block':'none';
+    switchWrap.style.display=social?'none':'block';
+
+    /* don't submit stale answers from a branch they moved away from */
+    if(!isStarling){ socialWrap.querySelectorAll('input[type=checkbox]').forEach(c=>{c.checked=false;}); }
+    if(social){ const sw=switchWrap.querySelector('input[type=checkbox]'); if(sw) sw.checked=false; }
+    else{ document.getElementById('crmSwitchName').textContent = isOther ? (document.getElementById('crmOther').value.trim()||'your CRM') : v; }
+
+    /* social channels light up only on Starling CRM */
+    document.querySelectorAll('#chanStrip [data-social]').forEach(pill=>{
+      pill.classList.toggle('on', social);
+      pill.classList.toggle('off', !social);
+    });
+
+    document.getElementById('pvCrm').textContent = isNone ? 'Starling' : (isOther ? 'Other' : v.replace(' (included)','').replace(' / kvCORE','').replace(' / Salesforce',''));
+  }
+  if(e.target.name==='CRM (other)' || e.target.id==='crmOther'){
+    const t=e.target.value.trim();
+    document.getElementById('pvCrm').textContent = t || 'Other';
+  }
   if(e.target.name==='Industry'){
     const wrap=document.getElementById('industryOtherWrap');
     const isOther=e.target.value==='Other';
@@ -800,11 +953,13 @@ async function sendSetup(){
   const fd=new FormData(form);
   const data={
     access_key: ACCESS_KEY,
-    subject: '🐦 New Starling Agent Build — ' + (fd.get('Business name')||'New client'),
+    subject: '🐦 New Starling Agent Build — ' + (fd.get('Business name')||'New client')
+             + (fd.get('CRM') ? ' · ' + (fd.get('CRM')==='Other' ? (fd.get('CRM (other)')||'Other CRM') : fd.get('CRM')) : ''),
     from_name: 'Starling AI — Agent Setup'
   };
   for (const [k,v] of fd.entries()){
     if(k==='botcheck') continue;
+    if(typeof v==='string' && !v.trim()) continue;   // skip blank/hidden optional fields
     if(data[k]){ data[k]=[].concat(data[k],v).join(', '); }   // merge multi-selects
     else data[k]=v;
   }
