@@ -402,16 +402,26 @@
           <h3 class="font-display text-lg font-600 text-white">Standard</h3>
           <p class="mt-1 text-[13px] text-mist/50">Add the AI that texts back.</p>
           <div class="mt-5 flex items-baseline gap-1">
-            <span class="font-display text-4xl font-700 text-white" data-price-m="$299" data-price-y="$249">$299</span>
-            <span class="text-sm text-mist/45">/mo</span>
+            <span id="stdPrice" class="font-display text-4xl font-700 text-white" data-price-m="$299" data-price-y="$249">$299</span>
+            <span id="stdPerMo" class="text-sm text-mist/45">/mo</span>
           </div>
           <p class="mt-1 text-[12px] font-semibold text-cyan-300">No setup fee · Any CRM integration included</p>
-        <p class="billed-note mt-1 hidden text-[12px] font-semibold text-emerald-300">Billed annually · 2 months free</p>
-          <a href="https://buy.stripe.com/00wbIUbT6d6Efcpdf25EY17" data-bill-m="https://buy.stripe.com/00wbIUbT6d6Efcpdf25EY17" data-bill-y="https://buy.stripe.com/9B63co6yMgiQfcpa2Q5EY18" class="mt-6 rounded-xl bg-cyan-400 px-4 py-2.5 text-center text-sm font-bold text-ink-900 transition hover:bg-cyan-300">Get Started</a>
+        <p id="stdBilled" class="billed-note mt-1 hidden text-[12px] font-semibold text-emerald-300">Billed annually · 2 months free</p>
+          <div class="relative mt-4">
+            <button id="volBtn" type="button" aria-expanded="false" aria-controls="volMenu" class="flex w-full items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-left transition hover:border-cyan-400/40 hover:bg-white/[0.07]">
+              <span class="flex items-baseline gap-2.5">
+                <span id="volNum" class="font-display text-lg font-700 text-white">1,000</span>
+                <span class="text-[13px] leading-tight text-mist/55">AI executions<span class="block text-mist/40">per month</span></span>
+              </span>
+              <span id="volChev" class="transition-transform duration-200"><svg class="h-4 w-4 shrink-0 text-mist/50 transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg></span>
+            </button>
+            <div id="volMenu" class="absolute inset-x-0 top-full z-20 mt-1.5 hidden overflow-hidden rounded-xl border border-white/10 bg-ink-850 shadow-2xl"></div>
+          </div>
+          <a id="stdCta" href="https://buy.stripe.com/00wbIUbT6d6Efcpdf25EY17" data-bill-m="https://buy.stripe.com/00wbIUbT6d6Efcpdf25EY17" data-bill-y="https://buy.stripe.com/9B63co6yMgiQfcpa2Q5EY18" class="mt-4 rounded-xl bg-cyan-400 px-4 py-2.5 text-center text-sm font-bold text-ink-900 transition hover:bg-cyan-300">Get Started</a>
           <ul class="mt-6 space-y-2.5 text-[13.5px] text-mist/75">
             <li class="flex gap-2.5"><span class="mt-0.5 text-cyan-400">✓</span> Everything in CRM</li>
             <li class="flex gap-2.5 font-medium text-white"><span class="mt-0.5 text-cyan-400">✓</span> 5 CRM users</li>
-            <li class="flex gap-2.5"><span class="mt-0.5 text-cyan-400">✓</span> Up to 1,000 AI executions / month<span class="mt-1 block text-[12px] text-mist/40">Messages your agent sends — not contacts stored. Need more volume? Step up to 3,000/mo for $599; we reach out before you hit your cap.</span></li>
+            <li class="flex gap-2.5"><span class="mt-0.5 text-cyan-400">✓</span> <span><b id="stdFeatExec">1,000 AI executions / month</b><span class="mt-1 block text-[12px] font-normal text-mist/40">Messages your agent sends — not contacts stored. <span id="stdFeatLeads">Roughly 150–200 leads worked end to end.</span></span></span></li>
             <li class="flex gap-2.5"><span class="mt-0.5 text-cyan-400">✓</span> AI SMS that replies in seconds</li>
             <li class="flex gap-2.5"><span class="mt-0.5 text-cyan-400">✓</span> Bilingual AI — English &amp; Spanish</li>
             <li class="flex gap-2.5"><span class="mt-0.5 text-cyan-400">✓</span> Speed-to-lead under 60 seconds, 24/7</li>
@@ -923,8 +933,115 @@
   }
   var on=false;
   t.addEventListener('click',function(){on=!on;setMode(on);});
+  window.__starlingBilling={refresh:function(){setMode(on);},yearly:function(){return on;}};
   setMode(false);
 })();
 </script>
+
+<script>
+/* ── Standard execution-volume selector ───────────────────────────────
+   Edit TIERS to change prices or drop in new Stripe products.
+   stripeM/stripeY = null  ->  routes to CONTACT with a "Talk to us" CTA. */
+(function(){
+  var TIERS = [
+    { label:"1,000", m:299, y:249, leads:"Roughly 150\u2013200 leads worked end to end.",
+      stripeM:"https://buy.stripe.com/00wbIUbT6d6Efcpdf25EY17", stripeY:"https://buy.stripe.com/9B63co6yMgiQfcpa2Q5EY18" },
+    { label:"3,000", m:599, y:499, leads:"Roughly 500\u2013600 leads worked end to end.",
+      stripeM:"https://buy.stripe.com/00w4gs3mA3w4d4hgre5EY19", stripeY:"https://buy.stripe.com/eVq9AMe1ed6E6FTcaY5EY1a" },
+    { label:"5,000", m:849, y:708, leads:"Roughly 850\u20131,000 leads worked end to end.",
+      stripeM:null, stripeY:null },
+    { custom:true, label:"Custom", leads:"Sized around your database and lead flow." }
+  ];
+  var CONTACT = "https://calendly.com/starlingagent/30min";
+
+  var $ = function(id){ return document.getElementById(id); };
+  var btn=$("volBtn"), menu=$("volMenu"), num=$("volNum"), chev=$("volChev"),
+      price=$("stdPrice"), perMo=$("stdPerMo"), billed=$("stdBilled"),
+      cta=$("stdCta"), fExec=$("stdFeatExec"), fLeads=$("stdFeatLeads");
+  if(!btn||!menu||!price||!cta) return;
+
+  var sel = 0;
+  function money(n){ return "$" + n.toLocaleString(); }
+  function isYearly(){ return document.getElementById('billToggle') &&
+                              document.getElementById('billToggle').getAttribute('aria-checked')==='true'; }
+
+  function renderMenu(){
+    var y = isYearly(), html = "";
+    for (var i=0;i<TIERS.length;i++){
+      var t=TIERS[i], on=(i===sel);
+      var left = t.custom
+        ? 'Custom plan<span class="mt-0.5 block text-[11px] font-normal text-mist/45">Custom executions</span>'
+        : t.label + ' executions';
+      var right = t.custom ? "Let\u2019s talk"
+        : money(y?t.y:t.m) + '<span class="text-xs font-normal text-mist/55">/mo</span>';
+      html += '<button type="button" data-i="'+i+'" class="volOpt flex w-full items-center '
+            + 'justify-between gap-4 px-4 py-3 text-left transition hover:bg-white/[0.06] '
+            + (on?'bg-white/[0.05]':'') + '">'
+            + '<span class="font-display text-sm font-bold '+(on?'text-cyan-300':'text-white')+'">'+left+'</span>'
+            + '<span class="shrink-0 text-sm font-semibold '+(on?'text-cyan-300':'text-mist/55')+'">'+right+'</span>'
+            + '</button>';
+      if(i<TIERS.length-1) html += '<div class="h-px bg-white/[0.07]"></div>';
+    }
+    menu.innerHTML = html;
+    var opts = menu.querySelectorAll(".volOpt");
+    for (var k=0;k<opts.length;k++){
+      opts[k].onclick = function(){ sel = +this.getAttribute("data-i"); close(); apply(); };
+    }
+  }
+
+  function apply(){
+    var t = TIERS[sel];
+    num.textContent = t.label;
+    if (fLeads) fLeads.textContent = t.leads;
+
+    if (t.custom){
+      price.setAttribute("data-price-m","Let\u2019s talk");
+      price.setAttribute("data-price-y","Let\u2019s talk");
+      cta.setAttribute("data-bill-m",CONTACT);
+      cta.setAttribute("data-bill-y",CONTACT);
+    } else {
+      price.setAttribute("data-price-m", money(t.m));
+      price.setAttribute("data-price-y", money(t.y));
+      cta.setAttribute("data-bill-m", t.stripeM || CONTACT);
+      cta.setAttribute("data-bill-y", t.stripeY || CONTACT);
+    }
+
+    /* let the existing billing toggle repaint price + href */
+    if (window.__starlingBilling) window.__starlingBilling.refresh();
+
+    if (t.custom){
+      price.className = "font-display text-3xl font-700 text-white";
+      if (perMo)  perMo.classList.add("hidden");
+      if (billed) billed.classList.add("hidden");
+      if (fExec)  fExec.textContent = "Execution volume built for you";
+      cta.textContent = "Book a call";
+    } else {
+      price.className = "font-display text-4xl font-700 text-white";
+      if (perMo) perMo.classList.remove("hidden");
+      if (fExec) fExec.textContent = t.label + " AI executions / month";
+      cta.textContent = (t.stripeM ? "Get Started" : "Talk to us");
+    }
+    renderMenu();
+  }
+
+  function open(){ menu.classList.remove("hidden"); btn.setAttribute("aria-expanded","true");
+                   if(chev) chev.style.transform="rotate(180deg)"; }
+  function close(){ menu.classList.add("hidden"); btn.setAttribute("aria-expanded","false");
+                    if(chev) chev.style.transform=""; }
+
+  btn.addEventListener("click", function(e){
+    e.stopPropagation();
+    menu.classList.contains("hidden") ? open() : close();
+  });
+  document.addEventListener("click", close);
+  document.addEventListener("keydown", function(e){ if(e.key==="Escape") close(); });
+
+  var bt = document.getElementById('billToggle');
+  if (bt) bt.addEventListener('click', function(){ setTimeout(apply, 0); });
+
+  apply();
+})();
+</script>
+
 </body>
 </html>
