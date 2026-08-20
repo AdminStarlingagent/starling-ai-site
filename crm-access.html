@@ -241,7 +241,7 @@ footer a{color:var(--muted)}
   </div>
   <p class="eyebrow">Onboarding · Step 2 of 3</p>
   <h1>Connect your CRM.</h1>
-  <p class="lede">This is the handoff. Fill this out once and our team wires your AI agent directly into the CRM you already work out of — <b>your leads, your pipeline, your calendar.</b> Most agents finish in about eight minutes. If you get stuck on a field, leave it blank and we'll grab it on the setup call.</p>
+  <p class="lede">This is the handoff. Fill this out once and our team wires your AI agent directly into the CRM you already work out of — <b>your leads, your pipeline, your calendar.</b> Most agents finish in about three minutes. If you get stuck on a field, leave it blank and we'll grab it on the setup call.</p>
   <p class="lede" style="font-size:15px"><b>Already sent this before?</b> Send it again any time something changes — a new lender, different hours, a rotated key. We match on your email, so it updates your existing setup instead of creating a second one, and our team gets flagged on exactly what moved.</p>
 </header>
 
@@ -261,80 +261,24 @@ footer a{color:var(--muted)}
   <input type="hidden" name="access_key" value="141e743a-9449-4980-b0dc-d37061594328">
   <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off">
 
-  <!-- ═══════════ 1. BUSINESS ═══════════ -->
+  <!-- ═══════════ 1. YOU ═══════════ -->
   <section>
-    <span class="snum">01 — Your business</span>
-    <h2>Who the agent works for</h2>
-    <p class="sub">This is what your leads see. The agent introduces itself using these exact names, so spell them the way you'd say them out loud.</p>
+    <span class="snum">01 — You</span>
+    <h2>Match this to your account</h2>
+    <p class="sub">Your business details, schedule, and agent personality already came in with your <a href="/build-your-agent.html" style="color:var(--peri)">agent build</a> — no need to repeat any of it. Just two fields so this connects to the right setup. <strong>Use the same email you used there.</strong></p>
 
     <div class="grid">
-      <div class="f span">
-        <label for="biz">Business or team name <span class="req">*</span></label>
-        <input type="text" id="biz" name="client.team_name" data-req placeholder="e.g., Bluebonnet Realty" autocomplete="organization">
-      </div>
       <div class="f">
         <label for="agentFull">Your full name <span class="req">*</span></label>
-        <input type="text" id="agentFull" name="client.agent_name" data-req placeholder="Maritza Robles" autocomplete="name">
-      </div>
-      <div class="f">
-        <label for="agentFirst">First name the agent uses <span class="req">*</span></label>
-        <input type="text" id="agentFirst" name="client.agent_first_name" data-req placeholder="Maritza">
-        <p class="hint">Nickname is fine — "Mari" reads warmer than "Maritza R." in a text.</p>
-      </div>
-      <div class="f">
-        <label for="brokerage">Brokerage <span class="req">*</span></label>
-        <input type="text" id="brokerage" name="client.brokerage" data-req placeholder="eXp Realty">
-      </div>
-      <div class="f">
-        <label for="btype">What you do <span class="req">*</span></label>
-        <select id="btype" name="client.business_type" data-req>
-          <option value="Real Estate Agent">Real estate — buyers &amp; sellers</option>
-          <option value="Mortgage Lender">Mortgage — loans &amp; pre-approvals</option>
-        </select>
-        <p class="hint">Mortgage mode keeps the agent off rates, payments and down-payment numbers.</p>
+        <input type="text" id="agentFull" name="client.agent_name" data-req placeholder="e.g., Alex Rivera" autocomplete="name">
       </div>
       <div class="f">
         <label for="email">Your email <span class="req">*</span></label>
         <input type="email" id="email" name="email" data-req placeholder="you@yourdomain.com" autocomplete="email">
-        <p class="hint">Where we send the confirmation and the go-live notice.</p>
-      </div>
-      <div class="f">
-        <label for="cell">Your mobile <span class="req">*</span></label>
-        <input type="tel" id="cell" name="client.owner_mobile" data-req placeholder="(832) 555-0142" autocomplete="tel">
-        <p class="hint">We text you the first live test message from your agent.</p>
-      </div>
-      <div class="f">
-        <label for="tz">Your time zone <span class="req">*</span></label>
-        <select id="tz" name="client.timezone" data-req>
-          <option value="America/New_York|Eastern Time">Eastern — New York, Atlanta, Miami</option>
-          <option value="America/Chicago|Central Time" selected>Central — Houston, Dallas, Chicago</option>
-          <option value="America/Denver|Mountain Time">Mountain — Denver, Boise, Salt Lake</option>
-          <option value="America/Phoenix|Mountain Time">Arizona — Phoenix, Tucson (no DST)</option>
-          <option value="America/Los_Angeles|Pacific Time">Pacific — Los Angeles, Seattle, Tacoma</option>
-          <option value="America/Anchorage|Alaska Time">Alaska</option>
-          <option value="Pacific/Honolulu|Hawaii Time">Hawaii</option>
-        </select>
-        <p class="hint">Every appointment the agent books is confirmed in this zone.</p>
-      </div>
-      <div class="f">
-        <label for="lang">Language <span class="req">*</span></label>
-        <select id="lang" name="client.language" data-req>
-          <option value="Spanish">Bilingual — Spanish &amp; English</option>
-          <option value="English">English only</option>
-          <option value="SpanishOnly">Spanish only</option>
-        </select>
-        <p class="hint">Bilingual mirrors whichever language the lead texts in. No scripts to duplicate.</p>
-      </div>
-      <div class="f span">
-        <div class="checks">
-          <label class="check">
-            <input type="checkbox" name="client.enable_itin" value="true" checked>
-            <div><strong>Mention ITIN loan options</strong>
-            <small>Turn this off if you don't work ITIN borrowers — the agent drops it from every message.</small></div>
-          </label>
-        </div>
+        <p class="hint">The same one from your agent build — it links everything to one account.</p>
       </div>
     </div>
+    <p class="hint" style="margin-top:12px">Haven't done the agent build yet? <a href="/build-your-agent.html" style="color:var(--peri)">Start there</a> — it's the fun part, and it feeds this form.</p>
   </section>
 
   <!-- ═══════════ 2. CRM ═══════════ -->
@@ -588,9 +532,9 @@ footer a{color:var(--muted)}
 
   <!-- ═══════════ 3. CALENDAR ═══════════ -->
   <section>
-    <span class="snum">03 — Booking</span>
-    <h2>When the agent can put people on your calendar</h2>
-    <p class="sub">These are the hours it offers leads — not the hours it replies. It replies around the clock.</p>
+    <span class="snum">03 — Booking &amp; guardrails</span>
+    <h2>Where it books — and when it's allowed to text</h2>
+    <p class="sub">Your days, hours, and appointment settings already came in with your <a href="/build-your-agent.html" style="color:var(--peri)">agent build</a> — here it's just the calendar and the safety rails.</p>
 
     <div class="grid">
       <div class="f span">
@@ -605,60 +549,6 @@ footer a{color:var(--muted)}
       </div>
 
       <div class="f span">
-        <label>Days you take appointments <span class="req">*</span></label>
-        <div class="days">
-          <label class="day"><input type="checkbox" name="hours.days" value="Sun"><span>Sun</span></label>
-          <label class="day"><input type="checkbox" name="hours.days" value="Mon" checked><span>Mon</span></label>
-          <label class="day"><input type="checkbox" name="hours.days" value="Tue" checked><span>Tue</span></label>
-          <label class="day"><input type="checkbox" name="hours.days" value="Wed" checked><span>Wed</span></label>
-          <label class="day"><input type="checkbox" name="hours.days" value="Thu" checked><span>Thu</span></label>
-          <label class="day"><input type="checkbox" name="hours.days" value="Fri" checked><span>Fri</span></label>
-          <label class="day"><input type="checkbox" name="hours.days" value="Sat" checked><span>Sat</span></label>
-        </div>
-      </div>
-
-      <div class="f">
-        <label for="hStart">Earliest slot <span class="req">*</span></label>
-        <input type="time" id="hStart" name="hours.start" value="09:00" data-req>
-      </div>
-      <div class="f">
-        <label for="hEnd">Latest slot <span class="req">*</span></label>
-        <input type="time" id="hEnd" name="hours.end" value="19:00" data-req>
-      </div>
-      <div class="f">
-        <label for="mlen">Meeting length</label>
-        <select id="mlen" name="scheduling.meeting_minutes">
-          <option value="30">30 minutes</option>
-          <option value="60" selected>1 hour</option>
-          <option value="90">90 minutes</option>
-        </select>
-      </div>
-      <div class="f">
-        <label for="lead">Minimum notice</label>
-        <select id="lead" name="scheduling.lead_time_minutes">
-          <option value="60">1 hour out</option>
-          <option value="120" selected>2 hours out</option>
-          <option value="240">4 hours out</option>
-          <option value="1440">Next day</option>
-        </select>
-      </div>
-      <div class="f">
-        <label for="mtype">Default meeting type</label>
-        <select id="mtype" name="locations.default_meeting_type">
-          <option value="phone" selected>Phone call</option>
-          <option value="video">Video call</option>
-          <option value="in_person">In person</option>
-        </select>
-      </div>
-      <div class="f">
-        <label for="skip">Same-day appointments</label>
-        <select id="skip" name="scheduling.skip_today">
-          <option value="false">Allowed</option>
-          <option value="true" selected>Start from tomorrow</option>
-        </select>
-      </div>
-
-      <div class="f span">
         <label class="check">
           <input type="checkbox" name="texting_compliance.enabled" value="true" checked>
           <div><strong>Hold all sends to 8:00 AM – 8:00 PM in the lead's local time</strong>
@@ -669,76 +559,16 @@ footer a{color:var(--muted)}
         <label for="states">States you text into <span class="opt">optional</span></label>
         <input type="text" id="states" name="texting_compliance.states" placeholder="TX, OK, WA">
       </div>
-    </div>
-  </section>
-
-  <!-- ═══════════ 4. HANDOFF ═══════════ -->
-  <section>
-    <span class="snum">04 — Handoff</span>
-    <h2>Where the agent sends people</h2>
-    <p class="sub">When a lead needs a pre-approval, a credit fix, or a human — these are the doors the agent opens.</p>
-
-    <div class="grid">
-      <div class="f">
-        <label for="lender">Your lender's name <span class="opt">optional</span></label>
-        <input type="text" id="lender" name="links.mortgage_name" placeholder="Aron Padierna with Lock It Lending">
-      </div>
-      <div class="f">
-        <label for="lenderUrl">Their application link <span class="opt">optional</span></label>
-        <input type="url" id="lenderUrl" name="links.mortgage_link" placeholder="https://…">
-      </div>
-      <div class="f">
-        <label for="crName">Credit repair partner <span class="opt">optional</span></label>
-        <input type="text" id="crName" name="links.credit_repair_name" placeholder="My Crystal Score">
-      </div>
-      <div class="f">
-        <label for="crUrl">Their link <span class="opt">optional</span></label>
-        <input type="url" id="crUrl" name="links.credit_repair_link" placeholder="https://…">
-      </div>
-      <div class="f">
-        <label for="office">Office phone <span class="opt">optional</span></label>
-        <input type="tel" id="office" name="contact.office_phone_1" placeholder="(832) 702-3574">
-      </div>
-      <div class="f">
-        <label for="mkt1">Primary market <span class="req">*</span></label>
-        <input type="text" id="mkt1" name="locations.market_1" data-req placeholder="Houston">
-      </div>
       <div class="f span">
-        <label for="addr1">Office address <span class="opt">optional</span></label>
-        <input type="text" id="addr1" name="locations.office_address_1" placeholder="5373 W Alabama St, Suite 448, Houston, TX 77056">
-      </div>
-      <div class="f span">
-        <label for="mkt2">Second market <span class="opt">optional</span></label>
-        <input type="text" id="mkt2" name="locations.market_2" placeholder="Dallas">
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════ 5. VOICE ═══════════ -->
-  <section>
-    <span class="snum">05 — Voice</span>
-    <h2>How it opens</h2>
-    <p class="sub">First text a new lead gets. Write it how you'd actually text — we'll clean up the formatting, not the personality.</p>
-
-    <div class="grid one">
-      <div class="f">
-        <label for="first">Your opening message <span class="opt">leave blank and we'll write it</span></label>
-        <textarea id="first" name="messages.first_sms_message" placeholder="Hi! This is Maritza with Robles Realty — thanks for reaching out about the listing. Which area are you looking in?"></textarea>
-      </div>
-      <div class="f">
         <label for="tone">Anything the agent should never say <span class="opt">optional</span></label>
         <textarea id="tone" name="messages.guardrails" placeholder="Don't quote commission. Don't promise a specific rate. Never say 'guaranteed'."></textarea>
-      </div>
-      <div class="f">
-        <label for="notes">Anything else we should know <span class="opt">optional</span></label>
-        <textarea id="notes" name="messages.notes" placeholder="I get a lot of new-construction leads. I also don't work rentals under $1,500."></textarea>
       </div>
     </div>
   </section>
 
   <!-- ═══════════ 6. AUTHORIZE ═══════════ -->
   <section>
-    <span class="snum">06 — Authorize</span>
+    <span class="snum">04 — Authorize</span>
     <h2>Sign off</h2>
     <p class="sub">Two boxes and your name. Then we go build it.</p>
 
@@ -758,7 +588,7 @@ footer a{color:var(--muted)}
     <div class="sig" style="margin-top:20px">
       <div class="f">
         <label for="sig">Type your full name to sign <span class="req">*</span></label>
-        <input type="text" id="sig" name="auth.signature" data-req placeholder="Maritza Robles" autocomplete="off">
+        <input type="text" id="sig" name="auth.signature" data-req placeholder="Alex Rivera" autocomplete="off">
       </div>
       <div class="f">
         <label for="sigDate">Date <span class="req">*</span></label>
@@ -865,27 +695,14 @@ footer a{color:var(--muted)}
   var DAYMAP = {Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6};
 
   function buildConfig(){
-    var tzRaw = v('client.timezone').split('|');
     var crm   = (form.querySelector('[name="crm_config.active_crm"]:checked')||{}).value || '';
-    var lang  = v('client.language');
-
-    var hours = {};
-    form.querySelectorAll('[name="hours.days"]:checked').forEach(function(d){
-      hours[DAYMAP[d.value]] = [{ start: v('hours.start'), end: v('hours.end') }];
-    });
 
     var cfg = {
+      /* identity, language, schedule persona, ITIN, etc. come from the
+         Build Your Agent record — the console merges both submissions. */
       client: {
-        business_type   : v('client.business_type'),
-        enable_itin     : ck('client.enable_itin'),
-        agent_name      : v('client.agent_name'),
-        agent_first_name: v('client.agent_first_name'),
-        team_name       : v('client.team_name'),
-        brokerage       : v('client.brokerage'),
-        timezone        : tzRaw[0] || '',
-        timezone_label  : tzRaw[1] || '',
-        locale          : 'en-US',
-        language        : lang === 'SpanishOnly' ? 'Spanish' : lang
+        agent_name : v('client.agent_name'),
+        locale     : 'en-US'
       },
       crm_config: {
         active_crm     : crm,
@@ -895,30 +712,10 @@ footer a{color:var(--muted)}
         enabled    : ck('texting_compliance.enabled'),
         daily_start: '08:00',
         daily_end  : '20:00',
-        per_day    : {}
+        per_day    : {},
+        states     : v('texting_compliance.states')
       },
-      scheduling: {
-        meeting_minutes         : Number(v('scheduling.meeting_minutes')) || 60,
-        lead_time_minutes       : Number(v('scheduling.lead_time_minutes')) || 120,
-        max_days_ahead          : 30,
-        slot_granularity_minutes: 30,
-        skip_today              : v('scheduling.skip_today') === 'true'
-      },
-      business_hours: hours,
-      messages : { first_sms_message: v('messages.first_sms_message') },
-      links    : {
-        mortgage_link     : v('links.mortgage_link'),
-        mortgage_name     : v('links.mortgage_name'),
-        credit_repair_link: v('links.credit_repair_link'),
-        credit_repair_name: v('links.credit_repair_name')
-      },
-      contact  : { office_phone_1: v('contact.office_phone_1') },
-      locations: {
-        market_1            : v('locations.market_1'),
-        office_address_1    : v('locations.office_address_1'),
-        market_2            : v('locations.market_2'),
-        default_meeting_type: v('locations.default_meeting_type')
-      }
+      messages : { guardrails: v('messages.guardrails') }
     };
 
     /* only the chosen CRM's block gets written */
@@ -944,7 +741,7 @@ footer a{color:var(--muted)}
       api_key: v('lofty.api_key'),
       calendar_assigned_user_id: v('lofty.calendar_assigned_user_id'),
       old_lead_assigned_user_id: v('lofty.old_lead_assigned_user_id'),
-      timezone_code: cfg.client.timezone, source_label:'Starling AI'
+      timezone_code: '',  /* from the Build Your Agent record */ source_label:'Starling AI'
     };
     if(crm === 'BoldTrail') C.bold_trail = {
       base_url:'https://api.kvcore.com', auth_mode:'api_key',
@@ -952,7 +749,7 @@ footer a{color:var(--muted)}
       assigned_user_id         : v('bold_trail.assigned_user_id'),
       old_lead_assigned_user_id: v('bold_trail.old_lead_assigned_user_id'),
       filter_tag   : v('bold_trail.filter_tag'),
-      timezone_code: cfg.client.timezone, source_label:'Starling AI'
+      timezone_code: '',  /* from the Build Your Agent record */ source_label:'Starling AI'
     };
     if(crm === 'RealGeeks') C.real_geeks = {
       crm_url:'https://api.realgeeks.com/v2',
@@ -976,7 +773,7 @@ footer a{color:var(--muted)}
 
   function buildSubject(){
     var crm  = (form.querySelector('[name="crm_config.active_crm"]:checked')||{}).value || 'NO CRM';
-    var biz  = v('client.team_name') || 'New client';
+    var biz  = v('client.team_name') || v('client.agent_name') || 'New client';
     var flag = '';
     if(ck('follow_up_boss.invite_instead') || ck('go_high_level.invite_instead')) flag += ' [USER INVITE]';
     if(v('credentials.one_time_link')) flag += ' [ONE-TIME LINK — OPEN FIRST]';
