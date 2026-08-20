@@ -35,6 +35,23 @@
   --line:rgba(134,139,223,.20); --line-2:rgba(134,139,223,.36);
   --ok:#4ED4A0; --warn:#FFC46B;
 }
+/* ── A2P status control ── */
+.a2pseg{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 16px}
+.a2pseg button{font:600 12.5px/1 'IBM Plex Sans',sans-serif;letter-spacing:.02em;color:var(--muted);
+  background:var(--navy-3);border:1px solid var(--line);border-radius:999px;padding:9px 14px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:7px;transition:border-color .12s,color .12s,background .12s,transform .12s}
+.a2pseg button i{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.85}
+.a2pseg button:hover{border-color:var(--line-2);color:var(--paper);transform:translateY(-1px)}
+.a2pseg button:focus-visible{outline:2px solid var(--peri);outline-offset:2px}
+.a2pseg button.on{color:var(--navy);font-weight:700}
+.a2pseg button.on.sub{background:var(--peri);border-color:var(--peri)}
+.a2pseg button.on.reg{background:var(--warn);border-color:var(--warn)}
+.a2pseg button.on.ok{background:var(--ok);border-color:var(--ok)}
+.a2pseg button.on.bad{background:var(--coral);border-color:var(--coral)}
+.a2phint{font-size:12px;color:var(--dim);margin:-8px 0 14px}
+.a2ptag{font-weight:600}
+.a2ptag.sub{color:var(--peri)} .a2ptag.reg{color:var(--warn)}
+.a2ptag.ok{color:var(--ok)}   .a2ptag.bad{color:var(--coral)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--navy);color:var(--paper);
   font:400 15px/1.55 "IBM Plex Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
@@ -221,7 +238,7 @@ textarea{min-height:88px;resize:vertical;font-size:14px}
         <input type="search" id="q" placeholder="Search name, email, brokerage…">
         <select id="fStatus">
           <option value="">All</option>
-          <option value="nowizard">missing wizard</option><option value="nocrm">missing CRM access</option><option value="noa2p">missing A2P</option><option value="unread">Unread</option>
+          <option value="nowizard">missing wizard</option><option value="nocrm">missing CRM access</option><option value="noa2p">missing A2P</option><option value="a2p_todo">A2P: to register</option><option value="a2p_wait">A2P: at carrier</option><option value="a2p_rej">A2P: rejected</option><option value="unread">Unread</option>
           <option value="new">New</option>
           <option value="in_setup">In setup</option>
           <option value="live">Live</option>
@@ -336,6 +353,9 @@ function filtered(){
     else if(st === "nowizard"){ if((r.sources||[]).includes("build_your_agent")) return false; }
     else if(st === "nocrm"){ if((r.sources||[]).includes("crm_access")) return false; }
     else if(st === "noa2p"){ if((r.sources||[]).includes("a2p_compliance")) return false; }
+    else if(st === "a2p_todo"){ if(r.a2p_status !== "submitted") return false; }
+    else if(st === "a2p_wait"){ if(r.a2p_status !== "registering") return false; }
+    else if(st === "a2p_rej"){ if(r.a2p_status !== "rejected") return false; }
     else if(st && r.status !== st) return false;
     if(!q) return true;
     return [r.team_name, r.agent_name, r.email, r.brokerage]
@@ -368,6 +388,7 @@ function render(){
       </div>
       <div class="r2">
         <span>${esc(r.active_crm || "no crm")}</span>
+        ${a2pTag(r)}
         <span>·</span>
         <span>v${r.submission_count}</span>
         <span>·</span>
@@ -513,6 +534,12 @@ async function openClient(id, quiet){
     ${(r.sources||[]).includes("a2p_compliance") ? `
     <div class="grp">
       <h3>A2P compliance <span style="color:var(--dim);font-weight:400">— compliance.html</span></h3>
+      <div class="a2pseg" id="a2pSeg" role="group" aria-label="A2P registration status">
+        ${Object.entries(A2P).map(([k, v]) =>
+          `<button type="button" data-a2p="${k}" class="${v[0]}${r.a2p_status === k ? " on" : ""}"><i></i>${v[1]}</button>`
+        ).join("")}
+      </div>
+      <p class="a2phint">Submitted = form in · Registering = being entered in Twilio · Approved / Rejected = carrier verdict</p>
       ${kv({
         "Legal name":   p["a2p.legal_business_name"],
         "DBA":          p["a2p.dba_name"],
@@ -553,8 +580,7 @@ async function openClient(id, quiet){
         "Signed by":    [p["a2p.signature_name"], p["a2p.signature_title"]].filter(Boolean).join(" · "),
         "Signed date":  p["a2p.signature_date"],
         "E-sign":       p["a2p.esign_consent"] === undefined ? "" : (p["a2p.esign_consent"] ? "consented" : "⚠ not consented"),
-        "Timestamp":    p["a2p.signed_at_iso"],
-        "Registration": p["a2p.status"]
+        "Timestamp":    p["a2p.signed_at_iso"]
       })}
     </div>` : ""}
 
@@ -666,6 +692,20 @@ function wire(r){
     toast("Status saved", `Now "${st.value.replace("_"," ")}".`);
   });
 
+  const seg = $("a2pSeg");
+  if(seg) seg.querySelectorAll("button").forEach(b =>
+    b.addEventListener("click", async () => {
+      const v = b.dataset.a2p;
+      if(r.a2p_status === v) return;
+      const { error } = await sb.from("starling_onboarding_clients")
+        .update({ a2p_status: v }).eq("id", r.id);
+      if(error) return toast("Couldn't save", error.message);
+      r.a2p_status = v;
+      seg.querySelectorAll("button").forEach(x => x.classList.toggle("on", x.dataset.a2p === v));
+      render();
+      toast("A2P status saved", `Now "${A2P[v][1]}".`);
+    }));
+
   on("saveNotes", async e => {
     const { error } = await sb.from("starling_onboarding_clients")
       .update({ internal_notes: $("notes").value }).eq("id", r.id);
@@ -691,6 +731,20 @@ $("bell").addEventListener("click", () => {
 
 /* ─────────── helpers ─────────── */
 const SRC_LABEL = { build_your_agent:"wizard", crm_access:"CRM access", a2p_compliance:"A2P" };
+const A2P = {
+  submitted:   ["sub","Submitted"],
+  registering: ["reg","Registering"],
+  approved:    ["ok","Approved"],
+  rejected:    ["bad","Rejected"]
+};
+const a2pTag = r => {
+  if(!r.a2p_status || !A2P[r.a2p_status]) return "";
+  const [cls] = A2P[r.a2p_status];
+  const txt = r.a2p_status === "approved" ? "A2P ✓"
+            : r.a2p_status === "rejected" ? "A2P ✗"
+            : "A2P " + r.a2p_status;
+  return `<span>·</span><span class="a2ptag ${cls}">${txt}</span>`;
+};
 
 function kv(obj){
   const e = Object.entries(obj).filter(([,v]) => v !== undefined && v !== null && v !== "");
