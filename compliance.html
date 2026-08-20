@@ -134,19 +134,6 @@ legend{font-weight:500;font-size:14.5px;padding:0;margin:0 0 8px}
   border:0;border-radius:7px;padding:6px 12px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-weight:600;
 }
 
-/* ---------- SMS preview (signature element) ---------- */
-.sms-preview{margin-top:12px;background:#0A101F;border:1px solid var(--line);border-radius:12px;padding:16px}
-.sms-preview .pv-label{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
-.bubble{
-  max-width:85%;background:linear-gradient(160deg,var(--peri) 0%,var(--peri-deep) 100%);
-  color:#fff;border-radius:16px 16px 16px 4px;padding:10px 14px;font-size:14.5px;line-height:1.5;
-  min-height:20px;white-space:pre-wrap;word-wrap:break-word;
-}
-.bubble:empty::before{content:"Your first sample message appears here…";color:rgba(255,255,255,.55)}
-.pv-meta{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);margin:10px 0 0}
-.pv-meta .ok{color:#8BE0B0}
-.pv-meta .warnc{color:var(--blush)}
-
 /* ---------- attestations ---------- */
 .attest{list-style:none;margin:0;padding:0}
 .attest li{border-top:1px solid var(--line);padding:14px 0}
@@ -342,38 +329,10 @@ footer a{color:var(--peri);text-decoration:none}
 
     <!-- ============ 02 MESSAGING PROGRAM ============ -->
     <section class="card" aria-labelledby="s2">
-      <div class="sec-head"><span class="sec-num">02</span><h2 id="s2">Your messaging program</h2></div>
-      <p class="sec-sub">What you'll text about, and roughly how much. Carriers review this word-for-word.</p>
-
-      <div class="field">
-        <label class="fl" for="useCase">What will you text your contacts about? <span class="req">*</span></label>
-        <textarea id="useCase" name="Messaging Use Case" required placeholder="Example: Follow up with new buyer and seller leads, answer their questions, schedule showings and appointments, and send occasional listing updates."></textarea>
-      </div>
-
-      <div class="field">
-        <label class="fl" for="volume">Estimated monthly volume <span class="req">*</span></label>
-        <select id="volume" name="Estimated Monthly Volume" required>
-          <option value="" selected disabled>Select…</option>
-          <option>Under 1,000 messages</option>
-          <option>1,000 – 10,000 messages</option>
-          <option>10,000 – 50,000 messages</option>
-          <option>50,000+ messages</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label class="fl" for="samples">Sample messages (2–3) <span class="req">*</span>
-          <span class="hint">Write real examples, one per paragraph. Include your business name in each, and end at least one with "Reply STOP to opt out."</span></label>
-        <textarea id="samples" class="mono" name="Sample Messages" required rows="6" placeholder="Hi Maria, it's Alex with Bluebonnet Realty — you asked about 4310 Elm St. Are you still looking in the $300s? Reply STOP to opt out."></textarea>
-        <div class="sms-preview">
-          <p class="pv-label">Live preview — first sample</p>
-          <div class="bubble" id="bubble"></div>
-          <p class="pv-meta" id="pvMeta" aria-live="polite"></p>
-        </div>
-      </div>
+      <div class="sec-head"><span class="sec-num">02</span><h2 id="s2">Message contents</h2></div>
+      <p class="sec-sub">Two quick checkboxes — we write your carrier-ready campaign description and sample messages for you.</p>
 
       <fieldset class="field">
-        <legend>Message contents</legend>
         <label class="check"><input type="checkbox" id="hasLinks" data-extra="Messages Include Links" value="Yes"> My messages will include web links</label>
         <div class="field hide" id="linkDomainWrap" style="margin:4px 0 4px 28px">
           <label class="fl" for="linkDomain">What domain will the links use?</label>
@@ -637,37 +596,6 @@ footer a{color:var(--peri);text-decoration:none}
     }
   });
 
-  /* ----- live SMS preview with GSM-7 segment math ----- */
-  var samples = document.getElementById('samples');
-  var bubble = document.getElementById('bubble');
-  var pvMeta = document.getElementById('pvMeta');
-  var GSM = "@£$¥èéùìòÇ\nØø\rÅåΔ_ΦΓΛΩΠΨΣΘΞÆæßÉ !\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑܧ¿abcdefghijklmnopqrstuvwxyzäöñüà";
-  var GSM_EXT = "^{}\\[~]|€";
-  function segmentInfo(text){
-    var isGsm = true, units = 0;
-    for (var i = 0; i < text.length; i++){
-      var ch = text[i];
-      if (GSM.indexOf(ch) > -1){ units += 1; }
-      else if (GSM_EXT.indexOf(ch) > -1){ units += 2; }
-      else { isGsm = false; break; }
-    }
-    if (!isGsm){
-      var len = text.length;
-      return { enc:'Unicode', chars: len, segs: len === 0 ? 0 : (len <= 70 ? 1 : Math.ceil(len / 67)) };
-    }
-    return { enc:'GSM-7', chars: units, segs: units === 0 ? 0 : (units <= 160 ? 1 : Math.ceil(units / 153)) };
-  }
-  function updatePreview(){
-    var first = samples.value.split(/\n\s*\n/)[0].trim();
-    bubble.textContent = first;
-    if (!first){ pvMeta.textContent = ''; return; }
-    var s = segmentInfo(first);
-    var cls = (s.segs <= 1 && s.enc === 'GSM-7') ? 'ok' : 'warnc';
-    pvMeta.innerHTML = s.chars + ' chars · <span class="' + cls + '">' + s.segs + ' segment' + (s.segs === 1 ? '' : 's') + ' · ' + s.enc + '</span>' + (s.enc === 'Unicode' ? ' — an emoji or special character switched this to Unicode (70 chars/segment)' : '');
-  }
-  samples.addEventListener('input', updatePreview);
-  updatePreview();
-
   /* ----- submit ----- */
   var btn = document.getElementById('submitBtn');
   var statusEl = document.getElementById('formStatus');
@@ -718,9 +646,6 @@ footer a{color:var(--peri);text-decoration:none}
       'a2p.rep_email': val('repEmail'),
       'a2p.rep_phone': val('repPhone'),
 
-      'a2p.use_case':        val('useCase'),
-      'a2p.monthly_volume':  val('volume'),
-      'a2p.sample_messages': val('samples'),
       'a2p.includes_links':  document.getElementById('hasLinks').checked,
       'a2p.link_domain':     val('linkDomain'),
       'a2p.includes_phone':  document.getElementById('hasPhone').checked,
