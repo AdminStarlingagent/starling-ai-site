@@ -221,7 +221,7 @@ textarea{min-height:88px;resize:vertical;font-size:14px}
         <input type="search" id="q" placeholder="Search name, email, brokerage…">
         <select id="fStatus">
           <option value="">All</option>
-          <option value="nowizard">missing wizard</option><option value="nocrm">missing CRM access</option><option value="unread">Unread</option>
+          <option value="nowizard">missing wizard</option><option value="nocrm">missing CRM access</option><option value="noa2p">missing A2P</option><option value="unread">Unread</option>
           <option value="new">New</option>
           <option value="in_setup">In setup</option>
           <option value="live">Live</option>
@@ -335,6 +335,7 @@ function filtered(){
     if(st === "unread"){ if(!r.has_unread) return false; }
     else if(st === "nowizard"){ if((r.sources||[]).includes("build_your_agent")) return false; }
     else if(st === "nocrm"){ if((r.sources||[]).includes("crm_access")) return false; }
+    else if(st === "noa2p"){ if((r.sources||[]).includes("a2p_compliance")) return false; }
     else if(st && r.status !== st) return false;
     if(!q) return true;
     return [r.team_name, r.agent_name, r.email, r.brokerage]
@@ -416,6 +417,7 @@ async function openClient(id, quiet){
       ${(r.sources||[]).map(x => `<span class="chip">${esc(SRC_LABEL[x] || x)}</span>`).join("")}
       ${(r.sources||[]).includes("build_your_agent") ? "" : '<span class="chip" style="opacity:.55">no wizard yet</span>'}
       ${(r.sources||[]).includes("crm_access")       ? "" : '<span class="chip" style="opacity:.55">no CRM access yet</span>'}
+      ${(r.sources||[]).includes("a2p_compliance")   ? "" : '<span class="chip" style="opacity:.55">no A2P yet</span>'}
     </div>
 
     ${r.has_credentials ? `
@@ -507,6 +509,54 @@ async function openClient(id, quiet){
         "Their notes":    p["agent.notes"]
       })}
     </div>
+
+    ${(r.sources||[]).includes("a2p_compliance") ? `
+    <div class="grp">
+      <h3>A2P compliance <span style="color:var(--dim);font-weight:400">— compliance.html</span></h3>
+      ${kv({
+        "Legal name":   p["a2p.legal_business_name"],
+        "DBA":          p["a2p.dba_name"],
+        "Entity":       p["a2p.entity_type"],
+        "EIN":          p["a2p.ein"],
+        "Industry":     p["a2p.industry"],
+        "Address":      [p["a2p.street"], p["a2p.city"], p["a2p.state"], p["a2p.zip"]].filter(Boolean).join(", "),
+        "Website":      p["a2p.website"] || (p["a2p.website_build_requested"] ? "⚠ NEEDS BUILD — send quote" : ""),
+        "Owns domain":  p["a2p.owns_domain"],
+        "Their domain": p["a2p.existing_domain"],
+        "Authorized rep": [p["a2p.rep_name"], p["a2p.rep_title"]].filter(Boolean).join(" · "),
+        "Rep email":    p["a2p.rep_email"],
+        "Rep phone":    p["a2p.rep_phone"]
+      })}
+      <h4 style="margin:14px 0 6px;font-size:13px;color:var(--dim);font-weight:600">Campaign</h4>
+      ${kv({
+        "Use case":     p["a2p.use_case"],
+        "Volume":       p["a2p.monthly_volume"],
+        "Samples":      p["a2p.sample_messages"],
+        "Has links":    p["a2p.includes_links"] === undefined ? "" : (p["a2p.includes_links"] ? "yes" : "no"),
+        "Link domain":  p["a2p.link_domain"],
+        "Has phone":    p["a2p.includes_phone"] === undefined ? "" : (p["a2p.includes_phone"] ? "yes" : "no")
+      })}
+      <h4 style="margin:14px 0 6px;font-size:13px;color:var(--dim);font-weight:600">Consent evidence</h4>
+      ${kv({
+        "Lead sources":   p["a2p.lead_sources"],
+        "Other source":   p["a2p.other_lead_source"],
+        "Opt-in method":  p["a2p.optin_method"],
+        "Opt-in URL":     p["a2p.optin_url"],
+        "Screenshot":     p["a2p.optin_screenshot"],
+        "Privacy URL":    p["a2p.privacy_url"],
+        "SMS clause":     p["a2p.privacy_sms_clause"] === undefined ? "" : (p["a2p.privacy_sms_clause"] ? "confirmed" : "⚠ not confirmed"),
+        "Consent records": p["a2p.consent_records"]
+      })}
+      <h4 style="margin:14px 0 6px;font-size:13px;color:var(--dim);font-weight:600">Attestations &amp; signature</h4>
+      ${kv({
+        "Attestations": p["a2p.attestations_complete"],
+        "Signed by":    [p["a2p.signature_name"], p["a2p.signature_title"]].filter(Boolean).join(" · "),
+        "Signed date":  p["a2p.signature_date"],
+        "E-sign":       p["a2p.esign_consent"] === undefined ? "" : (p["a2p.esign_consent"] ? "consented" : "⚠ not consented"),
+        "Timestamp":    p["a2p.signed_at_iso"],
+        "Registration": p["a2p.status"]
+      })}
+    </div>` : ""}
 
     <div class="grp">
       <h3>Handoff &amp; voice</h3>
@@ -640,7 +690,7 @@ $("bell").addEventListener("click", () => {
 });
 
 /* ─────────── helpers ─────────── */
-const SRC_LABEL = { build_your_agent:"wizard", crm_access:"CRM access" };
+const SRC_LABEL = { build_your_agent:"wizard", crm_access:"CRM access", a2p_compliance:"A2P" };
 
 function kv(obj){
   const e = Object.entries(obj).filter(([,v]) => v !== undefined && v !== null && v !== "");
