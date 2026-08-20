@@ -12,6 +12,12 @@
   evidence for that client.
 =========================================================== -->
 
+<script>
+  const SB_URL      = "https://xrcakqiwprrlznmfevrc.supabase.co";
+  const SB_ANON     = "sb_publishable_cfmwICjuYz3duCf75yWcag_jOI4DPSC";
+  const CONSOLE_URL = "https://starlingagent.com/admin/";
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -679,38 +685,135 @@ footer a{color:var(--peri);text-decoration:none}
     }
     if (!form.checkValidity()){ form.reportValidity(); return; }
 
-    var fd = new FormData(form);
-    var subj = 'A2P Compliance — ' + document.getElementById('legalName').value.trim();
-    if (hasWebsite.value === 'No') subj += ' — NEEDS WEBSITE';
-    fd.set('subject', subj);
-    fd.append('Lead Sources', srcs.join(', '));
-    document.querySelectorAll('[data-extra]').forEach(function(c){ if (c.checked) fd.append(c.getAttribute('data-extra'), c.value); });
-    fd.append('Signed At (ISO)', new Date().toISOString());
-    fd.append('Page URL', window.location.href);
+    var val = function(id){ var e = document.getElementById(id); return e && !e.disabled ? e.value.trim() : ''; };
+    var chk = function(name){ var e = form.querySelector('[name="'+name+'"]'); return !!(e && e.checked); };
+    var needsSite = hasWebsite.value === 'No';
+
+    /* Dotted keys namespaced to a2p.* so this form owns its own slice of the
+       shared client record — crm_access and build_your_agent keys stay untouched. */
+    var payload = {
+      _source: 'a2p_compliance',
+      email: val('repEmail'),
+
+      'client.team_name':    val('legalName'),
+      'client.owner_mobile': val('repPhone'),
+
+      'a2p.legal_business_name': val('legalName'),
+      'a2p.dba_name':            val('dba'),
+      'a2p.entity_type':         val('entityType'),
+      'a2p.ein':                 val('ein'),
+      'a2p.industry':            val('vertical'),
+      'a2p.street':              val('addr'),
+      'a2p.city':                val('city'),
+      'a2p.state':               val('state'),
+      'a2p.zip':                 val('zip'),
+      'a2p.website':             val('website'),
+      'a2p.has_website':         hasWebsite.value,
+      'a2p.website_build_requested': needsSite,
+      'a2p.owns_domain':         val('ownsDomain'),
+      'a2p.existing_domain':     val('existingDomain'),
+
+      'a2p.rep_name':  val('repName'),
+      'a2p.rep_title': val('repTitle'),
+      'a2p.rep_email': val('repEmail'),
+      'a2p.rep_phone': val('repPhone'),
+
+      'a2p.use_case':        val('useCase'),
+      'a2p.monthly_volume':  val('volume'),
+      'a2p.sample_messages': val('samples'),
+      'a2p.includes_links':  document.getElementById('hasLinks').checked,
+      'a2p.link_domain':     val('linkDomain'),
+      'a2p.includes_phone':  document.getElementById('hasPhone').checked,
+
+      'a2p.lead_sources':        srcs.join(', '),
+      'a2p.other_lead_source':   val('otherSource'),
+      'a2p.optin_method':        val('optinMethod'),
+      'a2p.optin_url':           val('optinUrl'),
+      'a2p.optin_screenshot':    val('optinShot'),
+      'a2p.privacy_url':         val('privacyUrl'),
+      'a2p.privacy_sms_clause':  chk('Privacy Policy Has SMS Clause'),
+      'a2p.consent_records':     val('consentRecords'),
+
+      'a2p.attest_consent':        chk('Attestation 1 - Prior Express Written Consent'),
+      'a2p.attest_no_lists':       chk('Attestation 2 - No Purchased Lists'),
+      'a2p.attest_records':        chk('Attestation 3 - Consent Records'),
+      'a2p.attest_optout':         chk('Attestation 4 - Opt-Out Handling'),
+      'a2p.attest_content':        chk('Attestation 5 - Content and Law'),
+      'a2p.attest_sender':         chk('Attestation 6 - Sender of Record'),
+      'a2p.attest_indemnify':      chk('Attestation 7 - Indemnification'),
+      'a2p.attest_suspension':     chk('Attestation 8 - Suspension Rights'),
+      'a2p.attest_accuracy':       chk('Attestation 9 - Accuracy and Terms'),
+      'a2p.attestations_complete': form.querySelectorAll('.attest input:checked').length + ' of 9',
+
+      'a2p.signature_name':  val('sigName'),
+      'a2p.signature_title': val('sigTitle'),
+      'a2p.signature_date':  val('sigDate'),
+      'a2p.esign_consent':   chk('E-Signature Consent'),
+      'a2p.signed_at_iso':   new Date().toISOString(),
+      'a2p.page_url':        window.location.href,
+      'a2p.status':          'submitted'
+    };
+    Object.keys(payload).forEach(function(k){ if (payload[k] === '') delete payload[k]; });
 
     btn.disabled = true;
     btn.textContent = 'Submitting…';
 
-    fetch('https://api.web3forms.com/submit', { method:'POST', body: fd })
-      .then(function(r){ return r.json(); })
-      .then(function(data){
-        if (data.success){
-          if (hasWebsite.value === 'No') document.getElementById('successBuild').classList.remove('hide');
-          form.classList.add('hide');
-          var ok = document.getElementById('success');
-          ok.classList.remove('hide');
-          try { ok.scrollIntoView({behavior:'smooth', block:'start'}); } catch(e){}
-        } else {
-          throw new Error(data.message || 'Submission failed');
-        }
-      })
-      .catch(function(err){
-        var reason = (err && err.message && err.message !== 'Failed to fetch') ? err.message : 'Network error — check your connection.';
-        statusEl.textContent = 'Submission failed: ' + reason + ' Your answers are still here — fix and resubmit, or call us at (832) 808-6483.';
-        if (window.console && console.error) console.error('Compliance form error:', err);
-        btn.disabled = false;
-        btn.textContent = 'Submit for compliance review';
+    var sbHeaders = { 'Content-Type':'application/json', 'apikey': SB_ANON };
+    /* sb_publishable_… keys are not JWTs; sending one as Bearer makes PostgREST
+       try to parse a JWT and fail. Only legacy anon keys get the Bearer header. */
+    if (SB_ANON.indexOf('sb_publishable_') !== 0){
+      sbHeaders['Authorization'] = 'Bearer ' + SB_ANON;
+    }
+
+    /* 1 — Supabase is the source of truth. Dedupes on email, merges with
+           whatever crm-access / build-your-agent already filed for this client. */
+    fetch(SB_URL + '/rest/v1/rpc/submit_starling_onboarding', {
+      method: 'POST', headers: sbHeaders,
+      body: JSON.stringify({ p_payload: payload, p_credentials: null, p_config: null })
+    })
+    .then(function(r){
+      return r.json().then(function(d){
+        if (!r.ok) throw new Error(d.message || d.hint || 'Save failed');
+        return d;
       });
+    })
+    .then(function(res){
+      /* 2 — redacted heads-up email. No EIN, no attestation detail: "go look." */
+      var note = {
+        access_key: form.querySelector('[name=access_key]').value,
+        subject: (res && res.is_new === false ? 'UPDATE — ' : '')
+               + 'A2P Compliance — ' + payload['a2p.legal_business_name']
+               + (needsSite ? ' — NEEDS WEBSITE' : ''),
+        from_name: 'Starling AI — A2P Compliance Form',
+        email: payload.email,
+        Business: payload['a2p.legal_business_name'] || '',
+        Signed_by: payload['a2p.signature_name'] || '',
+        Website: needsSite ? 'NEEDS BUILD — send quote' : (payload['a2p.website'] || ''),
+        Attestations: payload['a2p.attestations_complete'],
+        Submission: res && res.is_new ? 'First submission' : 'Update — v' + (res && res.version),
+        Console: CONSOLE_URL,
+        Note: 'Full registration details are in the console. EIN is not included in this email.'
+      };
+      return fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json','Accept':'application/json'},
+        body: JSON.stringify(note)
+      }).catch(function(){ /* email is best-effort; the record is already saved */ });
+    })
+    .then(function(){
+      if (needsSite) document.getElementById('successBuild').classList.remove('hide');
+      form.classList.add('hide');
+      var ok = document.getElementById('success');
+      ok.classList.remove('hide');
+      try { ok.scrollIntoView({behavior:'smooth', block:'start'}); } catch(e){}
+    })
+    .catch(function(err){
+      var reason = (err && err.message && err.message !== 'Failed to fetch') ? err.message : 'Network error — check your connection.';
+      statusEl.textContent = 'Submission failed: ' + reason + ' Your answers are still here — fix and resubmit, or call us at (832) 808-6483.';
+      if (window.console && console.error) console.error('Compliance form error:', err);
+      btn.disabled = false;
+      btn.textContent = 'Submit for compliance review';
+    });
   });
 })();
 </script>
