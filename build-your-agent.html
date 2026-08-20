@@ -756,6 +756,11 @@
    ============================================================ */
 const ACCESS_KEY = "141e743a-9449-4980-b0dc-d37061594328";   // Web3Forms key -> delivers to the email this key is registered under
 
+/* Supabase — the onboarding console is the source of truth. The wizard and
+   crm-access.html both write to one record per client, keyed on email. */
+const SB_URL  = "https://xrcakqiwprrlznmfevrc.supabase.co";
+const SB_ANON = "sb_publishable_cfmwICjuYz3duCf75yWcag_jOI4DPSC";
+
 const TOTAL = 5;
 let step = 1;
 
@@ -942,6 +947,108 @@ form.addEventListener('change', e=>{
 });
 
 /* ============ SUBMIT ============ */
+
+/* The console speaks one dotted-key vocabulary, shared with crm-access.html.
+   Map the wizard's friendly labels onto it so both forms land on one record.
+   Anything the wizard alone asks lives under agent.* and never collides. */
+const FIELD_MAP = {
+  "Your email"                    : "email",
+  "Business name"                 : "client.team_name",
+  "Brokerage"                     : "client.brokerage",
+  "Booking alert cell"            : "client.owner_mobile",
+  "Lead-facing phone"             : "contact.office_phone_1",
+  "Office address"                : "locations.office_address_1",
+  "Markets served"                : "locations.market_1",
+  "Default meeting type"          : "locations.default_meeting_type",
+  "First message"                 : "messages.first_sms_message",
+  "Lender name"                   : "links.mortgage_name",
+  "Lender link"                   : "links.mortgage_link",
+  "Credit repair name"            : "links.credit_repair_name",
+  "Credit repair link"            : "links.credit_repair_link",
+  "Hours start"                   : "hours.start",
+  "Hours end"                     : "hours.end",
+  "Intro line"                    : "agent.intro_line",
+  "Industry (other)"              : "agent.industry_other",
+  "CRM (other)"                   : "agent.crm_other",
+  "CRM login email"               : "agent.crm_login_email",
+  "Blackout dates"                : "agent.blackout_dates",
+  "Agent referral link"           : "agent.referral_link",
+  "Notes"                         : "agent.notes"
+};
+
+/* the wizard says "Follow Up Boss", the console stores "FUB" */
+const CRM_MAP = {
+  "Follow Up Boss"          : "FUB",
+  "GoHighLevel"             : "GHL",
+  "Lofty"                   : "Lofty",
+  "BoldTrail / kvCORE"      : "BoldTrail",
+  "Real Geeks"              : "RealGeeks",
+  "Jungo / Salesforce"      : "Jungo",
+  "Starling CRM (included)" : "Starling",
+  "No CRM yet"              : "Starling",
+  "Other"                   : "Other"
+};
+const LANG_MAP = { "Bilingual (EN/ES)":"Spanish", "English":"English", "Spanish":"SpanishOnly" };
+const TYPE_MAP = { "Real estate agent":"Real Estate Agent", "Mortgage lender":"Mortgage Lender" };
+
+function firstInt(v){ const m = String(v||"").match(/\d+/); return m ? +m[0] : null; }
+
+function buildStarlingPayload(fd){
+  const out = { _source: "build_your_agent" };
+  const put = (k, v) => { if(v !== null && v !== undefined && v !== "") out[k] = v; };
+
+  for(const [k, raw] of fd.entries()){
+    if(k === "botcheck") continue;
+    const v = typeof raw === "string" ? raw.trim() : raw;
+    if(!v) continue;
+    if(FIELD_MAP[k]) put(FIELD_MAP[k], v);
+  }
+
+  /* multi-selects */
+  const days = fd.getAll("Days available").filter(Boolean);
+  if(days.length) out["hours.days"] = days;
+  const srcs = fd.getAll("Lead sources").filter(Boolean);
+  if(srcs.length) out["agent.lead_sources"] = srcs.join(", ");
+  const soc = fd.getAll("Connect social accounts").filter(Boolean);
+  if(soc.length) out["agent.connect_social"] = soc.join(", ");
+
+  /* normalised vocabulary */
+  const crm = fd.get("CRM");
+  if(crm) put("crm_config.active_crm", CRM_MAP[crm] || crm);
+  const lang = fd.get("Languages");
+  if(lang) put("client.language", LANG_MAP[lang] || lang);
+  const ind = fd.get("Industry");
+  if(ind) put("client.business_type", TYPE_MAP[ind] || (fd.get("Industry (other)") || "Other").trim());
+
+  /* "Central Time (America/Chicago)" -> "America/Chicago|Central Time" */
+  const tz = fd.get("Time zone");
+  if(tz){
+    const m = tz.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
+    put("client.timezone", m ? m[2] + "|" + m[1].trim() : tz);
+  }
+
+  /* the wizard's intro line doubles as the agent's name when nothing else has it */
+  const intro = (fd.get("Intro line") || "").trim();
+  if(intro) put("client.agent_name", intro.split(/\s+with\s+|\s+at\s+/i)[0].trim());
+
+  /* scheduling numbers */
+  const len = firstInt(fd.get("Appointment length"));
+  if(len) out["scheduling.meeting_minutes"] = len;
+  const notice = firstInt(fd.get("Minimum notice"));
+  if(notice) out["scheduling.lead_time_minutes"] = notice * 60;
+  const win = firstInt(fd.get("Booking window"));
+  if(win) out["scheduling.max_days_ahead"] = win;
+
+  /* checkboxes -> booleans */
+  out["scheduling.skip_today"]            = !fd.get("Allow same-day booking");
+  out["client.enable_itin"]               = !!fd.get("Works with ITIN buyers");
+  out["agent.use_own_google_calendar"]    = !!fd.get("Use own Google Calendar");
+  out["agent.wants_starling_crm_social"]  = !!fd.get("Wants Starling CRM for social");
+  out["agent.optin_confirmed"]            = !!fd.get("Opt-in confirmed");
+
+  return out;
+}
+
 async function sendSetup(){
   errBanner.classList.remove('show');
   if(document.getElementById('botcheck').checked) return;   // honeypot
@@ -949,8 +1056,9 @@ async function sendSetup(){
   nextBtn.setAttribute('aria-busy','true');
   nextBtn.innerHTML='Building…';
 
-  // Build a clean, readable payload from every named field
-  const fd=new FormData(form);
+  const fd = new FormData(form);
+
+  // readable copy for the heads-up email
   const data={
     access_key: ACCESS_KEY,
     subject: '🐦 New Starling Agent Build — ' + (fd.get('Business name')||'New client')
@@ -965,20 +1073,42 @@ async function sendSetup(){
   }
   if(data['Your email']) data.replyto = data['Your email'];
 
+  const done = () => {
+    document.getElementById('wizard').style.display='none';
+    const nm=nickname(introEl.value);
+    document.getElementById('doneTitle').textContent = nm==='Your agent'? 'Your agent is on its way' : nm+' is on its way';
+    document.getElementById('doneScreen').classList.add('show');
+    window.scrollTo({top:0,behavior:'smooth'});
+  };
+
   try{
-    const res=await fetch('https://api.web3forms.com/submit',{
+    /* 1 — Supabase is the source of truth. Dedupes on email server-side and
+           merges with anything crm-access.html already sent for this client. */
+    const sbHeaders = { 'Content-Type':'application/json', 'apikey': SB_ANON };
+    /* sb_publishable_… keys are not JWTs; sending one as Bearer makes
+       PostgREST try to parse a JWT and fail. Only the legacy anon keys get it. */
+    if(SB_ANON.indexOf('sb_publishable_') !== 0){
+      sbHeaders['Authorization'] = 'Bearer ' + SB_ANON;
+    }
+
+    const sbRes = await fetch(SB_URL + '/rest/v1/rpc/submit_starling_onboarding',{
+      method:'POST', headers:sbHeaders,
+      body: JSON.stringify({ p_payload: buildStarlingPayload(fd) })
+    });
+    const saved = await sbRes.json();
+    if(!sbRes.ok) throw new Error(saved.message || saved.hint || 'Save failed');
+
+    /* 2 — heads-up email, best effort. The record is already safe. */
+    data.subject    = (saved && saved.is_new === false ? 'UPDATE — ' : '') + data.subject;
+    data.Submission = saved && saved.is_new ? 'First submission' : 'Update — v' + (saved && saved.version);
+    data.Console    = 'https://starlingagent.com/admin/';
+    await fetch('https://api.web3forms.com/submit',{
       method:'POST',
       headers:{'Content-Type':'application/json',Accept:'application/json'},
       body:JSON.stringify(data)
-    });
-    const out=await res.json();
-    if(out.success){
-      document.getElementById('wizard').style.display='none';
-      const nm=nickname(introEl.value);
-      document.getElementById('doneTitle').textContent = nm==='Your agent'? 'Your agent is on its way' : nm+' is on its way';
-      document.getElementById('doneScreen').classList.add('show');
-      window.scrollTo({top:0,behavior:'smooth'});
-    }else{ throw new Error(out.message||'Submission failed'); }
+    }).catch(()=>{});
+
+    done();
   }catch(err){
     errBanner.classList.add('show');
     nextBtn.removeAttribute('aria-busy');
