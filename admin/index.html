@@ -52,6 +52,27 @@
 .a2ptag{font-weight:600}
 .a2ptag.sub{color:var(--peri)} .a2ptag.reg{color:var(--warn)}
 .a2ptag.ok{color:var(--ok)}   .a2ptag.bad{color:var(--coral)}
+/* ── FUB-style detail layout ── */
+.dgrid{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:26px;align-items:start}
+.drail{position:sticky;top:16px;display:flex;flex-direction:column;gap:16px}
+.rcard{background:var(--navy-2);border:1px solid var(--line);border-radius:13px;padding:15px 16px}
+.rcard h3{font:600 11.5px/1 "IBM Plex Mono",monospace;letter-spacing:.11em;text-transform:uppercase;color:var(--coral);margin:0 0 11px}
+.rcard .bar{margin:0;padding:0;border:0;flex-direction:column;align-items:stretch;gap:8px}
+.rcard .bar select{width:100%}
+.rcard .bar .btn{width:100%;text-align:center}
+.rcard .kv{grid-template-columns:1fr}
+.chiprow{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+@media(max-width:1150px){.dgrid{grid-template-columns:1fr}.drail{position:static}}
+.grp h3 .ebtn{float:right;font:600 11px/1 "IBM Plex Sans",sans-serif;letter-spacing:.03em;color:var(--peri);
+  background:none;border:1px solid var(--line-2);border-radius:7px;padding:5px 10px;cursor:pointer;text-transform:none}
+.grp h3 .ebtn:hover{border-color:var(--peri)}
+.kv input,.kv select{width:100%;background:var(--navy-3);border:1px solid var(--line-2);border-radius:7px;
+  padding:7px 9px;font:400 13px/1.4 "IBM Plex Sans",sans-serif;color:var(--paper)}
+.kv input:focus,.kv select:focus{outline:none;border-color:var(--peri)}
+.editbar{display:flex;gap:8px;margin-top:10px}
+.credadd{margin-top:13px;padding-top:13px;border-top:1px solid rgba(255,196,107,.22);display:flex;flex-direction:column;gap:8px}
+.credadd select,.credadd input{width:100%;background:var(--navy-3);border:1px solid var(--line-2);border-radius:8px;padding:8px 10px;font-size:13px;color:var(--paper)}
+.credadd select:focus,.credadd input:focus{outline:none;border-color:var(--peri)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--navy);color:var(--paper);
   font:400 15px/1.55 "IBM Plex Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
@@ -433,79 +454,14 @@ async function openClient(id, quiet){
       ${r.owner_mobile ? ` · <a href="tel:${esc(r.owner_mobile)}">${esc(r.owner_mobile)}</a>` : ""}
     </p>
 
-    <div class="bar">
-      <select id="status">
-        ${["new","in_setup","live","paused","archived"].map(s =>
-          `<option value="${s}"${r.status===s?" selected":""}>${s.replace("_"," ")}</option>`).join("")}
-      </select>
-      <button class="btn ghost sm" id="copyCfg">Copy CONFIG block</button>
-      ${(r.sources||[]).includes("a2p_compliance") ? "" : `<button class="btn sm" id="sendA2P">${r.a2p_invite_sent_at ? "Resend compliance email" : "📧 Compliance email"}</button>`}
-      ${(r.sources||[]).includes("crm_access") ? "" : `<button class="btn sm" id="sendCRM">${r.crm_invite_sent_at ? "Resend CRM access email" : "🔗 CRM access email"}</button>`}
-      <span class="chip">v${r.submission_count}</span>
-      <span class="chip">${esc(r.active_crm || "no crm")}</span>
-      ${(r.sources||[]).map(x => `<span class="chip">${esc(SRC_LABEL[x] || x)}</span>`).join("")}
-      ${(r.sources||[]).includes("build_your_agent") ? "" : '<span class="chip" style="opacity:.55">no wizard yet</span>'}
-      ${(r.sources||[]).includes("crm_access")       ? "" : '<span class="chip" style="opacity:.55">no CRM access yet</span>'}
-      ${(r.sources||[]).includes("a2p_compliance")   ? "" : '<span class="chip" style="opacity:.55">no A2P yet</span>'}
-    </div>
+    <div class="dgrid">
+    <div class="dmain">
 
-    ${r.has_credentials ? `
-    <div class="grp">
-      <h3>Credentials</h3>
-      <div class="cred">
-        <button class="btn sm" id="reveal">Reveal credentials</button>
-        <p class="hint">Stored encrypted. Every reveal is logged with your user ID and timestamp.
-        ${r.cred_hint ? `Fingerprint: <code style="color:var(--warn)">${esc(r.cred_hint)}</code>` : ""}</p>
-        <div class="credout" id="credout"></div>
-      </div>
-    </div>` : `
-    <div class="grp">
-      <h3>Credentials</h3>
-      <div class="kv"><div>status</div><div class="none">None submitted — they chose the user-invite path, or left it blank.</div></div>
-    </div>`}
+    <div class="grp" id="grp_details">${grpHTML(r, "details", false)}</div>
 
-    <div class="grp">
-      <h3>Business</h3>
-      ${kv({
-        "Team":        r.team_name,
-        "Agent":       r.agent_name,
-        "Agent 1st":   p["client.agent_first_name"],
-        "Brokerage":   r.brokerage,
-        "Type":        r.business_type,
-        "Time zone":   (p["client.timezone"]||"").split("|")[0],
-        "Language":    r.language,
-        "ITIN":        p["client.enable_itin"] ? "yes" : "no",
-        "Market":      p["locations.market_1"],
-        "Market 2":    p["locations.market_2"],
-        "Office":      p["locations.office_address_1"]
-      })}
-    </div>
+    <div class="grp" id="grp_integration">${grpHTML(r, "integration", false)}</div>
 
-    <div class="grp">
-      <h3>Integration</h3>
-      ${kv({
-        "CRM":            r.active_crm,
-        "Calendar":       r.active_calendar,
-        "FUB invitee":    p["follow_up_boss.calendar_invitee_user_id"],
-        "FUB old leads":  p["follow_up_boss.old_lead_assigned_user_id"],
-        "User invite":    p["follow_up_boss.invite_instead"] || p["go_high_level.invite_instead"],
-        "GHL location":   p["go_high_level.location_id"],
-        "GHL calendar":   p["go_high_level.calendar_id"],
-        "Lofty new":      p["lofty.calendar_assigned_user_id"],
-        "Lofty old":      p["lofty.old_lead_assigned_user_id"],
-        "BoldTrail user": p["bold_trail.assigned_user_id"],
-        "BoldTrail tag":  p["bold_trail.filter_tag"],
-        "RG site uuid":   p["real_geeks.site_uuid"],
-        "RG user id":     p["real_geeks.user_id"],
-        "SF org":         p["jungo.org_url"],
-        "SF admin":       p["jungo.admin_contact"],
-        "SF object":      p["jungo.lead_object"],
-        "Other CRM":      p["other_crm.name"],
-        "Other notes":    p["other_crm.notes"]
-      })}
-    </div>
-
-    <div class="grp">
+        <div class="grp">
       <h3>Booking</h3>
       ${kv({
         "Days":         Array.isArray(p["hours.days"]) ? p["hours.days"].join(", ") : p["hours.days"],
@@ -633,10 +589,59 @@ async function openClient(id, quiet){
       </div>
     </div>
 
-    <div class="grp">
-      <h3>Internal notes</h3>
-      <textarea id="notes" placeholder="Where this stands, who's on it, what's blocking…">${esc(r.internal_notes||"")}</textarea>
-      <button class="btn ghost sm" id="saveNotes" style="margin-top:9px">Save notes</button>
+    </div>
+    <aside class="drail">
+
+      <div class="rcard">
+        <h3>Status &amp; actions</h3>
+    <div class="bar">
+      <select id="status">
+        ${["new","in_setup","live","paused","archived"].map(s =>
+          `<option value="${s}"${r.status===s?" selected":""}>${s.replace("_"," ")}</option>`).join("")}
+      </select>
+      <button class="btn ghost sm" id="copyCfg">Copy CONFIG block</button>
+      ${(r.sources||[]).includes("a2p_compliance") ? "" : `<button class="btn sm" id="sendA2P">${r.a2p_invite_sent_at ? "Resend compliance email" : "📧 Compliance email"}</button>`}
+      ${(r.sources||[]).includes("crm_access") ? "" : `<button class="btn sm" id="sendCRM">${r.crm_invite_sent_at ? "Resend CRM access email" : "🔗 CRM access email"}</button>`}
+        </div>
+        <div class="chiprow">
+          <span class="chip">v${r.submission_count}</span>
+      <span class="chip">${esc(r.active_crm || "no crm")}</span>
+      ${(r.sources||[]).map(x => `<span class="chip">${esc(SRC_LABEL[x] || x)}</span>`).join("")}
+      ${(r.sources||[]).includes("build_your_agent") ? "" : '<span class="chip" style="opacity:.55">no wizard yet</span>'}
+      ${(r.sources||[]).includes("crm_access")       ? "" : '<span class="chip" style="opacity:.55">no CRM access yet</span>'}
+      ${(r.sources||[]).includes("a2p_compliance")   ? "" : '<span class="chip" style="opacity:.55">no A2P yet</span>'}
+        </div>
+      </div>
+
+      <div class="rcard">
+        <h3>Credentials</h3>
+      ${r.has_credentials ? `
+      <div class="cred">
+        <button class="btn sm" id="reveal">Reveal credentials</button>
+        <p class="hint">Stored encrypted. Every reveal is logged with your user ID and timestamp.
+        ${r.cred_hint ? `Fingerprint: <code style="color:var(--warn)">${esc(r.cred_hint)}</code>` : ""}</p>
+        <div class="credout" id="credout"></div>
+      </div>` : `
+      <div class="kv"><div>status</div><div class="none">None submitted — they chose the user-invite path, or left it blank.</div></div>`}
+        <div class="credadd">
+          <select id="ckName">
+            ${SECRET_KEYS.map(k => `<option value="${k}">${k}</option>`).join("")}
+            <option value="__custom">Custom key name…</option>
+          </select>
+          <input id="ckCustom" placeholder="e.g. sierra.api_key" style="display:none">
+          <input id="ckVal" type="password" placeholder="Paste the new key value" autocomplete="new-password">
+          <button class="btn sm" id="ckSave">Replace key</button>
+          <p class="hint" style="margin:0">Merges over what's stored — other keys stay. Every change is logged in History as ⚿.</p>
+        </div>
+      </div>
+
+      <div class="rcard">
+        <h3>Internal notes</h3>
+        <textarea id="notes" placeholder="Where this stands, who's on it, what's blocking…">${esc(r.internal_notes||"")}</textarea>
+        <button class="btn ghost sm" id="saveNotes" style="margin-top:9px">Save notes</button>
+      </div>
+
+    </aside>
     </div>
   `;
 
@@ -742,6 +747,35 @@ function wire(r){
     openClient(r.id, true);
   });
 
+  $("detail").querySelectorAll("[data-edit]").forEach(b =>
+    b.addEventListener("click", () => {
+      const gid = b.dataset.edit;
+      $("grp_" + gid).innerHTML = grpHTML(r, gid, true);
+      wireEdit(r, gid);
+    }));
+
+  const ckN = $("ckName");
+  if(ckN) ckN.addEventListener("change", () => {
+    $("ckCustom").style.display = ckN.value === "__custom" ? "block" : "none";
+  });
+  const ckS = $("ckSave");
+  if(ckS) ckS.addEventListener("click", async () => {
+    const name = ckN.value === "__custom" ? $("ckCustom").value.trim() : ckN.value;
+    const val  = $("ckVal").value.trim();
+    if(!name) return toast("Pick a key", "Choose which key you're replacing.");
+    if(!val)  return toast("Empty value", "Paste the new key first.");
+    ckS.disabled = true; ckS.textContent = "Encrypting…";
+    const { data, error } = await sb.rpc("admin_update_credentials", { p_id: r.id, p_secrets: { [name]: val } });
+    ckS.disabled = false; ckS.textContent = "Replace key";
+    if(error) return toast("Couldn't save key", error.message);
+    r.has_credentials = true;
+    if(data){ r.cred_hint = data.hint || r.cred_hint; r.submission_count = data.version || r.submission_count; }
+    $("ckVal").value = "";
+    toast("Key replaced", name + " updated — logged in History.");
+    render();
+    openClient(r.id, true);
+  });
+
   on("saveNotes", async e => {
     const { error } = await sb.from("starling_onboarding_clients")
       .update({ internal_notes: $("notes").value }).eq("id", r.id);
@@ -773,6 +807,107 @@ const A2P = {
   approved:    ["ok","Approved"],
   rejected:    ["bad","Rejected"]
 };
+const CRM_OPTS = ["FUB","GHL","Lofty","BoldTrail","RealGeeks","Jungo","Starling","Other"];
+const CAL_OPTS = ["Google","FUB","GHL","Lofty","BoldTrail","RealGeeks","Starling","SameAsCRM"];
+const SECRET_KEYS = ["follow_up_boss.api_key","go_high_level.private_token","lofty.api_key","bold_trail.api_key","real_geeks.api_key"];
+const EDIT_GROUPS = {
+  details: { title:"Details", fields:[
+    ["Team","client.team_name","text"],["Agent","client.agent_name","text"],
+    ["Agent 1st","client.agent_first_name","text"],["Brokerage","client.brokerage","text"],
+    ["Type","client.business_type","text"],["Time zone","client.timezone","text"],
+    ["Language","client.language","text"],["ITIN","client.enable_itin","bool"],
+    ["Alert cell","client.owner_mobile","text"],["Market","locations.market_1","text"],
+    ["Market 2","locations.market_2","text"],["Office","locations.office_address_1","text"]
+  ]},
+  integration: { title:"Integration", fields:[
+    ["CRM","crm_config.active_crm","crm"],["Calendar","crm_config.active_calendar","cal"],
+    ["FUB invitee","follow_up_boss.calendar_invitee_user_id","text"],
+    ["FUB old leads","follow_up_boss.old_lead_assigned_user_id","text"],
+    ["GHL location","go_high_level.location_id","text"],
+    ["GHL calendar","go_high_level.calendar_id","text"],
+    ["Lofty new","lofty.calendar_assigned_user_id","text"],
+    ["Lofty old","lofty.old_lead_assigned_user_id","text"],
+    ["BoldTrail user","bold_trail.assigned_user_id","text"],
+    ["BoldTrail tag","bold_trail.filter_tag","text"],
+    ["RG site uuid","real_geeks.site_uuid","text"],
+    ["RG user id","real_geeks.user_id","text"],
+    ["SF org","jungo.org_url","text"],["SF admin","jungo.admin_contact","text"],
+    ["SF object","jungo.lead_object","text"],
+    ["Other CRM","other_crm.name","text"],["Other notes","other_crm.notes","text"]
+  ]}
+};
+const FALLBACK_COL = {"client.team_name":"team_name","client.agent_name":"agent_name","client.brokerage":"brokerage","client.business_type":"business_type","client.owner_mobile":"owner_mobile","client.language":"language","crm_config.active_crm":"active_crm","crm_config.active_calendar":"active_calendar"};
+function fval(r, key){
+  const p = r.payload || {};
+  if(p[key] !== undefined && p[key] !== null) return p[key];
+  const col = FALLBACK_COL[key];
+  return col ? (r[col] ?? "") : "";
+}
+function grpHTML(r, gid, editing){
+  const g = EDIT_GROUPS[gid];
+  const rows = g.fields.map(([label, key, type]) => {
+    const v = fval(r, key);
+    if(!editing){
+      const disp = type === "bool"
+        ? (v === true || v === "true" ? "yes" : (v === false || v === "false" ? "no" : ""))
+        : String(v ?? "");
+      return `<div>${label}</div><div>${disp ? esc(disp) : '<span class="none">—</span>'}</div>`;
+    }
+    if(type === "bool")
+      return `<div>${label}</div><div><select data-k="${key}" data-t="bool"><option value=""${v===""||v===undefined?" selected":""}>—</option><option value="true"${v===true||v==="true"?" selected":""}>yes</option><option value="false"${v===false||v==="false"?" selected":""}>no</option></select></div>`;
+    if(type === "crm" || type === "cal"){
+      const opts = type === "crm" ? CRM_OPTS : CAL_OPTS;
+      const cur = String(v ?? "");
+      return `<div>${label}</div><div><select data-k="${key}"><option value=""${cur===""?" selected":""}>—</option>${opts.map(o=>`<option${o===cur?" selected":""}>${o}</option>`).join("")}${cur && !opts.includes(cur) ? `<option selected>${esc(cur)}</option>` : ""}</select></div>`;
+    }
+    return `<div>${label}</div><div><input data-k="${key}" value="${esc(String(v ?? ""))}"></div>`;
+  }).join("");
+  return `<h3>${g.title}${editing ? "" : ` <button class="ebtn" data-edit="${gid}">✎ Edit</button>`}</h3>
+    <div class="kv">${rows}</div>
+    ${editing ? `<div class="editbar">
+        <button class="btn sm" data-save="${gid}">Save changes</button>
+        <button class="btn ghost sm" data-cancel="${gid}">Cancel</button>
+      </div>` : ""}`;
+}
+function wireEdit(r, gid){
+  const box = $("grp_" + gid);
+  box.querySelector("[data-cancel]").addEventListener("click", () => openClient(r.id, true));
+  box.querySelector("[data-save]").addEventListener("click", async e => {
+    const changes = {};
+    box.querySelectorAll("[data-k]").forEach(el => {
+      const key = el.dataset.k;
+      let nv = el.value;
+      if(el.dataset.t === "bool"){
+        if(nv === "") return;
+        nv = nv === "true";
+        const ov = fval(r, key);
+        if(ov === nv || String(ov) === String(nv)) return;
+        changes[key] = nv;
+        return;
+      }
+      const ov = String(fval(r, key) ?? "");
+      if(ov !== nv) changes[key] = nv;
+    });
+    if(!Object.keys(changes).length) return openClient(r.id, true);
+    e.target.disabled = true; e.target.textContent = "Saving…";
+    const { data, error } = await sb.rpc("admin_update_client", { p_id: r.id, p_changes: changes });
+    if(error){
+      e.target.disabled = false; e.target.textContent = "Save changes";
+      return toast("Couldn't save", error.message);
+    }
+    r.payload = Object.assign({}, r.payload, changes);
+    for(const k in changes){
+      const col = FALLBACK_COL[k];
+      if(col && typeof changes[k] === "string" && changes[k] !== "")
+        r[col] = k === "client.timezone" ? changes[k].split("|")[0] : changes[k];
+    }
+    if(data) r.submission_count = data.version || r.submission_count;
+    toast("Saved", Object.keys(changes).length + " field(s) updated — logged in History.");
+    render();
+    openClient(r.id, true);
+  });
+}
+
 function complianceMail(r){
   const biz = r.team_name || r.agent_name || "your business";
   const subject = biz + " — one step left before your AI can text (A2P registration)";
