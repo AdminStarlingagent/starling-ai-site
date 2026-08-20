@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Onboarding Console — Starling AI</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#080C17">
+
+<!-- ══════════════════════════════════════════════════════════════════
+     DEPLOY
+       Repo:  AdminStarlingagent/starling-ai-site
+       Path:  admin/index.html
+       URL:   https://starlingagent.com/admin/
+
+     Single file — Supabase URL, publishable key and logo are all embedded.
+     Nothing else to upload. The page is publicly reachable by design; the
+     data behind it is guarded by Supabase Auth + row level security, and
+     only emails listed in starling_admins can read anything.
+     ══════════════════════════════════════════════════════════════════ -->
+<script>
+  const SB_URL  = "https://xrcakqiwprrlznmfevrc.supabase.co";
+  const SB_ANON = "sb_publishable_cfmwICjuYz3duCf75yWcag_jOI4DPSC";   // Settings → API Keys → publishable key (sb_publishable_…)
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --navy:#080C17; --navy-2:#0D1526; --navy-3:#141E35; --navy-4:#1B2743;
+  --coral:#F15368; --peri:#868BDF; --blush:#FFA0A8;
+  --paper:#EEF0F6; --muted:#8B94AC; --dim:#69728A;
+  --line:rgba(134,139,223,.20); --line-2:rgba(134,139,223,.36);
+  --ok:#4ED4A0; --warn:#FFC46B;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--navy);color:var(--paper);
+  font:400 15px/1.55 "IBM Plex Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font-family:inherit}
+a{color:var(--peri)}
+
+/* ── login ── */
+#login{min-height:100vh;display:grid;place-items:center;padding:24px}
+.card{width:100%;max-width:380px;background:var(--navy-2);border:1px solid var(--line);
+  border-radius:16px;padding:34px 30px;position:relative}
+.card::after{content:"";position:absolute;top:0;right:0;width:26px;height:26px;
+  background:linear-gradient(225deg,var(--navy) 50%,rgba(134,139,223,.28) 50%);border-top-right-radius:16px}
+.card .lg{display:flex;align-items:center;gap:11px;margin-bottom:26px}
+.logo{background:url("data:image/png;base64,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") center/contain no-repeat;display:block;flex:none}
+.card .lg .logo{width:43px;height:40px}
+.toprow .logo{width:34px;height:32px}
+.card .lg b{font:700 17px/1 "Poppins",sans-serif}
+.card h1{font:600 21px/1.3 "Poppins",sans-serif;margin:0 0 6px;letter-spacing:-.02em}
+.card p.s{color:var(--muted);font-size:13.5px;margin:0 0 22px}
+label{display:block;font-size:13px;font-weight:500;margin:0 0 6px}
+input,select,textarea{width:100%;background:var(--navy-3);color:var(--paper);
+  border:1px solid var(--line);border-radius:9px;padding:11px 13px;
+  font:400 15px "IBM Plex Sans",sans-serif}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--peri);outline-offset:1px;border-color:transparent}
+.fg{margin-bottom:15px}
+.btn{cursor:pointer;border:0;border-radius:10px;padding:13px 22px;
+  font:600 15px "Poppins",sans-serif;color:#12060A;
+  background:linear-gradient(100deg,var(--blush),var(--coral));transition:.16s}
+.btn:hover{transform:translateY(-1px)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn.w{width:100%}
+.btn.ghost{background:var(--navy-3);color:var(--paper);border:1px solid var(--line);font-weight:500}
+.btn.ghost:hover{border-color:var(--line-2);background:var(--navy-4)}
+.btn.sm{padding:8px 14px;font-size:13px;border-radius:8px}
+.msg{font-size:13.5px;margin-top:14px;display:none}
+.msg.on{display:block}
+.msg.bad{color:var(--coral)}
+
+/* ── app shell ── */
+#app{display:none;min-height:100vh;grid-template-columns:390px 1fr}
+#app.on{display:grid}
+.pane{border-right:1px solid var(--line);display:flex;flex-direction:column;
+  height:100vh;position:sticky;top:0}
+.top{padding:16px 18px;border-bottom:1px solid var(--line);background:var(--navy-2)}
+.toprow{display:flex;align-items:center;gap:10px;margin-bottom:13px}
+
+.toprow b{font:700 15px/1 "Poppins",sans-serif;flex:1}
+.bell{position:relative;background:var(--navy-3);border:1px solid var(--line);
+  border-radius:8px;width:32px;height:32px;color:var(--muted);cursor:pointer;font-size:14px}
+.bell b{position:absolute;top:-6px;right:-6px;background:var(--coral);color:#150609;
+  font:700 10px/16px "IBM Plex Mono",monospace;min-width:17px;height:17px;
+  border-radius:9px;padding:0 4px;display:none}
+.bell b.on{display:block}
+.filters{display:flex;gap:7px}
+.filters select,.filters input{padding:8px 10px;font-size:13px;border-radius:8px}
+.filters input{flex:1}
+
+.list{overflow-y:auto;flex:1;padding:8px}
+.row{padding:13px 14px;border-radius:10px;cursor:pointer;border:1px solid transparent;
+  margin-bottom:5px;transition:.14s;position:relative}
+.row:hover{background:var(--navy-2);border-color:var(--line)}
+.row.sel{background:rgba(241,83,104,.10);border-color:rgba(241,83,104,.42)}
+.row .r1{display:flex;align-items:baseline;gap:8px}
+.row .nm{font-weight:600;font-size:14.5px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .r2{display:flex;align-items:center;gap:7px;margin-top:5px;
+  font:400 11.5px/1 "IBM Plex Mono",monospace;color:var(--dim)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--coral);flex:none}
+.dot.hide{visibility:hidden}
+.chip{font:500 10px/1 "IBM Plex Mono",monospace;letter-spacing:.05em;text-transform:uppercase;
+  padding:4px 7px;border-radius:5px;background:rgba(134,139,223,.14);color:var(--peri);
+  border:1px solid var(--line);white-space:nowrap}
+.chip.new{background:rgba(241,83,104,.15);color:var(--blush);border-color:rgba(241,83,104,.35)}
+.chip.upd{background:rgba(255,196,107,.14);color:var(--warn);border-color:rgba(255,196,107,.32)}
+.chip.live{background:rgba(78,212,160,.13);color:var(--ok);border-color:rgba(78,212,160,.32)}
+.empty{padding:44px 20px;text-align:center;color:var(--dim);font-size:13.5px}
+
+/* ── detail ── */
+.detail{overflow-y:auto;height:100vh;padding:30px 34px 90px}
+.dhead{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.dhead h2{font:600 26px/1.2 "Poppins",sans-serif;margin:0;letter-spacing:-.02em;flex:1;min-width:220px}
+.dsub{color:var(--muted);font-size:14px;margin:0 0 22px}
+.dsub a{color:var(--peri)}
+.bar{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-bottom:24px;
+  padding-bottom:22px;border-bottom:1px solid var(--line)}
+.bar select{width:auto;padding:8px 30px 8px 11px;font-size:13.5px;border-radius:8px;
+  appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='11' height='7'><path d='M1 1l4.5 4.5L10 1' stroke='%238B94AC' stroke-width='1.6' fill='none' stroke-linecap='round'/></svg>");
+  background-repeat:no-repeat;background-position:right 11px center}
+
+.grp{margin-bottom:26px}
+.grp h3{font:600 12px/1 "IBM Plex Mono",monospace;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--coral);margin:0 0 12px}
+.kv{display:grid;grid-template-columns:200px 1fr;gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.kv>div{background:var(--navy-2);padding:10px 13px;font-size:13.5px;min-width:0}
+.kv>div:nth-child(odd){color:var(--dim);font-family:"IBM Plex Mono",monospace;font-size:12px}
+.kv>div:nth-child(even){word-break:break-word;white-space:pre-wrap}
+.kv .none{color:#4C5570}
+
+/* credentials */
+.cred{background:rgba(255,196,107,.05);border:1px solid rgba(255,196,107,.26);
+  border-radius:11px;padding:17px 19px}
+.cred .hint{font:400 12.5px/1.6 "IBM Plex Sans";color:var(--muted);margin:9px 0 0}
+.credout{margin-top:13px;display:none}
+.credout.on{display:block}
+.credline{display:flex;gap:9px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+.credline span{font:400 11.5px/1 "IBM Plex Mono",monospace;color:var(--dim);min-width:150px}
+.credline code{flex:1;min-width:180px;font:400 13px/1.4 "IBM Plex Mono",monospace;
+  background:var(--navy);border:1px solid var(--line);border-radius:7px;
+  padding:9px 11px;word-break:break-all;color:var(--blush)}
+
+/* versions */
+.ver{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.vrow{padding:12px 14px;border-bottom:1px solid var(--line);background:var(--navy-2)}
+.vrow:last-child{border-bottom:0}
+.vrow .vh{display:flex;gap:9px;align-items:baseline;font-size:13.5px}
+.vrow .vh b{font:600 13px "IBM Plex Mono",monospace;color:var(--peri)}
+.vrow .vh time{color:var(--dim);font-size:12px;margin-left:auto}
+.diffs{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.diffs em{font:400 11px/1 "IBM Plex Mono",monospace;font-style:normal;
+  padding:4px 7px;border-radius:5px;background:rgba(255,196,107,.11);
+  color:var(--warn);border:1px solid rgba(255,196,107,.24)}
+.diffs em.first{background:rgba(78,212,160,.11);color:var(--ok);border-color:rgba(78,212,160,.26)}
+
+textarea{min-height:88px;resize:vertical;font-size:14px}
+.blank{display:grid;place-items:center;height:100vh;color:var(--dim);text-align:center;padding:40px}
+.blank div{max-width:280px}
+.blank h3{font:600 17px "Poppins",sans-serif;color:var(--muted);margin:0 0 8px}
+
+.toast{position:fixed;bottom:22px;right:22px;z-index:99;background:var(--navy-3);
+  border:1px solid var(--line-2);border-left:3px solid var(--ok);border-radius:10px;
+  padding:14px 18px;font-size:14px;box-shadow:0 18px 44px -14px rgba(0,0,0,.7);
+  transform:translateY(140%);transition:transform .35s cubic-bezier(.2,.8,.2,1);max-width:330px}
+.toast.on{transform:none}
+.toast b{display:block;font-weight:600;margin-bottom:2px}
+.toast small{color:var(--muted);font-size:12.5px}
+
+@media (max-width:980px){
+  #app.on{grid-template-columns:1fr}
+  .pane{height:auto;position:static;border-right:0;border-bottom:1px solid var(--line)}
+  .list{max-height:44vh}
+  .detail{height:auto;padding:24px 18px 70px}
+  .kv{grid-template-columns:1fr}
+  .kv>div:nth-child(odd){padding-bottom:0;background:var(--navy-2)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN ═══ -->
+<div id="login">
+  <div class="card">
+    <div class="lg">
+      <span class="logo" role="img" aria-label="Starling AI"></span>
+      <b>Starling AI</b>
+    </div>
+    <h1>Onboarding console</h1>
+    <p class="s">Client CRM access and integration config. Admin accounts only.</p>
+    <div class="fg">
+      <label for="lu">Email</label>
+      <input type="email" id="lu" autocomplete="username" placeholder="admin@starlingagent.com">
+    </div>
+    <div class="fg">
+      <label for="lp">Password</label>
+      <input type="password" id="lp" autocomplete="current-password" placeholder="••••••••••">
+    </div>
+    <button class="btn w" id="loginBtn">Sign in</button>
+    <p class="msg bad" id="loginMsg"></p>
+  </div>
+</div>
+
+<!-- ═══ APP ═══ -->
+<div id="app">
+  <div class="pane">
+    <div class="top">
+      <div class="toprow">
+        <span class="logo" role="img" aria-label="Starling AI"></span>
+        <b>Onboarding</b>
+        <button class="bell" id="bell" title="Unread">🔔<b id="bellCount"></b></button>
+        <button class="btn ghost sm" id="out">Out</button>
+      </div>
+      <div class="filters">
+        <input type="search" id="q" placeholder="Search name, email, brokerage…">
+        <select id="fStatus">
+          <option value="">All</option>
+          <option value="unread">Unread</option>
+          <option value="new">New</option>
+          <option value="in_setup">In setup</option>
+          <option value="live">Live</option>
+          <option value="paused">Paused</option>
+        </select>
+        <select id="fCrm"><option value="">CRM</option></select>
+      </div>
+    </div>
+    <div class="list" id="list"><div class="empty">Loading…</div></div>
+  </div>
+
+  <div id="detail">
+    <div class="blank"><div>
+      <h3>Nothing selected</h3>
+      <p style="font-size:13.5px;margin:0">Pick a client on the left. A red dot means they've submitted something you haven't opened yet.</p>
+    </div></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><b id="toastT"></b><small id="toastS"></small></div>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const sb = createClient(SB_URL, SB_ANON);
+const $  = id => document.getElementById(id);
+
+let rows = [], sel = null, baseTitle = document.title;
+
+/* ─────────── auth ─────────── */
+$("loginBtn").addEventListener("click", signIn);
+$("lp").addEventListener("keydown", e => { if(e.key === "Enter") signIn(); });
+
+async function signIn(){
+  const btn = $("loginBtn"), msg = $("loginMsg");
+  btn.disabled = true; btn.textContent = "Signing in…"; msg.classList.remove("on");
+
+  const { error } = await sb.auth.signInWithPassword({
+    email: $("lu").value.trim(), password: $("lp").value
+  });
+
+  if(error){
+    msg.textContent = "That email and password didn't match. Check them and try again.";
+    msg.classList.add("on");
+    btn.disabled = false; btn.textContent = "Sign in";
+    return;
+  }
+  start();
+}
+
+$("out").addEventListener("click", async () => {
+  await sb.auth.signOut();
+  location.reload();
+});
+
+sb.auth.getSession().then(({ data }) => { if(data.session) start(); });
+
+async function start(){
+  // is this user actually on the allowlist?
+  const { data: ok } = await sb.rpc("is_starling_admin");
+  if(!ok){
+    $("loginMsg").textContent = "This account isn't on the admin allowlist. Ask Jason to add you.";
+    $("loginMsg").classList.add("on");
+    $("loginBtn").disabled = false; $("loginBtn").textContent = "Sign in";
+    await sb.auth.signOut();
+    return;
+  }
+  $("login").style.display = "none";
+  $("app").classList.add("on");
+  await load();
+  setInterval(poll, 45000);
+}
+
+/* ─────────── data ─────────── */
+async function load(){
+  const { data, error } = await sb
+    .from("starling_onboarding_clients")
+    .select("*")
+    .order("updated_at", { ascending:false });
+
+  if(error){ $("list").innerHTML = `<div class="empty">Couldn't load: ${esc(error.message)}</div>`; return; }
+
+  rows = data || [];
+  const crms = [...new Set(rows.map(r => r.active_crm).filter(Boolean))].sort();
+  const cur  = $("fCrm").value;
+  $("fCrm").innerHTML = '<option value="">CRM</option>' +
+    crms.map(c => `<option${c===cur?" selected":""}>${esc(c)}</option>`).join("");
+  render();
+}
+
+async function poll(){
+  const before = rows.filter(r => r.has_unread).length;
+  const keep = sel;
+  await load();
+  const after = rows.filter(r => r.has_unread).length;
+  if(after > before){
+    const fresh = rows.find(r => r.has_unread && r.id !== keep);
+    toast("New submission", fresh ? `${fresh.team_name || fresh.email} just sent an update.` : "Something new came in.");
+  }
+  if(keep) openClient(keep, true);
+}
+
+/* ─────────── list ─────────── */
+["q","fStatus","fCrm"].forEach(id => $(id).addEventListener("input", render));
+
+function filtered(){
+  const q  = $("q").value.trim().toLowerCase();
+  const st = $("fStatus").value, cm = $("fCrm").value;
+  return rows.filter(r => {
+    if(cm && r.active_crm !== cm) return false;
+    if(st === "unread" ? !r.has_unread : st && r.status !== st) return false;
+    if(!q) return true;
+    return [r.team_name, r.agent_name, r.email, r.brokerage]
+      .filter(Boolean).join(" ").toLowerCase().includes(q);
+  });
+}
+
+function render(){
+  const list = filtered();
+  const unread = rows.filter(r => r.has_unread).length;
+  $("bellCount").textContent = unread;
+  $("bellCount").classList.toggle("on", unread > 0);
+  document.title = unread ? `(${unread}) ${baseTitle}` : baseTitle;
+
+  if(!list.length){
+    $("list").innerHTML = `<div class="empty">${rows.length ? "Nothing matches that filter." : "No submissions yet. They'll show up here the moment someone sends the form."}</div>`;
+    return;
+  }
+
+  $("list").innerHTML = list.map(r => {
+    const isUpd = r.submission_count > 1;
+    const chip  = r.status === "live"  ? '<span class="chip live">live</span>'
+                : r.status === "new"   ? `<span class="chip ${isUpd?"upd":"new"}">${isUpd?"updated":"new"}</span>`
+                : `<span class="chip">${esc(r.status.replace("_"," "))}</span>`;
+    return `<div class="row${sel===r.id?" sel":""}" data-id="${r.id}">
+      <div class="r1">
+        <i class="dot${r.has_unread?"":" hide"}"></i>
+        <span class="nm">${esc(r.team_name || r.agent_name || r.email)}</span>
+        ${chip}
+      </div>
+      <div class="r2">
+        <span>${esc(r.active_crm || "no crm")}</span>
+        <span>·</span>
+        <span>v${r.submission_count}</span>
+        <span>·</span>
+        <span>${when(r.updated_at)}</span>
+      </div>
+    </div>`;
+  }).join("");
+
+  [...$("list").querySelectorAll(".row")].forEach(el =>
+    el.addEventListener("click", () => openClient(el.dataset.id)));
+}
+
+/* ─────────── detail ─────────── */
+async function openClient(id, quiet){
+  sel = id;
+  const r = rows.find(x => x.id === id);
+  if(!r) return;
+  render();
+
+  const { data: vers } = await sb
+    .from("starling_onboarding_versions")
+    .select("version, changed_fields, submitted_at")
+    .eq("client_id", id)
+    .order("version", { ascending:false });
+
+  const p = r.payload || {};
+
+  $("detail").innerHTML = `
+    <div class="dhead">
+      <h2>${esc(r.team_name || r.agent_name || r.email)}</h2>
+      ${r.has_unread ? '<button class="btn sm" id="markRead">Mark read</button>' : ""}
+    </div>
+    <p class="dsub">
+      ${esc(r.agent_name || "—")} · ${esc(r.brokerage || "—")} ·
+      <a href="mailto:${esc(r.email)}">${esc(r.email)}</a>
+      ${r.owner_mobile ? ` · <a href="tel:${esc(r.owner_mobile)}">${esc(r.owner_mobile)}</a>` : ""}
+    </p>
+
+    <div class="bar">
+      <select id="status">
+        ${["new","in_setup","live","paused","archived"].map(s =>
+          `<option value="${s}"${r.status===s?" selected":""}>${s.replace("_"," ")}</option>`).join("")}
+      </select>
+      <button class="btn ghost sm" id="copyCfg">Copy CONFIG block</button>
+      <span class="chip">v${r.submission_count}</span>
+      <span class="chip">${esc(r.active_crm || "no crm")}</span>
+    </div>
+
+    ${r.has_credentials ? `
+    <div class="grp">
+      <h3>Credentials</h3>
+      <div class="cred">
+        <button class="btn sm" id="reveal">Reveal credentials</button>
+        <p class="hint">Stored encrypted. Every reveal is logged with your user ID and timestamp.
+        ${r.cred_hint ? `Fingerprint: <code style="color:var(--warn)">${esc(r.cred_hint)}</code>` : ""}</p>
+        <div class="credout" id="credout"></div>
+      </div>
+    </div>` : `
+    <div class="grp">
+      <h3>Credentials</h3>
+      <div class="kv"><div>status</div><div class="none">None submitted — they chose the user-invite path, or left it blank.</div></div>
+    </div>`}
+
+    <div class="grp">
+      <h3>Business</h3>
+      ${kv({
+        "Team":        r.team_name,
+        "Agent":       r.agent_name,
+        "Agent 1st":   p["client.agent_first_name"],
+        "Brokerage":   r.brokerage,
+        "Type":        r.business_type,
+        "Time zone":   (p["client.timezone"]||"").split("|")[0],
+        "Language":    r.language,
+        "ITIN":        p["client.enable_itin"] ? "yes" : "no",
+        "Market":      p["locations.market_1"],
+        "Market 2":    p["locations.market_2"],
+        "Office":      p["locations.office_address_1"]
+      })}
+    </div>
+
+    <div class="grp">
+      <h3>Integration</h3>
+      ${kv({
+        "CRM":            r.active_crm,
+        "Calendar":       r.active_calendar,
+        "FUB invitee":    p["follow_up_boss.calendar_invitee_user_id"],
+        "FUB old leads":  p["follow_up_boss.old_lead_assigned_user_id"],
+        "User invite":    p["follow_up_boss.invite_instead"] || p["go_high_level.invite_instead"],
+        "GHL location":   p["go_high_level.location_id"],
+        "GHL calendar":   p["go_high_level.calendar_id"],
+        "Lofty new":      p["lofty.calendar_assigned_user_id"],
+        "Lofty old":      p["lofty.old_lead_assigned_user_id"],
+        "BoldTrail user": p["bold_trail.assigned_user_id"],
+        "BoldTrail tag":  p["bold_trail.filter_tag"],
+        "RG site uuid":   p["real_geeks.site_uuid"],
+        "RG user id":     p["real_geeks.user_id"],
+        "SF org":         p["jungo.org_url"],
+        "SF admin":       p["jungo.admin_contact"],
+        "SF object":      p["jungo.lead_object"],
+        "Other CRM":      p["other_crm.name"],
+        "Other notes":    p["other_crm.notes"]
+      })}
+    </div>
+
+    <div class="grp">
+      <h3>Booking</h3>
+      ${kv({
+        "Days":         Array.isArray(p["hours.days"]) ? p["hours.days"].join(", ") : p["hours.days"],
+        "Window":       (p["hours.start"]||"") + (p["hours.end"] ? " – " + p["hours.end"] : ""),
+        "Length":       p["scheduling.meeting_minutes"] ? p["scheduling.meeting_minutes"] + " min" : "",
+        "Notice":       p["scheduling.lead_time_minutes"] ? p["scheduling.lead_time_minutes"] + " min" : "",
+        "Meeting type": p["locations.default_meeting_type"],
+        "Skip today":   p["scheduling.skip_today"],
+        "8am–8pm gate": p["texting_compliance.enabled"] ? "on" : "off",
+        "States":       p["texting_compliance.states"]
+      })}
+    </div>
+
+    <div class="grp">
+      <h3>Handoff &amp; voice</h3>
+      ${kv({
+        "Lender":       p["links.mortgage_name"],
+        "Lender link":  p["links.mortgage_link"],
+        "Credit":       p["links.credit_repair_name"],
+        "Credit link":  p["links.credit_repair_link"],
+        "Office phone": p["contact.office_phone_1"],
+        "First SMS":    p["messages.first_sms_message"],
+        "Never say":    p["messages.guardrails"],
+        "Notes":        p["messages.notes"]
+      })}
+    </div>
+
+    <div class="grp">
+      <h3>Signed</h3>
+      ${kv({
+        "Signature": p["auth.signature"],
+        "Date":      p["auth.date"],
+        "CRM access": p["auth.access"],
+        "Consent":    p["auth.consent"]
+      })}
+    </div>
+
+    <div class="grp">
+      <h3>History — ${(vers||[]).length} submission${(vers||[]).length===1?"":"s"}</h3>
+      <div class="ver">
+        ${(vers||[]).map(v => `
+          <div class="vrow">
+            <div class="vh"><b>v${v.version}</b>
+              <span style="color:var(--muted)">${v.changed_fields?.length ? v.changed_fields.length + " field(s) changed" : "no field changes"}</span>
+              <time>${when(v.submitted_at)}</time>
+            </div>
+            ${v.changed_fields?.length ? `<div class="diffs">${
+              v.changed_fields.map(f => `<em class="${f.startsWith("—")?"first":""}">${esc(f)}</em>`).join("")
+            }</div>` : ""}
+          </div>`).join("") || '<div class="vrow"><span style="color:var(--dim)">No history.</span></div>'}
+      </div>
+    </div>
+
+    <div class="grp">
+      <h3>Internal notes</h3>
+      <textarea id="notes" placeholder="Where this stands, who's on it, what's blocking…">${esc(r.internal_notes||"")}</textarea>
+      <button class="btn ghost sm" id="saveNotes" style="margin-top:9px">Save notes</button>
+    </div>
+  `;
+
+  wire(r);
+  if(r.has_unread && !quiet) markRead(r.id);
+}
+
+function wire(r){
+  const on = (id, fn) => { const el = $(id); if(el) el.addEventListener("click", fn); };
+
+  on("markRead", () => markRead(r.id));
+
+  on("reveal", async e => {
+    e.target.disabled = true; e.target.textContent = "Decrypting…";
+    const { data, error } = await sb.rpc("reveal_starling_credentials", { p_client_id: r.id });
+    if(error){
+      e.target.disabled = false; e.target.textContent = "Reveal credentials";
+      toast("Couldn't decrypt", error.message);
+      return;
+    }
+    e.target.style.display = "none";
+    const box = $("credout");
+    box.classList.add("on");
+    box.innerHTML = Object.entries(data || {}).filter(([,v]) => v).map(([k,v]) =>
+      `<div class="credline"><span>${esc(k)}</span><code>${esc(v)}</code>
+       <button class="btn ghost sm" data-copy="${esc(v)}">Copy</button></div>`).join("")
+      || '<p class="hint">Nothing stored.</p>';
+    [...box.querySelectorAll("[data-copy]")].forEach(b =>
+      b.addEventListener("click", () => {
+        navigator.clipboard.writeText(b.dataset.copy);
+        b.textContent = "Copied";
+        setTimeout(() => b.textContent = "Copy", 1600);
+      }));
+  });
+
+  on("copyCfg", async e => {
+    let cfg = JSON.parse(JSON.stringify(r.config_json || {}));
+    if(r.has_credentials){
+      const { data } = await sb.rpc("reveal_starling_credentials", { p_client_id: r.id });
+      // drop the real keys back into the redacted config block
+      const walk = o => { for(const k in o){
+        if(o[k] && typeof o[k] === "object") walk(o[k]);
+        else if(typeof o[k] === "string" && o[k].startsWith("«")){
+          const hit = Object.entries(data||{}).find(([n]) => n.endsWith("." + k) || n === k);
+          if(hit) o[k] = hit[1];
+        }
+      }};
+      walk(cfg);
+    }
+    navigator.clipboard.writeText(JSON.stringify(cfg, null, 2));
+    e.target.textContent = "Copied — paste into CONFIG";
+    setTimeout(() => e.target.textContent = "Copy CONFIG block", 2200);
+  });
+
+  const st = $("status");
+  if(st) st.addEventListener("change", async () => {
+    const { error } = await sb.from("starling_onboarding_clients")
+      .update({ status: st.value }).eq("id", r.id);
+    if(error) return toast("Couldn't save", error.message);
+    r.status = st.value; render();
+    toast("Status saved", `Now "${st.value.replace("_"," ")}".`);
+  });
+
+  on("saveNotes", async e => {
+    const { error } = await sb.from("starling_onboarding_clients")
+      .update({ internal_notes: $("notes").value }).eq("id", r.id);
+    if(error) return toast("Couldn't save", error.message);
+    r.internal_notes = $("notes").value;
+    e.target.textContent = "Saved";
+    setTimeout(() => e.target.textContent = "Save notes", 1600);
+  });
+}
+
+async function markRead(id){
+  await sb.from("starling_onboarding_clients").update({ has_unread:false }).eq("id", id);
+  const r = rows.find(x => x.id === id);
+  if(r) r.has_unread = false;
+  render();
+  const b = $("markRead"); if(b) b.remove();
+}
+
+$("bell").addEventListener("click", () => {
+  $("fStatus").value = $("fStatus").value === "unread" ? "" : "unread";
+  render();
+});
+
+/* ─────────── helpers ─────────── */
+function kv(obj){
+  const e = Object.entries(obj).filter(([,v]) => v !== undefined && v !== null && v !== "");
+  if(!e.length) return '<div class="kv"><div>—</div><div class="none">Nothing filled in.</div></div>';
+  return '<div class="kv">' + e.map(([k,v]) =>
+    `<div>${esc(k)}</div><div>${esc(String(v))}</div>`).join("") + "</div>";
+}
+function esc(s){
+  return String(s ?? "").replace(/[&<>"']/g, c =>
+    ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+}
+function when(ts){
+  const d = new Date(ts), m = (Date.now() - d) / 60000;
+  if(m < 1)    return "just now";
+  if(m < 60)   return Math.floor(m) + "m ago";
+  if(m < 1440) return Math.floor(m/60) + "h ago";
+  if(m < 10080)return Math.floor(m/1440) + "d ago";
+  return d.toLocaleDateString("en-US", { month:"short", day:"numeric" });
+}
+let toastTimer;
+function toast(title, sub){
+  $("toastT").textContent = title;
+  $("toastS").textContent = sub || "";
+  $("toast").classList.add("on");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => $("toast").classList.remove("on"), 5200);
+}
+</script>
+</body>
+</html>
