@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Connect your CRM — Starling AI</title>
+<meta name="theme-color" content="#080C17">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Give Starling AI the access we need to connect your AI agent to your CRM.">
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SETUP — nothing left to do
+       Supabase URL + publishable key are set below.
+       The logo is embedded, so there's no assets/ folder to ship.
+       Deploy to starlingagent.com/crm-access.html
+
+     Submissions go to Supabase (source of truth, keys encrypted at rest) and
+     a redacted heads-up email goes to Web3Forms. No key ever hits the inbox.
+     ══════════════════════════════════════════════════════════════════ -->
+
+<script>
+  const SB_URL     = "https://xrcakqiwprrlznmfevrc.supabase.co";
+  const SB_ANON    = "sb_publishable_cfmwICjuYz3duCf75yWcag_jOI4DPSC";  // Settings → API Keys → publishable key (sb_publishable_…)
+  const CONSOLE_URL = "https://starlingagent.com/admin/onboarding.html";
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --navy:#080C17; --navy-2:#0D1526; --navy-3:#141E35; --navy-4:#1B2743;
+  --coral:#F15368; --peri:#868BDF; --blush:#FFA0A8;
+  --paper:#EEF0F6; --muted:#8B94AC; --dim:#69728A;
+  --line:rgba(134,139,223,.20); --line-2:rgba(134,139,223,.34);
+  --ok:#4ED4A0; --warn:#FFC46B;
+  --r:14px; --maxw:860px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--navy); color:var(--paper);
+  font:400 16px/1.6 "IBM Plex Sans",system-ui,-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(60rem 40rem at 80% -10%, rgba(134,139,223,.13), transparent 60%),
+    radial-gradient(45rem 30rem at 5% 0%, rgba(241,83,104,.09), transparent 62%);
+}
+.wrap{position:relative; z-index:1; max-width:var(--maxw); margin:0 auto; padding:0 20px 96px}
+
+/* ── progress rail (signature: fills as required fields complete) ── */
+.rail{position:sticky; top:0; z-index:40; height:3px; background:rgba(255,255,255,.06)}
+.rail i{display:block; height:100%; width:0%;
+  background:linear-gradient(90deg,var(--coral),var(--blush),var(--peri));
+  transition:width .45s cubic-bezier(.2,.8,.2,1)}
+.railnote{position:sticky; top:3px; z-index:39; background:rgba(8,12,23,.86);
+  backdrop-filter:blur(10px); border-bottom:1px solid var(--line);
+  font:500 12.5px/1 "IBM Plex Mono",monospace; color:var(--dim);
+  padding:9px 20px; letter-spacing:.02em}
+.railnote b{color:var(--peri); font-weight:500}
+
+/* ── header ── */
+header{padding:52px 0 8px}
+.brand{display:flex; align-items:center; gap:13px; margin-bottom:34px}
+.brand .logo{width:47px; height:44px; display:block; flex:none;
+  background:url("data:image/png;base64,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") center/contain no-repeat}
+.brand span{font:700 19px/1 "Poppins",sans-serif; letter-spacing:-.01em}
+.eyebrow{font:500 12px/1 "IBM Plex Mono",monospace; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--coral); margin:0 0 14px}
+h1{font:600 clamp(30px,5.4vw,44px)/1.1 "Poppins",sans-serif; letter-spacing:-.025em; margin:0 0 16px}
+.lede{font-size:17.5px; color:var(--muted); max-width:60ch; margin:0 0 26px}
+.lede b{color:var(--paper); font-weight:500}
+
+/* ── security notice ── */
+.notice{background:var(--navy-2); border:1px solid var(--line); border-left:3px solid var(--peri);
+  border-radius:0 var(--r) var(--r) 0; padding:17px 20px; margin:0 0 12px; font-size:14.5px; color:var(--muted)}
+.notice strong{color:var(--paper); font-weight:600}
+.notice ul{margin:9px 0 0; padding-left:19px} .notice li{margin:5px 0}
+
+/* ── sections: folded corner = origami motif ── */
+section{background:var(--navy-2); border:1px solid var(--line); border-radius:var(--r);
+  padding:28px 26px; margin:20px 0; position:relative}
+section::after{content:""; position:absolute; top:0; right:0; width:26px; height:26px;
+  background:linear-gradient(225deg,var(--navy) 50%, rgba(134,139,223,.28) 50%);
+  border-top-right-radius:var(--r)}
+.snum{font:500 11.5px/1 "IBM Plex Mono",monospace; color:var(--coral);
+  letter-spacing:.12em; text-transform:uppercase; display:block; margin-bottom:8px}
+h2{font:600 22px/1.25 "Poppins",sans-serif; letter-spacing:-.015em; margin:0 0 6px}
+.sub{color:var(--muted); font-size:14.5px; margin:0 0 22px; max-width:62ch}
+
+/* ── fields ── */
+.grid{display:grid; gap:16px; grid-template-columns:1fr 1fr}
+.grid.one{grid-template-columns:1fr}
+.f{display:flex; flex-direction:column; gap:6px}
+.f.span{grid-column:1/-1}
+label{font-size:13.5px; font-weight:500; color:var(--paper); display:flex; gap:7px; align-items:baseline; flex-wrap:wrap}
+label .req{color:var(--coral); font-size:15px; line-height:1}
+label .opt{color:var(--dim); font-weight:400; font-size:12px}
+input[type=text],input[type=email],input[type=tel],input[type=url],input[type=password],
+input[type=number],input[type=time],select,textarea{
+  width:100%; background:var(--navy-3); color:var(--paper);
+  border:1px solid var(--line); border-radius:9px; padding:11px 13px;
+  font:400 15px/1.45 "IBM Plex Sans",sans-serif; transition:border-color .15s, background .15s}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--peri); outline-offset:1px;
+  border-color:transparent; background:var(--navy-4)}
+input::placeholder,textarea::placeholder{color:#5B6480}
+textarea{resize:vertical; min-height:96px}
+select{appearance:none; cursor:pointer;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='11' height='7'><path d='M1 1l4.5 4.5L10 1' stroke='%238B94AC' stroke-width='1.6' fill='none' stroke-linecap='round'/></svg>");
+  background-repeat:no-repeat; background-position:right 14px center; padding-right:36px}
+.mono{font-family:"IBM Plex Mono",monospace !important; font-size:13.5px !important; letter-spacing:.01em}
+.hint{font-size:12.5px; color:var(--dim); line-height:1.5}
+.hint a{color:var(--peri)}
+.hint code{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--blush);
+  background:rgba(255,160,168,.09); padding:1px 5px; border-radius:4px}
+.path{font-family:"IBM Plex Mono",monospace; font-size:12.5px; color:var(--peri);
+  background:var(--navy); border:1px solid var(--line); border-radius:7px;
+  padding:8px 11px; display:block; margin-top:2px; line-height:1.6}
+
+/* secret field + reveal */
+.secret{position:relative}
+.secret input{padding-right:62px}
+.peek{position:absolute; right:6px; top:6px; bottom:6px; padding:0 11px; cursor:pointer;
+  background:var(--navy-4); border:1px solid var(--line); border-radius:6px; color:var(--muted);
+  font:500 11.5px/1 "IBM Plex Mono",monospace; letter-spacing:.06em}
+.peek:hover{color:var(--paper); border-color:var(--line-2)}
+
+/* ── CRM picker cards ── */
+.crms{display:grid; grid-template-columns:repeat(auto-fill,minmax(158px,1fr)); gap:11px; margin-bottom:6px}
+.crm{position:relative}
+.crm input{position:absolute; opacity:0; width:0; height:0}
+.crm span{display:block; cursor:pointer; padding:15px 14px; border-radius:11px;
+  background:var(--navy-3); border:1px solid var(--line); transition:.15s;
+  font-weight:500; font-size:14.5px}
+.crm span small{display:block; font:400 11.5px/1.4 "IBM Plex Mono",monospace;
+  color:var(--dim); margin-top:4px; letter-spacing:.02em}
+.crm input:focus-visible + span{outline:2px solid var(--peri); outline-offset:2px}
+.crm span:hover{border-color:var(--line-2); background:var(--navy-4)}
+.crm input:checked + span{border-color:var(--coral); background:rgba(241,83,104,.10);
+  box-shadow:inset 0 0 0 1px rgba(241,83,104,.45)}
+.crm input:checked + span small{color:var(--blush)}
+
+/* ── conditional blocks ── */
+.block{display:none; margin-top:22px; padding-top:22px; border-top:1px dashed var(--line-2)}
+.block.on{display:block; animation:fade .35s ease}
+@keyframes fade{from{opacity:0; transform:translateY(-5px)}to{opacity:1; transform:none}}
+.blockhead{display:flex; align-items:center; gap:9px; margin-bottom:5px}
+.blockhead h3{font:600 16.5px/1.3 "Poppins",sans-serif; margin:0}
+.tag{font:500 10.5px/1 "IBM Plex Mono",monospace; letter-spacing:.08em; text-transform:uppercase;
+  padding:4px 8px; border-radius:5px; background:rgba(134,139,223,.14); color:var(--peri);
+  border:1px solid var(--line)}
+.tag.warn{background:rgba(255,196,107,.12); color:var(--warn); border-color:rgba(255,196,107,.3)}
+
+/* ── checkboxes ── */
+.check{display:flex; gap:11px; align-items:flex-start; padding:13px 15px; border-radius:10px;
+  background:var(--navy-3); border:1px solid var(--line); cursor:pointer; transition:.15s}
+.check:hover{border-color:var(--line-2)}
+.check input{width:18px; height:18px; margin:1px 0 0; accent-color:var(--coral); flex:none; cursor:pointer}
+.check div{font-size:14px; line-height:1.55}
+.check strong{display:block; font-weight:600; font-size:14.5px; margin-bottom:2px}
+.check small{color:var(--dim); font-size:12.5px; line-height:1.5; display:block}
+.checks{display:flex; flex-direction:column; gap:10px}
+.check.alt{background:rgba(78,212,160,.06); border-color:rgba(78,212,160,.26)}
+.check.alt strong{color:var(--ok)}
+
+/* one-time secret link */
+.otsbox{background:rgba(78,212,160,.05); border:1px solid rgba(78,212,160,.24);
+  border-radius:11px; padding:19px 21px}
+.otsbox h3{font:600 16px/1.3 "Poppins",sans-serif; margin:0}
+ol.ots{margin:0; padding-left:19px; color:var(--muted); font-size:13.5px; line-height:1.75}
+ol.ots li{margin:5px 0}
+ol.ots b{color:var(--paper); font-weight:500}
+ol.ots a{color:var(--ok)}
+
+/* days */
+.days{display:flex; flex-wrap:wrap; gap:8px}
+.day input{position:absolute; opacity:0; width:0; height:0}
+.day span{display:block; cursor:pointer; min-width:50px; text-align:center; padding:9px 12px;
+  border-radius:8px; background:var(--navy-3); border:1px solid var(--line);
+  font:500 13px/1 "IBM Plex Mono",monospace; transition:.15s}
+.day input:checked + span{background:rgba(134,139,223,.16); border-color:var(--peri); color:var(--paper)}
+.day input:focus-visible + span{outline:2px solid var(--peri); outline-offset:2px}
+
+/* ── submit ── */
+.submit{margin-top:26px; display:flex; flex-direction:column; gap:14px; align-items:flex-start}
+button.go{font:600 16px/1 "Poppins",sans-serif; color:#12060A; cursor:pointer;
+  background:linear-gradient(100deg,var(--blush),var(--coral)); border:0;
+  padding:16px 34px; border-radius:11px; transition:.18s; letter-spacing:-.01em}
+button.go:hover{transform:translateY(-1px); box-shadow:0 10px 30px -8px rgba(241,83,104,.55)}
+button.go:disabled{opacity:.5; cursor:not-allowed; transform:none; box-shadow:none}
+.sig{display:grid; gap:16px; grid-template-columns:1fr 1fr}
+.err{color:var(--coral); font-size:14px; display:none}
+.err.on{display:block}
+
+/* ── success ── */
+#done{display:none; text-align:center; padding:76px 24px}
+#done.on{display:block}
+#done .mark{width:60px; height:60px; margin:0 auto 24px; border-radius:50%;
+  background:rgba(78,212,160,.14); border:1px solid rgba(78,212,160,.4);
+  display:grid; place-items:center; font-size:27px; color:var(--ok)}
+#done h2{font-size:29px; margin-bottom:12px}
+#done p{color:var(--muted); max-width:48ch; margin:0 auto 12px; font-size:16px}
+.next{max-width:420px; margin:30px auto 0; text-align:left;
+  background:var(--navy-2); border:1px solid var(--line); border-radius:var(--r); padding:20px 22px}
+.next h4{font:600 13px/1 "IBM Plex Mono",monospace; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--coral); margin:0 0 13px}
+.next ol{margin:0; padding-left:20px; color:var(--muted); font-size:14.5px}
+.next li{margin:8px 0} .next b{color:var(--paper); font-weight:500}
+
+footer{text-align:center; color:var(--dim); font-size:13px; padding-top:38px; line-height:1.9}
+footer a{color:var(--muted)}
+.hp{position:absolute!important; left:-9999px!important}
+
+@media (max-width:640px){
+  .grid,.sig{grid-template-columns:1fr}
+  section{padding:24px 18px}
+  header{padding:36px 0 4px}
+  .wrap{padding:0 15px 70px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important; transition:none!important; scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+
+<div class="rail"><i id="railfill"></i></div>
+<div class="railnote">Starling AI · CRM access &amp; integration · <b id="railpct">0% complete</b></div>
+
+<div class="wrap">
+
+<header>
+  <div class="brand">
+    <!-- Official logo, embedded. No asset path to break. -->
+    <span class="logo" role="img" aria-label="Starling AI"></span>
+    <span>Starling AI</span>
+  </div>
+  <p class="eyebrow">Onboarding · Step 2 of 3</p>
+  <h1>Connect your CRM.</h1>
+  <p class="lede">This is the handoff. Fill this out once and our team wires your AI agent directly into the CRM you already work out of — <b>your leads, your pipeline, your calendar.</b> Most agents finish in about eight minutes. If you get stuck on a field, leave it blank and we'll grab it on the setup call.</p>
+  <p class="lede" style="font-size:15px"><b>Already sent this before?</b> Send it again any time something changes — a new lender, different hours, a rotated key. We match on your email, so it updates your existing setup instead of creating a second one, and our team gets flagged on exactly what moved.</p>
+</header>
+
+<div class="notice">
+  <strong>About the keys you're about to paste.</strong>
+  <ul>
+    <li>They're used for one thing: connecting your AI agent. Nothing else.</li>
+    <li>You can revoke or rotate any key from inside your CRM at any time — doing that just pauses the agent until you send a new one.</li>
+    <li>Sending this form a second time with the key field blank keeps the key we already hold. Only fill it in when it's actually changed.</li>
+    <li>Where your CRM supports it, you can skip the key entirely and invite <code>Starling AI</code> as a user instead. Each CRM section below has that option.</li>
+    <li>Prefer not to put a key in a web form at all? Leave it blank and send it as a self-destructing link instead — there's a two-minute walkthrough in that section.</li>
+  </ul>
+</div>
+
+<form id="f" novalidate>
+  <!-- Web3Forms key — read by JS, which builds the redacted notification email -->
+  <input type="hidden" name="access_key" value="141e743a-9449-4980-b0dc-d37061594328">
+  <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off">
+
+  <!-- ═══════════ 1. BUSINESS ═══════════ -->
+  <section>
+    <span class="snum">01 — Your business</span>
+    <h2>Who the agent works for</h2>
+    <p class="sub">This is what your leads see. The agent introduces itself using these exact names, so spell them the way you'd say them out loud.</p>
+
+    <div class="grid">
+      <div class="f span">
+        <label for="biz">Business or team name <span class="req">*</span></label>
+        <input type="text" id="biz" name="client.team_name" data-req placeholder="Rockford Ave Real Estate" autocomplete="organization">
+      </div>
+      <div class="f">
+        <label for="agentFull">Your full name <span class="req">*</span></label>
+        <input type="text" id="agentFull" name="client.agent_name" data-req placeholder="Maritza Robles" autocomplete="name">
+      </div>
+      <div class="f">
+        <label for="agentFirst">First name the agent uses <span class="req">*</span></label>
+        <input type="text" id="agentFirst" name="client.agent_first_name" data-req placeholder="Maritza">
+        <p class="hint">Nickname is fine — "Mari" reads warmer than "Maritza R." in a text.</p>
+      </div>
+      <div class="f">
+        <label for="brokerage">Brokerage <span class="req">*</span></label>
+        <input type="text" id="brokerage" name="client.brokerage" data-req placeholder="eXp Realty">
+      </div>
+      <div class="f">
+        <label for="btype">What you do <span class="req">*</span></label>
+        <select id="btype" name="client.business_type" data-req>
+          <option value="Real Estate Agent">Real estate — buyers &amp; sellers</option>
+          <option value="Mortgage Lender">Mortgage — loans &amp; pre-approvals</option>
+        </select>
+        <p class="hint">Mortgage mode keeps the agent off rates, payments and down-payment numbers.</p>
+      </div>
+      <div class="f">
+        <label for="email">Your email <span class="req">*</span></label>
+        <input type="email" id="email" name="email" data-req placeholder="you@yourdomain.com" autocomplete="email">
+        <p class="hint">Where we send the confirmation and the go-live notice.</p>
+      </div>
+      <div class="f">
+        <label for="cell">Your mobile <span class="req">*</span></label>
+        <input type="tel" id="cell" name="client.owner_mobile" data-req placeholder="(832) 555-0142" autocomplete="tel">
+        <p class="hint">We text you the first live test message from your agent.</p>
+      </div>
+      <div class="f">
+        <label for="tz">Your time zone <span class="req">*</span></label>
+        <select id="tz" name="client.timezone" data-req>
+          <option value="America/New_York|Eastern Time">Eastern — New York, Atlanta, Miami</option>
+          <option value="America/Chicago|Central Time" selected>Central — Houston, Dallas, Chicago</option>
+          <option value="America/Denver|Mountain Time">Mountain — Denver, Boise, Salt Lake</option>
+          <option value="America/Phoenix|Mountain Time">Arizona — Phoenix, Tucson (no DST)</option>
+          <option value="America/Los_Angeles|Pacific Time">Pacific — Los Angeles, Seattle, Tacoma</option>
+          <option value="America/Anchorage|Alaska Time">Alaska</option>
+          <option value="Pacific/Honolulu|Hawaii Time">Hawaii</option>
+        </select>
+        <p class="hint">Every appointment the agent books is confirmed in this zone.</p>
+      </div>
+      <div class="f">
+        <label for="lang">Language <span class="req">*</span></label>
+        <select id="lang" name="client.language" data-req>
+          <option value="Spanish">Bilingual — Spanish &amp; English</option>
+          <option value="English">English only</option>
+          <option value="SpanishOnly">Spanish only</option>
+        </select>
+        <p class="hint">Bilingual mirrors whichever language the lead texts in. No scripts to duplicate.</p>
+      </div>
+      <div class="f span">
+        <div class="checks">
+          <label class="check">
+            <input type="checkbox" name="client.enable_itin" value="true" checked>
+            <div><strong>Mention ITIN loan options</strong>
+            <small>Turn this off if you don't work ITIN borrowers — the agent drops it from every message.</small></div>
+          </label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ 2. CRM ═══════════ -->
+  <section>
+    <span class="snum">02 — Access</span>
+    <h2>Which CRM are we connecting to?</h2>
+    <p class="sub">Pick one. The exact click-path for finding your key shows up underneath.</p>
+
+    <div class="crms">
+      <label class="crm"><input type="radio" name="crm_config.active_crm" value="Starling" data-req>
+        <span>Starling CRM<small>included</small></span></label>
+      <label class="crm"><input type="radio" name="crm_config.active_crm" value="FUB">
+        <span>Follow Up Boss<small>api key</small></span></label>
+      <label class="crm"><input type="radio" name="crm_config.active_crm" value="GHL">
+        <span>GoHighLevel<small>pit- token</small></span></label>
+      <label class="crm"><input type="radio" name="crm_config.active_crm" value="Lofty">
+        <span>Lofty<small>formerly Chime</small></span></label>
+      <label class="crm"><input type="radio" name="crm_config.active_crm" value="BoldTrail">
+        <span>BoldTrail<small>formerly kvCORE</small></span></label>
+      <label class="crm"><input type="radio" name="crm_config.active_crm" value="RealGeeks">
+        <span>Real Geeks<small>site uuid</small></span></label>
+      <label class="crm"><input type="radio" name="crm_config.active_crm" value="Jungo">
+        <span>Jungo<small>salesforce</small></span></label>
+      <label class="crm"><input type="radio" name="crm_config.active_crm" value="Other">
+        <span>Something else<small>tell us</small></span></label>
+    </div>
+
+    <!-- STARLING -->
+    <div class="block" data-for="Starling">
+      <div class="blockhead"><h3>Nothing needed from you</h3><span class="tag">built in</span></div>
+      <p class="sub">Your Starling CRM sub-account is already provisioned on our side. Skip to the calendar section — and note this is the only setup where the agent also answers TikTok, Instagram and Facebook DMs.</p>
+    </div>
+
+    <!-- FUB -->
+    <div class="block" data-for="FUB">
+      <div class="blockhead"><h3>Follow Up Boss</h3><span class="tag">api key</span></div>
+      <span class="path">Admin → API → Create API Key → name it "Starling AI"</span>
+      <div class="grid" style="margin-top:16px">
+        <div class="f span">
+          <label for="fubKey">API key <span class="opt">starts with fka_</span></label>
+          <div class="secret">
+            <input type="password" id="fubKey" class="mono" name="follow_up_boss.api_key" placeholder="fka_…" autocomplete="off" spellcheck="false">
+            <button type="button" class="peek" data-peek="fubKey">SHOW</button>
+          </div>
+          <p class="hint">Paste it raw — don't encode it. We handle that.</p>
+        </div>
+        <div class="f span">
+          <label class="check alt">
+            <input type="checkbox" name="follow_up_boss.invite_instead" value="Yes — invited Starling AI as an admin user">
+            <div><strong>I'd rather add you as a user</strong>
+            <small>Invite <code>tech@starlingagent.com</code> as an Admin under Admin → Team, and leave the key blank. This is the safer path and it's what most of our FUB clients do.</small></div>
+          </label>
+        </div>
+        <div class="f">
+          <label for="fubInvitee">Agent to put on booked appointments <span class="opt">optional</span></label>
+          <input type="text" id="fubInvitee" name="follow_up_boss.calendar_invitee_user_id" placeholder="Name or FUB user ID">
+          <p class="hint">Whoever should show as the invitee when the agent books a meeting.</p>
+        </div>
+        <div class="f">
+          <label for="fubOld">Whose old leads should we re-engage? <span class="opt">optional</span></label>
+          <input type="text" id="fubOld" name="follow_up_boss.old_lead_assigned_user_id" placeholder="Name or FUB user ID">
+          <p class="hint">Blank = we only work new leads until you say go.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- GHL -->
+    <div class="block" data-for="GHL">
+      <div class="blockhead"><h3>GoHighLevel</h3><span class="tag">private token</span></div>
+      <span class="path">Settings → Private Integrations → Create new → scopes: contacts, conversations, calendars, users, opportunities</span>
+      <div class="grid" style="margin-top:16px">
+        <div class="f span">
+          <label for="ghlTok">Private Integration Token <span class="opt">starts with pit-</span></label>
+          <div class="secret">
+            <input type="password" id="ghlTok" class="mono" name="go_high_level.private_token" placeholder="pit-…" autocomplete="off" spellcheck="false">
+            <button type="button" class="peek" data-peek="ghlTok">SHOW</button>
+          </div>
+        </div>
+        <div class="f">
+          <label for="ghlLoc">Location ID <span class="opt">sub-account</span></label>
+          <input type="text" id="ghlLoc" class="mono" name="go_high_level.location_id" placeholder="3X25g5SDvzkbKlZCU844">
+          <p class="hint">Settings → Business Profile, or read it out of your browser URL.</p>
+        </div>
+        <div class="f">
+          <label for="ghlCal">Calendar ID <span class="opt">optional</span></label>
+          <input type="text" id="ghlCal" class="mono" name="go_high_level.calendar_id" placeholder="E5AY6UmAl8CrhsMgygUr">
+          <p class="hint">Only if you want bookings landing on a GHL calendar.</p>
+        </div>
+        <div class="f">
+          <label for="ghlUser">Assign new contacts to <span class="opt">optional</span></label>
+          <input type="text" id="ghlUser" name="go_high_level.assigned_user_id" placeholder="Name or user ID">
+        </div>
+        <div class="f">
+          <label for="ghlPipe">Pipeline for new opportunities <span class="opt">optional</span></label>
+          <input type="text" id="ghlPipe" name="go_high_level.pipeline_id" placeholder="Pipeline name is fine">
+        </div>
+        <div class="f span">
+          <label class="check alt">
+            <input type="checkbox" name="go_high_level.invite_instead" value="Yes — invited Starling AI to the sub-account">
+            <div><strong>I'd rather add you as a user</strong>
+            <small>Invite <code>tech@starlingagent.com</code> to the sub-account with Admin rights and skip the token.</small></div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOFTY -->
+    <div class="block" data-for="Lofty">
+      <div class="blockhead"><h3>Lofty</h3><span class="tag">api key</span><span class="tag warn">no expiration</span></div>
+      <span class="path">Settings → Integrations → API → Generate key → expiration: NEVER</span>
+      <div class="grid" style="margin-top:16px">
+        <div class="f span">
+          <label for="lofKey">API key</label>
+          <div class="secret">
+            <input type="password" id="lofKey" class="mono" name="lofty.api_key" placeholder="eyJhbGciOi…" autocomplete="off" spellcheck="false">
+            <button type="button" class="peek" data-peek="lofKey">SHOW</button>
+          </div>
+          <p class="hint"><b style="color:var(--warn)">Set the expiration to "never."</b> A key that expires silently stops your agent mid-conversation, and Lofty won't warn either of us.</p>
+        </div>
+        <div class="f">
+          <label for="lofNew">Assign new leads to <span class="opt">optional</span></label>
+          <input type="text" id="lofNew" name="lofty.calendar_assigned_user_id" placeholder="Agent name or ID">
+          <p class="hint">Existing leads keep their current agent — Lofty ties appointments to the owner.</p>
+        </div>
+        <div class="f">
+          <label for="lofOld">Whose old leads should we re-engage? <span class="opt">optional</span></label>
+          <input type="text" id="lofOld" name="lofty.old_lead_assigned_user_id" placeholder="Agent name or ID">
+        </div>
+      </div>
+    </div>
+
+    <!-- BOLDTRAIL -->
+    <div class="block" data-for="BoldTrail">
+      <div class="blockhead"><h3>BoldTrail</h3><span class="tag">contacts token</span></div>
+      <span class="path">Lead Engine → Lead Dropbox → My API Tokens → generate a Contacts token</span>
+      <div class="grid" style="margin-top:16px">
+        <div class="f span">
+          <label for="btKey">API token</label>
+          <div class="secret">
+            <input type="password" id="btKey" class="mono" name="bold_trail.api_key" placeholder="eyJ0eXAiOiJKV1Qi…" autocomplete="off" spellcheck="false">
+            <button type="button" class="peek" data-peek="btKey">SHOW</button>
+          </div>
+          <p class="hint">Paste the raw token. Heads up: BoldTrail tokens expire after one year and you can only hold three at a time — we'll remind you before yours runs out.</p>
+        </div>
+        <div class="f">
+          <label for="btNew">Assign new contacts to <span class="opt">optional</span></label>
+          <input type="text" id="btNew" name="bold_trail.assigned_user_id" placeholder="Agent name or ID">
+        </div>
+        <div class="f">
+          <label for="btOld">Whose old contacts should we re-engage? <span class="opt">optional</span></label>
+          <input type="text" id="btOld" name="bold_trail.old_lead_assigned_user_id" placeholder="Agent name or ID">
+        </div>
+        <div class="f span">
+          <label for="btTag">Tag or hashtag that marks a lead for the AI <span class="opt">optional</span></label>
+          <input type="text" id="btTag" name="bold_trail.filter_tag" placeholder="#starling">
+          <p class="hint">If you only want the agent touching tagged contacts, name the tag here.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- REAL GEEKS -->
+    <div class="block" data-for="RealGeeks">
+      <div class="blockhead"><h3>Real Geeks</h3><span class="tag">site uuid + key</span></div>
+      <span class="path">Your Real Geeks rep issues these — ask for Lead Router API access</span>
+      <div class="grid" style="margin-top:16px">
+        <div class="f">
+          <label for="rgSite">Site UUID</label>
+          <input type="text" id="rgSite" class="mono" name="real_geeks.site_uuid" placeholder="a1b2c3d4-…">
+        </div>
+        <div class="f">
+          <label for="rgUser">User ID</label>
+          <input type="text" id="rgUser" class="mono" name="real_geeks.user_id" placeholder="12345">
+        </div>
+        <div class="f span">
+          <label for="rgKey">API key</label>
+          <div class="secret">
+            <input type="password" id="rgKey" class="mono" name="real_geeks.api_key" placeholder="••••••••" autocomplete="off" spellcheck="false">
+            <button type="button" class="peek" data-peek="rgKey">SHOW</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JUNGO -->
+    <div class="block" data-for="Jungo">
+      <div class="blockhead"><h3>Jungo</h3><span class="tag">salesforce</span><span class="tag warn">needs a call</span></div>
+      <p class="sub">Jungo runs on Salesforce, so this one we do together on a screen share with whoever admins your org — usually 30–40 minutes. Fill in what you know and we'll book it.</p>
+      <div class="grid">
+        <div class="f">
+          <label for="jgOrg">Salesforce org URL</label>
+          <input type="text" id="jgOrg" class="mono" name="jungo.org_url" placeholder="yourteam.lightning.force.com">
+        </div>
+        <div class="f">
+          <label for="jgObj">Where do your leads live?</label>
+          <select id="jgObj" name="jungo.lead_object">
+            <option value="Lead">Lead object</option>
+            <option value="Contact">Contact object</option>
+            <option value="">Not sure</option>
+          </select>
+        </div>
+        <div class="f span">
+          <label for="jgAdmin">Your Salesforce admin — name and email</label>
+          <input type="text" id="jgAdmin" name="jungo.admin_contact" placeholder="Kristen Griffith · kristen@…">
+          <p class="hint">We'll need them on the call to create the Connected App, Named Credential and record-triggered Flow. Don't send us a password.</p>
+        </div>
+        <div class="f span">
+          <label for="jgView">List view your internet leads sit in <span class="opt">optional</span></label>
+          <input type="text" id="jgView" name="jungo.list_view" placeholder="Jungo Stage: Internet Leads">
+        </div>
+      </div>
+    </div>
+
+    <!-- OTHER -->
+    <div class="block" data-for="Other">
+      <div class="blockhead"><h3>Tell us what you're running</h3></div>
+      <div class="grid one">
+        <div class="f">
+          <label for="othName">CRM name</label>
+          <input type="text" id="othName" name="other_crm.name" placeholder="BoomTown, Sierra Interactive, Wise Agent…">
+        </div>
+        <div class="f">
+          <label for="othNotes">Anything you know about its API</label>
+          <textarea id="othNotes" name="other_crm.notes" placeholder="Link to their API docs, who your rep is, whether you can generate a key yourself…"></textarea>
+          <p class="hint">If it has an API, we can almost always connect it. If it doesn't, the Starling CRM is included with your plan and we'll migrate you free.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="f span" style="margin-top:22px">
+      <div class="otsbox">
+        <div class="blockhead" style="margin-bottom:8px">
+          <h3>Rather not paste a key into a web form?</h3><span class="tag">optional</span>
+        </div>
+        <p class="hint" style="font-size:13.5px; margin-bottom:13px">
+          Fair. Leave the key field above blank and send it as a link that destroys itself the moment it's opened.
+        </p>
+        <ol class="ots">
+          <li>Open <a href="https://onetimesecret.com" target="_blank" rel="noopener">onetimesecret.com</a> — no account, no signup</li>
+          <li>Paste your key, set it to expire in <b>7 days</b>, click <b>Create a secret link</b></li>
+          <li>Copy the link it hands you and drop it below</li>
+        </ol>
+        <div class="f" style="margin-top:15px">
+          <label for="ots">One-time secret link <span class="opt">optional</span></label>
+          <input type="url" id="ots" class="mono" name="credentials.one_time_link"
+                 placeholder="https://onetimesecret.com/secret/…" autocomplete="off" spellcheck="false">
+          <p class="hint">Opens once, then it's gone — so don't open it yourself to check it. If we hit a dead link we'll just ask you for a fresh one.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ 3. CALENDAR ═══════════ -->
+  <section>
+    <span class="snum">03 — Booking</span>
+    <h2>When the agent can put people on your calendar</h2>
+    <p class="sub">These are the hours it offers leads — not the hours it replies. It replies around the clock.</p>
+
+    <div class="grid">
+      <div class="f span">
+        <label for="cal">Book onto <span class="req">*</span></label>
+        <select id="cal" name="crm_config.active_calendar" data-req>
+          <option value="">Choose one…</option>
+          <option value="Google">Google Calendar</option>
+          <option value="SameAsCRM">My CRM's built-in calendar</option>
+          <option value="Starling">Starling CRM calendar</option>
+        </select>
+        <p class="hint">Google Calendar: connect it at <a href="https://auth.starlingagent.com" target="_blank" rel="noopener">auth.starlingagent.com</a> — takes about 20 seconds and no key comes near this form.</p>
+      </div>
+
+      <div class="f span">
+        <label>Days you take appointments <span class="req">*</span></label>
+        <div class="days">
+          <label class="day"><input type="checkbox" name="hours.days" value="Sun"><span>Sun</span></label>
+          <label class="day"><input type="checkbox" name="hours.days" value="Mon" checked><span>Mon</span></label>
+          <label class="day"><input type="checkbox" name="hours.days" value="Tue" checked><span>Tue</span></label>
+          <label class="day"><input type="checkbox" name="hours.days" value="Wed" checked><span>Wed</span></label>
+          <label class="day"><input type="checkbox" name="hours.days" value="Thu" checked><span>Thu</span></label>
+          <label class="day"><input type="checkbox" name="hours.days" value="Fri" checked><span>Fri</span></label>
+          <label class="day"><input type="checkbox" name="hours.days" value="Sat" checked><span>Sat</span></label>
+        </div>
+      </div>
+
+      <div class="f">
+        <label for="hStart">Earliest slot <span class="req">*</span></label>
+        <input type="time" id="hStart" name="hours.start" value="09:00" data-req>
+      </div>
+      <div class="f">
+        <label for="hEnd">Latest slot <span class="req">*</span></label>
+        <input type="time" id="hEnd" name="hours.end" value="19:00" data-req>
+      </div>
+      <div class="f">
+        <label for="mlen">Meeting length</label>
+        <select id="mlen" name="scheduling.meeting_minutes">
+          <option value="30">30 minutes</option>
+          <option value="60" selected>1 hour</option>
+          <option value="90">90 minutes</option>
+        </select>
+      </div>
+      <div class="f">
+        <label for="lead">Minimum notice</label>
+        <select id="lead" name="scheduling.lead_time_minutes">
+          <option value="60">1 hour out</option>
+          <option value="120" selected>2 hours out</option>
+          <option value="240">4 hours out</option>
+          <option value="1440">Next day</option>
+        </select>
+      </div>
+      <div class="f">
+        <label for="mtype">Default meeting type</label>
+        <select id="mtype" name="locations.default_meeting_type">
+          <option value="phone" selected>Phone call</option>
+          <option value="video">Video call</option>
+          <option value="in_person">In person</option>
+        </select>
+      </div>
+      <div class="f">
+        <label for="skip">Same-day appointments</label>
+        <select id="skip" name="scheduling.skip_today">
+          <option value="false">Allowed</option>
+          <option value="true" selected>Start from tomorrow</option>
+        </select>
+      </div>
+
+      <div class="f span">
+        <label class="check">
+          <input type="checkbox" name="texting_compliance.enabled" value="true" checked>
+          <div><strong>Hold all sends to 8:00 AM – 8:00 PM in the lead's local time</strong>
+          <small>On by default. Some states set their own texting windows and a few are stricter than the federal rule — Washington is the one that catches people out. Leave this on unless your counsel has told you otherwise.</small></div>
+        </label>
+      </div>
+      <div class="f span">
+        <label for="states">States you text into <span class="opt">optional</span></label>
+        <input type="text" id="states" name="texting_compliance.states" placeholder="TX, OK, WA">
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ 4. HANDOFF ═══════════ -->
+  <section>
+    <span class="snum">04 — Handoff</span>
+    <h2>Where the agent sends people</h2>
+    <p class="sub">When a lead needs a pre-approval, a credit fix, or a human — these are the doors the agent opens.</p>
+
+    <div class="grid">
+      <div class="f">
+        <label for="lender">Your lender's name <span class="opt">optional</span></label>
+        <input type="text" id="lender" name="links.mortgage_name" placeholder="Aron Padierna with Lock It Lending">
+      </div>
+      <div class="f">
+        <label for="lenderUrl">Their application link <span class="opt">optional</span></label>
+        <input type="url" id="lenderUrl" name="links.mortgage_link" placeholder="https://…">
+      </div>
+      <div class="f">
+        <label for="crName">Credit repair partner <span class="opt">optional</span></label>
+        <input type="text" id="crName" name="links.credit_repair_name" placeholder="My Crystal Score">
+      </div>
+      <div class="f">
+        <label for="crUrl">Their link <span class="opt">optional</span></label>
+        <input type="url" id="crUrl" name="links.credit_repair_link" placeholder="https://…">
+      </div>
+      <div class="f">
+        <label for="office">Office phone <span class="opt">optional</span></label>
+        <input type="tel" id="office" name="contact.office_phone_1" placeholder="(832) 702-3574">
+      </div>
+      <div class="f">
+        <label for="mkt1">Primary market <span class="req">*</span></label>
+        <input type="text" id="mkt1" name="locations.market_1" data-req placeholder="Houston">
+      </div>
+      <div class="f span">
+        <label for="addr1">Office address <span class="opt">optional</span></label>
+        <input type="text" id="addr1" name="locations.office_address_1" placeholder="5373 W Alabama St, Suite 448, Houston, TX 77056">
+      </div>
+      <div class="f span">
+        <label for="mkt2">Second market <span class="opt">optional</span></label>
+        <input type="text" id="mkt2" name="locations.market_2" placeholder="Dallas">
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ 5. VOICE ═══════════ -->
+  <section>
+    <span class="snum">05 — Voice</span>
+    <h2>How it opens</h2>
+    <p class="sub">First text a new lead gets. Write it how you'd actually text — we'll clean up the formatting, not the personality.</p>
+
+    <div class="grid one">
+      <div class="f">
+        <label for="first">Your opening message <span class="opt">leave blank and we'll write it</span></label>
+        <textarea id="first" name="messages.first_sms_message" placeholder="Hi! This is Maritza with Robles Realty — thanks for reaching out about the listing. Which area are you looking in?"></textarea>
+      </div>
+      <div class="f">
+        <label for="tone">Anything the agent should never say <span class="opt">optional</span></label>
+        <textarea id="tone" name="messages.guardrails" placeholder="Don't quote commission. Don't promise a specific rate. Never say 'guaranteed'."></textarea>
+      </div>
+      <div class="f">
+        <label for="notes">Anything else we should know <span class="opt">optional</span></label>
+        <textarea id="notes" name="messages.notes" placeholder="I get a lot of new-construction leads. I also don't work rentals under $1,500."></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ 6. AUTHORIZE ═══════════ -->
+  <section>
+    <span class="snum">06 — Authorize</span>
+    <h2>Sign off</h2>
+    <p class="sub">Two boxes and your name. Then we go build it.</p>
+
+    <div class="checks">
+      <label class="check">
+        <input type="checkbox" name="auth.access" value="Authorized" data-req>
+        <div><strong>I authorize Starling AI LLC to access the CRM account named above</strong>
+        <small>Scope: reading and writing contacts, notes, appointments and tags for the purpose of running my AI agent. I can revoke this at any time from inside my CRM.</small></div>
+      </label>
+      <label class="check">
+        <input type="checkbox" name="auth.consent" value="Confirmed" data-req>
+        <div><strong>The leads in this database have consented to be texted</strong>
+        <small>I hold prior express written consent for the contacts my agent will message, and none of them came from a purchased list. My A2P 10DLC registration is filed separately at <a href="https://starlingagent.com/compliance" style="color:var(--peri)" target="_blank" rel="noopener">starlingagent.com/compliance</a>.</small></div>
+      </label>
+    </div>
+
+    <div class="sig" style="margin-top:20px">
+      <div class="f">
+        <label for="sig">Type your full name to sign <span class="req">*</span></label>
+        <input type="text" id="sig" name="auth.signature" data-req placeholder="Maritza Robles" autocomplete="off">
+      </div>
+      <div class="f">
+        <label for="sigDate">Date <span class="req">*</span></label>
+        <input type="text" id="sigDate" name="auth.date" data-req readonly>
+      </div>
+    </div>
+
+    <div class="submit">
+      <p class="err" id="err">Fill in the highlighted fields above, then try again.</p>
+      <button type="submit" class="go" id="go">Send access &amp; start setup</button>
+      <p class="hint">Submits over an encrypted connection to Starling AI. Nothing is stored in your browser.</p>
+    </div>
+  </section>
+</form>
+
+<div id="done">
+  <div class="mark">✓</div>
+  <h2>Got it. We're building.</h2>
+  <p>Your agent is in the queue. Watch for a confirmation at the email you gave us in the next few minutes — if it doesn't land, check spam and then text us.</p>
+  <div class="next">
+    <h4>What happens now</h4>
+    <ol>
+      <li><b>Today</b> — we connect your CRM and mirror your pipeline</li>
+      <li><b>24–48 hrs</b> — your agent gets built and we run test leads through it</li>
+      <li><b>Before go-live</b> — you get a text from your own agent to approve</li>
+      <li><b>Live</b> — every new lead answered in under 60 seconds</li>
+    </ol>
+  </div>
+  <p style="margin-top:26px; font-size:14.5px">Questions in the meantime: <a href="tel:+18328086483" style="color:var(--peri)">(832) 808-6483</a></p>
+</div>
+
+<footer>
+  Starling AI LLC · Houston, Texas<br>
+  <a href="https://starlingagent.com/privacy">Privacy</a> · <a href="https://starlingagent.com/terms">Terms</a> · <a href="https://starlingagent.com/compliance">A2P Compliance</a>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var form = document.getElementById('f');
+  var go   = document.getElementById('go');
+  var err  = document.getElementById('err');
+
+  /* date stamp */
+  document.getElementById('sigDate').value =
+    new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+
+  /* ── show / hide secrets ── */
+  document.querySelectorAll('.peek').forEach(function(b){
+    b.addEventListener('click', function(){
+      var i = document.getElementById(b.dataset.peek);
+      var shown = i.type === 'text';
+      i.type = shown ? 'password' : 'text';
+      b.textContent = shown ? 'SHOW' : 'HIDE';
+    });
+  });
+
+  /* ── CRM branching. Hidden inputs get disabled, so they never submit. ── */
+  var blocks = document.querySelectorAll('.block');
+  function setBlock(el, on){
+    el.classList.toggle('on', on);
+    el.querySelectorAll('input, select, textarea').forEach(function(i){ i.disabled = !on; });
+  }
+  blocks.forEach(function(b){ setBlock(b, false); });
+
+  document.querySelectorAll('[name="crm_config.active_crm"]').forEach(function(r){
+    r.addEventListener('change', function(){
+      blocks.forEach(function(b){ setBlock(b, b.dataset.for === r.value); });
+      tick();
+    });
+  });
+
+  /* ── progress ── */
+  function reqFields(){
+    return Array.prototype.filter.call(
+      form.querySelectorAll('[data-req]'),
+      function(i){ return !i.disabled; }
+    );
+  }
+  function filled(i){
+    if(i.type === 'checkbox') return i.checked;
+    if(i.type === 'radio') return !!form.querySelector('[name="'+i.name+'"]:checked');
+    return i.value.trim() !== '';
+  }
+  function tick(){
+    var all = reqFields(), seen = {}, total = 0, done = 0;
+    all.forEach(function(i){
+      if(i.type === 'radio'){ if(seen[i.name]) return; seen[i.name] = 1; }
+      total++; if(filled(i)) done++;
+    });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    document.getElementById('railfill').style.width = pct + '%';
+    document.getElementById('railpct').textContent = pct + '% complete';
+  }
+  form.addEventListener('input', tick);
+  form.addEventListener('change', tick);
+  tick();
+
+  /* ── build the CONFIG snippet the tech team pastes ── */
+  function v(n){ var e = form.querySelector('[name="'+n+'"]'); return e && !e.disabled ? e.value.trim() : ''; }
+  function ck(n){ var e = form.querySelector('[name="'+n+'"]'); return !!(e && !e.disabled && e.checked); }
+
+  var DAYMAP = {Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6};
+
+  function buildConfig(){
+    var tzRaw = v('client.timezone').split('|');
+    var crm   = (form.querySelector('[name="crm_config.active_crm"]:checked')||{}).value || '';
+    var lang  = v('client.language');
+
+    var hours = {};
+    form.querySelectorAll('[name="hours.days"]:checked').forEach(function(d){
+      hours[DAYMAP[d.value]] = [{ start: v('hours.start'), end: v('hours.end') }];
+    });
+
+    var cfg = {
+      client: {
+        business_type   : v('client.business_type'),
+        enable_itin     : ck('client.enable_itin'),
+        agent_name      : v('client.agent_name'),
+        agent_first_name: v('client.agent_first_name'),
+        team_name       : v('client.team_name'),
+        brokerage       : v('client.brokerage'),
+        timezone        : tzRaw[0] || '',
+        timezone_label  : tzRaw[1] || '',
+        locale          : 'en-US',
+        language        : lang === 'SpanishOnly' ? 'Spanish' : lang
+      },
+      crm_config: {
+        active_crm     : crm,
+        active_calendar: v('crm_config.active_calendar') === 'SameAsCRM' ? crm : v('crm_config.active_calendar')
+      },
+      texting_compliance: {
+        enabled    : ck('texting_compliance.enabled'),
+        daily_start: '08:00',
+        daily_end  : '20:00',
+        per_day    : {}
+      },
+      scheduling: {
+        meeting_minutes         : Number(v('scheduling.meeting_minutes')) || 60,
+        lead_time_minutes       : Number(v('scheduling.lead_time_minutes')) || 120,
+        max_days_ahead          : 30,
+        slot_granularity_minutes: 30,
+        skip_today              : v('scheduling.skip_today') === 'true'
+      },
+      business_hours: hours,
+      messages : { first_sms_message: v('messages.first_sms_message') },
+      links    : {
+        mortgage_link     : v('links.mortgage_link'),
+        mortgage_name     : v('links.mortgage_name'),
+        credit_repair_link: v('links.credit_repair_link'),
+        credit_repair_name: v('links.credit_repair_name')
+      },
+      contact  : { office_phone_1: v('contact.office_phone_1') },
+      locations: {
+        market_1            : v('locations.market_1'),
+        office_address_1    : v('locations.office_address_1'),
+        market_2            : v('locations.market_2'),
+        default_meeting_type: v('locations.default_meeting_type')
+      }
+    };
+
+    /* only the chosen CRM's block gets written */
+    var C = cfg.crm_config;
+    if(crm === 'FUB') C.follow_up_boss = {
+      base_url:'https://api.followupboss.com/v1',
+      api_key : v('follow_up_boss.api_key'),
+      calendar_invitee_user_id  : v('follow_up_boss.calendar_invitee_user_id'),
+      old_lead_assigned_user_id : v('follow_up_boss.old_lead_assigned_user_id'),
+      source_label:'Starling Ai'
+    };
+    if(crm === 'GHL') C.go_high_level = {
+      base_url:'https://services.leadconnectorhq.com', api_version:'2021-07-28',
+      private_token   : v('go_high_level.private_token'),
+      location_id     : v('go_high_level.location_id'),
+      assigned_user_id: v('go_high_level.assigned_user_id'),
+      calendar_id     : v('go_high_level.calendar_id'),
+      pipeline_id     : v('go_high_level.pipeline_id'),
+      source_label:'Starling AI'
+    };
+    if(crm === 'Lofty') C.lofty = {
+      base_url:'https://api.lofty.com', auth_mode:'api_key',
+      api_key: v('lofty.api_key'),
+      calendar_assigned_user_id: v('lofty.calendar_assigned_user_id'),
+      old_lead_assigned_user_id: v('lofty.old_lead_assigned_user_id'),
+      timezone_code: cfg.client.timezone, source_label:'Starling AI'
+    };
+    if(crm === 'BoldTrail') C.bold_trail = {
+      base_url:'https://api.kvcore.com', auth_mode:'api_key',
+      api_key: v('bold_trail.api_key'),
+      assigned_user_id         : v('bold_trail.assigned_user_id'),
+      old_lead_assigned_user_id: v('bold_trail.old_lead_assigned_user_id'),
+      filter_tag   : v('bold_trail.filter_tag'),
+      timezone_code: cfg.client.timezone, source_label:'Starling AI'
+    };
+    if(crm === 'RealGeeks') C.real_geeks = {
+      crm_url:'https://api.realgeeks.com/v2',
+      router_url:'https://receivers.leadrouter.realgeeks.com/rest',
+      site_uuid: v('real_geeks.site_uuid'),
+      api_key  : v('real_geeks.api_key'),
+      user_id  : v('real_geeks.user_id')
+    };
+    if(crm === 'Jungo') C.jungo = {
+      login_url:'https://login.salesforce.com', api_version:'v60.0',
+      client_id:'', client_secret:'', refresh_token:'',
+      lead_object: v('jungo.lead_object') || 'Lead',
+      lead_company_default:'Internet Lead', source_label:'Starling AI',
+      _org_url  : v('jungo.org_url'),
+      _admin    : v('jungo.admin_contact'),
+      _list_view: v('jungo.list_view'),
+      _note:'OAuth values collected on the Salesforce screen share.'
+    };
+    return cfg;
+  }
+
+  function buildSubject(){
+    var crm  = (form.querySelector('[name="crm_config.active_crm"]:checked')||{}).value || 'NO CRM';
+    var biz  = v('client.team_name') || 'New client';
+    var flag = '';
+    if(ck('follow_up_boss.invite_instead') || ck('go_high_level.invite_instead')) flag += ' [USER INVITE]';
+    if(v('credentials.one_time_link')) flag += ' [ONE-TIME LINK — OPEN FIRST]';
+    if(crm === 'Jungo') flag += ' [NEEDS SF CALL]';
+    if(crm === 'Other') flag += ' [UNKNOWN CRM]';
+    return 'CRM ACCESS — ' + biz + ' — ' + crm + flag;
+  }
+
+  /* ── which fields are secrets — these never touch email or the payload ── */
+  var SECRETS = [
+    'follow_up_boss.api_key','go_high_level.private_token','lofty.api_key',
+    'bold_trail.api_key','real_geeks.api_key','credentials.one_time_link'
+  ];
+
+  /* everything the client typed, minus secrets and plumbing */
+  function buildPayload(){
+    var skip = {access_key:1, botcheck:1, subject:1, from_name:1, PASTE_INTO_CONFIG_NODE:1};
+    SECRETS.forEach(function(s){ skip[s] = 1; });
+
+    var out = {};
+    form.querySelectorAll('input, select, textarea').forEach(function(el){
+      if(!el.name || el.disabled || skip[el.name]) return;
+      if(el.type === 'checkbox'){
+        if(el.name === 'hours.days'){
+          out['hours.days'] = out['hours.days'] || [];
+          if(el.checked) out['hours.days'].push(el.value);
+        } else if(el.checked){ out[el.name] = el.value === 'on' ? true : el.value; }
+      } else if(el.type === 'radio'){
+        if(el.checked) out[el.name] = el.value;
+      } else if(el.value.trim() !== ''){
+        out[el.name] = el.value.trim();
+      }
+    });
+    return out;
+  }
+
+  function buildSecrets(){
+    var s = {};
+    SECRETS.forEach(function(n){
+      var el = form.querySelector('[name="'+n+'"]');
+      if(el && !el.disabled && el.value.trim()) s[n] = el.value.trim();
+    });
+    return Object.keys(s).length ? s : null;
+  }
+
+  /* strip real keys out of the CONFIG block before it's stored or emailed */
+  function redact(cfg){
+    var c = JSON.parse(JSON.stringify(cfg));
+    ['api_key','private_token','client_secret','refresh_token'].forEach(function(k){
+      (function walk(o){
+        for(var p in o){
+          if(o[p] && typeof o[p] === 'object') walk(o[p]);
+          else if(p === k && o[p]) o[p] = '«reveal in console»';
+        }
+      })(c);
+    });
+    return c;
+  }
+
+  /* ── submit ── */
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    var bad = reqFields().filter(function(i){ return !filled(i); });
+    if(bad.length){
+      err.classList.add('on');
+      err.textContent = 'Fill in the highlighted fields above, then try again.';
+      bad.forEach(function(i){
+        var box = i.closest('.f') || i.closest('.check') || i.closest('section');
+        if(box) box.style.outline = '1px solid var(--coral)';
+        setTimeout(function(){ if(box) box.style.outline = ''; }, 2600);
+      });
+      bad[0].scrollIntoView({block:'center'});
+      try{ bad[0].focus({preventScroll:true}); }catch(_){}
+      return;
+    }
+    err.classList.remove('on');
+
+    go.disabled = true;
+    go.textContent = 'Sending…';
+
+    var payload  = buildPayload();
+    var secrets  = buildSecrets();
+    var config   = redact(buildConfig());
+    var subject  = buildSubject();
+
+    /* 1 — Supabase is the source of truth. Dedupes on email server-side. */
+    var sbHeaders = { 'Content-Type':'application/json', 'apikey': SB_ANON };
+    /* Legacy anon keys are JWTs and want a Bearer header too. The newer
+       sb_publishable_… keys are not JWTs — sending them as Bearer makes
+       PostgREST try to parse one and fail. So only add it for the old format. */
+    if(SB_ANON.indexOf('sb_publishable_') !== 0){
+      sbHeaders['Authorization'] = 'Bearer ' + SB_ANON;
+    }
+
+    fetch(SB_URL + '/rest/v1/rpc/submit_starling_onboarding', {
+      method : 'POST',
+      headers: sbHeaders,
+      body: JSON.stringify({ p_payload: payload, p_credentials: secrets, p_config: config })
+    })
+    .then(function(r){
+      return r.json().then(function(d){
+        if(!r.ok) throw new Error(d.message || d.hint || 'Save failed');
+        return d;
+      });
+    })
+    .then(function(res){
+      /* 2 — heads-up email. Redacted: no keys, no link, just "go look." */
+      var note = {
+        access_key: form.querySelector('[name=access_key]').value,
+        subject   : (res && res.is_new === false ? 'UPDATE — ' : '') + subject,
+        from_name : 'Starling AI — CRM Access Form',
+        email     : payload.email,
+        Business  : payload['client.team_name'] || '',
+        Agent     : payload['client.agent_name'] || '',
+        CRM       : payload['crm_config.active_crm'] || '',
+        Submission: res && res.is_new ? 'First submission' : 'Update — v' + (res && res.version),
+        Changed   : res && res.changed ? res.changed + ' field(s) changed' : '—',
+        Credentials: secrets ? 'Encrypted and stored — reveal in the console' : 'None sent',
+        Console   : CONSOLE_URL,
+        Note      : 'Full details are in the console. Nothing sensitive is in this email.'
+      };
+      return fetch('https://api.web3forms.com/submit', {
+        method : 'POST',
+        headers: {'Content-Type':'application/json','Accept':'application/json'},
+        body   : JSON.stringify(note)
+      }).catch(function(){ /* email is best-effort; the record is already saved */ });
+    })
+    .then(function(){
+      form.style.display = 'none';
+      document.querySelector('header').style.display = 'none';
+      document.querySelector('.notice').style.display = 'none';
+      document.getElementById('done').classList.add('on');
+      window.scrollTo({top:0});
+    })
+    .catch(function(ex){
+      go.disabled = false;
+      go.textContent = 'Send access & start setup';
+      err.textContent = (/email/i.test(ex.message) ? ex.message + ' ' : "That didn't go through. ")
+        + "Check your connection and try again — or text us at (832) 808-6483 and we'll take it over the phone.";
+      err.classList.add('on');
+      err.scrollIntoView({block:'center'});
+    });
+  });
+})();
+</script>
+</body>
+</html>
