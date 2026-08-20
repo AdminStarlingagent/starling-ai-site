@@ -537,7 +537,7 @@ footer a{color:var(--peri);text-decoration:none}
     <div class="row">
       <span>Starling AI LLC</span>
       <a href="https://starlingagent.com">starlingagent.com</a>
-      <span>(832) 808-6483</span>
+      <a href="mailto:Admin@starlingagent.com">Admin@starlingagent.com</a>
     </div>
     <p class="fine">Starling AI LLC provides software and phone-number management services. You remain the sender of record for messages sent at your direction. Submitting this form does not itself constitute carrier approval. This page supports compliance intake and is not legal advice.</p>
   </div>
@@ -809,7 +809,7 @@ footer a{color:var(--peri);text-decoration:none}
     })
     .catch(function(err){
       var reason = (err && err.message && err.message !== 'Failed to fetch') ? err.message : 'Network error — check your connection.';
-      statusEl.textContent = 'Submission failed: ' + reason + ' Your answers are still here — fix and resubmit, or call us at (832) 808-6483.';
+      statusEl.textContent = 'Submission failed: ' + reason + ' Your answers are still here — fix and resubmit, or email Admin@starlingagent.com.';
       if (window.console && console.error) console.error('Compliance form error:', err);
       btn.disabled = false;
       btn.textContent = 'Submit for compliance review';
