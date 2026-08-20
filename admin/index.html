@@ -105,9 +105,13 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--peri);outline-of
   font:700 10px/16px "IBM Plex Mono",monospace;min-width:17px;height:17px;
   border-radius:9px;padding:0 4px;display:none}
 .bell b.on{display:block}
-.filters{display:flex;gap:7px}
-.filters select,.filters input{padding:8px 10px;font-size:13px;border-radius:8px}
-.filters input{flex:1}
+.filters{display:flex;flex-direction:column;gap:8px}
+.filters select,.filters input{padding:10px 12px;font-size:13.5px;border-radius:10px}
+.filters input#q{width:100%;padding:11px 13px 11px 38px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='%23868BDF' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:12px 50%}
+.filters .selrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.filters .selrow select{width:100%;min-width:0}
 
 .list{overflow-y:auto;flex:1;padding:8px}
 .row{padding:13px 14px;border-radius:10px;cursor:pointer;border:1px solid transparent;
@@ -235,16 +239,18 @@ textarea{min-height:88px;resize:vertical;font-size:14px}
         <button class="btn ghost sm" id="out">Out</button>
       </div>
       <div class="filters">
-        <input type="search" id="q" placeholder="Search name, email, brokerage…">
+        <input type="search" id="q" placeholder="Search clients — name, email, brokerage…">
+        <div class="selrow">
         <select id="fStatus">
-          <option value="">All</option>
+          <option value="">All statuses</option>
           <option value="nowizard">missing wizard</option><option value="nocrm">missing CRM access</option><option value="noa2p">missing A2P</option><option value="a2p_todo">A2P: to register</option><option value="a2p_wait">A2P: at carrier</option><option value="a2p_rej">A2P: rejected</option><option value="unread">Unread</option>
           <option value="new">New</option>
           <option value="in_setup">In setup</option>
           <option value="live">Live</option>
           <option value="paused">Paused</option>
         </select>
-        <select id="fCrm"><option value="">CRM</option></select>
+        <select id="fCrm"><option value="">All CRMs</option></select>
+        </div>
       </div>
     </div>
     <div class="list" id="list"><div class="empty">Loading…</div></div>
@@ -388,7 +394,7 @@ function render(){
       </div>
       <div class="r2">
         <span>${esc(r.active_crm || "no crm")}</span>
-        ${a2pTag(r)}
+        ${a2pTag(r)}${crmTag(r)}
         <span>·</span>
         <span>v${r.submission_count}</span>
         <span>·</span>
@@ -433,7 +439,8 @@ async function openClient(id, quiet){
           `<option value="${s}"${r.status===s?" selected":""}>${s.replace("_"," ")}</option>`).join("")}
       </select>
       <button class="btn ghost sm" id="copyCfg">Copy CONFIG block</button>
-      ${(r.sources||[]).includes("a2p_compliance") ? "" : `<button class="btn sm" id="sendA2P">${r.a2p_invite_sent_at ? "Resend compliance email" : "📧 Send compliance email"}</button>`}
+      ${(r.sources||[]).includes("a2p_compliance") ? "" : `<button class="btn sm" id="sendA2P">${r.a2p_invite_sent_at ? "Resend compliance email" : "📧 Compliance email"}</button>`}
+      ${(r.sources||[]).includes("crm_access") ? "" : `<button class="btn sm" id="sendCRM">${r.crm_invite_sent_at ? "Resend CRM access email" : "🔗 CRM access email"}</button>`}
       <span class="chip">v${r.submission_count}</span>
       <span class="chip">${esc(r.active_crm || "no crm")}</span>
       ${(r.sources||[]).map(x => `<span class="chip">${esc(SRC_LABEL[x] || x)}</span>`).join("")}
@@ -721,6 +728,20 @@ function wire(r){
     openClient(r.id, true);
   });
 
+  const cBtn = $("sendCRM");
+  if(cBtn) cBtn.addEventListener("click", async () => {
+    const w = window.open(crmAccessMail(r), "_blank", "noopener");
+    if(!w) return toast("Popup blocked", "Allow popups for this site, then click again.");
+    const ts = new Date().toISOString();
+    const { error } = await sb.from("starling_onboarding_clients")
+      .update({ crm_invite_sent_at: ts }).eq("id", r.id);
+    if(error) return toast("Compose opened", "Couldn't stamp the record: " + error.message);
+    r.crm_invite_sent_at = ts;
+    render();
+    toast("Compose opened in Gmail", "Review, personalize, hit Send. Marked as CRM-invited.");
+    openClient(r.id, true);
+  });
+
   on("saveNotes", async e => {
     const { error } = await sb.from("starling_onboarding_clients")
       .update({ internal_notes: $("notes").value }).eq("id", r.id);
@@ -782,10 +803,39 @@ function complianceMail(r){
   return "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent(r.email)
        + "&su=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
 }
+function crmAccessMail(r){
+  const biz = r.team_name || r.agent_name || "your business";
+  const subject = biz + " — connect your CRM and your agent goes live";
+  const body = [
+    "Hi there,",
+    "",
+    "Your Starling AI agent is built — one step left before it starts working your leads: connect it to your CRM.",
+    "",
+    "It takes about 3 minutes:",
+    "https://starlingagent.com/crm-access.html",
+    "",
+    "Two ways to connect — pick whichever you prefer:",
+    "- Paste your CRM's API key (the form shows exactly where to find it), or",
+    "- Skip the key and invite \"Starling AI\" as a user in your CRM instead — the form walks you through it.",
+    "",
+    "Important: use this same email address (" + r.email + ") on the form so it links to your account.",
+    "",
+    "Once it's in, we wire the agent, run a live test, and you'll see it working your leads the same day.",
+    "",
+    "Questions? Just reply to this email — we answer fast.",
+    "",
+    "— The Starling AI Team",
+    "Admin@starlingagent.com · starlingagent.com"
+  ].join("\n");
+  return "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent(r.email)
+       + "&su=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+}
+const crmTag = r => (!((r.sources||[]).includes("crm_access")) && r.crm_invite_sent_at)
+  ? `<span>·</span><span class="a2ptag" style="opacity:.6">CRM invited ${when(r.crm_invite_sent_at)}</span>` : "";
 const a2pTag = r => {
   if(!r.a2p_status || !A2P[r.a2p_status]){
     if(r.a2p_invite_sent_at && !(r.sources||[]).includes("a2p_compliance"))
-      return `<span>·</span><span class="a2ptag" style="opacity:.6">invited ${when(r.a2p_invite_sent_at)}</span>`;
+      return `<span>·</span><span class="a2ptag" style="opacity:.6">A2P invited ${when(r.a2p_invite_sent_at)}</span>`;
     return "";
   }
   const [cls] = A2P[r.a2p_status];
