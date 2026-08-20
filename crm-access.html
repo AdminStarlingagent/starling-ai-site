@@ -168,9 +168,6 @@ select{appearance:none; cursor:pointer;
 .check.alt strong{color:var(--ok)}
 
 /* one-time secret link */
-.otsbox{background:rgba(78,212,160,.05); border:1px solid rgba(78,212,160,.24);
-  border-radius:11px; padding:19px 21px}
-.otsbox h3{font:600 16px/1.3 "Poppins",sans-serif; margin:0}
 ol.ots{margin:0; padding-left:19px; color:var(--muted); font-size:13.5px; line-height:1.75}
 ol.ots li{margin:5px 0}
 ol.ots b{color:var(--paper); font-weight:500}
@@ -252,7 +249,6 @@ footer a{color:var(--muted)}
     <li>You can revoke or rotate any key from inside your CRM at any time — doing that just pauses the agent until you send a new one.</li>
     <li>Sending this form a second time with the key field blank keeps the key we already hold. Only fill it in when it's actually changed.</li>
     <li>Where your CRM supports it, you can skip the key entirely and invite <code>Starling AI</code> as a user instead. Each CRM section below has that option.</li>
-    <li>Prefer not to put a key in a web form at all? Leave it blank and send it as a self-destructing link instead — there's a two-minute walkthrough in that section.</li>
   </ul>
 </div>
 
@@ -507,27 +503,6 @@ footer a{color:var(--muted)}
       </div>
     </div>
 
-    <div class="f span" style="margin-top:22px">
-      <div class="otsbox">
-        <div class="blockhead" style="margin-bottom:8px">
-          <h3>Rather not paste a key into a web form?</h3><span class="tag">optional</span>
-        </div>
-        <p class="hint" style="font-size:13.5px; margin-bottom:13px">
-          Fair. Leave the key field above blank and send it as a link that destroys itself the moment it's opened.
-        </p>
-        <ol class="ots">
-          <li>Open <a href="https://onetimesecret.com" target="_blank" rel="noopener">onetimesecret.com</a> — no account, no signup</li>
-          <li>Paste your key, set it to expire in <b>7 days</b>, click <b>Create a secret link</b></li>
-          <li>Copy the link it hands you and drop it below</li>
-        </ol>
-        <div class="f" style="margin-top:15px">
-          <label for="ots">One-time secret link <span class="opt">optional</span></label>
-          <input type="url" id="ots" class="mono" name="credentials.one_time_link"
-                 placeholder="https://onetimesecret.com/secret/…" autocomplete="off" spellcheck="false">
-          <p class="hint">Opens once, then it's gone — so don't open it yourself to check it. If we hit a dead link we'll just ask you for a fresh one.</p>
-        </div>
-      </div>
-    </div>
   </section>
 
   <!-- ═══════════ 3. CALENDAR ═══════════ -->
@@ -554,10 +529,6 @@ footer a{color:var(--muted)}
           <div><strong>Hold all sends to 8:00 AM – 8:00 PM in the lead's local time</strong>
           <small>On by default. Some states set their own texting windows and a few are stricter than the federal rule — Washington is the one that catches people out. Leave this on unless your counsel has told you otherwise.</small></div>
         </label>
-      </div>
-      <div class="f span">
-        <label for="states">States you text into <span class="opt">optional</span></label>
-        <input type="text" id="states" name="texting_compliance.states" placeholder="TX, OK, WA">
       </div>
       <div class="f span">
         <label for="tone">Anything the agent should never say <span class="opt">optional</span></label>
@@ -712,8 +683,7 @@ footer a{color:var(--muted)}
         enabled    : ck('texting_compliance.enabled'),
         daily_start: '08:00',
         daily_end  : '20:00',
-        per_day    : {},
-        states     : v('texting_compliance.states')
+        per_day    : {}
       },
       messages : { guardrails: v('messages.guardrails') }
     };
@@ -776,7 +746,6 @@ footer a{color:var(--muted)}
     var biz  = v('client.team_name') || v('client.agent_name') || 'New client';
     var flag = '';
     if(ck('follow_up_boss.invite_instead') || ck('go_high_level.invite_instead')) flag += ' [USER INVITE]';
-    if(v('credentials.one_time_link')) flag += ' [ONE-TIME LINK — OPEN FIRST]';
     if(crm === 'Jungo') flag += ' [NEEDS SF CALL]';
     if(crm === 'Other') flag += ' [UNKNOWN CRM]';
     return 'CRM ACCESS — ' + biz + ' — ' + crm + flag;
@@ -785,7 +754,7 @@ footer a{color:var(--muted)}
   /* ── which fields are secrets — these never touch email or the payload ── */
   var SECRETS = [
     'follow_up_boss.api_key','go_high_level.private_token','lofty.api_key',
-    'bold_trail.api_key','real_geeks.api_key','credentials.one_time_link'
+    'bold_trail.api_key','real_geeks.api_key'
   ];
 
   /* everything the client typed, minus secrets and plumbing */
