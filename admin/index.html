@@ -221,7 +221,7 @@ textarea{min-height:88px;resize:vertical;font-size:14px}
         <input type="search" id="q" placeholder="Search name, email, brokerage…">
         <select id="fStatus">
           <option value="">All</option>
-          <option value="unread">Unread</option>
+          <option value="nowizard">missing wizard</option><option value="nocrm">missing CRM access</option><option value="unread">Unread</option>
           <option value="new">New</option>
           <option value="in_setup">In setup</option>
           <option value="live">Live</option>
@@ -332,7 +332,10 @@ function filtered(){
   const st = $("fStatus").value, cm = $("fCrm").value;
   return rows.filter(r => {
     if(cm && r.active_crm !== cm) return false;
-    if(st === "unread" ? !r.has_unread : st && r.status !== st) return false;
+    if(st === "unread"){ if(!r.has_unread) return false; }
+    else if(st === "nowizard"){ if((r.sources||[]).includes("build_your_agent")) return false; }
+    else if(st === "nocrm"){ if((r.sources||[]).includes("crm_access")) return false; }
+    else if(st && r.status !== st) return false;
     if(!q) return true;
     return [r.team_name, r.agent_name, r.email, r.brokerage]
       .filter(Boolean).join(" ").toLowerCase().includes(q);
@@ -385,7 +388,7 @@ async function openClient(id, quiet){
 
   const { data: vers } = await sb
     .from("starling_onboarding_versions")
-    .select("version, changed_fields, submitted_at")
+    .select("version, changed_fields, submitted_at, source")
     .eq("client_id", id)
     .order("version", { ascending:false });
 
@@ -410,6 +413,9 @@ async function openClient(id, quiet){
       <button class="btn ghost sm" id="copyCfg">Copy CONFIG block</button>
       <span class="chip">v${r.submission_count}</span>
       <span class="chip">${esc(r.active_crm || "no crm")}</span>
+      ${(r.sources||[]).map(x => `<span class="chip">${esc(SRC_LABEL[x] || x)}</span>`).join("")}
+      ${(r.sources||[]).includes("build_your_agent") ? "" : '<span class="chip" style="opacity:.55">no wizard yet</span>'}
+      ${(r.sources||[]).includes("crm_access")       ? "" : '<span class="chip" style="opacity:.55">no CRM access yet</span>'}
     </div>
 
     ${r.has_credentials ? `
@@ -483,6 +489,26 @@ async function openClient(id, quiet){
     </div>
 
     <div class="grp">
+      <h3>Agent build <span style="color:var(--dim);font-weight:400">— build-your-agent.html</span></h3>
+      ${kv({
+        "Intro line":     p["agent.intro_line"],
+        "Industry other": p["agent.industry_other"],
+        "Lead sources":   p["agent.lead_sources"],
+        "Alert cell":     p["client.owner_mobile"],
+        "Booking window": p["scheduling.max_days_ahead"] ? p["scheduling.max_days_ahead"] + " days" : "",
+        "Blackout":       p["agent.blackout_dates"],
+        "Own Google Cal": p["agent.use_own_google_calendar"] === undefined ? "" : (p["agent.use_own_google_calendar"] ? "yes" : "no"),
+        "Socials":        p["agent.connect_social"],
+        "Wants Starling CRM": p["agent.wants_starling_crm_social"] === undefined ? "" : (p["agent.wants_starling_crm_social"] ? "yes" : "no"),
+        "CRM (their words)":  p["agent.crm_other"],
+        "CRM login":      p["agent.crm_login_email"],
+        "Referral link":  p["agent.referral_link"],
+        "Opt-in":         p["agent.optin_confirmed"] === undefined ? "" : (p["agent.optin_confirmed"] ? "confirmed" : "not confirmed"),
+        "Their notes":    p["agent.notes"]
+      })}
+    </div>
+
+    <div class="grp">
       <h3>Handoff &amp; voice</h3>
       ${kv({
         "Lender":       p["links.mortgage_name"],
@@ -512,6 +538,7 @@ async function openClient(id, quiet){
         ${(vers||[]).map(v => `
           <div class="vrow">
             <div class="vh"><b>v${v.version}</b>
+              <span class="chip" style="font-size:10px">${esc(SRC_LABEL[v.source] || v.source || "—")}</span>
               <span style="color:var(--muted)">${v.changed_fields?.length ? v.changed_fields.length + " field(s) changed" : "no field changes"}</span>
               <time>${when(v.submitted_at)}</time>
             </div>
@@ -613,6 +640,8 @@ $("bell").addEventListener("click", () => {
 });
 
 /* ─────────── helpers ─────────── */
+const SRC_LABEL = { build_your_agent:"wizard", crm_access:"CRM access" };
+
 function kv(obj){
   const e = Object.entries(obj).filter(([,v]) => v !== undefined && v !== null && v !== "");
   if(!e.length) return '<div class="kv"><div>—</div><div class="none">Nothing filled in.</div></div>';
