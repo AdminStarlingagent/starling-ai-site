@@ -433,6 +433,7 @@ async function openClient(id, quiet){
           `<option value="${s}"${r.status===s?" selected":""}>${s.replace("_"," ")}</option>`).join("")}
       </select>
       <button class="btn ghost sm" id="copyCfg">Copy CONFIG block</button>
+      ${(r.sources||[]).includes("a2p_compliance") ? "" : `<button class="btn sm" id="sendA2P">${r.a2p_invite_sent_at ? "Resend compliance email" : "📧 Send compliance email"}</button>`}
       <span class="chip">v${r.submission_count}</span>
       <span class="chip">${esc(r.active_crm || "no crm")}</span>
       ${(r.sources||[]).map(x => `<span class="chip">${esc(SRC_LABEL[x] || x)}</span>`).join("")}
@@ -706,6 +707,20 @@ function wire(r){
       toast("A2P status saved", `Now "${A2P[v][1]}".`);
     }));
 
+  const sBtn = $("sendA2P");
+  if(sBtn) sBtn.addEventListener("click", async () => {
+    const w = window.open(complianceMail(r), "_blank", "noopener");
+    if(!w) return toast("Popup blocked", "Allow popups for this site, then click again.");
+    const ts = new Date().toISOString();
+    const { error } = await sb.from("starling_onboarding_clients")
+      .update({ a2p_invite_sent_at: ts }).eq("id", r.id);
+    if(error) return toast("Compose opened", "Couldn't stamp the record: " + error.message);
+    r.a2p_invite_sent_at = ts;
+    render();
+    toast("Compose opened in Gmail", "Review, personalize the greeting, hit Send. Marked as invited.");
+    openClient(r.id, true);
+  });
+
   on("saveNotes", async e => {
     const { error } = await sb.from("starling_onboarding_clients")
       .update({ internal_notes: $("notes").value }).eq("id", r.id);
@@ -737,8 +752,42 @@ const A2P = {
   approved:    ["ok","Approved"],
   rejected:    ["bad","Rejected"]
 };
+function complianceMail(r){
+  const biz = r.team_name || r.agent_name || "your business";
+  const subject = biz + " — one step left before your AI can text (A2P registration)";
+  const body = [
+    "Hi there,",
+    "",
+    "Great news — your Starling AI agent build is in and we're configuring it now.",
+    "",
+    "One required step before your number can go live: U.S. carriers require every business that sends text messages to register who they are and how their contacts opted in (it's called A2P 10DLC). Until you're registered, carriers block the texts — so this step unlocks everything.",
+    "",
+    "It takes about 10 minutes:",
+    "https://starlingagent.com/compliance",
+    "",
+    "Have handy:",
+    "- Your EIN (or choose sole proprietor if you don't have one)",
+    "- Your business website (no website? the form has an option — we can build you a compliance-ready one)",
+    "- Your privacy policy link",
+    "",
+    "Important: use this same email address (" + r.email + ") on the form so it links to your account.",
+    "",
+    "Once you submit, we register your business with the carriers — approval typically takes 3–7 business days — and your agent starts texting the moment it clears.",
+    "",
+    "Questions? Just reply, or call/text us at (832) 808-6483.",
+    "",
+    "— The Starling AI Team",
+    "Admin@starlingagent.com · starlingagent.com"
+  ].join("\n");
+  return "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent(r.email)
+       + "&su=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+}
 const a2pTag = r => {
-  if(!r.a2p_status || !A2P[r.a2p_status]) return "";
+  if(!r.a2p_status || !A2P[r.a2p_status]){
+    if(r.a2p_invite_sent_at && !(r.sources||[]).includes("a2p_compliance"))
+      return `<span>·</span><span class="a2ptag" style="opacity:.6">invited ${when(r.a2p_invite_sent_at)}</span>`;
+    return "";
+  }
   const [cls] = A2P[r.a2p_status];
   const txt = r.a2p_status === "approved" ? "A2P ✓"
             : r.a2p_status === "rejected" ? "A2P ✗"
