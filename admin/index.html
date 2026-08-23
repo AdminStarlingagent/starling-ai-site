@@ -29,11 +29,15 @@
 
 <style>
 :root{
-  --navy:#080C17; --navy-2:#0D1526; --navy-3:#141E35; --navy-4:#1B2743;
+  --navy:#080C17; --navy-2:#101828; --navy-3:#182238; --navy-4:#212D49;
   --coral:#F15368; --peri:#868BDF; --blush:#FFA0A8;
-  --paper:#EEF0F6; --muted:#8B94AC; --dim:#69728A;
-  --line:rgba(134,139,223,.20); --line-2:rgba(134,139,223,.36);
+  /* text: lifted so muted/dim clear 4.5:1 on the navy surfaces */
+  --paper:#F2F4F9; --muted:#A8B0C6; --dim:#8A93AB; --faint:#646D86;
+  --line:rgba(134,139,223,.16); --line-2:rgba(134,139,223,.32);
   --ok:#4ED4A0; --warn:#FFC46B;
+  --peri-soft:rgba(134,139,223,.13);
+  --stripe:rgba(134,139,223,.035);
+  --radius:12px;
 }
 /* ── A2P status control ── */
 .a2pseg{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 16px}
@@ -54,16 +58,17 @@
 .a2ptag.ok{color:var(--ok)}   .a2ptag.bad{color:var(--coral)}
 /* ── FUB-style detail layout ── */
 .dgrid{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:26px;align-items:start}
-.drail{position:sticky;top:16px;display:flex;flex-direction:column;gap:16px}
+.drail{position:sticky;top:16px;display:flex;flex-direction:column;gap:16px;padding-bottom:32px}
 .rcard{background:var(--navy-2);border:1px solid var(--line);border-radius:13px;padding:15px 16px}
-.rcard h3{font:600 11.5px/1 "IBM Plex Mono",monospace;letter-spacing:.11em;text-transform:uppercase;color:var(--coral);margin:0 0 11px}
+.rcard h3{font:600 14px/1.3 "Poppins",sans-serif;letter-spacing:-.01em;text-transform:none;
+  color:var(--paper);margin:0 0 13px}
 .rcard .bar{margin:0;padding:0;border:0;flex-direction:column;align-items:stretch;gap:8px}
 .rcard .bar select{width:100%}
 .rcard .bar .btn{width:100%;text-align:center}
 .rcard .kv{grid-template-columns:1fr}
 .chiprow{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
 @media(max-width:1150px){.dgrid{grid-template-columns:1fr}.drail{position:static}}
-.grp h3 .ebtn{float:right;font:600 11px/1 "IBM Plex Sans",sans-serif;letter-spacing:.03em;color:var(--peri);
+.grp h3 .ebtn{margin-left:auto;font:600 11px/1 "IBM Plex Sans",sans-serif;letter-spacing:.03em;color:var(--peri);
   background:none;border:1px solid var(--line-2);border-radius:7px;padding:5px 10px;cursor:pointer;text-transform:none}
 .grp h3 .ebtn:hover{border-color:var(--peri)}
 .kv input,.kv select{width:100%;background:var(--navy-3);border:1px solid var(--line-2);border-radius:7px;
@@ -106,16 +111,21 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--peri);outline-of
 .btn.w{width:100%}
 .btn.ghost{background:var(--navy-3);color:var(--paper);border:1px solid var(--line);font-weight:500}
 .btn.ghost:hover{border-color:var(--line-2);background:var(--navy-4)}
+.btn.peri{background:var(--peri-soft);color:var(--peri);border:1px solid rgba(134,139,223,.42);font-weight:600}
+.btn.peri:hover{background:rgba(134,139,223,.20);border-color:var(--peri);color:#B9BDF0}
+.btn.warn{background:rgba(255,196,107,.11);color:var(--warn);border:1px solid rgba(255,196,107,.38);font-weight:600}
+.btn.warn:hover{background:rgba(255,196,107,.19);border-color:var(--warn)}
 .btn.sm{padding:8px 14px;font-size:13px;border-radius:8px}
 .msg{font-size:13.5px;margin-top:14px;display:none}
 .msg.on{display:block}
 .msg.bad{color:var(--coral)}
 
 /* ── app shell ── */
-#app{display:none;min-height:100vh;grid-template-columns:390px 1fr}
+html,body{height:auto;overflow-x:hidden}
+#app{display:none;min-height:100vh;grid-template-columns:390px 1fr;align-items:start}
 #app.on{display:grid}
 .pane{border-right:1px solid var(--line);display:flex;flex-direction:column;
-  height:100vh;position:sticky;top:0}
+  max-height:100vh;position:sticky;top:0;align-self:start}
 .top{padding:16px 18px;border-bottom:1px solid var(--line);background:var(--navy-2)}
 .toprow{display:flex;align-items:center;gap:10px;margin-bottom:13px}
 
@@ -134,7 +144,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--peri);outline-of
 .filters .selrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .filters .selrow select{width:100%;min-width:0}
 
-.list{overflow-y:auto;flex:1;padding:8px}
+.list{overflow-y:auto;flex:1;min-height:0;padding:8px}
 .row{padding:13px 14px;border-radius:10px;cursor:pointer;border:1px solid transparent;
   margin-bottom:5px;transition:.14s;position:relative}
 .row:hover{background:var(--navy-2);border-color:var(--line)}
@@ -154,7 +164,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--peri);outline-of
 .empty{padding:44px 20px;text-align:center;color:var(--dim);font-size:13.5px}
 
 /* ── detail ── */
-.detail{overflow-y:auto;height:100vh;padding:30px 34px 90px}
+.detail{height:auto;overflow:visible;padding:30px 34px 200px}
 .dhead{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:6px}
 .dhead h2{font:600 26px/1.2 "Poppins",sans-serif;margin:0;letter-spacing:-.02em;flex:1;min-width:220px}
 .dsub{color:var(--muted);font-size:14px;margin:0 0 22px}
@@ -167,14 +177,58 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--peri);outline-of
   background-repeat:no-repeat;background-position:right 11px center}
 
 .grp{margin-bottom:26px}
-.grp h3{font:600 12px/1 "IBM Plex Mono",monospace;letter-spacing:.11em;text-transform:uppercase;
-  color:var(--coral);margin:0 0 12px}
-.kv{display:grid;grid-template-columns:200px 1fr;gap:1px;background:var(--line);
-  border:1px solid var(--line);border-radius:10px;overflow:hidden}
-.kv>div{background:var(--navy-2);padding:10px 13px;font-size:13.5px;min-width:0}
-.kv>div:nth-child(odd){color:var(--dim);font-family:"IBM Plex Mono",monospace;font-size:12px}
-.kv>div:nth-child(even){word-break:break-word;white-space:pre-wrap}
-.kv .none{color:#4C5570}
+.grp h3{font:600 15.5px/1.3 "Poppins",sans-serif;letter-spacing:-.01em;text-transform:none;
+  color:var(--paper);margin:0 0 14px;display:flex;align-items:center;gap:9px}
+.grp h3::before{content:"";width:3px;height:15px;border-radius:2px;background:var(--peri);flex:none}
+.grp h3 span{font-weight:400;font-size:13px;color:var(--faint)}
+.kv{display:grid;grid-template-columns:190px minmax(0,1fr);gap:0;background:var(--navy-2);
+  border:1px solid var(--line);border-radius:var(--radius);padding:4px 2px;overflow:hidden}
+.kv>div{background:none;border:0;padding:9px 15px;font-size:14px;min-width:0}
+.kv>div:nth-child(odd){color:var(--dim);font-family:"IBM Plex Sans",sans-serif;
+  font-size:13px;font-weight:500}
+.kv>div:nth-child(even){word-break:break-word;white-space:pre-wrap;color:var(--paper)}
+/* row banding replaces grid lines */
+.kv>div:nth-child(4n+1),.kv>div:nth-child(4n+2){background:var(--stripe)}
+.kv .none{color:var(--faint)}
+.kv code{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--blush)}
+
+/* empty-field collapsing */
+.kv.hide-empty>div.is-empty{display:none}
+.emptytog{margin-top:9px;background:none;border:0;cursor:pointer;padding:4px 2px;
+  font:500 12.5px/1 "IBM Plex Sans",sans-serif;color:var(--dim);
+  border-bottom:1px dashed var(--line-2);transition:color .12s}
+.emptytog:hover{color:var(--peri);border-bottom-color:var(--peri)}
+
+/* possible-duplicate banner */
+.dupbanner{display:flex;align-items:flex-start;gap:11px;margin:0 0 22px;padding:13px 15px;
+  background:rgba(255,196,107,.07);border:1px solid rgba(255,196,107,.30);
+  border-left:3px solid var(--warn);border-radius:var(--radius);font-size:13.5px}
+.dupbanner b{color:var(--warn);font-weight:600}
+.dupbanner button{background:none;border:0;padding:0;cursor:pointer;color:var(--peri);
+  font:600 13.5px "IBM Plex Sans",sans-serif;text-decoration:underline}
+
+/* quick links */
+.qlhint{font-size:12px;color:var(--faint);margin:-4px 0 11px;line-height:1.5}
+.qlrow{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--line)}
+.qlrow:last-of-type{border-bottom:0;padding-bottom:2px}
+.qlrow .ql{flex:1;min-width:0}
+.qlrow .ql b{display:block;font:600 13.5px "IBM Plex Sans",sans-serif;color:var(--paper);margin-bottom:2px}
+.qlstate{font:500 11px/1 "IBM Plex Mono",monospace;color:var(--faint)}
+.qlstate.got{color:var(--ok)}
+.qlbtn{flex:none;background:var(--navy-3);border:1px solid var(--line);border-radius:8px;
+  padding:7px 11px;cursor:pointer;font:600 12px "IBM Plex Sans",sans-serif;color:var(--peri);transition:.14s}
+.qlbtn:hover{border-color:var(--peri);background:var(--navy-4)}
+.qlbtn.done{color:var(--ok);border-color:rgba(78,212,160,.42)}
+.qlopen{flex:none;color:var(--dim);text-decoration:none;font-size:15px;padding:0 3px;line-height:1}
+.qlopen:hover{color:var(--peri)}
+.qlall{width:100%;margin-top:12px}
+
+/* alias address chips */
+.aliasrow{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:-14px 0 22px}
+.alias{font:500 11.5px/1 "IBM Plex Mono",monospace;padding:5px 8px;border-radius:6px;
+  background:var(--peri-soft);color:var(--peri);border:1px solid var(--line)}
+.alias.pri{background:rgba(78,212,160,.11);color:var(--ok);border-color:rgba(78,212,160,.28)}
+.aliaslbl{font-size:12px;color:var(--faint)}
 
 /* credentials */
 .cred{background:rgba(255,196,107,.05);border:1px solid rgba(255,196,107,.26);
@@ -202,7 +256,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--peri);outline-of
 .diffs em.first{background:rgba(78,212,160,.11);color:var(--ok);border-color:rgba(78,212,160,.26)}
 
 textarea{min-height:88px;resize:vertical;font-size:14px}
-.blank{display:grid;place-items:center;height:100vh;color:var(--dim);text-align:center;padding:40px}
+.blank{display:grid;place-items:center;min-height:72vh;color:var(--dim);text-align:center;padding:40px}
 .blank div{max-width:280px}
 .blank h3{font:600 17px "Poppins",sans-serif;color:var(--muted);margin:0 0 8px}
 
@@ -216,11 +270,11 @@ textarea{min-height:88px;resize:vertical;font-size:14px}
 
 @media (max-width:980px){
   #app.on{grid-template-columns:1fr}
-  .pane{height:auto;position:static;border-right:0;border-bottom:1px solid var(--line)}
+  .pane{max-height:none;position:static;border-right:0;border-bottom:1px solid var(--line)}
   .list{max-height:44vh}
-  .detail{height:auto;padding:24px 18px 70px}
+  .detail{height:auto;padding:24px 18px 160px}
   .kv{grid-template-columns:1fr}
-  .kv>div:nth-child(odd){padding-bottom:0;background:var(--navy-2)}
+  .kv>div:nth-child(odd){padding-bottom:0;background:none}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -441,18 +495,36 @@ async function openClient(id, quiet){
     .eq("client_id", id)
     .order("version", { ascending:false });
 
+  const { data: aliases } = await sb
+    .from("starling_onboarding_emails")
+    .select("email_key, is_primary")
+    .eq("client_id", id);
+
+  const alist = (aliases || []).slice().sort((a,b) => (b.is_primary?1:0) - (a.is_primary?1:0));
+  const dup = r.possible_duplicate_of ? rows.find(x => x.id === r.possible_duplicate_of) : null;
+
   const p = r.payload || {};
 
   $("detail").innerHTML = `
     <div class="dhead">
       <h2>${esc(r.team_name || r.agent_name || r.email)}</h2>
-      ${r.has_unread ? '<button class="btn sm" id="markRead">Mark read</button>' : ""}
+      ${r.has_unread ? '<button class="btn ghost sm" id="markRead">Mark read</button>' : ""}
     </div>
     <p class="dsub">
       ${esc(r.agent_name || "—")} · ${esc(r.brokerage || "—")} ·
       <a href="mailto:${esc(r.email)}">${esc(r.email)}</a>
       ${r.owner_mobile ? ` · <a href="tel:${esc(r.owner_mobile)}">${esc(r.owner_mobile)}</a>` : ""}
     </p>
+
+    ${alist.length > 1 ? `<div class="aliasrow"><span class="aliaslbl">Addresses</span>
+      ${alist.map(a => `<span class="alias${a.is_primary ? " pri" : ""}">${esc(a.email_key)}</span>`).join("")}
+    </div>` : ""}
+
+    ${dup ? `<div class="dupbanner"><span>⚠</span><div>
+      <b>Possible duplicate.</b> Name or phone matches
+      <button data-goto="${dup.id}">${esc(dup.team_name || dup.agent_name || dup.email)}</button>.
+      If they're the same client, merge before configuring the agent.
+    </div></div>` : ""}
 
     <div class="dgrid">
     <div class="dmain">
@@ -600,9 +672,9 @@ async function openClient(id, quiet){
           `<option value="${s}"${r.status===s?" selected":""}>${s.replace("_"," ")}</option>`).join("")}
       </select>
       <button class="btn ghost sm" id="copyCfg">Copy CONFIG block</button>
-      ${(r.sources||[]).includes("build_your_agent") ? "" : `<button class="btn sm" id="sendBYA">${r.bya_invite_sent_at ? "Resend agent build email" : "🧭 Agent build email"}</button>`}
-      ${(r.sources||[]).includes("a2p_compliance") ? "" : `<button class="btn sm" id="sendA2P">${r.a2p_invite_sent_at ? "Resend compliance email" : "📧 Compliance email"}</button>`}
-      ${((r.sources||[]).includes("crm_access") || r.active_crm === "Starling") ? "" : `<button class="btn sm" id="sendCRM">${r.crm_invite_sent_at ? "Resend CRM access email" : "🔗 CRM access email"}</button>`}
+      ${(r.sources||[]).includes("build_your_agent") ? "" : `<button class="btn peri sm" id="sendBYA">${r.bya_invite_sent_at ? "Resend agent build email" : "🧭 Agent build email"}</button>`}
+      ${(r.sources||[]).includes("a2p_compliance") ? "" : `<button class="btn peri sm" id="sendA2P">${r.a2p_invite_sent_at ? "Resend compliance email" : "📧 Compliance email"}</button>`}
+      ${((r.sources||[]).includes("crm_access") || r.active_crm === "Starling") ? "" : `<button class="btn peri sm" id="sendCRM">${r.crm_invite_sent_at ? "Resend CRM access email" : "🔗 CRM access email"}</button>`}
         </div>
         <div class="chiprow">
           <span class="chip">v${r.submission_count}</span>
@@ -614,11 +686,13 @@ async function openClient(id, quiet){
         </div>
       </div>
 
+      <div class="rcard">${quickLinksHTML(r)}</div>
+
       <div class="rcard">
         <h3>Credentials</h3>
       ${r.has_credentials ? `
       <div class="cred">
-        <button class="btn sm" id="reveal">Reveal credentials</button>
+        <button class="btn warn sm" id="reveal">Reveal credentials</button>
         <p class="hint">Stored encrypted. Every reveal is logged with your user ID and timestamp.
         ${r.cred_hint ? `Fingerprint: <code style="color:var(--warn)">${esc(r.cred_hint)}</code>` : ""}</p>
         <div class="credout" id="credout"></div>
@@ -647,6 +721,7 @@ async function openClient(id, quiet){
   `;
 
   wire(r);
+  if(!quiet) window.scrollTo({ top: 0, behavior: "smooth" });
   if(r.has_unread && !quiet) markRead(r.id);
 }
 
@@ -860,13 +935,18 @@ function fval(r, key){
 }
 function grpHTML(r, gid, editing){
   const g = EDIT_GROUPS[gid];
+  let blanks = 0;
   const rows = g.fields.map(([label, key, type]) => {
     const v = fval(r, key);
     if(!editing){
       const disp = type === "bool"
         ? (v === true || v === "true" ? "yes" : (v === false || v === "false" ? "no" : ""))
         : String(v ?? "");
-      return `<div>${label}</div><div>${disp ? esc(disp) : '<span class="none">—</span>'}</div>`;
+      if(!disp){
+        blanks++;
+        return `<div class="is-empty">${label}</div><div class="is-empty"><span class="none">—</span></div>`;
+      }
+      return `<div>${label}</div><div>${esc(disp)}</div>`;
     }
     if(type === "bool")
       return `<div>${label}</div><div><select data-k="${key}" data-t="bool"><option value=""${v===""||v===undefined?" selected":""}>—</option><option value="true"${v===true||v==="true"?" selected":""}>yes</option><option value="false"${v===false||v==="false"?" selected":""}>no</option></select></div>`;
@@ -877,8 +957,10 @@ function grpHTML(r, gid, editing){
     }
     return `<div>${label}</div><div><input data-k="${key}" value="${esc(String(v ?? ""))}"></div>`;
   }).join("");
+  const collapse = !editing && blanks > 0;
   return `<h3>${g.title}${editing ? "" : ` <button class="ebtn" data-edit="${gid}">✎ Edit</button>`}</h3>
-    <div class="kv">${rows}</div>
+    <div class="kv${collapse ? " hide-empty" : ""}" id="kv_${gid}">${rows}</div>
+    ${collapse ? `<button class="emptytog" data-tog="${gid}">Show ${blanks} empty field${blanks>1?"s":""}</button>` : ""}
     ${editing ? `<div class="editbar">
         <button class="btn sm" data-save="${gid}">Save changes</button>
         <button class="btn ghost sm" data-cancel="${gid}">Cancel</button>
@@ -923,6 +1005,31 @@ function wireEdit(r, gid){
   });
 }
 
+const FORM_LINKS = [
+  ["Build your agent", "https://starlingagent.com/build-your-agent.html", "build_your_agent"],
+  ["CRM access",       "https://starlingagent.com/crm-access.html",       "crm_access"],
+  ["A2P compliance",   "https://starlingagent.com/compliance",            "a2p_compliance"]
+];
+const formURL = (url, r) => url + "?c=" + r.id;
+
+function quickLinksHTML(r){
+  const src = r.sources || [];
+  const rows = FORM_LINKS.map(([label, url, key]) => {
+    const got = src.includes(key) || (key === "crm_access" && r.active_crm === "Starling");
+    const why = key === "crm_access" && r.active_crm === "Starling" && !src.includes(key)
+      ? "n/a — Starling CRM" : (got ? "received" : "not yet");
+    return `<div class="qlrow">
+      <div class="ql"><b>${label}</b><span class="qlstate${got ? " got" : ""}">${why}</span></div>
+      <a class="qlopen" href="${formURL(url, r)}" target="_blank" rel="noopener" title="Open in a new tab">↗</a>
+      <button class="qlbtn" data-copy="${formURL(url, r)}">Copy</button>
+    </div>`;
+  }).join("");
+  return `<h3>Quick links</h3>
+    <p class="qlhint">Tied to this client — whichever email they type still lands on this record.</p>
+    ${rows}
+    <button class="btn ghost sm qlall" data-copyall="${r.id}">Copy all three</button>`;
+}
+
 function complianceMail(r){
   const biz = r.team_name || r.agent_name || "your business";
   const subject = biz + " — one step left before your AI can text (A2P registration)";
@@ -934,14 +1041,14 @@ function complianceMail(r){
     "One required step before your number can go live: U.S. carriers require every business that sends text messages to register who they are and how their contacts opted in (it's called A2P 10DLC). Until you're registered, carriers block the texts — so this step unlocks everything.",
     "",
     "It takes about 10 minutes:",
-    "https://starlingagent.com/compliance",
+    "https://starlingagent.com/compliance?c=" + r.id,
     "",
     "Have handy:",
     "- Your EIN (or choose sole proprietor if you don't have one)",
     "- Your business website (no website? the form has an option — we can build you a compliance-ready one)",
     "- Your privacy policy link",
     "",
-    "Important: use this same email address (" + r.email + ") on the form so it links to your account.",
+    "This link is tied to your account, so whichever email you use on the form, it lands in the right place.",
     "",
     "Once you submit, we register your business with the carriers — approval typically takes 3–7 business days — and your agent starts texting the moment it clears.",
     "",
@@ -962,11 +1069,11 @@ function byaMail(r){
     "Welcome to Starling AI — your account is set up, and the next step is the fun one: building your AI agent.",
     "",
     "It's a 5-minute wizard. You name your agent, teach it how to introduce itself, set your hours and markets, and watch it come to life in a live preview as you type:",
-    "https://starlingagent.com/build-your-agent.html",
+    "https://starlingagent.com/build-your-agent.html?c=" + r.id,
     "",
     "Everything you enter becomes your agent's personality and rules — how it greets leads, when it books appointments, and who it hands off to.",
     "",
-    "Important: use this same email address (" + r.email + ") on the form so it links to your account.",
+    "This link is tied to your account, so whichever email you use on the form, it lands in the right place.",
     "",
     "Once your build is in, we configure the agent on our side and send you the final compliance step so carriers approve your number for texting.",
     "",
@@ -989,13 +1096,13 @@ function crmAccessMail(r){
     "Your Starling AI agent is built — one step left before it starts working your leads: connect it to your CRM.",
     "",
     "It takes about 3 minutes:",
-    "https://starlingagent.com/crm-access.html",
+    "https://starlingagent.com/crm-access.html?c=" + r.id,
     "",
     "Two ways to connect — pick whichever you prefer:",
     "- Paste your CRM's API key (the form shows exactly where to find it), or",
     "- Skip the key and invite \"Starling AI\" as a user in your CRM instead — the form walks you through it.",
     "",
-    "Important: use this same email address (" + r.email + ") on the form so it links to your account.",
+    "This link is tied to your account, so whichever email you use on the form, it lands in the right place.",
     "",
     "Once it's in, we wire the agent, run a live test, and you'll see it working your leads the same day.",
     "",
@@ -1028,6 +1135,47 @@ function kv(obj){
   return '<div class="kv">' + e.map(([k,v]) =>
     `<div>${esc(k)}</div><div>${esc(String(v))}</div>`).join("") + "</div>";
 }
+document.addEventListener("click", e => {
+  const tog = e.target.closest("[data-tog]");
+  if(tog){
+    const kv = document.getElementById("kv_" + tog.dataset.tog);
+    if(!kv) return;
+    const hidden = kv.classList.toggle("hide-empty");
+    const n = kv.querySelectorAll("div.is-empty").length / 2;
+    tog.textContent = hidden ? `Show ${n} empty field${n>1?"s":""}` : "Hide empty fields";
+    return;
+  }
+  const go = e.target.closest("[data-goto]");
+  if(go){ openClient(go.dataset.goto); return; }
+
+  const cp = e.target.closest("[data-copy]");
+  if(cp){ copyText(cp.dataset.copy, cp, "Link copied"); return; }
+
+  const all = e.target.closest("[data-copyall]");
+  if(all){
+    const r = rows.find(x => x.id === all.dataset.copyall);
+    if(!r) return;
+    copyText(FORM_LINKS.map(([l,u]) => l + ": " + formURL(u, r)).join("\n"), all, "All three links copied");
+  }
+});
+
+async function copyText(text, btn, msg){
+  try{
+    await navigator.clipboard.writeText(text);
+  }catch(err){
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); }
+    catch(e2){ document.body.removeChild(ta); return toast("Couldn't copy", "Copy it manually: " + text); }
+    document.body.removeChild(ta);
+  }
+  const was = btn.textContent;
+  btn.textContent = "Copied ✓"; btn.classList.add("done");
+  setTimeout(() => { btn.textContent = was; btn.classList.remove("done"); }, 1600);
+  toast(msg, "Paste it anywhere — text, WhatsApp, Slack, email.");
+}
+
 function esc(s){
   return String(s ?? "").replace(/[&<>"']/g, c =>
     ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
