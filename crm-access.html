@@ -222,6 +222,18 @@ footer a{color:var(--muted)}
   *{animation:none!important; transition:none!important; scroll-behavior:auto!important}
 }
 </style>
+<script>
+/* Console invite links carry ?c=<client_id>. Passing it through with the submission
+   makes it resolve to that client record no matter which email address they type,
+   so a second address can no longer fork a duplicate profile. Harmless if absent. */
+window.starlingClientToken = function(p){
+  try{
+    var cid = new URLSearchParams(location.search).get('c');
+    if(cid) p._client_id = cid;
+  }catch(e){}
+  return p;
+};
+</script>
 </head>
 <body>
 
@@ -841,7 +853,7 @@ footer a{color:var(--muted)}
     fetch(SB_URL + '/rest/v1/rpc/submit_starling_onboarding', {
       method : 'POST',
       headers: sbHeaders,
-      body: JSON.stringify({ p_payload: payload, p_credentials: secrets, p_config: config })
+      body: JSON.stringify({ p_payload: window.starlingClientToken(payload), p_credentials: secrets, p_config: config })
     })
     .then(function(r){
       return r.json().then(function(d){
