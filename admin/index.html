@@ -136,6 +136,8 @@ html,body{height:auto;overflow-x:hidden}
   font:700 10px/16px "IBM Plex Mono",monospace;min-width:17px;height:17px;
   border-radius:9px;padding:0 4px;display:none}
 .bell b.on{display:block}
+.bell.spin{animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
 .filters{display:flex;flex-direction:column;gap:8px}
 .filters select,.filters input{padding:10px 12px;font-size:13.5px;border-radius:10px}
 .filters input#q{width:100%;padding:11px 13px 11px 38px;
@@ -310,6 +312,7 @@ textarea{min-height:88px;resize:vertical;font-size:14px}
       <div class="toprow">
         <span class="logo" role="img" aria-label="Starling AI"></span>
         <b>Onboarding</b>
+        <button class="bell" id="refresh" title="Refresh now">⟳</button>
         <button class="bell" id="bell" title="Unread">🔔<b id="bellCount"></b></button>
         <button class="btn ghost sm" id="out">Out</button>
       </div>
@@ -326,6 +329,7 @@ textarea{min-height:88px;resize:vertical;font-size:14px}
         </select>
         <select id="fCrm"><option value="">All CRMs</option></select>
         </div>
+        <button class="btn peri sm" id="newInvite" title="Blank wizard link — no client token, safe to send to anyone new">＋ New client invite</button>
       </div>
     </div>
     <div class="list" id="list"><div class="empty">Loading…</div></div>
@@ -348,6 +352,7 @@ const sb = createClient(SB_URL, SB_ANON);
 const $  = id => document.getElementById(id);
 
 let rows = [], sel = null, baseTitle = document.title;
+let openSeq = 0, refreshing = false, rtTimer;
 
 /* ─────────── auth ─────────── */
 $("loginBtn").addEventListener("click", signIn);
@@ -390,7 +395,14 @@ async function start(){
   $("login").style.display = "none";
   $("app").classList.add("on");
   await load();
-  setInterval(poll, 45000);
+  if(!window.__consoleStarted){
+    window.__consoleStarted = true;
+    startRealtime();                                        // instant updates
+    setInterval(() => refreshAll(true), 45000);             // fallback if realtime drops
+    document.addEventListener("visibilitychange", () => {   // coming back to the GHL tab
+      if(!document.hidden) refreshAll(true);
+    });
+  }
 }
 
 /* ─────────── data ─────────── */
@@ -410,16 +422,35 @@ async function load(){
   render();
 }
 
-async function poll(){
+async function refreshAll(announce){
+  if(refreshing) return;
+  refreshing = true;
   const before = rows.filter(r => r.has_unread).length;
-  const keep = sel;
-  await load();
+  try{ await load(); } finally { refreshing = false; }
   const after = rows.filter(r => r.has_unread).length;
-  if(after > before){
-    const fresh = rows.find(r => r.has_unread && r.id !== keep);
+  if(announce && after > before){
+    const fresh = rows.find(r => r.has_unread && r.id !== sel);
     toast("New submission", fresh ? `${fresh.team_name || fresh.email} just sent an update.` : "Something new came in.");
   }
-  if(keep) openClient(keep, true);
+  // Re-open whatever is selected NOW — never a selection captured before the
+  // network round-trip. (The old poll captured `sel` pre-await and re-opened
+  // it after, silently snapping the pane back to the previous client — which
+  // is how invite links got composed for the wrong record.)
+  // Also never repaint over the operator's hands: an open edit form, revealed
+  // credentials, or a focused input pauses the quiet re-render.
+  const busy = $("detail").querySelector("[data-save]")
+            || $("detail").querySelector("#credout.on")
+            || (document.activeElement && $("detail").contains(document.activeElement)
+                && /^(TEXTAREA|INPUT|SELECT)$/.test(document.activeElement.tagName));
+  if(sel && !busy) openClient(sel, true);
+}
+
+function startRealtime(){
+  sb.channel("console-live")
+    .on("postgres_changes",
+        { event: "*", schema: "public", table: "starling_onboarding_clients" },
+        () => { clearTimeout(rtTimer); rtTimer = setTimeout(() => refreshAll(true), 600); })
+    .subscribe();
 }
 
 /* ─────────── list ─────────── */
@@ -484,6 +515,7 @@ function render(){
 
 /* ─────────── detail ─────────── */
 async function openClient(id, quiet){
+  const seq = ++openSeq;
   sel = id;
   const r = rows.find(x => x.id === id);
   if(!r) return;
@@ -499,6 +531,8 @@ async function openClient(id, quiet){
     .from("starling_onboarding_emails")
     .select("email_key, is_primary")
     .eq("client_id", id);
+
+  if(seq !== openSeq) return;  // a newer click superseded this load — drop the stale render
 
   const alist = (aliases || []).slice().sort((a,b) => (b.is_primary?1:0) - (a.is_primary?1:0));
   const dup = r.possible_duplicate_of ? rows.find(x => x.id === r.possible_duplicate_of) : null;
@@ -805,7 +839,8 @@ function wire(r){
     if(error) return toast("Compose opened", "Couldn't stamp the record: " + error.message);
     r.a2p_invite_sent_at = ts;
     render();
-    toast("Compose opened in Gmail", "Review, personalize the greeting, hit Send. Marked as invited.");
+    toast("Compose opened — " + (r.team_name || r.agent_name || r.email),
+          "This compliance link is tied to them only. Review, personalize, send. Marked as invited.");
     openClient(r.id, true);
   });
 
@@ -819,7 +854,8 @@ function wire(r){
     if(error) return toast("Compose opened", "Couldn't stamp the record: " + error.message);
     r.crm_invite_sent_at = ts;
     render();
-    toast("Compose opened in Gmail", "Review, personalize, hit Send. Marked as CRM-invited.");
+    toast("Compose opened — " + (r.team_name || r.agent_name || r.email),
+          "This CRM-access link is tied to them only. Review, personalize, send. Marked as CRM-invited.");
     openClient(r.id, true);
   });
 
@@ -833,7 +869,8 @@ function wire(r){
     if(error) return toast("Compose opened", "Couldn't stamp the record: " + error.message);
     r.bya_invite_sent_at = ts;
     render();
-    toast("Compose opened in Gmail", "Review, personalize, hit Send. Marked as build-invited.");
+    toast("Compose opened — " + (r.team_name || r.agent_name || r.email),
+          "This wizard link is tied to them only. Review, personalize, send. Marked as build-invited.");
     openClient(r.id, true);
   });
 
@@ -887,6 +924,19 @@ async function markRead(id){
 $("bell").addEventListener("click", () => {
   $("fStatus").value = $("fStatus").value === "unread" ? "" : "unread";
   render();
+});
+
+$("refresh").addEventListener("click", async () => {
+  $("refresh").classList.add("spin");
+  await refreshAll(true);
+  $("refresh").classList.remove("spin");
+  toast("Up to date", "List and open record re-pulled from the database just now.");
+});
+
+$("newInvite").addEventListener("click", () => {
+  const w = window.open(newClientMail(), "_blank", "noopener");
+  if(!w) return toast("Popup blocked", "Allow popups for this site, then click again.");
+  toast("Blank invite opened", "No client token in this link — their record is created from whatever email they enter on the form.");
 });
 
 /* ─────────── helpers ─────────── */
@@ -1021,13 +1071,13 @@ function quickLinksHTML(r){
     return `<div class="qlrow">
       <div class="ql"><b>${label}</b><span class="qlstate${got ? " got" : ""}">${why}</span></div>
       <a class="qlopen" href="${formURL(url, r)}" target="_blank" rel="noopener" title="Open in a new tab">↗</a>
-      <button class="qlbtn" data-copy="${formURL(url, r)}">Copy</button>
+      <button class="qlbtn" data-copy="${formURL(url, r)}" data-owner="${esc(r.team_name || r.agent_name || r.email)}">Copy</button>
     </div>`;
   }).join("");
   return `<h3>Quick links</h3>
-    <p class="qlhint">Tied to this client — whichever email they type still lands on this record.</p>
+    <p class="qlhint">Personal to this client only. A link sent to anyone else now forks a flagged duplicate instead of landing here — for brand-new people use ＋ New client invite.</p>
     ${rows}
-    <button class="btn ghost sm qlall" data-copyall="${r.id}">Copy all three</button>`;
+    <button class="btn ghost sm qlall" data-copyall="${r.id}" data-owner="${esc(r.team_name || r.agent_name || r.email)}">Copy all three</button>`;
 }
 
 function complianceMail(r){
@@ -1048,7 +1098,7 @@ function complianceMail(r){
     "- Your business website (no website? the form has an option — we can build you a compliance-ready one)",
     "- Your privacy policy link",
     "",
-    "This link is tied to your account, so whichever email you use on the form, it lands in the right place.",
+    "This link is personal to your account — use whichever email you like on the form. Please don't forward it to teammates: if someone else needs their own setup link, just reply and we'll send one over.",
     "",
     "Once you submit, we register your business with the carriers — approval typically takes 3–7 business days — and your agent starts texting the moment it clears.",
     "",
@@ -1073,7 +1123,7 @@ function byaMail(r){
     "",
     "Everything you enter becomes your agent's personality and rules — how it greets leads, when it books appointments, and who it hands off to.",
     "",
-    "This link is tied to your account, so whichever email you use on the form, it lands in the right place.",
+    "This link is personal to your account — use whichever email you like on the form. Please don't forward it to teammates: if someone else needs their own setup link, just reply and we'll send one over.",
     "",
     "Once your build is in, we configure the agent on our side and send you the final compliance step so carriers approve your number for texting.",
     "",
@@ -1087,6 +1137,28 @@ function byaMail(r){
 }
 const byaTag = r => (!((r.sources||[]).includes("build_your_agent")) && r.bya_invite_sent_at)
   ? `<span>·</span><span class="a2ptag" style="opacity:.6">build invited ${when(r.bya_invite_sent_at)}</span>` : "";
+function newClientMail(){
+  const subject = "Welcome to Starling AI — let's build your AI agent (about 5 minutes)";
+  const body = [
+    "Hi there,",
+    "",
+    "Welcome to Starling AI — the first step is the fun one: building your AI agent.",
+    "",
+    "It's a 5-minute wizard. You name your agent, teach it how to introduce itself, set your hours and markets, and watch it come to life in a live preview as you type:",
+    "https://starlingagent.com/build-your-agent.html",
+    "",
+    "Use your best email on the form — that's how your account gets created, and every step after this stays tied to it.",
+    "",
+    "Once your build is in, we configure the agent on our side and send you the next steps from there.",
+    "",
+    "Questions? Just reply to this email — we answer fast.",
+    "",
+    "— The Starling AI Team",
+    "Admin@starlingagent.com · starlingagent.com"
+  ].join("\n");
+  return "https://mail.google.com/mail/?view=cm&fs=1&su=" + encodeURIComponent(subject)
+       + "&body=" + encodeURIComponent(body);
+}
 function crmAccessMail(r){
   const biz = r.team_name || r.agent_name || "your business";
   const subject = biz + " — connect your CRM and your agent goes live";
@@ -1102,7 +1174,7 @@ function crmAccessMail(r){
     "- Paste your CRM's API key (the form shows exactly where to find it), or",
     "- Skip the key and invite \"Starling AI\" as a user in your CRM instead — the form walks you through it.",
     "",
-    "This link is tied to your account, so whichever email you use on the form, it lands in the right place.",
+    "This link is personal to your account — use whichever email you like on the form. Please don't forward it to teammates: if someone else needs their own setup link, just reply and we'll send one over.",
     "",
     "Once it's in, we wire the agent, run a live test, and you'll see it working your leads the same day.",
     "",
@@ -1149,17 +1221,26 @@ document.addEventListener("click", e => {
   if(go){ openClient(go.dataset.goto); return; }
 
   const cp = e.target.closest("[data-copy]");
-  if(cp){ copyText(cp.dataset.copy, cp, "Link copied"); return; }
+  if(cp){
+    const who = cp.dataset.owner;
+    copyText(cp.dataset.copy, cp,
+      who ? "Copied — " + who + "'s personal link" : "Copied",
+      who ? "Only send this to " + who + ". Anyone else's submission on it gets forked and flagged, not merged." : undefined);
+    return;
+  }
 
   const all = e.target.closest("[data-copyall]");
   if(all){
     const r = rows.find(x => x.id === all.dataset.copyall);
     if(!r) return;
-    copyText(FORM_LINKS.map(([l,u]) => l + ": " + formURL(u, r)).join("\n"), all, "All three links copied");
+    const who = all.dataset.owner || r.team_name || r.email;
+    copyText(FORM_LINKS.map(([l,u]) => l + ": " + formURL(u, r)).join("\n"), all,
+      "All three copied — " + who + "'s links",
+      "Personal to " + who + " only. For a brand-new client use ＋ New client invite instead.");
   }
 });
 
-async function copyText(text, btn, msg){
+async function copyText(text, btn, msg, sub){
   try{
     await navigator.clipboard.writeText(text);
   }catch(err){
@@ -1173,7 +1254,7 @@ async function copyText(text, btn, msg){
   const was = btn.textContent;
   btn.textContent = "Copied ✓"; btn.classList.add("done");
   setTimeout(() => { btn.textContent = was; btn.classList.remove("done"); }, 1600);
-  toast(msg, "Paste it anywhere — text, WhatsApp, Slack, email.");
+  toast(msg, sub || "Paste it anywhere — text, WhatsApp, Slack, email.");
 }
 
 function esc(s){
