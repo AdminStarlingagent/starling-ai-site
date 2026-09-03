@@ -566,14 +566,10 @@
           <span id="stdPerMo" class="text-sm font-medium text-slate-500">/mo</span>
         </div>
         <p id="stdBilled" class="billed-note mt-1 hidden text-[13px] font-semibold text-emerald-300">Billed annually · 2 months free</p>
-        <div class="mt-3 space-y-2 rounded-xl border border-white/10 bg-white/[0.03] p-3.5">
+        <div class="mt-3 rounded-xl border border-white/10 bg-white/[0.03] p-3.5">
           <div class="flex items-start gap-2.5 text-xs leading-snug text-slate-200">
             <svg class="mt-px h-4 w-4 shrink-0 text-emerald-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
-            <span><span class="font-bold text-emerald-300">$0 setup</span> with the Starling CRM — AI agent included.</span>
-          </div>
-          <div class="flex items-start gap-2.5 text-xs leading-snug text-slate-400">
-            <svg class="mt-px h-4 w-4 shrink-0 text-slate-500" viewBox="0 0 20 20" fill="currentColor"><path d="M10 5a.75.75 0 01.75.75v3.5h3.5a.75.75 0 010 1.5h-3.5v3.5a.75.75 0 01-1.5 0v-3.5h-3.5a.75.75 0 010-1.5h3.5v-3.5A.75.75 0 0110 5z"/></svg>
-            <span><span class="font-bold text-white">+$400 one-time</span> only if you connect your own 3rd-party CRM.</span>
+            <span><span class="font-bold text-emerald-300">$0 setup</span> — Starling CRM or bring your own. AI agent and CRM integration included.</span>
           </div>
         </div>
         <div class="relative mt-4">
@@ -587,7 +583,6 @@
           <div id="volMenu" class="absolute inset-x-0 top-full z-20 mt-1.5 hidden overflow-hidden rounded-xl border border-white/10 bg-navy-850 shadow-card"></div>
         </div>
         <a id="stdCta" href="https://buy.stripe.com/bJe7sEcXafeM9S5caY5EY0Z" data-bill-m="https://buy.stripe.com/bJe7sEcXafeM9S5caY5EY0Z" data-bill-y="https://buy.stripe.com/9B628k0ao9Us4xLb6U5EY10" class="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-coral-500 px-5 py-3 text-sm font-bold text-white shadow-glow-coral transition duration-300 hover:-translate-y-0.5 hover:bg-coral-400">Get Started</a>
-        <a href="https://buy.stripe.com/5kQ14g6yM8QoaW98YM5EY0w" class="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 px-5 py-2.5 text-xs font-semibold text-slate-400 transition duration-300 hover:border-white/20 hover:bg-white/5 hover:text-white">Bring your own CRM <span class="whitespace-nowrap rounded-full bg-white/5 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-slate-300 ring-1 ring-inset ring-white/15">+$400 setup</span></a>
         <ul class="mt-7 space-y-3 text-sm text-slate-300">
           <li class="flex gap-3 font-semibold text-white"><svg class="mt-0.5 h-4 w-4 shrink-0 text-peri-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>Everything in CRM Only, plus:</li>
           <li class="flex gap-3"><svg class="mt-0.5 h-4 w-4 shrink-0 text-peri-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg><span><b id="stdFeatExec">1,000 AI executions / month</b><span class="mt-1.5 block text-xs font-normal text-slate-500">Messages your agent sends — not contacts stored. <span id="stdFeatLeads">Roughly 150–200 leads worked end to end.</span></span></span></li>
@@ -610,17 +605,27 @@
         <h3 class="font-display text-base font-bold text-white">Starling AI Producer</h3>
         <p class="mt-2.5 text-sm leading-relaxed text-slate-400">We bring the leads and work them. You take the appointments and close.</p>
         <div class="mt-6 flex items-baseline gap-1.5">
-          <span class="font-display text-4xl font-extrabold leading-none tracking-tight text-white" data-price-m="$999" data-price-y="$833">$999</span>
-          <span class="text-sm font-medium text-slate-500">/mo</span>
+          <span id="prodPrice" class="font-display text-4xl font-extrabold leading-none tracking-tight text-white" data-price-m="$999" data-price-y="$833">$999</span>
+          <span id="prodPerMo" class="text-sm font-medium text-slate-500">/mo</span>
         </div>
-        <p class="billed-note mt-1 hidden text-[13px] font-semibold text-emerald-300">Billed annually · 2 months free</p>
+        <p id="prodBilled" class="billed-note mt-1 hidden text-[13px] font-semibold text-emerald-300">Billed annually · 2 months free</p>
         <p class="mt-2 text-xs text-slate-500">Leads + follow-up, fully managed.</p>
-        <a href="https://buy.stripe.com/eVq14g8GU7Mkc0dej65EY13" data-bill-m="https://buy.stripe.com/eVq14g8GU7Mkc0dej65EY13" data-bill-y="https://buy.stripe.com/5kQdR20ao6Ig8O1df25EY14" class="mt-6 inline-flex w-full items-center justify-center rounded-xl border border-peri-500/40 bg-peri-500/10 px-5 py-3 text-sm font-semibold text-peri-300 transition duration-300 hover:-translate-y-0.5 hover:border-peri-400/60 hover:bg-peri-500/20 hover:text-white">Get Started</a>
+        <div class="relative mt-4">
+          <button id="prodVolBtn" type="button" aria-expanded="false" aria-controls="prodVolMenu" class="flex w-full items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-left transition hover:border-white/25 hover:bg-white/10">
+            <span class="flex items-baseline gap-2.5">
+              <span id="prodVolNum" class="font-display text-lg font-extrabold text-white">1,000</span>
+              <span class="text-[13px] leading-tight text-slate-400">AI executions<span class="block text-slate-500">per month</span></span>
+            </span>
+            <span id="prodVolChev" class="transition-transform duration-200"><svg class="h-4 w-4 shrink-0 text-slate-400 transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg></span>
+          </button>
+          <div id="prodVolMenu" class="absolute inset-x-0 top-full z-20 mt-1.5 hidden overflow-hidden rounded-xl border border-white/10 bg-navy-850 shadow-card"></div>
+        </div>
+        <a id="prodCta" href="https://buy.stripe.com/eVq14g8GU7Mkc0dej65EY13" data-bill-m="https://buy.stripe.com/eVq14g8GU7Mkc0dej65EY13" data-bill-y="https://buy.stripe.com/5kQdR20ao6Ig8O1df25EY14" class="mt-4 inline-flex w-full items-center justify-center rounded-xl border border-peri-500/40 bg-peri-500/10 px-5 py-3 text-sm font-semibold text-peri-300 transition duration-300 hover:-translate-y-0.5 hover:border-peri-400/60 hover:bg-peri-500/20 hover:text-white">Get Started</a>
         <ul class="mt-7 space-y-3 text-sm text-slate-300">
           <li class="flex gap-3 font-semibold text-white"><svg class="mt-0.5 h-4 w-4 shrink-0 text-peri-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>Everything in Standard, plus:</li>
-          <li class="flex gap-3 font-medium text-white"><svg class="mt-0.5 h-4 w-4 shrink-0 text-peri-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>Connect any 3rd-party CRM — integration included, no setup fee</li>
+          <li class="flex gap-3 font-medium text-white"><svg class="mt-0.5 h-4 w-4 shrink-0 text-peri-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>Connect any 3rd-party CRM — integration included</li>
           <li class="flex gap-3"><svg class="mt-0.5 h-4 w-4 shrink-0 text-peri-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>Qualified leads delivered to your pipeline</li>
-          <li class="flex gap-3"><svg class="mt-0.5 h-4 w-4 shrink-0 text-peri-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>3,000 AI executions / month</li>
+          <li class="flex gap-3"><svg class="mt-0.5 h-4 w-4 shrink-0 text-peri-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg><span><b id="prodFeatExec">1,000 AI executions / month</b><span class="mt-1.5 block text-xs font-normal text-slate-500">Messages your agent sends — not contacts stored. <span id="prodFeatLeads">Roughly 150–200 leads worked end to end.</span></span></span></li>
           <li class="flex gap-3"><svg class="mt-0.5 h-4 w-4 shrink-0 text-peri-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>Done-for-you lead generation</li>
           <li class="flex gap-3"><svg class="mt-0.5 h-4 w-4 shrink-0 text-peri-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg><span>You keep 100% of your commission<span class="mt-1 block text-xs font-normal text-slate-500">No splits, no referral fees</span></span></li>
           <li class="flex gap-3"><svg class="mt-0.5 h-4 w-4 shrink-0 text-peri-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>Priority support</li>
@@ -705,7 +710,7 @@
         <details class="group rounded-xl border border-white/[0.08] bg-navy-900/70 backdrop-blur open:border-coral-500/30">
           <summary class="flex cursor-pointer items-center justify-between gap-4 p-5 text-[15px] font-semibold text-white marker:content-none [&amp;::-webkit-details-marker]:hidden">Do I have to switch off my current CRM?<span class="shrink-0 text-xl font-normal text-coral-400 transition group-open:rotate-45">+</span></summary>
           <div class="space-y-3 px-5 pb-5 text-sm leading-relaxed text-slate-400">
-            <p>No. Standard connects to Follow Up Boss, GoHighLevel, Lofty, BoldTrail, Real Geeks and Jungo/Salesforce for a one-time $400 integration.</p>
+            <p>No. Standard connects to Follow Up Boss, GoHighLevel, Lofty, BoldTrail, Real Geeks and Jungo/Salesforce at no extra cost — the integration is included.</p>
             <p>That said, the Starling CRM is included free with Standard, and a few things only work there — social DMs being the big one. Most agents who try it move over within the first couple of months.</p>
           </div>
         </details>
@@ -1083,6 +1088,88 @@
       if (fExec) fExec.textContent = t.label + " AI executions / month";
       cta.textContent = (t.stripeM ? "Get Started" : "Talk to us");
     }
+    renderMenu();
+  }
+
+  function open(){ menu.classList.remove("hidden"); btn.setAttribute("aria-expanded","true");
+                   if(chev) chev.style.transform="rotate(180deg)"; }
+  function close(){ menu.classList.add("hidden"); btn.setAttribute("aria-expanded","false");
+                    if(chev) chev.style.transform=""; }
+
+  btn.addEventListener("click", function(e){
+    e.stopPropagation();
+    menu.classList.contains("hidden") ? open() : close();
+  });
+  document.addEventListener("click", close);
+  document.addEventListener("keydown", function(e){ if(e.key==="Escape") close(); });
+
+  var bt = document.getElementById('billToggle');
+  if (bt) bt.addEventListener('click', function(){ setTimeout(apply, 0); });
+
+  apply();
+})();
+</script>
+
+<script>
+/* ── Producer execution-volume selector ──────────────────────────────
+   Edit PROD_TIERS to change prices or drop in new Stripe products.
+   stripeM/stripeY = null  ->  routes to CONTACT with a "Talk to us" CTA. */
+(function(){
+  var PROD_TIERS = [
+    { label:"1,000", m:999,  y:833,   leads:"Roughly 150\u2013200 leads worked end to end.",
+      stripeM:"https://buy.stripe.com/eVq14g8GU7Mkc0dej65EY13", stripeY:"https://buy.stripe.com/5kQdR20ao6Ig8O1df25EY14" },
+    { label:"3,000", m:1299, y:1083,  leads:"Roughly 500\u2013600 leads worked end to end.",
+      stripeM:null, stripeY:null },   /* TODO: paste $1,299/mo + annual Stripe links */
+    { label:"5,000", m:1549, y:1291,  leads:"Roughly 850\u20131,000 leads worked end to end.",
+      stripeM:null, stripeY:null }    /* TODO: paste $1,549/mo + annual Stripe links */
+  ];
+  var CONTACT = "https://calendly.com/starlingagent/30min";
+
+  var $ = function(id){ return document.getElementById(id); };
+  var btn=$("prodVolBtn"), menu=$("prodVolMenu"), num=$("prodVolNum"), chev=$("prodVolChev"),
+      price=$("prodPrice"), perMo=$("prodPerMo"), billed=$("prodBilled"),
+      cta=$("prodCta"), fExec=$("prodFeatExec"), fLeads=$("prodFeatLeads");
+  if(!btn||!menu||!price||!cta) return;
+
+  var sel = 0;
+  function money(n){ return "$" + n.toLocaleString(); }
+  function isYearly(){ return document.getElementById('billToggle') &&
+                              document.getElementById('billToggle').getAttribute('aria-checked')==='true'; }
+
+  function renderMenu(){
+    var y = isYearly(), html = "";
+    for (var i=0;i<PROD_TIERS.length;i++){
+      var t=PROD_TIERS[i], on=(i===sel);
+      var right = money(y?t.y:t.m) + '<span class="text-xs font-normal text-slate-400">/mo</span>';
+      html += '<button type="button" data-i="'+i+'" class="prodVolOpt flex w-full items-center '
+            + 'justify-between gap-4 px-4 py-3 text-left transition hover:bg-white/5 '
+            + (on?'bg-white/[0.05]':'') + '">'
+            + '<span class="font-display text-sm font-bold '+(on?'text-peri-300':'text-white')+'">'+t.label+' executions</span>'
+            + '<span class="shrink-0 text-sm font-semibold '+(on?'text-peri-300':'text-slate-400')+'">'+right+'</span>'
+            + '</button>';
+      if(i<PROD_TIERS.length-1) html += '<div class="h-px bg-white/5"></div>';
+    }
+    menu.innerHTML = html;
+    var opts = menu.querySelectorAll(".prodVolOpt");
+    for (var k=0;k<opts.length;k++){
+      opts[k].onclick = function(){ sel = +this.getAttribute("data-i"); close(); apply(); };
+    }
+  }
+
+  function apply(){
+    var t = PROD_TIERS[sel];
+    num.textContent = t.label;
+    if (fLeads) fLeads.textContent = t.leads;
+    if (fExec)  fExec.textContent = t.label + " AI executions / month";
+
+    price.setAttribute("data-price-m", money(t.m));
+    price.setAttribute("data-price-y", money(t.y));
+    cta.setAttribute("data-bill-m", t.stripeM || CONTACT);
+    cta.setAttribute("data-bill-y", t.stripeY || CONTACT);
+    cta.textContent = (t.stripeM ? "Get Started" : "Talk to us");
+
+    /* let the existing billing toggle repaint price + href */
+    if (window.__starlingBilling) window.__starlingBilling.refresh();
     renderMenu();
   }
 
