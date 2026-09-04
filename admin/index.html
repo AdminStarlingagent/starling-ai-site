@@ -66,6 +66,105 @@
 .rcard .bar select{width:100%}
 .rcard .bar .btn{width:100%;text-align:center}
 .rcard .kv{grid-template-columns:1fr}
+
+/* ── profile layout (FUB-style) ── */
+.prof{display:grid;grid-template-columns:290px minmax(0,1fr) 320px;gap:20px;align-items:start}
+.pcol{display:flex;flex-direction:column;gap:16px;min-width:0}
+.pcol.right{position:sticky;top:16px}
+@media(max-width:1480px){.prof{grid-template-columns:270px minmax(0,1fr)}.pcol.right{position:static;grid-column:1 / -1;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;align-items:start}}
+@media(max-width:1080px){.prof{grid-template-columns:1fr}.pcol.right{grid-template-columns:1fr}}
+
+.wdg{background:var(--navy-2);border:1px solid var(--line);border-radius:14px;padding:0;overflow:hidden}
+.wdg>header{display:flex;align-items:center;gap:9px;padding:13px 16px;cursor:pointer;user-select:none}
+.wdg>header:hover{background:var(--navy-3)}
+.wdg>header h3{margin:0;font:600 13.5px/1.3 "Poppins",sans-serif;letter-spacing:-.01em;color:var(--paper);flex:1;display:flex;align-items:center;gap:8px}
+.wdg>header h3 .cnt{font:400 11px/1 "IBM Plex Mono",monospace;color:var(--dim)}
+.wdg>header .chev{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;color:var(--dim);font-size:11px;transition:transform .18s}
+.wdg.closed>header .chev{transform:rotate(-90deg)}
+.wdg>.wb{padding:2px 16px 16px;border-top:1px solid var(--line)}
+.wdg.closed>.wb{display:none}
+.wdg .kv{grid-template-columns:1fr}
+.wdg .bar{margin:0;padding:0;border:0;flex-direction:column;align-items:stretch;gap:8px}
+.wdg .bar select{width:100%}.wdg .bar .btn{width:100%;text-align:center}
+.wdg .ebtn{font:600 11px/1 "IBM Plex Sans",sans-serif;letter-spacing:.03em;color:var(--peri);background:none;border:1px solid var(--line);border-radius:6px;padding:5px 8px;cursor:pointer}
+.wdg .ebtn:hover{border-color:var(--peri)}
+
+/* identity card */
+.pcard{background:var(--navy-2);border:1px solid var(--line);border-radius:14px;padding:20px 18px 6px}
+.pid{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.avatar{width:58px;height:58px;border-radius:50%;flex:none;display:grid;place-items:center;
+  font:600 20px/1 "Poppins",sans-serif;color:#fff;letter-spacing:.02em;
+  background:linear-gradient(135deg,var(--peri),var(--coral));box-shadow:0 8px 24px -10px rgba(241,83,104,.6)}
+.pid h2{margin:0 0 4px;font:600 19px/1.2 "Poppins",sans-serif;letter-spacing:-.02em;word-break:break-word}
+.pid .sub{font-size:12.5px;color:var(--dim)}
+.pstat{display:flex;gap:6px;flex-wrap:wrap;margin:-4px 0 14px}
+.crow{display:flex;align-items:center;gap:11px;padding:9px 0;border-top:1px solid var(--line);font-size:13.5px;min-width:0}
+.crow .ic{width:16px;text-align:center;color:var(--peri);font-size:14px;flex:none;opacity:.9}
+.crow .v{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--paper)}
+.crow .v a{color:var(--paper);text-decoration:none}.crow .v a:hover{color:var(--peri)}
+.crow .l{font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;flex:none}
+.crow.none .v{color:var(--faint)}
+.pcard .aliasrow{margin:4px 0 8px}
+
+/* composer */
+.composer{background:var(--navy-2);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.composer .ctabs{display:flex;border-bottom:1px solid var(--line)}
+.composer .ctabs span{padding:13px 18px;font:600 13.5px "IBM Plex Sans",sans-serif;color:var(--paper);border-bottom:2px solid var(--coral);display:flex;align-items:center;gap:7px}
+.composer .cbody{padding:14px 16px 12px}
+.composer textarea{min-height:92px;background:var(--navy-3);border:1px solid var(--line-2);border-radius:10px;padding:12px 14px;font-size:14px;line-height:1.5}
+.composer .cfoot{display:flex;align-items:center;gap:10px;padding:0 16px 14px}
+.composer .cfoot .hint{margin:0;flex:1}
+.composer .cfoot .btn{margin-left:auto}
+
+/* feed */
+.feed{background:var(--navy-2);border:1px solid var(--line);border-radius:14px}
+.ftabs{display:flex;align-items:center;border-bottom:1px solid var(--line);padding:0 8px}
+.ftabs button{background:none;border:0;border-bottom:2px solid transparent;color:var(--dim);cursor:pointer;
+  padding:13px 12px;font:500 13px "IBM Plex Sans",sans-serif;display:flex;align-items:center;gap:6px}
+.ftabs button b{font:500 11px/1 "IBM Plex Mono",monospace;color:var(--faint);background:var(--navy-3);padding:3px 6px;border-radius:5px}
+.ftabs button.on{color:var(--paper);border-bottom-color:var(--peri)}
+.ftabs button.on b{color:var(--peri)}
+.flist{padding:8px 18px 14px 18px}
+.fitem{display:grid;grid-template-columns:30px minmax(0,1fr);gap:0 14px;position:relative;padding:14px 0}
+.fitem::before{content:"";position:absolute;left:14px;top:38px;bottom:-6px;width:2px;background:var(--line)}
+.fitem:last-child::before{display:none}
+.fic{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:13px;background:var(--navy-3);border:1px solid var(--line-2);color:var(--peri);z-index:1}
+.fic.sub{background:rgba(78,212,160,.13);border-color:rgba(78,212,160,.35);color:var(--ok)}
+.fic.flag{background:rgba(255,196,107,.13);border-color:rgba(255,196,107,.35);color:var(--warn)}
+.fic.pin{background:rgba(255,196,107,.13);border-color:rgba(255,196,107,.35);color:var(--warn)}
+.fhead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;font-size:13px;margin-bottom:5px}
+.fhead b{font-weight:600;color:var(--paper)}
+.fhead time{color:var(--dim);font-size:12px}
+.fhead .chip{font-size:9.5px}
+.fhead .acts{margin-left:auto;display:flex;gap:2px;opacity:0;transition:opacity .15s}
+.fitem:hover .fhead .acts,.fitem.editing .fhead .acts{opacity:1}
+.fhead .acts button{background:none;border:0;color:var(--faint);cursor:pointer;font:500 11.5px "IBM Plex Sans",sans-serif;padding:2px 6px;border-radius:4px}
+.fhead .acts button:hover{color:var(--paper);background:var(--navy-4)}
+.fhead .acts button.del:hover{color:var(--coral)}
+.fbody p{margin:0;font-size:14px;line-height:1.55;white-space:pre-wrap;word-break:break-word;color:var(--paper)}
+.fbody .nedit{min-height:70px;margin-bottom:8px}
+.fbody .diffs{margin-top:8px}
+.fempty{padding:30px 10px;text-align:center;color:var(--dim);font-size:13.5px}
+
+/* setup tabs */
+.setup{background:var(--navy-2);border:1px solid var(--line);border-radius:14px}
+.stabs{display:flex;flex-wrap:wrap;gap:2px;padding:8px 10px;border-bottom:1px solid var(--line)}
+.stabs button{background:none;border:0;border-radius:8px;padding:8px 12px;cursor:pointer;color:var(--dim);font:500 13px "IBM Plex Sans",sans-serif}
+.stabs button:hover{color:var(--paper);background:var(--navy-3)}
+.stabs button.on{color:var(--paper);background:var(--navy-3);font-weight:600}
+.spanel{display:none;padding:18px 18px 20px}
+.spanel.on{display:block}
+.spanel .grp{margin-bottom:0}
+.spanel .grp+.grp{margin-top:22px}
+.spanel .grp h3{font-size:14px}
+.spanel .grp h3::before{display:none}
+.spanel .kv{background:var(--navy);border-color:var(--line)}
+
+/* background / pinned summary */
+.bg{font-size:14px;line-height:1.6;color:var(--paper);white-space:pre-wrap;word-break:break-word;cursor:text;padding:10px 0 4px;min-height:22px}
+.bg.none{color:var(--faint);font-style:italic}
+.bgedit textarea{min-height:110px;margin-top:8px}
+.bgedit .editbar{margin-top:8px}
 .chiprow{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
 @media(max-width:1150px){.dgrid{grid-template-columns:1fr}.drail{position:static}}
 .grp h3 .ebtn{margin-left:auto;font:600 11px/1 "IBM Plex Sans",sans-serif;letter-spacing:.03em;color:var(--peri);
@@ -407,6 +506,7 @@ const $  = id => document.getElementById(id);
 
 let rows = [], sel = null, baseTitle = document.title;
 let openSeq = 0, refreshing = false, rtTimer;
+let curVers = [], curNotes = [], feedFilter = "all";
 
 /* ─────────── auth ─────────── */
 $("loginBtn").addEventListener("click", signIn);
@@ -495,6 +595,7 @@ async function refreshAll(announce){
   const busy = $("detail").querySelector("[data-save]")
             || $("detail").querySelector("#planSave")
             || $("detail").querySelector(".nedit")
+            || $("detail").querySelector("#bgText")
             || ($("noteBody") && $("noteBody").value.trim())
             || $("detail").querySelector("#credout.on")
             || (document.activeElement && $("detail").contains(document.activeElement)
@@ -610,36 +711,57 @@ async function openClient(id, quiet){
 
   const p = r.payload || {};
 
+  curVers = vers || []; curNotes = notes || [];
+  const prof = profileCardHTML(r, alist);
+
   $("detail").innerHTML = `
-    <div class="dhead">
-      <h2>${esc(r.team_name || r.agent_name || r.email)}</h2>
-      ${r.has_unread ? '<button class="btn ghost sm" id="markRead">Mark read</button>' : ""}
-    </div>
-    <p class="dsub">
-      ${esc(r.agent_name || "—")} · ${esc(r.brokerage || "—")} ·
-      <a href="mailto:${esc(r.email)}">${esc(r.email)}</a>
-      ${r.owner_mobile ? ` · <a href="tel:${esc(r.owner_mobile)}">${esc(r.owner_mobile)}</a>` : ""}
-    </p>
-
-    ${alist.length > 1 ? `<div class="aliasrow"><span class="aliaslbl">Addresses</span>
-      ${alist.map(a => `<span class="alias${a.is_primary ? " pri" : ""}">${esc(a.email_key)}</span>`).join("")}
-    </div>` : ""}
-
     ${dup ? `<div class="dupbanner"><span>⚠</span><div>
       <b>Possible duplicate.</b> Name or phone matches
       <button data-goto="${dup.id}">${esc(dup.team_name || dup.agent_name || dup.email)}</button>.
       If they're the same client, merge before configuring the agent.
     </div></div>` : ""}
 
-    <div class="dgrid">
-    <div class="dmain">
+    <div class="prof">
 
-    <div class="grp" id="grp_details">${grpHTML(r, "details", false)}</div>
+    <!-- ── left: identity ── -->
+    <div class="pcol left">
+      ${prof}
+      ${wdg("bg", "Background", backgroundHTML(r, false), {id:"bgcard"})}
+      ${wdg("sub", "Subscription", subscriptionHTML(r, false), {id:"subcard"})}
+    </div>
 
-    <div class="grp" id="grp_integration">${grpHTML(r, "integration", false)}</div>
+    <!-- ── center: notes + activity + setup data ── -->
+    <div class="pcol mid">
+      <div class="composer">
+        <div class="ctabs"><span>✎ Create Note</span></div>
+        <div class="cbody"><textarea id="noteBody" placeholder="Add a note — call recap, what's blocking, who's on it…"></textarea></div>
+        <div class="cfoot"><p class="hint">Ctrl+Enter to post · visible to the whole team</p><button class="btn sm" id="addNote">Create Note</button></div>
+      </div>
 
-        <div class="grp">
-      <h3>Booking</h3>
+      <div class="feed" id="feedcard">
+        <div class="ftabs" id="ftabs">
+          <button data-ff="all" class="on">All <b id="fcAll"></b></button>
+          <button data-ff="note">Notes <b id="fcNote"></b></button>
+          <button data-ff="sub">Submissions <b id="fcSub"></b></button>
+        </div>
+        <div class="flist" id="feed"></div>
+      </div>
+
+      <div class="setup">
+        <div class="stabs" id="stabs">
+          <button data-stab="details">Details</button>
+          <button data-stab="integration">Integration</button>
+          <button data-stab="booking">Booking</button>
+          <button data-stab="agent">Agent build</button>
+          ${(r.sources||[]).includes("a2p_compliance") ? `<button data-stab="a2p">A2P compliance</button>` : ""}
+          <button data-stab="handoff">Handoff &amp; voice</button>
+          <button data-stab="signed">Signed</button>
+        </div>
+
+        <div class="spanel" data-spanel="details"><div class="grp" id="grp_details">${grpHTML(r, "details", false)}</div></div>
+        <div class="spanel" data-spanel="integration"><div class="grp" id="grp_integration">${grpHTML(r, "integration", false)}</div></div>
+
+        <div class="spanel" data-spanel="booking"><div class="grp">
       ${kv({
         "Days":         Array.isArray(p["hours.days"]) ? p["hours.days"].join(", ") : p["hours.days"],
         "Window":       (p["hours.start"]||"") + (p["hours.end"] ? " – " + p["hours.end"] : ""),
@@ -650,10 +772,10 @@ async function openClient(id, quiet){
         "8am–8pm gate": p["texting_compliance.enabled"] ? "on" : "off",
         "States":       p["texting_compliance.states"]
       })}
-    </div>
+        </div></div>
 
-    <div class="grp">
-      <h3>Agent build <span style="color:var(--dim);font-weight:400">— build-your-agent.html</span></h3>
+        <div class="spanel" data-spanel="agent"><div class="grp">
+      <p class="hint" style="margin:0 0 10px">From build-your-agent.html</p>
       ${kv({
         "Intro line":     p["agent.intro_line"],
         "Industry other": p["agent.industry_other"],
@@ -670,11 +792,10 @@ async function openClient(id, quiet){
         "Opt-in":         p["agent.optin_confirmed"] === undefined ? "" : (p["agent.optin_confirmed"] ? "confirmed" : "not confirmed"),
         "Their notes":    p["agent.notes"]
       })}
-    </div>
+        </div></div>
 
     ${(r.sources||[]).includes("a2p_compliance") ? `
-    <div class="grp">
-      <h3>A2P compliance <span style="color:var(--dim);font-weight:400">— compliance.html</span></h3>
+        <div class="spanel" data-spanel="a2p"><div class="grp">
       <div class="a2pseg" id="a2pSeg" role="group" aria-label="A2P registration status">
         ${Object.entries(A2P).map(([k, v]) =>
           `<button type="button" data-a2p="${k}" class="${v[0]}${r.a2p_status === k ? " on" : ""}"><i></i>${v[1]}</button>`
@@ -723,10 +844,9 @@ async function openClient(id, quiet){
         "E-sign":       p["a2p.esign_consent"] === undefined ? "" : (p["a2p.esign_consent"] ? "consented" : "⚠ not consented"),
         "Timestamp":    p["a2p.signed_at_iso"]
       })}
-    </div>` : ""}
+        </div></div>` : ""}
 
-    <div class="grp">
-      <h3>Handoff &amp; voice</h3>
+        <div class="spanel" data-spanel="handoff"><div class="grp">
       ${kv({
         "Lender":       p["links.mortgage_name"],
         "Lender link":  p["links.mortgage_link"],
@@ -737,41 +857,23 @@ async function openClient(id, quiet){
         "Never say":    p["messages.guardrails"],
         "Notes":        p["messages.notes"]
       })}
-    </div>
+        </div></div>
 
-    <div class="grp">
-      <h3>Signed</h3>
+        <div class="spanel" data-spanel="signed"><div class="grp">
       ${kv({
         "Signature": p["auth.signature"],
         "Date":      p["auth.date"],
         "CRM access": p["auth.access"],
         "Consent":    p["auth.consent"]
       })}
-    </div>
-
-    <div class="grp">
-      <h3>History — ${(vers||[]).length} submission${(vers||[]).length===1?"":"s"}</h3>
-      <div class="ver">
-        ${(vers||[]).map(v => `
-          <div class="vrow">
-            <div class="vh"><b>v${v.version}</b>
-              <span class="chip" style="font-size:10px">${esc(SRC_LABEL[v.source] || v.source || "—")}</span>
-              <span style="color:var(--muted)">${v.changed_fields?.length ? v.changed_fields.length + " field(s) changed" : "no field changes"}</span>
-              <time>${when(v.submitted_at)}</time>
-            </div>
-            ${v.changed_fields?.length ? `<div class="diffs">${
-              v.changed_fields.map(f => `<em class="${f.startsWith("—")?"first":""}">${esc(f)}</em>`).join("")
-            }</div>` : ""}
-          </div>`).join("") || '<div class="vrow"><span style="color:var(--dim)">No history.</span></div>'}
+        </div></div>
       </div>
     </div>
 
-    </div>
-    <aside class="drail">
-
-      <div class="rcard">
-        <h3>Status &amp; actions</h3>
-    <div class="bar">
+    <!-- ── right: actions ── -->
+    <aside class="pcol right">
+      ${wdg("status", "Status &amp; actions", `
+    <div class="bar" style="margin-top:12px">
       <select id="status">
         ${["new","in_setup","live","paused","archived"].map(s =>
           `<option value="${s}"${r.status===s?" selected":""}>${s.replace("_"," ")}</option>`).join("")}
@@ -780,23 +882,19 @@ async function openClient(id, quiet){
       ${(r.sources||[]).includes("build_your_agent") ? "" : `<button class="btn peri sm" id="sendBYA">${r.bya_invite_sent_at ? "Resend agent build email" : "🧭 Agent build email"}</button>`}
       ${(r.sources||[]).includes("a2p_compliance") ? "" : `<button class="btn peri sm" id="sendA2P">${r.a2p_invite_sent_at ? "Resend compliance email" : "📧 Compliance email"}</button>`}
       ${((r.sources||[]).includes("crm_access") || r.active_crm === "Starling") ? "" : `<button class="btn peri sm" id="sendCRM">${r.crm_invite_sent_at ? "Resend CRM access email" : "🔗 CRM access email"}</button>`}
-        </div>
-        <div class="chiprow">
-          <span class="chip">v${r.submission_count}</span>
+    </div>
+    <div class="chiprow">
+      <span class="chip">v${r.submission_count}</span>
       <span class="chip">${esc(r.active_crm || "no crm")}</span>
       ${(r.sources||[]).map(x => `<span class="chip">${esc(SRC_LABEL[x] || x)}</span>`).join("")}
       ${(r.sources||[]).includes("build_your_agent") ? "" : '<span class="chip" style="opacity:.55">no wizard yet</span>'}
       ${((r.sources||[]).includes("crm_access") || r.active_crm === "Starling") ? "" : '<span class="chip" style="opacity:.55">no CRM access yet</span>'}
       ${(r.sources||[]).includes("a2p_compliance")   ? "" : '<span class="chip" style="opacity:.55">no A2P yet</span>'}
-        </div>
-      </div>
+    </div>`)}
 
-      <div class="rcard" id="subcard">${subscriptionHTML(r, false)}</div>
+      ${wdg("ql", "Onboarding forms", `<div style="margin-top:10px">${quickLinksHTML(r).replace(/^<h3>Quick links<\/h3>/, "")}</div>`)}
 
-      <div class="rcard">${quickLinksHTML(r)}</div>
-
-      <div class="rcard">
-        <h3>Credentials</h3>
+      ${wdg("cred", "Credentials", `<div style="margin-top:12px">
       ${r.has_credentials ? `
       <div class="cred">
         <button class="btn warn sm" id="reveal">Reveal credentials</button>
@@ -814,27 +912,16 @@ async function openClient(id, quiet){
           <input id="ckVal" type="password" placeholder="Paste the new key value" autocomplete="new-password">
           <button class="btn sm" id="ckSave">Replace key</button>
           <p class="hint" style="margin:0">Merges over what's stored — other keys stay. Every change is logged in History as ⚿.</p>
-        </div>
-      </div>
+        </div></div>`, {open:false})}
 
-      <div class="rcard" id="notecard">
-        <h3 style="display:flex;align-items:center">Notes <span class="notecount">${(notes||[]).length || ""}</span></h3>
-        <div class="notecomp">
-          <textarea id="noteBody" placeholder="Add a note — call recap, what's blocking, who's on it… (Ctrl+Enter to post)"></textarea>
-          <button class="btn sm" id="addNote">Add note</button>
-        </div>
-        <div class="notelist" id="noteList">${notesHTML(notes||[])}</div>
-        <div class="notesum">
-          <label for="notes">Pinned summary — where this client stands overall</label>
-          <textarea id="notes" placeholder="One-paragraph status the whole team should see first…">${esc(r.internal_notes||"")}</textarea>
-          <button class="btn ghost sm" id="saveNotes" style="margin-top:9px">Save summary</button>
-        </div>
-      </div>
-
+      <textarea id="notes" style="display:none">${esc(r.internal_notes||"")}</textarea>
     </aside>
+
     </div>
   `;
 
+  renderFeed();
+  wireWidgets(r);
   wire(r);
   wireSubscription(r);
   wireNotes(r);
@@ -1031,20 +1118,19 @@ function subscriptionHTML(r, editing){
     if(r.stripe_customer_id) kv.push(["Stripe customer", `<a href="https://dashboard.stripe.com/customers/${esc(r.stripe_customer_id)}" target="_blank" rel="noopener"><code>${esc(r.stripe_customer_id)}</code></a>`]);
     if(r.stripe_subscription_id) kv.push(["Stripe sub", `<a href="https://dashboard.stripe.com/subscriptions/${esc(r.stripe_subscription_id)}" target="_blank" rel="noopener"><code>${esc(r.stripe_subscription_id)}</code></a>`]);
     if(r.plan_notes) kv.push(["Plan notes", esc(r.plan_notes)]);
-    return `<h3 style="display:flex;align-items:center">Subscription <button class="ebtn" id="planEdit" style="margin-left:auto">✎ Edit</button></h3>
-      <div class="plan">
+    return `<div class="plan" style="margin-top:12px">
         <span class="planbadge ${r.plan || "none"}">${r.plan ? esc(PLAN_LABEL[r.plan] || r.plan) : "No plan set"}</span>
         ${r.plan ? `<span class="bill ${bs}">${esc(BILL_LABEL[bs])}</span>` : ""}
         ${price != null && r.plan ? `<span class="planprice">${money(price)}<small>/mo</small></span>` : ""}
       </div>
+      <button class="ebtn" id="planEdit" style="margin-bottom:12px">✎ Edit subscription</button>
       ${kv.length ? `<div class="kv">${kv.map(([k,v]) => `<div>${k}</div><div>${v}</div>`).join("")}</div>`
                   : (r.plan ? "" : `<p class="hint" style="margin:0">Nothing recorded yet — set the plan they bought so the team knows what they're entitled to.</p>`)}`;
   }
   const plan = r.plan || "";
   const vols = PLAN_VOLUMES[plan] || [];
   const opt = (v, cur, lbl) => `<option value="${v}"${String(v)===String(cur ?? "")?" selected":""}>${lbl ?? v}</option>`;
-  return `<h3>Subscription</h3>
-    <div class="planform">
+  return `<div class="planform" style="margin-top:12px">
       <div><label>Plan</label><select id="pPlan">
         <option value=""${plan?"":" selected"}>— none —</option>
         ${Object.entries(PLAN_LABEL).map(([k,l]) => opt(k, plan, l)).join("")}</select></div>
@@ -1070,7 +1156,7 @@ function subscriptionHTML(r, editing){
 }
 function wireSubscription(r){
   const card = $("subcard"); if(!card) return;
-  const paint = editing => { card.innerHTML = subscriptionHTML(r, editing); wireSubscription(r); };
+  const paint = editing => { card.querySelector(".wb").innerHTML = subscriptionHTML(r, editing); wireSubscription(r); };
   const edit = $("planEdit"); if(edit) edit.addEventListener("click", () => paint(true));
   const save = $("planSave"); if(!save) return;
 
@@ -1146,15 +1232,129 @@ function notesHTML(notes){
     </div>
   </div>`).join("");
 }
+/* ─────────── FUB-style profile helpers ─────────── */
+function wdg(key, title, body, o){
+  o = o || {};
+  const stored = localStorage.getItem("wdg:" + key);
+  const closed = stored ? stored === "0" : o.open === false;
+  return `<section class="wdg${closed ? " closed" : ""}" data-wdg="${key}"${o.id ? ` id="${o.id}"` : ""}>
+    <header><h3>${title}${o.count ? ` <span class="cnt">${o.count}</span>` : ""}</h3><span class="chev">▼</span></header>
+    <div class="wb">${body}</div>
+  </section>`;
+}
+function initials(r){
+  const n = (r.team_name || r.agent_name || r.email || "?").replace(/@.*/, "").trim();
+  const parts = n.split(/[\s._-]+/).filter(Boolean);
+  return ((parts[0]||"?")[0] + (parts[1] ? parts[1][0] : "")).toUpperCase();
+}
+function profileCardHTML(r, alist){
+  const p = r.payload || {};
+  const stChip = r.status === "live" ? '<span class="chip live">live</span>'
+               : r.status === "new"  ? `<span class="chip ${r.submission_count>1?"upd":"new"}">${r.submission_count>1?"updated":"new"}</span>`
+               : `<span class="chip">${esc(r.status.replace("_"," "))}</span>`;
+  const row = (ic, v, l, href) => `<div class="crow${v ? "" : " none"}"><span class="ic">${ic}</span><span class="v">${v ? (href ? `<a href="${href}">${esc(v)}</a>` : esc(v)) : "—"}</span>${l ? `<span class="l">${l}</span>` : ""}</div>`;
+  return `<div class="pcard">
+    <div class="pid">
+      <div class="avatar">${initials(r)}</div>
+      <div style="min-width:0"><h2>${esc(r.team_name || r.agent_name || r.email)}</h2>
+        <div class="sub">${r.agent_name && r.team_name ? esc(r.agent_name) + " · " : ""}Last activity ${when(r.updated_at)}</div></div>
+    </div>
+    <div class="pstat">${stChip}${r.has_unread ? '<button class="btn ghost sm" id="markRead" style="padding:4px 9px;font-size:11px">Mark read</button>' : ""}</div>
+    ${row("✆", r.owner_mobile, "mobile", r.owner_mobile ? "tel:" + esc(r.owner_mobile) : null)}
+    ${row("✉", r.email, "", "mailto:" + esc(r.email))}
+    ${row("⌂", r.brokerage, "brokerage")}
+    ${row("⚙", r.active_crm, "crm")}
+    ${row("◎", p["locations.market_1"] || p["client.market"], "market")}
+    ${row("◷", (r.timezone||"").split("|")[0], "time zone")}
+    ${alist.length > 1 ? `<div class="aliasrow"><span class="aliaslbl">Also</span>${alist.filter(a=>!a.is_primary).map(a => `<span class="alias">${esc(a.email_key)}</span>`).join("")}</div>` : ""}
+  </div>`;
+}
+function backgroundHTML(r, editing){
+  if(editing) return `<div class="bgedit">
+      <textarea id="bgText" placeholder="One-paragraph status the whole team should see first — pre-approvals, who's the lender, what's next…">${esc(r.internal_notes||"")}</textarea>
+      <div class="editbar"><button class="btn sm" id="bgSave">Save</button><button class="btn ghost sm" id="bgCancel">Cancel</button></div>
+    </div>`;
+  return `<div class="bg${r.internal_notes ? "" : " none"}" id="bgView" title="Click to edit">${r.internal_notes ? esc(r.internal_notes) : "Click to add a summary the whole team sees first…"}</div>`;
+}
+function wireWidgets(r){
+  $("detail").querySelectorAll(".wdg>header").forEach(h => h.addEventListener("click", () => {
+    const w = h.parentElement, closed = w.classList.toggle("closed");
+    localStorage.setItem("wdg:" + w.dataset.wdg, closed ? "0" : "1");
+  }));
+  // background inline edit
+  const paintBg = editing => { $("bgcard").querySelector(".wb").innerHTML = backgroundHTML(r, editing); wireBg(); };
+  const wireBg = () => {
+    const v = $("bgView"); if(v) v.addEventListener("click", () => paintBg(true));
+    const sv = $("bgSave"); if(!sv) return;
+    $("bgText").focus();
+    $("bgCancel").addEventListener("click", () => paintBg(false));
+    sv.addEventListener("click", async () => {
+      const text = $("bgText").value;
+      sv.disabled = true;
+      const { error } = await sb.from("starling_onboarding_clients").update({ internal_notes: text }).eq("id", r.id);
+      if(error){ sv.disabled = false; return toast("Couldn't save", error.message); }
+      r.internal_notes = text; paintBg(false); toast("Background saved");
+    });
+  };
+  wireBg();
+  // setup tabs
+  const tabs = $("stabs"); if(!tabs) return;
+  const show = k => {
+    tabs.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.stab === k));
+    $("detail").querySelectorAll(".spanel").forEach(pn => pn.classList.toggle("on", pn.dataset.spanel === k));
+    localStorage.setItem("stab", k);
+  };
+  tabs.querySelectorAll("button").forEach(b => b.addEventListener("click", () => show(b.dataset.stab)));
+  const want = localStorage.getItem("stab");
+  show(tabs.querySelector(`[data-stab="${want}"]`) ? want : "details");
+}
+function renderFeed(){
+  const feed = $("feed"); if(!feed) return;
+  const items = [];
+  curNotes.forEach(n => items.push({ t:"note", ts:n.created_at, n, flag:n.body.startsWith("⚑") }));
+  curVers.forEach(v => items.push({ t:"sub", ts:v.submitted_at, v }));
+  items.sort((a,b) => (b.n?.pinned?1:0) - (a.n?.pinned?1:0) || new Date(b.ts) - new Date(a.ts));
+  const nc = curNotes.length, sc = curVers.length;
+  $("fcAll").textContent = nc + sc || ""; $("fcNote").textContent = nc || ""; $("fcSub").textContent = sc || "";
+  const list = items.filter(i => feedFilter === "all" || i.t === feedFilter);
+  if(!list.length){ feed.innerHTML = `<div class="fempty">${feedFilter === "sub" ? "No submissions yet." : "No notes yet — add the first one above."}</div>`; return; }
+  feed.innerHTML = list.map(i => {
+    if(i.t === "note"){
+      const n = i.n, who = (n.author_email || "").split("@")[0] || "team";
+      return `<div class="fitem" data-nid="${n.id}">
+        <div class="fic${n.pinned ? " pin" : i.flag ? " flag" : ""}">${n.pinned ? "★" : i.flag ? "⚑" : "✎"}</div>
+        <div>
+          <div class="fhead"><b>${esc(who)}</b><time title="${esc(new Date(n.created_at).toLocaleString())}">${when(n.created_at)}${n.updated_at && n.updated_at !== n.created_at ? " · edited" : ""}</time>
+            ${n.pinned ? '<span class="chip upd">pinned</span>' : ""}
+            <span class="acts">
+              <button data-pin="${n.id}">${n.pinned ? "★ pinned" : "☆ pin"}</button>
+              <button data-editn="${n.id}">edit</button>
+              <button class="del" data-deln="${n.id}">delete</button>
+            </span></div>
+          <div class="fbody"><p>${esc(n.body)}</p></div>
+        </div></div>`;
+    }
+    const v = i.v;
+    return `<div class="fitem">
+      <div class="fic sub">↓</div>
+      <div>
+        <div class="fhead"><b>v${v.version} submission</b><span class="chip">${esc(SRC_LABEL[v.source] || v.source || "—")}</span>
+          <span style="color:var(--dim)">${v.changed_fields?.length ? v.changed_fields.length + " field(s) changed" : "no field changes"}</span>
+          <time>${when(v.submitted_at)}</time></div>
+        ${v.changed_fields?.length ? `<div class="fbody"><div class="diffs">${v.changed_fields.map(f => `<em class="${f.startsWith("—")?"first":""}">${esc(f)}</em>`).join("")}</div></div>` : ""}
+      </div></div>`;
+  }).join("");
+}
+
 async function reloadNotes(r){
   const { data } = await sb.from("starling_onboarding_notes")
     .select("id, body, author_email, pinned, created_at, updated_at")
     .eq("client_id", r.id)
     .order("pinned", { ascending:false })
     .order("created_at", { ascending:false });
-  const list = $("noteList"); if(!list || sel !== r.id) return;
-  list.innerHTML = notesHTML(data || []);
-  const c = document.querySelector("#notecard .notecount"); if(c) c.textContent = (data||[]).length || "";
+  if(sel !== r.id || !$("feed")) return;
+  curNotes = data || [];
+  renderFeed();
   wireNoteRows(r);
 }
 function wireNotes(r){
@@ -1170,10 +1370,14 @@ function wireNotes(r){
   };
   btn.addEventListener("click", post);
   body.addEventListener("keydown", e => { if((e.ctrlKey || e.metaKey) && e.key === "Enter") post(); });
+  const ft = $("ftabs"); if(ft) ft.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+    feedFilter = b.dataset.ff; ft.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
+    renderFeed(); wireNoteRows(r);
+  }));
   wireNoteRows(r);
 }
 function wireNoteRows(r){
-  const list = $("noteList"); if(!list) return;
+  const list = $("feed"); if(!list) return;
   list.querySelectorAll("[data-deln]").forEach(b => b.addEventListener("click", async () => {
     if(!confirm("Delete this note? This can't be undone.")) return;
     const { error } = await sb.from("starling_onboarding_notes").delete().eq("id", b.dataset.deln);
@@ -1187,10 +1391,11 @@ function wireNoteRows(r){
     reloadNotes(r);
   }));
   list.querySelectorAll("[data-editn]").forEach(b => b.addEventListener("click", () => {
-    const box = b.closest(".note"), p = box.querySelector("p");
+    const box = b.closest(".fitem"), p = box.querySelector(".fbody p");
     if(box.querySelector("textarea")) return;
+    box.classList.add("editing");
     const old = p.textContent;
-    p.outerHTML = `<textarea class="nedit" style="min-height:64px;margin-bottom:8px">${esc(old)}</textarea>`;
+    p.outerHTML = `<textarea class="nedit">${esc(old)}</textarea>`;
     b.textContent = "save";
     const ta = box.querySelector("textarea"); ta.focus();
     const done = async () => {
