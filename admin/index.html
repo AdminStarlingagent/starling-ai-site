@@ -258,6 +258,48 @@ html,body{height:auto;overflow-x:hidden}
 .diffs em.first{background:rgba(78,212,160,.11);color:var(--ok);border-color:rgba(78,212,160,.26)}
 
 textarea{min-height:88px;resize:vertical;font-size:14px}
+
+/* subscription */
+.plan{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-bottom:11px}
+.planbadge{font:600 12px/1 "Poppins",sans-serif;letter-spacing:.01em;padding:6px 10px;border-radius:7px;
+  background:var(--peri-soft);color:var(--peri);border:1px solid rgba(134,139,223,.42)}
+.planbadge.producer{background:rgba(241,83,104,.14);color:var(--blush);border-color:rgba(241,83,104,.38)}
+.planbadge.crm_only{background:var(--navy-3);color:var(--muted);border-color:var(--line-2)}
+.planbadge.custom{background:rgba(255,196,107,.13);color:var(--warn);border-color:rgba(255,196,107,.36)}
+.planbadge.none{background:none;color:var(--faint);border:1px dashed var(--line-2)}
+.bill{font:500 10px/1 "IBM Plex Mono",monospace;letter-spacing:.05em;text-transform:uppercase;
+  padding:4px 7px;border-radius:5px;border:1px solid var(--line-2);color:var(--dim)}
+.bill.active{color:var(--ok);border-color:rgba(78,212,160,.32);background:rgba(78,212,160,.10)}
+.bill.trial{color:var(--peri);border-color:rgba(134,139,223,.4);background:var(--peri-soft)}
+.bill.past_due{color:var(--warn);border-color:rgba(255,196,107,.36);background:rgba(255,196,107,.11)}
+.bill.paused{color:var(--warn)}
+.bill.cancelled{color:var(--coral);border-color:rgba(241,83,104,.35);background:rgba(241,83,104,.10)}
+.planprice{margin-left:auto;font:600 15px/1 "Poppins",sans-serif;color:var(--paper)}
+.planprice small{font:400 11px/1 "IBM Plex Sans",sans-serif;color:var(--dim);margin-left:2px}
+.planform{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.planform label{display:block;font:500 11px/1.2 "IBM Plex Sans",sans-serif;color:var(--dim);margin:0 0 4px 2px;letter-spacing:.02em}
+.planform .full{grid-column:1 / -1}
+.planform input,.planform select{padding:8px 10px;font-size:13.5px;border-radius:7px}
+.plantag{font:500 10px/1 "IBM Plex Mono",monospace;letter-spacing:.04em;color:var(--peri)}
+.plantag.producer{color:var(--blush)} .plantag.crm_only{color:var(--dim)} .plantag.custom{color:var(--warn)}
+.plantag.past_due,.plantag.cancelled{color:var(--coral)}
+
+/* notes log */
+.notecomp{display:flex;flex-direction:column;gap:8px}
+.notecomp textarea{min-height:70px}
+.notelist{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.note{position:relative;background:var(--navy-3);border:1px solid var(--line);border-radius:9px;padding:10px 12px 9px}
+.note.pinned{border-color:rgba(255,196,107,.4);background:rgba(255,196,107,.06)}
+.note p{margin:0 0 7px;font-size:13.5px;line-height:1.5;white-space:pre-wrap;word-break:break-word;color:var(--paper)}
+.note .nm{display:flex;align-items:center;gap:8px;font:400 11px/1 "IBM Plex Mono",monospace;color:var(--dim)}
+.note .nm b{font-weight:500;color:var(--muted)}
+.note .nm .sp{flex:1}
+.note .nm button{background:none;border:0;color:var(--faint);cursor:pointer;font:500 11px/1 "IBM Plex Sans",sans-serif;padding:2px 4px;border-radius:4px}
+.note .nm button:hover{color:var(--paper);background:var(--navy-4)}
+.note .nm button.del:hover{color:var(--coral)}
+.notesum{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.notesum label{display:block;font:500 11px/1.2 "IBM Plex Sans",sans-serif;color:var(--dim);margin-bottom:6px;letter-spacing:.02em}
+.notecount{font:400 11px/1 "IBM Plex Mono",monospace;color:var(--dim);margin-left:auto;font-weight:400}
 .blank{display:grid;place-items:center;min-height:72vh;color:var(--dim);text-align:center;padding:40px}
 .blank div{max-width:280px}
 .blank h3{font:600 17px "Poppins",sans-serif;color:var(--muted);margin:0 0 8px}
@@ -328,6 +370,18 @@ textarea{min-height:88px;resize:vertical;font-size:14px}
           <option value="paused">Paused</option>
         </select>
         <select id="fCrm"><option value="">All CRMs</option></select>
+        <select id="fPlan">
+          <option value="">All plans</option>
+          <option value="crm_only">CRM Only</option>
+          <option value="standard">Standard</option>
+          <option value="producer">Producer</option>
+          <option value="custom">Custom</option>
+          <option value="__none">No plan set</option>
+          <option value="__active">Billing: active</option>
+          <option value="__trial">Billing: trial</option>
+          <option value="__past_due">Billing: past due</option>
+          <option value="__cancelled">Billing: cancelled</option>
+        </select>
         </div>
         <button class="btn peri sm" id="newInvite" title="Blank wizard link — no client token, safe to send to anyone new">＋ New client invite</button>
       </div>
@@ -439,6 +493,9 @@ async function refreshAll(announce){
   // Also never repaint over the operator's hands: an open edit form, revealed
   // credentials, or a focused input pauses the quiet re-render.
   const busy = $("detail").querySelector("[data-save]")
+            || $("detail").querySelector("#planSave")
+            || $("detail").querySelector(".nedit")
+            || ($("noteBody") && $("noteBody").value.trim())
             || $("detail").querySelector("#credout.on")
             || (document.activeElement && $("detail").contains(document.activeElement)
                 && /^(TEXTAREA|INPUT|SELECT)$/.test(document.activeElement.tagName));
@@ -450,17 +507,23 @@ function startRealtime(){
     .on("postgres_changes",
         { event: "*", schema: "public", table: "starling_onboarding_clients" },
         () => { clearTimeout(rtTimer); rtTimer = setTimeout(() => refreshAll(true), 600); })
+    .on("postgres_changes",
+        { event: "*", schema: "public", table: "starling_onboarding_notes" },
+        () => { const r = rows.find(x => x.id === sel); if(r && !$("detail").querySelector(".nedit")) reloadNotes(r); })
     .subscribe();
 }
 
 /* ─────────── list ─────────── */
-["q","fStatus","fCrm"].forEach(id => $(id).addEventListener("input", render));
+["q","fStatus","fCrm","fPlan"].forEach(id => $(id).addEventListener("input", render));
 
 function filtered(){
   const q  = $("q").value.trim().toLowerCase();
-  const st = $("fStatus").value, cm = $("fCrm").value;
+  const st = $("fStatus").value, cm = $("fCrm").value, pl = $("fPlan").value;
   return rows.filter(r => {
     if(cm && r.active_crm !== cm) return false;
+    if(pl === "__none"){ if(r.plan) return false; }
+    else if(pl.startsWith("__")){ if((r.billing_status||"none") !== pl.slice(2)) return false; }
+    else if(pl && r.plan !== pl) return false;
     if(st === "unread"){ if(!r.has_unread) return false; }
     else if(st === "nowizard"){ if((r.sources||[]).includes("build_your_agent")) return false; }
     else if(st === "nocrm"){ if((r.sources||[]).includes("crm_access") || r.active_crm === "Starling") return false; }
@@ -501,6 +564,7 @@ function render(){
       <div class="r2">
         <span>${esc(r.active_crm || "no crm")}</span>
         ${byaTag(r)}${a2pTag(r)}${crmTag(r)}
+        ${planTag(r)}
         <span>·</span>
         <span>v${r.submission_count}</span>
         <span>·</span>
@@ -531,6 +595,13 @@ async function openClient(id, quiet){
     .from("starling_onboarding_emails")
     .select("email_key, is_primary")
     .eq("client_id", id);
+
+  const { data: notes } = await sb
+    .from("starling_onboarding_notes")
+    .select("id, body, author_email, pinned, created_at, updated_at")
+    .eq("client_id", id)
+    .order("pinned", { ascending:false })
+    .order("created_at", { ascending:false });
 
   if(seq !== openSeq) return;  // a newer click superseded this load — drop the stale render
 
@@ -720,6 +791,8 @@ async function openClient(id, quiet){
         </div>
       </div>
 
+      <div class="rcard" id="subcard">${subscriptionHTML(r, false)}</div>
+
       <div class="rcard">${quickLinksHTML(r)}</div>
 
       <div class="rcard">
@@ -744,10 +817,18 @@ async function openClient(id, quiet){
         </div>
       </div>
 
-      <div class="rcard">
-        <h3>Internal notes</h3>
-        <textarea id="notes" placeholder="Where this stands, who's on it, what's blocking…">${esc(r.internal_notes||"")}</textarea>
-        <button class="btn ghost sm" id="saveNotes" style="margin-top:9px">Save notes</button>
+      <div class="rcard" id="notecard">
+        <h3 style="display:flex;align-items:center">Notes <span class="notecount">${(notes||[]).length || ""}</span></h3>
+        <div class="notecomp">
+          <textarea id="noteBody" placeholder="Add a note — call recap, what's blocking, who's on it… (Ctrl+Enter to post)"></textarea>
+          <button class="btn sm" id="addNote">Add note</button>
+        </div>
+        <div class="notelist" id="noteList">${notesHTML(notes||[])}</div>
+        <div class="notesum">
+          <label for="notes">Pinned summary — where this client stands overall</label>
+          <textarea id="notes" placeholder="One-paragraph status the whole team should see first…">${esc(r.internal_notes||"")}</textarea>
+          <button class="btn ghost sm" id="saveNotes" style="margin-top:9px">Save summary</button>
+        </div>
       </div>
 
     </aside>
@@ -755,6 +836,8 @@ async function openClient(id, quiet){
   `;
 
   wire(r);
+  wireSubscription(r);
+  wireNotes(r);
   if(!quiet) window.scrollTo({ top: 0, behavior: "smooth" });
   if(r.has_unread && !quiet) markRead(r.id);
 }
@@ -909,8 +992,218 @@ function wire(r){
     if(error) return toast("Couldn't save", error.message);
     r.internal_notes = $("notes").value;
     e.target.textContent = "Saved";
-    setTimeout(() => e.target.textContent = "Save notes", 1600);
+    setTimeout(() => e.target.textContent = "Save summary", 1600);
   });
+}
+
+/* ─────────── subscription ─────────── */
+const PLAN_LABEL = { crm_only:"CRM Only", standard:"Standard", producer:"Producer", custom:"Custom" };
+// Current price book (Sep 2026). Setup fee is $0 on every plan.
+const PLAN_PRICE = {
+  crm_only: { 0:50 },
+  standard: { 1000:299, 3000:599, 5000:849 },
+  producer: { 1000:999, 3000:1299, 5000:1549 }
+};
+const PLAN_VOLUMES = { crm_only:[], standard:[1000,3000,5000], producer:[1000,3000,5000], custom:[1000,3000,5000,10000] };
+const BILL_LABEL = { none:"no billing", trial:"trial", active:"active", past_due:"past due", paused:"paused", cancelled:"cancelled" };
+const money = n => n == null || n === "" ? "" : "$" + Number(n).toLocaleString("en-US", { minimumFractionDigits:0, maximumFractionDigits:2 });
+const dateStr = d => d ? new Date(d + "T00:00:00").toLocaleDateString("en-US", { month:"short", day:"numeric", year:"numeric" }) : "";
+function listPrice(plan, vol){
+  const book = PLAN_PRICE[plan]; if(!book) return null;
+  if(plan === "crm_only") return book[0];
+  return book[Number(vol)] ?? null;
+}
+function planTag(r){
+  if(!r.plan) return "";
+  const bs = r.billing_status || "none";
+  const vol = r.plan_volume ? " " + (r.plan_volume/1000) + "k" : "";
+  const warn = ["past_due","cancelled"].includes(bs) ? ` <span class="plantag ${bs}">${esc(BILL_LABEL[bs])}</span>` : "";
+  return `<span>·</span><span class="plantag ${r.plan}">${esc(PLAN_LABEL[r.plan] || r.plan)}${vol}</span>${warn}`;
+}
+function subscriptionHTML(r, editing){
+  const bs = r.billing_status || "none";
+  if(!editing){
+    const price = r.plan_price ?? listPrice(r.plan, r.plan_volume);
+    const kv = [];
+    if(r.plan && r.plan !== "crm_only") kv.push(["Executions / mo", r.plan_volume ? r.plan_volume.toLocaleString("en-US") : `<span class="none">not set</span>`]);
+    if(r.plan_started_at) kv.push(["Started", dateStr(r.plan_started_at)]);
+    if(r.next_billing_at) kv.push(["Next bill", dateStr(r.next_billing_at)]);
+    if(r.stripe_customer_id) kv.push(["Stripe customer", `<a href="https://dashboard.stripe.com/customers/${esc(r.stripe_customer_id)}" target="_blank" rel="noopener"><code>${esc(r.stripe_customer_id)}</code></a>`]);
+    if(r.stripe_subscription_id) kv.push(["Stripe sub", `<a href="https://dashboard.stripe.com/subscriptions/${esc(r.stripe_subscription_id)}" target="_blank" rel="noopener"><code>${esc(r.stripe_subscription_id)}</code></a>`]);
+    if(r.plan_notes) kv.push(["Plan notes", esc(r.plan_notes)]);
+    return `<h3 style="display:flex;align-items:center">Subscription <button class="ebtn" id="planEdit" style="margin-left:auto">✎ Edit</button></h3>
+      <div class="plan">
+        <span class="planbadge ${r.plan || "none"}">${r.plan ? esc(PLAN_LABEL[r.plan] || r.plan) : "No plan set"}</span>
+        ${r.plan ? `<span class="bill ${bs}">${esc(BILL_LABEL[bs])}</span>` : ""}
+        ${price != null && r.plan ? `<span class="planprice">${money(price)}<small>/mo</small></span>` : ""}
+      </div>
+      ${kv.length ? `<div class="kv">${kv.map(([k,v]) => `<div>${k}</div><div>${v}</div>`).join("")}</div>`
+                  : (r.plan ? "" : `<p class="hint" style="margin:0">Nothing recorded yet — set the plan they bought so the team knows what they're entitled to.</p>`)}`;
+  }
+  const plan = r.plan || "";
+  const vols = PLAN_VOLUMES[plan] || [];
+  const opt = (v, cur, lbl) => `<option value="${v}"${String(v)===String(cur ?? "")?" selected":""}>${lbl ?? v}</option>`;
+  return `<h3>Subscription</h3>
+    <div class="planform">
+      <div><label>Plan</label><select id="pPlan">
+        <option value=""${plan?"":" selected"}>— none —</option>
+        ${Object.entries(PLAN_LABEL).map(([k,l]) => opt(k, plan, l)).join("")}</select></div>
+      <div><label>Executions / mo</label><select id="pVol" ${plan === "crm_only" ? "disabled" : ""}>
+        <option value="">—</option>
+        ${vols.map(v => opt(v, r.plan_volume, v.toLocaleString("en-US"))).join("")}
+        ${r.plan_volume && !vols.includes(r.plan_volume) ? opt(r.plan_volume, r.plan_volume, r.plan_volume.toLocaleString("en-US")) : ""}
+        <option value="__other">Other…</option></select></div>
+      <div><label>Monthly price ($)</label><input id="pPrice" type="number" step="0.01" min="0" value="${esc(r.plan_price ?? listPrice(plan, r.plan_volume) ?? "")}" placeholder="auto"></div>
+      <div><label>Billing status</label><select id="pBill">
+        ${Object.entries(BILL_LABEL).map(([k,l]) => opt(k, bs, l)).join("")}</select></div>
+      <div><label>Started</label><input id="pStart" type="date" value="${esc(r.plan_started_at || "")}"></div>
+      <div><label>Next bill date</label><input id="pNext" type="date" value="${esc(r.next_billing_at || "")}"></div>
+      <div><label>Stripe customer ID</label><input id="pCus" value="${esc(r.stripe_customer_id || "")}" placeholder="cus_…"></div>
+      <div><label>Stripe subscription ID</label><input id="pSub" value="${esc(r.stripe_subscription_id || "")}" placeholder="sub_…"></div>
+      <div class="full"><label>Plan notes</label><input id="pNotes" value="${esc(r.plan_notes || "")}" placeholder="Discount, custom terms, who negotiated…"></div>
+    </div>
+    <p class="hint">Price auto-fills from the current price book when you pick a plan + volume; type over it for a custom deal. Executions reset on the calendar month regardless of bill date.</p>
+    <div class="editbar">
+      <button class="btn sm" id="planSave">Save subscription</button>
+      <button class="btn ghost sm" id="planCancel">Cancel</button>
+    </div>`;
+}
+function wireSubscription(r){
+  const card = $("subcard"); if(!card) return;
+  const paint = editing => { card.innerHTML = subscriptionHTML(r, editing); wireSubscription(r); };
+  const edit = $("planEdit"); if(edit) edit.addEventListener("click", () => paint(true));
+  const save = $("planSave"); if(!save) return;
+
+  $("planCancel").addEventListener("click", () => paint(false));
+
+  const autoPrice = () => {
+    const lp = listPrice($("pPlan").value, $("pVol").value);
+    if(lp != null) $("pPrice").value = lp;
+  };
+  $("pPlan").addEventListener("change", () => {
+    const plan = $("pPlan").value, vols = PLAN_VOLUMES[plan] || [];
+    const vol = $("pVol");
+    vol.disabled = plan === "crm_only" || plan === "";
+    vol.innerHTML = `<option value="">—</option>` + vols.map(v => `<option value="${v}">${v.toLocaleString("en-US")}</option>`).join("") + `<option value="__other">Other…</option>`;
+    if(plan === "crm_only") vol.value = "";
+    else if(vols.length) vol.value = String(vols[0]);
+    autoPrice();
+  });
+  $("pVol").addEventListener("change", () => {
+    if($("pVol").value === "__other"){
+      const n = parseInt(prompt("Monthly execution allotment for this client:", "") || "", 10);
+      if(!n){ $("pVol").value = ""; return; }
+      const o = document.createElement("option"); o.value = o.textContent = n; $("pVol").insertBefore(o, $("pVol").lastElementChild); $("pVol").value = String(n);
+    }
+    autoPrice();
+  });
+
+  save.addEventListener("click", async () => {
+    const plan = $("pPlan").value || null;
+    const volRaw = $("pVol").value;
+    const vol = plan === "crm_only" || !plan || !volRaw || volRaw === "__other" ? null : parseInt(volRaw, 10);
+    const priceRaw = $("pPrice").value;
+    const patch = {
+      plan,
+      plan_volume: vol,
+      plan_price: priceRaw === "" ? null : Number(priceRaw),
+      billing_status: plan ? $("pBill").value : "none",
+      plan_started_at: $("pStart").value || null,
+      next_billing_at: $("pNext").value || null,
+      stripe_customer_id: $("pCus").value.trim() || null,
+      stripe_subscription_id: $("pSub").value.trim() || null,
+      plan_notes: $("pNotes").value.trim() || null
+    };
+    const changed = Object.keys(patch).filter(k => String(r[k] ?? "") !== String(patch[k] ?? ""));
+    if(!changed.length) return paint(false);
+    save.disabled = true; save.textContent = "Saving…";
+    const { error } = await sb.from("starling_onboarding_clients").update(patch).eq("id", r.id);
+    if(error){ save.disabled = false; save.textContent = "Save subscription"; return toast("Couldn't save", error.message); }
+    Object.assign(r, patch);
+    // leave a breadcrumb in the notes log so the change is visible later
+    const line = plan
+      ? `Subscription set: ${PLAN_LABEL[plan]}${vol ? " " + vol.toLocaleString("en-US") + " exec/mo" : ""}${patch.plan_price != null ? " @ " + money(patch.plan_price) + "/mo" : ""} — ${BILL_LABEL[patch.billing_status]}`
+      : "Subscription cleared";
+    await sb.from("starling_onboarding_notes").insert({ client_id: r.id, body: "⚑ " + line });
+    toast("Subscription saved", line);
+    render();
+    openClient(r.id, true);
+  });
+}
+
+/* ─────────── notes log ─────────── */
+function notesHTML(notes){
+  if(!notes.length) return `<div class="empty" style="padding:14px 4px 4px;text-align:left">No notes yet.</div>`;
+  return notes.map(n => `<div class="note${n.pinned ? " pinned" : ""}" data-nid="${n.id}">
+    <p>${esc(n.body)}</p>
+    <div class="nm">
+      <b>${esc((n.author_email || "").split("@")[0] || "team")}</b>
+      <span title="${esc(new Date(n.created_at).toLocaleString())}">${when(n.created_at)}${n.updated_at && n.updated_at !== n.created_at ? " · edited" : ""}</span>
+      <span class="sp"></span>
+      <button data-pin="${n.id}" title="${n.pinned ? "Unpin" : "Pin to top"}">${n.pinned ? "★ pinned" : "☆ pin"}</button>
+      <button data-editn="${n.id}">edit</button>
+      <button class="del" data-deln="${n.id}">delete</button>
+    </div>
+  </div>`).join("");
+}
+async function reloadNotes(r){
+  const { data } = await sb.from("starling_onboarding_notes")
+    .select("id, body, author_email, pinned, created_at, updated_at")
+    .eq("client_id", r.id)
+    .order("pinned", { ascending:false })
+    .order("created_at", { ascending:false });
+  const list = $("noteList"); if(!list || sel !== r.id) return;
+  list.innerHTML = notesHTML(data || []);
+  const c = document.querySelector("#notecard .notecount"); if(c) c.textContent = (data||[]).length || "";
+  wireNoteRows(r);
+}
+function wireNotes(r){
+  const body = $("noteBody"), btn = $("addNote"); if(!body || !btn) return;
+  const post = async () => {
+    const text = body.value.trim(); if(!text) return body.focus();
+    btn.disabled = true; btn.textContent = "Posting…";
+    const { error } = await sb.from("starling_onboarding_notes").insert({ client_id: r.id, body: text });
+    btn.disabled = false; btn.textContent = "Add note";
+    if(error) return toast("Couldn't add note", error.message);
+    body.value = "";
+    await reloadNotes(r);
+  };
+  btn.addEventListener("click", post);
+  body.addEventListener("keydown", e => { if((e.ctrlKey || e.metaKey) && e.key === "Enter") post(); });
+  wireNoteRows(r);
+}
+function wireNoteRows(r){
+  const list = $("noteList"); if(!list) return;
+  list.querySelectorAll("[data-deln]").forEach(b => b.addEventListener("click", async () => {
+    if(!confirm("Delete this note? This can't be undone.")) return;
+    const { error } = await sb.from("starling_onboarding_notes").delete().eq("id", b.dataset.deln);
+    if(error) return toast("Couldn't delete", error.message);
+    reloadNotes(r);
+  }));
+  list.querySelectorAll("[data-pin]").forEach(b => b.addEventListener("click", async () => {
+    const pinned = !b.textContent.includes("pinned");
+    const { error } = await sb.from("starling_onboarding_notes").update({ pinned }).eq("id", b.dataset.pin);
+    if(error) return toast("Couldn't update", error.message);
+    reloadNotes(r);
+  }));
+  list.querySelectorAll("[data-editn]").forEach(b => b.addEventListener("click", () => {
+    const box = b.closest(".note"), p = box.querySelector("p");
+    if(box.querySelector("textarea")) return;
+    const old = p.textContent;
+    p.outerHTML = `<textarea class="nedit" style="min-height:64px;margin-bottom:8px">${esc(old)}</textarea>`;
+    b.textContent = "save";
+    const ta = box.querySelector("textarea"); ta.focus();
+    const done = async () => {
+      const text = ta.value.trim();
+      if(!text || text === old) return reloadNotes(r);
+      const { error } = await sb.from("starling_onboarding_notes").update({ body: text }).eq("id", b.dataset.editn);
+      if(error) return toast("Couldn't save", error.message);
+      reloadNotes(r);
+    };
+    b.replaceWith(b.cloneNode(true));
+    box.querySelector("[data-editn]").addEventListener("click", done);
+    ta.addEventListener("keydown", e => { if((e.ctrlKey || e.metaKey) && e.key === "Enter") done(); if(e.key === "Escape") reloadNotes(r); });
+  }));
 }
 
 async function markRead(id){
