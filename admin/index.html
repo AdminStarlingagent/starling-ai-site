@@ -105,6 +105,20 @@
 .crow .l{font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;flex:none}
 .crow.none .v{color:var(--faint)}
 .pcard .aliasrow{margin:4px 0 8px}
+.crow .ed{opacity:0;flex:none;background:none;border:0;color:var(--dim);cursor:pointer;font-size:12px;padding:2px 5px;border-radius:4px;transition:opacity .12s}
+.crow:hover .ed{opacity:1}.crow .ed:hover{color:var(--peri);background:var(--navy-3)}
+.crow .lock{opacity:.35;font-size:11px;flex:none}
+.crow.editing{gap:6px}
+.crow.editing input,.crow.editing select{flex:1;min-width:0;padding:6px 9px;font-size:13.5px;border-radius:7px}
+.crow .ok,.crow .no{flex:none;border:0;border-radius:6px;padding:6px 8px;cursor:pointer;font-size:12px}
+.crow .ok{background:var(--ok);color:var(--navy)}.crow .no{background:var(--navy-3);color:var(--muted)}
+.crow.custom .ic{color:var(--warn)}
+.addf{display:flex;gap:6px;padding:10px 0 8px;border-top:1px solid var(--line);align-items:center}
+.addf button.btn{width:100%}
+.addf input{padding:7px 9px;font-size:13px;border-radius:7px;min-width:0}
+.addf input.lbl{flex:0 0 38%}
+.pid h2 .ed{opacity:0;background:none;border:0;color:var(--dim);cursor:pointer;font-size:12px;padding:0 4px;vertical-align:middle}
+.pid:hover h2 .ed{opacity:1}
 
 /* composer */
 .composer{background:var(--navy-2);border:1px solid var(--line);border-radius:14px;overflow:hidden}
@@ -596,6 +610,8 @@ async function refreshAll(announce){
             || $("detail").querySelector("#planSave")
             || $("detail").querySelector(".nedit")
             || $("detail").querySelector("#bgText")
+            || $("detail").querySelector(".crow.editing")
+            || $("detail").querySelector("#afLbl")
             || ($("noteBody") && $("noteBody").value.trim())
             || $("detail").querySelector("#credout.on")
             || (document.activeElement && $("detail").contains(document.activeElement)
@@ -1252,21 +1268,26 @@ function profileCardHTML(r, alist){
   const stChip = r.status === "live" ? '<span class="chip live">live</span>'
                : r.status === "new"  ? `<span class="chip ${r.submission_count>1?"upd":"new"}">${r.submission_count>1?"updated":"new"}</span>`
                : `<span class="chip">${esc(r.status.replace("_"," "))}</span>`;
-  const row = (ic, v, l, href) => `<div class="crow${v ? "" : " none"}"><span class="ic">${ic}</span><span class="v">${v ? (href ? `<a href="${href}">${esc(v)}</a>` : esc(v)) : "—"}</span>${l ? `<span class="l">${l}</span>` : ""}</div>`;
+  const row = (ic, v, l, href, key, type) => `<div class="crow${v ? "" : " none"}${key && key.startsWith("custom.") ? " custom" : ""}"${key ? ` data-key="${esc(key)}" data-type="${type||"text"}" data-label="${esc(l||"")}"` : ""}><span class="ic">${ic}</span><span class="v">${v ? (href ? `<a href="${href}">${esc(v)}</a>` : esc(v)) : "—"}</span>${l ? `<span class="l">${esc(l)}</span>` : ""}${key ? `<button class="ed" title="Edit">✎</button>` : `<span class="lock" title="Email is the merge key — change it via a support ticket, not here">🔒</span>`}</div>`;
+  const customRows = Object.entries(p).filter(([k,v]) => k.startsWith("custom.") && v !== "" && v != null)
+    .map(([k,v]) => row("◆", String(v), k.slice(7).replace(/_/g," "), null, k)).join("");
   return `<div class="pcard">
     <div class="pid">
       <div class="avatar">${initials(r)}</div>
-      <div style="min-width:0"><h2>${esc(r.team_name || r.agent_name || r.email)}</h2>
+      <div style="min-width:0"><h2>${esc(r.team_name || r.agent_name || r.email)} <button class="ed" id="nameEdit" title="Edit team / agent name">✎</button></h2>
         <div class="sub">${r.agent_name && r.team_name ? esc(r.agent_name) + " · " : ""}Last activity ${when(r.updated_at)}</div></div>
     </div>
     <div class="pstat">${stChip}${r.has_unread ? '<button class="btn ghost sm" id="markRead" style="padding:4px 9px;font-size:11px">Mark read</button>' : ""}</div>
-    ${row("✆", r.owner_mobile, "mobile", r.owner_mobile ? "tel:" + esc(r.owner_mobile) : null)}
+    ${row("✆", r.owner_mobile, "mobile", r.owner_mobile ? "tel:" + esc(r.owner_mobile) : null, "client.owner_mobile", "tel")}
     ${row("✉", r.email, "", "mailto:" + esc(r.email))}
-    ${row("⌂", r.brokerage, "brokerage")}
-    ${row("⚙", r.active_crm, "crm")}
-    ${row("◎", p["locations.market_1"] || p["client.market"], "market")}
-    ${row("◷", (r.timezone||"").split("|")[0], "time zone")}
+    ${row("⌂", r.brokerage, "brokerage", null, "client.brokerage")}
+    ${row("⚙", r.active_crm, "crm", null, "crm_config.active_crm", "crm")}
+    ${row("◎", p["locations.market_1"] || p["client.market"], "market", null, "locations.market_1")}
+    ${row("◷", (r.timezone||"").split("|")[0], "time zone", null, "client.timezone")}
+    ${row("☰", r.language, "language", null, "client.language")}
+    ${customRows}
     ${alist.length > 1 ? `<div class="aliasrow"><span class="aliaslbl">Also</span>${alist.filter(a=>!a.is_primary).map(a => `<span class="alias">${esc(a.email_key)}</span>`).join("")}</div>` : ""}
+    <div class="addf" id="addf"><button class="btn ghost sm" id="addField">＋ Add field</button></div>
   </div>`;
 }
 function backgroundHTML(r, editing){
@@ -1276,7 +1297,98 @@ function backgroundHTML(r, editing){
     </div>`;
   return `<div class="bg${r.internal_notes ? "" : " none"}" id="bgView" title="Click to edit">${r.internal_notes ? esc(r.internal_notes) : "Click to add a summary the whole team sees first…"}</div>`;
 }
+async function saveField(r, key, value){
+  const changes = { [key]: value };
+  const { data, error } = await sb.rpc("admin_update_client", { p_id: r.id, p_changes: changes });
+  if(error){ toast("Couldn't save", error.message); return false; }
+  r.payload = Object.assign({}, r.payload, changes);
+  const col = FALLBACK_COL[key];
+  if(col && value !== "") r[col] = key === "client.timezone" ? value.split("|")[0] : value;
+  if(key === "client.timezone" && value !== "") r.timezone = value.split("|")[0];
+  if(data) r.submission_count = data.version || r.submission_count;
+  return true;
+}
+function repaintProfile(r){
+  const old = $("detail").querySelector(".pcard"); if(!old) return;
+  const alist = [...old.querySelectorAll(".alias")].map(a => ({ email_key:a.textContent, is_primary:false }));
+  if(alist.length) alist.unshift({ email_key:r.email, is_primary:true });
+  old.outerHTML = profileCardHTML(r, alist);
+  wireProfile(r); render();
+}
+function wireProfile(r){
+  const card = $("detail").querySelector(".pcard"); if(!card) return;
+  on0("markRead", () => markRead(r.id));
+  card.querySelectorAll(".crow[data-key]").forEach(rowEl => {
+    rowEl.querySelector(".ed").addEventListener("click", () => {
+      if(rowEl.classList.contains("editing")) return;
+      const key = rowEl.dataset.key, type = rowEl.dataset.type, label = rowEl.dataset.label;
+      const cur = String(fval(r, key) ?? "");
+      rowEl.classList.add("editing");
+      const ctl = type === "crm"
+        ? `<select>${CRM_OPTS.map(o => `<option${o===cur?" selected":""}>${o}</option>`).join("")}${cur && !CRM_OPTS.includes(cur) ? `<option selected>${esc(cur)}</option>` : ""}</select>`
+        : `<input type="${type === "tel" ? "tel" : "text"}" value="${esc(cur)}" placeholder="${esc(label)}">`;
+      rowEl.innerHTML = `<span class="ic">${rowEl.querySelector(".ic")?.textContent || "•"}</span>${ctl}<button class="ok" title="Save">✓</button><button class="no" title="Cancel">✕</button>${key.startsWith("custom.") ? `<button class="no" data-rm title="Remove this field">🗑</button>` : ""}`;
+      const inp = rowEl.querySelector("input,select"); inp.focus(); if(inp.select) inp.select();
+      const done = async () => {
+        const v = inp.value.trim();
+        if(v === cur) return repaintProfile(r);
+        rowEl.querySelector(".ok").disabled = true;
+        if(await saveField(r, key, v)) toast("Saved", label + " updated — logged in History.");
+        repaintProfile(r);
+      };
+      rowEl.querySelector(".ok").addEventListener("click", done);
+      rowEl.querySelector(".no:not([data-rm])").addEventListener("click", () => repaintProfile(r));
+      const rm = rowEl.querySelector("[data-rm]");
+      if(rm) rm.addEventListener("click", async () => {
+        if(!confirm(`Remove the "${label}" field from this client?`)) return;
+        if(await saveField(r, key, "")) toast("Field removed", label + " cleared — logged in History.");
+        repaintProfile(r);
+      });
+      inp.addEventListener("keydown", e => { if(e.key === "Enter") done(); if(e.key === "Escape") repaintProfile(r); });
+    });
+  });
+  // team / agent name
+  on0("nameEdit", () => {
+    const pid = card.querySelector(".pid > div");
+    pid.innerHTML = `<div class="crow editing" style="border:0;padding:0 0 6px"><input id="nmTeam" value="${esc(r.team_name||"")}" placeholder="Team / company name"></div>
+      <div class="crow editing" style="border:0;padding:0"><input id="nmAgent" value="${esc(r.agent_name||"")}" placeholder="Agent name"><button class="ok" id="nmOk">✓</button><button class="no" id="nmNo">✕</button></div>`;
+    $("nmTeam").focus();
+    const done = async () => {
+      const ch = {};
+      if($("nmTeam").value.trim() !== (r.team_name||"")) ch["client.team_name"] = $("nmTeam").value.trim();
+      if($("nmAgent").value.trim() !== (r.agent_name||"")) ch["client.agent_name"] = $("nmAgent").value.trim();
+      if(!Object.keys(ch).length) return repaintProfile(r);
+      const { data, error } = await sb.rpc("admin_update_client", { p_id: r.id, p_changes: ch });
+      if(error) return toast("Couldn't save", error.message);
+      r.payload = Object.assign({}, r.payload, ch);
+      if(ch["client.team_name"]) r.team_name = ch["client.team_name"];
+      if(ch["client.agent_name"]) r.agent_name = ch["client.agent_name"];
+      if(data) r.submission_count = data.version || r.submission_count;
+      toast("Saved", "Name updated — logged in History."); repaintProfile(r);
+    };
+    $("nmOk").addEventListener("click", done); $("nmNo").addEventListener("click", () => repaintProfile(r));
+    [$("nmTeam"), $("nmAgent")].forEach(i => i.addEventListener("keydown", e => { if(e.key === "Enter") done(); if(e.key === "Escape") repaintProfile(r); }));
+  });
+  // add a custom field
+  on0("addField", () => {
+    const box = $("addf");
+    box.innerHTML = `<input class="lbl" id="afLbl" placeholder="Label (e.g. Lender)"><input id="afVal" placeholder="Value"><button class="ok" id="afOk">✓</button><button class="no" id="afNo">✕</button>`;
+    $("afLbl").focus();
+    const done = async () => {
+      const lbl = $("afLbl").value.trim(), val = $("afVal").value.trim();
+      if(!lbl || !val) return toast("Both needed", "Give the field a label and a value.");
+      const key = "custom." + lbl.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
+      if(await saveField(r, key, val)) toast("Field added", lbl + " saved — logged in History.");
+      repaintProfile(r);
+    };
+    $("afOk").addEventListener("click", done); $("afNo").addEventListener("click", () => repaintProfile(r));
+    [$("afLbl"), $("afVal")].forEach(i => i.addEventListener("keydown", e => { if(e.key === "Enter") done(); if(e.key === "Escape") repaintProfile(r); }));
+  });
+}
+const on0 = (id, fn) => { const el = $(id); if(el) el.addEventListener("click", fn); };
+
 function wireWidgets(r){
+  wireProfile(r);
   $("detail").querySelectorAll(".wdg>header").forEach(h => h.addEventListener("click", () => {
     const w = h.parentElement, closed = w.classList.toggle("closed");
     localStorage.setItem("wdg:" + w.dataset.wdg, closed ? "0" : "1");
