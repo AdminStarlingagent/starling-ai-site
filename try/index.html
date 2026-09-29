@@ -81,6 +81,16 @@
   .took{margin:5px 0 8px 4px;font-size:.8125rem;color:var(--mute)}
   .took b{font-family:var(--display);font-weight:700;color:var(--coral);font-variant-numeric:tabular-nums}
 
+  /* coach note: what the AI just did and why it converts (agent-facing) */
+  .coach{margin:6px 0 10px 4px;max-width:88%;padding:9px 12px 9px 14px;border-left:3px solid var(--peri);background:rgba(134,139,223,.10);border-radius:0 12px 12px 0;font-size:.8125rem;line-height:1.45;color:var(--ink)}
+  .coach b{display:block;font-family:var(--display);font-weight:700;font-size:.6875rem;letter-spacing:.02em;color:var(--peri);margin-bottom:2px}
+  /* the reveal: shown once the roleplay books a meeting */
+  .reveal{align-self:stretch;margin:12px 0 6px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(135deg,rgba(241,83,104,.12),rgba(134,139,223,.12))}
+  .reveal b{display:block;font-family:var(--display);font-weight:700;font-size:1.0625rem;letter-spacing:-.01em;margin-bottom:4px}
+  .reveal p{margin:0;font-size:.9375rem;line-height:1.45;color:var(--ink)}
+  .chips{display:flex;gap:8px;padding:0 12px 6px;flex-wrap:wrap}
+  .chip{border:1px solid var(--peri);background:none;color:var(--ink);border-radius:999px;padding:7px 13px;font-size:.8125rem;font-weight:600}
+  .chip:hover,.chip:focus-visible{background:var(--surface-2)}
   .err{align-self:stretch;margin:8px 0;padding:12px 14px;border:1px solid rgba(241,83,104,.5);border-radius:12px;background:rgba(241,83,104,.08);font-size:.9375rem;line-height:1.4;display:flex;gap:12px;align-items:center;justify-content:space-between}
   .err button{flex:none;border:1px solid var(--coral);background:none;color:var(--ink);border-radius:999px;padding:7px 14px;font-weight:600;font-size:.875rem}
 
@@ -98,6 +108,31 @@
   .send[disabled]{opacity:.35;cursor:default}
   .fine{margin:0;padding:0 16px calc(10px + env(safe-area-inset-bottom,0px));font-size:.75rem;line-height:1.4;color:var(--mute);display:flex;justify-content:space-between;gap:12px}
   .fine button{border:0;background:none;padding:0;color:var(--mute);text-decoration:underline;text-underline-offset:2px;font-size:.75rem;flex:none}
+  /* "Text me": the one real-world step on this page (opt-in texts from Starling AI) */
+  .optin{align-self:stretch;margin:12px 0 6px;padding:16px;border:1px solid var(--peri);border-radius:14px;background:var(--surface)}
+  .optin h2{margin:0 0 4px;font-family:var(--display);font-weight:700;font-size:1.0625rem;letter-spacing:-.01em}
+  .optin > p{margin:0 0 6px;font-size:.9375rem;line-height:1.45}
+  .optin label.f{display:block;margin:12px 0 5px;font-size:.8125rem;font-weight:600;color:var(--mute)}
+  .optin input.t{width:100%;border:1px solid var(--line);background:var(--navy);color:var(--ink);border-radius:10px;padding:11px 12px;font:inherit;font-size:16px;outline:none}
+  .optin input.t:focus{border-color:var(--peri)}
+  .optin input.t:disabled{opacity:.7}
+  .optin .consent{display:flex;gap:10px;align-items:flex-start;margin-top:16px}
+  .optin .consent input{flex:none;width:20px;height:20px;margin:1px 0 0;accent-color:var(--coral)}
+  .optin .consent label{font-size:.75rem;line-height:1.5;color:var(--mute)}
+  .optin .legal{margin:6px 0 0 30px;font-size:.75rem;line-height:1.5;color:var(--mute)}
+  .optin .legal a{color:var(--ink);text-decoration:underline;text-underline-offset:2px}
+  .optin .go{display:block;width:100%;margin-top:14px;border:0;border-radius:999px;background:var(--coral);color:#fff;font-weight:600;font-size:.9375rem;padding:12px 16px}
+  .optin .go[disabled]{opacity:.5;cursor:default}
+  .optin .msg{margin:10px 0 0;font-size:.875rem;line-height:1.4}
+  .optin .msg:empty{display:none}
+  .optin .msg.bad{color:var(--blush)}
+  .optin.done{border-color:var(--line)}
+  .optin.done .msg{font-weight:600}
+  .hp{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;overflow:hidden!important}
+  .cta .acts{display:flex;gap:8px;flex:none}
+  .cta button.alt{border:1px solid var(--coral);background:none;color:var(--ink);font-weight:600;font-size:.9375rem;padding:9px 14px;border-radius:999px}
+  .err .btns{display:flex;gap:8px;flex:none;flex-wrap:wrap;justify-content:flex-end}
+  @media (max-width:420px){.cta{flex-wrap:wrap}.cta p{flex-basis:100%}}
   [hidden]{display:none!important}
 
   @media (prefers-reduced-motion:reduce){
@@ -134,9 +169,15 @@
 
   <div class="cta" id="cta" hidden>
     <p data-i18n="ctaText"></p>
-    <a id="ctaLink" target="_blank" rel="noopener" data-i18n="ctaBtn"></a>
+    <div class="acts">
+      <button type="button" class="alt" id="textMeBtn" data-i18n="textMeBtn"></button>
+      <a id="ctaLink" target="_blank" rel="noopener" data-i18n="ctaBtn"></a>
+    </div>
   </div>
 
+  <div class="chips" id="chips" hidden>
+    <button class="chip" type="button" id="pitchChip" data-i18n="pitchChip"></button>
+  </div>
   <form class="composer" id="composer" autocomplete="off">
     <label class="sr" for="msg" data-i18n="inputLabel"></label>
     <textarea id="msg" rows="1" maxlength="600" enterkeyhint="send"></textarea>
@@ -155,8 +196,9 @@
 const CONFIG = {
   // n8n Production URL of the "Starling AI demo chat" workflow (Webhook node path: demo-chat)
   WEBHOOK_URL: "https://starlingagent.app.n8n.cloud/webhook/demo-chat",
+  // n8n Production URL of the "Starling AI - Web Demo Text Me" workflow (Webhook node path: demo-lead)
+  CAPTURE_URL: "https://starlingagent.app.n8n.cloud/webhook/demo-lead",
   BOOKING_URL: "https://calendly.com/starlingagent/30min",
-  SOURCE: "demo-qr",
   MAX_TURNS: 12,          // visitor messages per session (keeps n8n executions in check)
   CTA_AFTER_REPLIES: 3,   // show "Book a call" once the AI has replied this many times
   TIMEOUT_MS: 45000
@@ -183,9 +225,34 @@ const T = {
     error: "Message didn't go through. Check your connection and send it again.", retry: "Send again",
     capped: "That's the end of the demo thread. Book a call to see it work your own leads.",
     ribbon: "Preview mode. Replies are a sample script, not the live AI.",
+    coachLabel: "Why this works",
+    revealTitle: "That's the demo.",
+    revealBody: "In your account that appointment is now on your real calendar, the notes are in your CRM, and your phone just got the alert. Ask anything about running this on your own leads.",
+    pitchChip: "Ask about my leads",
+    pitchAsk: "How would this work on my leads?",
+    placeholderPitch: "Ask about your leads",
+    textMeBtn: "Text me",
+    optinTitle: "Get a real text from Starling AI",
+    optinBody: "Leave your number and our AI will text you, the same way it texts your leads.",
+    optinName: "Name", optinPhone: "Mobile number", optinEmail: "Email (optional)",
+    optinConsent: "Yes, text me. I agree to receive recurring automated marketing texts from Starling AI at this number. Consent isn't a condition of purchase. Msg & data rates may apply. Msg frequency varies. Reply STOP to opt out, HELP for help.",
+    optinSee: "See our", optinPrivacy: "Privacy Policy", optinAnd: "and", optinSms: "SMS Terms",
+    optinGo: "Text me", optinSending: "Sending…",
+    optinDone: "Done. Starling AI is texting you now. Check your phone.",
+    optinErrName: "Add your name.", optinErrPhone: "Enter a 10-digit US mobile number.", optinErrEmail: "Check your email address.",
+    optinErrConsent: "Check the box so we're allowed to text you.", optinErrBusy: "Too many sign-ups right now. Try again in a minute.",
+    optinErrFail: "That didn't go through. Try again in a moment.",
+    busy: "Lots of people are trying this right now. Send it again in a few seconds.",
+    sample: "Show a sample chat",
     preview: ["Hi! This is Mia with the Demo Realty Team. I just saw your request come in. Are you hoping to move in the next few months, or still early in the process?",
               "Got it, that helps. Have you talked to a lender yet, or would a quick intro be useful?",
-              "Perfect. I can set up a 15 minute call with the team. Does tomorrow at 10am or 4pm work better?"]
+              "Perfect. I can set up a 15 minute call with the team. Does tomorrow at 10am or 4pm work better?",
+              "You're all set for tomorrow at 10:00 AM Central. Anything else I can help with?",
+              "Here is what just happened in your thread: the first text landed in under a second, three qualifying answers were captured, and the meeting was booked with no human involved. Where do most of your leads come from right now?"],
+    previewInsight: ["Timeline first: a lead with a 3-month window gets a meeting ask by my third reply, which is where most agents lose the thread.",
+                     "One question at a time. A lead who feels interviewed stops answering; a lead who feels helped keeps texting.",
+                     "Two specific times, not 'when works for you?' One easy decision books more meetings than an open question.",
+                     "Booked, confirmed, and written to the CRM without you touching your phone."]
   },
   es: {
     headline: "Ahora tú eres el cliente.",
@@ -206,9 +273,34 @@ const T = {
     error: "El mensaje no se envió. Revisa tu conexión y envíalo otra vez.", retry: "Enviar otra vez",
     capped: "Aquí termina la demostración. Agenda una llamada para verla trabajar con tus propios prospectos.",
     ribbon: "Modo de vista previa. Las respuestas son un guion de muestra, no la IA en vivo.",
+    coachLabel: "Por qué funciona",
+    revealTitle: "Esa fue la demostración.",
+    revealBody: "En tu cuenta esa cita ya está en tu calendario real, las notas quedaron en tu CRM y tu teléfono acaba de recibir la alerta. Pregunta lo que quieras sobre cómo trabajaría tus propios leads.",
+    pitchChip: "Pregunta por tus leads",
+    pitchAsk: "¿Cómo funcionaría esto con mis leads?",
+    placeholderPitch: "Pregunta por tus leads",
+    textMeBtn: "Envíame un texto",
+    optinTitle: "Recibe un mensaje real de Starling AI",
+    optinBody: "Deja tu número y nuestra IA te escribirá, igual que les escribe a tus prospectos.",
+    optinName: "Nombre", optinPhone: "Celular", optinEmail: "Correo (opcional)",
+    optinConsent: "Sí, envíenme mensajes. Acepto recibir mensajes de texto de marketing automatizados y recurrentes de Starling AI en este número. El consentimiento no es condición de compra. Pueden aplicar tarifas de mensajes y datos. La frecuencia varía. Responde STOP para cancelar o HELP para ayuda.",
+    optinSee: "Consulta nuestra", optinPrivacy: "Política de privacidad", optinAnd: "y los", optinSms: "Términos de SMS",
+    optinGo: "Envíame un texto", optinSending: "Enviando…",
+    optinDone: "Listo. Starling AI te está escribiendo ahora. Revisa tu teléfono.",
+    optinErrName: "Escribe tu nombre.", optinErrPhone: "Escribe un celular de EE. UU. de 10 dígitos.", optinErrEmail: "Revisa tu correo.",
+    optinErrConsent: "Marca la casilla para que podamos escribirte.", optinErrBusy: "Hay muchos registros en este momento. Intenta de nuevo en un minuto.",
+    optinErrFail: "No se pudo enviar. Intenta de nuevo en un momento.",
+    busy: "Mucha gente lo está probando ahora mismo. Envíalo otra vez en unos segundos.",
+    sample: "Ver un chat de ejemplo",
     preview: ["¡Hola! Soy Mia del equipo Demo Realty. Acabo de ver tu solicitud. ¿Piensas mudarte en los próximos meses o apenas estás empezando a ver opciones?",
               "Perfecto, eso me ayuda. ¿Ya hablaste con un prestamista o te sirve que te presente a uno?",
-              "Excelente. Puedo agendarte una llamada de 15 minutos con el equipo. ¿Te queda mejor mañana a las 10am o a las 4pm?"]
+              "Excelente. Puedo agendarte una llamada de 15 minutos con el equipo. ¿Te queda mejor mañana a las 10am o a las 4pm?",
+              "Listo, quedas agendado para mañana a las 10:00 AM hora central. ¿Algo más en lo que te pueda ayudar?",
+              "Esto fue lo que pasó en tu conversación: el primer mensaje salió en menos de un segundo, se capturaron tres respuestas de calificación y la cita se agendó sin ninguna persona de por medio. ¿De dónde llegan la mayoría de tus leads hoy?"],
+    previewInsight: ["Primero el tiempo: un lead con ventana de 3 meses recibe una propuesta de cita en mi tercera respuesta, justo donde muchos agentes pierden el hilo.",
+                     "Una pregunta a la vez. Un lead que se siente interrogado deja de contestar; uno que se siente ayudado sigue escribiendo.",
+                     "Dos horarios concretos, no un '¿cuándo te queda bien?'. Una decisión fácil agenda más citas que una pregunta abierta.",
+                     "Agendado, confirmado y anotado en el CRM sin que tocaras tu teléfono."]
   }
 };
 
@@ -220,7 +312,8 @@ const S = {
   lang: (qs.get("lang") || navigator.language || "en").toLowerCase().startsWith("es") ? "es" : "en",
   preview: qs.has("preview") || !CONFIG.WEBHOOK_URL,
   src: (qs.get("s") || "direct").slice(0, 40),
-  sessionId: newId(), scenario: null, turns: 0, replies: 0, busy: false, capped: false, previewStep: 0
+  sessionId: newId(), scenario: null, phase: "roleplay", turns: 0, replies: 0, busy: false, capped: false, previewStep: 0,
+  log: [], optin: null, optinDone: false, fails: 0
 };
 
 function newId(){
@@ -233,7 +326,7 @@ function setLang(l){
   S.lang = l; document.documentElement.lang = l;
   document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.dataset.i18n); });
   document.querySelectorAll(".lang button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === l)));
-  msg.placeholder = S.scenario ? t("placeholder") : t("placeholderIdle");
+  msg.placeholder = S.phase === "pitch" ? t("placeholderPitch") : (S.scenario ? t("placeholder") : t("placeholderIdle"));
   document.title = (l === "es" ? "Escríbele a la IA" : "Text the AI") + " | Starling AI";
 }
 document.querySelectorAll(".lang button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
@@ -250,9 +343,15 @@ function linkify(node, text){
 }
 function addBubble(who, text){
   const row = el("div", "row " + who), b = el("div", "bubble");
+  S.log.push({ who, text: String(text).slice(0, 600) });
   linkify(b, text); row.appendChild(b); thread.appendChild(row); toBottom(); return row;
 }
 function fmt(ms){ return (ms / 1000).toFixed(1) + t("unit"); }
+function addCoach(text){ const c = el("div", "coach"); c.appendChild(el("b", "", t("coachLabel"))); c.appendChild(document.createTextNode(text)); thread.appendChild(c); toBottom(); }
+function enterPitch(reveal){
+  if (reveal && S.phase !== "pitch"){ const r = el("div", "reveal"); r.appendChild(el("b", "", t("revealTitle"))); r.appendChild(el("p", "", t("revealBody"))); thread.appendChild(r); }
+  S.phase = "pitch"; msg.placeholder = t("placeholderPitch"); $("chips").hidden = true; cta.hidden = false; toBottom();
+}
 
 /* typing row with a live stopwatch; resolves to the elapsed ms when stopped */
 function startWait(){
@@ -268,50 +367,156 @@ function pickReply(data){
   if (Array.isArray(data)) data = data[0];
   if (data == null) return { text: "" };
   if (typeof data === "string") return { text: data };
-  return { text: data.reply ?? data.output ?? data.text ?? data.message ?? "", cta: !!data.cta, end: !!data.end };
+  return { text: data.reply ?? data.output ?? data.text ?? data.message ?? "", cta: !!data.cta, end: !!data.end,
+           insight: typeof data.insight === "string" ? data.insight.trim() : "", booked: !!data.booked, phase: data.phase || "", busy: !!data.busy };
 }
 async function askAI(payload){
   if (S.preview){
     await new Promise(r => setTimeout(r, 1200 + Math.random() * 1300));
-    const script = t("preview"); return { text: script[Math.min(S.previewStep++, script.length - 1)] };
+    const step = S.previewStep++, script = t("preview"), notes = t("previewInsight");
+    if (S.phase === "pitch") return { text: script[script.length - 1], phase: "pitch" };
+    const i = Math.min(step, script.length - 2);
+    return { text: script[i], insight: notes[Math.min(i, notes.length - 1)], booked: i === script.length - 2, phase: i === script.length - 2 ? "pitch" : "roleplay" };
   }
   const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), CONFIG.TIMEOUT_MS);
   try {
     const res = await fetch(CONFIG.WEBHOOK_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload), signal: ctrl.signal });
     if (!res.ok) throw new Error("HTTP " + res.status);
     const raw = await res.text(); let data; try { data = JSON.parse(raw); } catch { data = raw; }
-    const out = pickReply(data); if (!out.text.trim()) throw new Error("Empty reply"); return out;
+    const out = pickReply(data);
+    if (out.busy){ const err = new Error("busy"); err.busy = true; throw err; }
+    if (!out.text.trim()) throw new Error("Empty reply"); return out;
   } finally { clearTimeout(timer); }
 }
 
 async function exchange(event, text){
   if (S.busy) return;
   S.busy = true; refreshSend();
-  const payload = { sessionId: S.sessionId, event, scenario: S.scenario, lang: S.lang, message: text || "", turn: S.turns, source: CONFIG.SOURCE, src: S.src };
+  const payload = { sessionId: S.sessionId, event, scenario: S.scenario, lang: S.lang, message: text || "", turn: S.turns, phase: S.phase, src: S.src };
   const wait = startWait();
   try {
     const out = await askAI(payload), ms = wait.stop();
+    S.fails = 0;
     const parts = out.text.trim().split(/\n{2,}/).slice(0, 3);
     let last; parts.forEach(p => { last = addBubble("ai", p.trim()); });
     const took = el("p", "took"); took.append((event === "start" ? t("first") : t("replied")) + " ", el("b", "", fmt(ms)));
     last.appendChild(took); toBottom();
     S.replies++;
+    if (out.insight && S.phase !== "pitch") addCoach(out.insight);
+    if (out.booked) enterPitch(true);
+    else if (out.phase === "pitch" && S.phase !== "pitch") enterPitch(false);
+    if (S.phase !== "pitch" && S.replies >= 1) $("chips").hidden = false;
     if (out.cta || S.replies >= CONFIG.CTA_AFTER_REPLIES) cta.hidden = false;
+    if (S.phase === "pitch") showOptin();
     if (out.end || S.turns >= CONFIG.MAX_TURNS) endThread();
   } catch (e) {
-    wait.stop(); showError(() => exchange(event, text));
+    wait.stop(); S.fails++; showError(() => exchange(event, text), !!(e && e.busy));
   } finally {
     S.busy = false; refreshSend(); toBottom();
   }
 }
-function showError(retry){
+function showError(retry, busy){
   const box = el("div", "err"); box.setAttribute("role", "alert");
+  const btns = el("div", "btns");
   const btn = el("button", "", t("retry")); btn.type = "button";
   btn.addEventListener("click", () => { box.remove(); retry(); });
-  box.append(el("span", "", t("error")), btn); thread.appendChild(box); toBottom();
+  btns.appendChild(btn);
+  if (S.fails >= 2 && !S.preview){          // live AI keeps failing: offer the sample script instead
+    const s = el("button", "", t("sample")); s.type = "button";
+    s.addEventListener("click", () => { box.remove(); startSample(); });
+    btns.appendChild(s);
+  }
+  box.append(el("span", "", busy ? t("busy") : t("error")), btns); thread.appendChild(box); toBottom();
 }
 function endThread(){
-  if (S.capped) return; S.capped = true; addSys(t("capped")); cta.hidden = false; msg.disabled = true; refreshSend();
+  if (S.capped) return; S.capped = true; addSys(t("capped")); cta.hidden = false; msg.disabled = true; refreshSend(); showOptin();
+}
+
+/* ---------- "Text me": the one real-world step on this page ----------
+   Opt-in only. Sends name, mobile, optional email, the consent text shown and the
+   demo chat to the Starling "Text me" workflow, which saves the contact in
+   Starling's CRM. Starling AI then texts them for real. ?preview=1 never sends. */
+const CAPTURE_SIMULATED = qs.has("preview");
+function optinField(id, key, type, auto, mode){
+  const wrap = el("div"), lab = el("label", "f", t(key)), inp = el("input", "t");
+  lab.htmlFor = id; lab.dataset.i18n = key;
+  inp.id = id; inp.type = type; inp.autocomplete = auto; if (mode) inp.inputMode = mode;
+  wrap.append(lab, inp); return { wrap, inp };
+}
+function showOptin(){
+  if (!CONFIG.CAPTURE_URL || S.optinDone || S.optin) return;
+  const card = el("section", "optin");
+  const h = el("h2", "", t("optinTitle")); h.dataset.i18n = "optinTitle";
+  const p = el("p", "", t("optinBody")); p.dataset.i18n = "optinBody";
+  const nm = optinField("oName", "optinName", "text", "name");
+  const ph = optinField("oPhone", "optinPhone", "tel", "tel", "tel");
+  const em = optinField("oEmail", "optinEmail", "email", "email", "email");
+  const hp = el("input", "hp"); hp.type = "text"; hp.tabIndex = -1; hp.autocomplete = "off"; hp.setAttribute("aria-hidden", "true");
+  const row = el("div", "consent"), box = el("input"), lab = el("label", "", t("optinConsent"));
+  box.type = "checkbox"; box.id = "oConsent"; lab.htmlFor = "oConsent"; lab.dataset.i18n = "optinConsent";
+  row.append(box, lab);
+  const legal = el("p", "legal");
+  const see = el("span", "", t("optinSee")), and = el("span", "", t("optinAnd"));
+  const a1 = el("a", "", t("optinPrivacy")), a2 = el("a", "", t("optinSms"));
+  see.dataset.i18n = "optinSee"; and.dataset.i18n = "optinAnd"; a1.dataset.i18n = "optinPrivacy"; a2.dataset.i18n = "optinSms";
+  a1.href = "/privacy"; a2.href = "/sms-compliance#demo-texts"; [a1, a2].forEach(a => { a.target = "_blank"; a.rel = "noopener"; });
+  legal.append(see, " ", a1, " ", and, " ", a2, ".");
+  const go = el("button", "go", t("optinGo")); go.type = "button"; go.dataset.i18n = "optinGo";
+  const note = el("p", "msg"); note.setAttribute("role", "status");
+  card.append(h, p, nm.wrap, ph.wrap, em.wrap, hp, row, legal, go, note);
+  go.addEventListener("click", submitOptin);
+  S.optin = { card, name: nm.inp, phone: ph.inp, email: em.inp, hp, box, consent: lab, legal, go, note, sending: false };
+  thread.appendChild(card); toBottom();
+}
+async function submitOptin(){
+  const o = S.optin; if (!o || o.sending || S.optinDone) return;
+  const say = (key, bad) => { o.note.className = bad ? "msg bad" : "msg"; o.note.textContent = t(key); toBottom(); };
+  const name = o.name.value.trim(), email = o.email.value.trim();
+  let digits = o.phone.value.replace(/\D/g, ""); if (digits.length === 11 && digits[0] === "1") digits = digits.slice(1);
+  if (!name) return say("optinErrName", true);
+  if (!/^[2-9]\d{2}[2-9]\d{6}$/.test(digits)) return say("optinErrPhone", true);
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return say("optinErrEmail", true);
+  if (!o.box.checked) return say("optinErrConsent", true);
+  o.sending = true; o.go.disabled = true; o.go.textContent = t("optinSending"); o.note.textContent = "";
+  const payload = {
+    sessionId: S.sessionId, name, phone: digits, email, consent: true,
+    consent_text: (o.consent.textContent + " " + o.legal.textContent).replace(/\s+/g, " ").trim(),
+    lang: S.lang, scenario: S.scenario || "open", src: S.src, page: location.href.slice(0, 300),
+    transcript: S.log.slice(-40), company_website: o.hp.value
+  };
+  let res = null;
+  try {
+    if (CAPTURE_SIMULATED){ await new Promise(r => setTimeout(r, 700)); res = { ok: true }; }
+    else {
+      const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 20000);
+      try {
+        const r = await fetch(CONFIG.CAPTURE_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload), signal: ctrl.signal });
+        const raw = await r.text(); try { res = JSON.parse(raw); } catch { res = null; }
+        if (Array.isArray(res)) res = res[0];
+      } finally { clearTimeout(timer); }
+    }
+  } catch (e) { res = null; }
+  o.sending = false;
+  if (res && res.ok){
+    S.optinDone = true; o.card.classList.add("done");
+    [o.name, o.phone, o.email, o.box].forEach(i => { i.disabled = true; });
+    o.go.hidden = true; $("textMeBtn").hidden = true;
+    o.note.dataset.i18n = "optinDone"; say("optinDone", false);
+  } else {
+    o.go.disabled = false; o.go.textContent = t("optinGo");
+    const map = { phone_invalid: "optinErrPhone", consent_required: "optinErrConsent", name_required: "optinErrName", email_invalid: "optinErrEmail", busy: "optinErrBusy" };
+    say(map[res && res.error] || "optinErrFail", true);
+  }
+}
+function resetThread(){
+  Object.assign(S, { sessionId: newId(), scenario: null, phase: "roleplay", turns: 0, replies: 0, capped: false, previewStep: 0, log: [], optin: null, fails: 0 });
+  [...thread.children].forEach(n => { if (n !== intro) n.remove(); });
+  intro.hidden = false; cta.hidden = true; $("chips").hidden = true; msg.disabled = false; msg.value = ""; autosize();
+  msg.placeholder = t("placeholderIdle"); refreshSend(); thread.scrollTop = 0;
+}
+function startSample(){
+  const role = S.scenario && S.scenario !== "open" ? S.scenario : "buyer";
+  S.preview = true; $("ribbon").hidden = false; resetThread(); start(role);
 }
 
 /* ---------- start, send, restart ---------- */
@@ -334,13 +539,13 @@ $("composer").addEventListener("submit", e => {
   msg.value = ""; autosize(); S.turns++;
   addBubble("me", text); exchange("message", text);
 });
-$("restart").addEventListener("click", () => {
-  if (S.busy) return;
-  Object.assign(S, { sessionId: newId(), scenario: null, turns: 0, replies: 0, capped: false, previewStep: 0 });
-  [...thread.children].forEach(n => { if (n !== intro) n.remove(); });
-  intro.hidden = false; cta.hidden = true; msg.disabled = false; msg.value = ""; autosize();
-  msg.placeholder = t("placeholderIdle"); refreshSend(); thread.scrollTop = 0;
+$("pitchChip").addEventListener("click", () => {
+  if (S.busy || S.capped) return;
+  if (!S.scenario) S.scenario = "open";
+  enterPitch(false); S.turns++;
+  const q = t("pitchAsk"); addBubble("me", q); exchange("message", q);
 });
+$("restart").addEventListener("click", () => { if (S.busy) return; resetThread(); });
 
 /* keep the composer above the phone keyboard */
 const vv = window.visualViewport;
@@ -349,6 +554,8 @@ function toBottomIfChatting(){ if (S.scenario) toBottom(); }
 if (vv) vv.addEventListener("resize", fit); window.addEventListener("resize", fit); fit();
 
 $("ctaLink").href = CONFIG.BOOKING_URL;
+$("textMeBtn").hidden = !CONFIG.CAPTURE_URL;
+$("textMeBtn").addEventListener("click", () => { showOptin(); if (S.optin) S.optin.card.scrollIntoView({ block: "nearest" }); });
 $("ribbon").hidden = !S.preview;
 setLang(S.lang); refreshSend();
 </script>
