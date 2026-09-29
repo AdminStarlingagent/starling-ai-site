@@ -37,6 +37,10 @@
 .bg-white\/25{background-color:hsla(0,0%,100%,.25)}
 .border-coral-500\/25{border-color:rgba(255,107,91,.25)}
 .border-coral-500\/30{border-color:rgba(255,107,91,.3)}
+/* Header collapses to the menu button below 1280px: with "Try the AI" added, the
+   full link row no longer fits on tablets and small laptops (it was already
+   wrapping onto two lines below ~1100px before this change). */
+@media (min-width:1280px){.xl\:hidden{display:none}}
 .from-coral-500\/\[0\.11\]{--tw-gradient-from:rgba(255,107,91,.11) var(--tw-gradient-from-position);--tw-gradient-to:rgba(255,107,91,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}
 .to-peri-500\/\[0\.08\]{--tw-gradient-to:rgba(124,138,237,.08) var(--tw-gradient-to-position)}
 .open\:border-coral-500\/30[open]{border-color:rgba(255,107,91,.3)}
@@ -70,17 +74,18 @@
       </a>
 
       <!-- Center links -->
-      <div class="hidden items-center gap-1 md:flex">
+      <div class="hidden items-center gap-1 xl:flex">
         <a href="#features" class="rounded-lg px-3.5 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white">Features</a>
         <a href="#solutions" class="rounded-lg px-3.5 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white">Solutions</a>
         <a href="#pricing" class="rounded-lg px-3.5 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white">Plans &amp; Pricing</a>
         <a href="#integrations" class="rounded-lg px-3.5 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white">Integrations</a>
         <a href="/demos/" class="rounded-lg px-3.5 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white">Live Demos</a>
+        <a href="/try/?s=nav" class="inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-semibold text-white transition hover:bg-white/5"><span class="relative inline-flex h-2 w-2 rounded-full bg-coral-500" aria-hidden="true"></span>Try the AI</a>
         <a href="/build-your-agent.html" class="rounded-lg px-3.5 py-2 text-sm font-semibold text-peri-300 transition hover:bg-white/5 hover:text-white">Build Your Agent</a>
       </div>
 
       <!-- Utility + CTA -->
-      <div class="hidden items-center gap-2 md:flex">
+      <div class="hidden items-center gap-2 xl:flex">
         <a href="https://app.starlingagent.com/" class="rounded-lg px-3.5 py-2 text-sm font-medium text-slate-300 transition hover:text-white">Log in</a>
         <a href="#pricing" class="inline-flex items-center gap-2 rounded-xl bg-coral-500 px-4 py-2.5 text-sm font-bold text-white shadow-glow-coral transition-all duration-200 hover:-translate-y-0.5 hover:bg-coral-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-peri-400 active:translate-y-0">
           Get Started
@@ -88,20 +93,21 @@
       </div>
 
       <!-- Mobile menu button -->
-      <button id="menuBtn" type="button" class="grid h-10 w-10 place-items-center rounded-lg border border-white/10 bg-white/5 text-slate-200 transition hover:bg-white/10 md:hidden" aria-expanded="false" aria-controls="mobileMenu" aria-label="Toggle menu">
+      <button id="menuBtn" type="button" class="grid h-10 w-10 place-items-center rounded-lg border border-white/10 bg-white/5 text-slate-200 transition hover:bg-white/10 xl:hidden" aria-expanded="false" aria-controls="mobileMenu" aria-label="Toggle menu">
         <svg id="iconOpen" viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         <svg id="iconClose" viewBox="0 0 24 24" class="hidden h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
     </nav>
 
     <!-- Mobile panel -->
-    <div id="mobileMenu" class="hidden border-t border-white/5 px-4 pb-6 pt-3 md:hidden">
+    <div id="mobileMenu" class="hidden border-t border-white/5 px-4 pb-6 pt-3 xl:hidden">
       <div class="flex flex-col gap-1">
         <a href="#features" class="rounded-lg px-3 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white">Features</a>
         <a href="#solutions" class="rounded-lg px-3 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white">Solutions</a>
         <a href="#pricing" class="rounded-lg px-3 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white">Plans &amp; Pricing</a>
         <a href="#integrations" class="rounded-lg px-3 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white">Integrations</a>
         <a href="/demos/" class="rounded-lg px-3 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white">Live Demos</a>
+        <a href="/try/?s=menu" class="inline-flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold text-white transition hover:bg-white/5"><span class="relative inline-flex h-2 w-2 rounded-full bg-coral-500" aria-hidden="true"></span>Try the AI</a>
         <a href="/build-your-agent.html" class="rounded-lg px-3 py-2.5 text-sm font-semibold text-peri-300 transition hover:bg-white/5 hover:text-white">Build Your Agent</a>
         <a href="https://app.starlingagent.com/" class="rounded-lg px-3 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white">Log in</a>
       </div>
@@ -148,6 +154,10 @@
       <a href="#pricing" class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-coral-500 px-7 py-3.5 text-sm font-bold text-white shadow-glow-coral transition-all duration-200 hover:-translate-y-0.5 hover:bg-coral-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-peri-400 active:translate-y-0 sm:w-auto">
         Get Started Now
         <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a href="/try/?s=hero" class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-coral-500/30 bg-white/[0.04] px-7 py-3.5 text-sm font-semibold text-white backdrop-blur transition-all duration-200 hover:border-white/25 hover:bg-white/[0.08] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-peri-400 sm:w-auto">
+        <span class="relative flex h-2 w-2" aria-hidden="true"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-coral-400 opacity-60"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-coral-500"></span></span>
+        Try the AI
       </a>
       <a href="https://calendly.com/starlingagent/30min" target="_blank" rel="noopener" class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-7 py-3.5 text-sm font-semibold text-white backdrop-blur transition-all duration-200 hover:border-white/25 hover:bg-white/[0.08] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-peri-400 sm:w-auto">
         Book a Demo
@@ -880,6 +890,7 @@
           <li><a href="#pricing" class="text-slate-400 transition hover:text-white">Plans &amp; Pricing</a></li>
           <li><a href="#integrations" class="text-slate-400 transition hover:text-white">Integrations</a></li>
           <li><a href="/demos/" class="text-slate-400 transition hover:text-white">Live Demos</a></li>
+          <li><a href="/try/?s=footer" class="text-slate-400 transition hover:text-white">Try the AI</a></li>
           <li><a href="/changelog" class="text-slate-400 transition hover:text-white">Changelog</a></li>
           <li><a href="/roadmap" class="text-slate-400 transition hover:text-white">Roadmap</a></li>
         </ul>
