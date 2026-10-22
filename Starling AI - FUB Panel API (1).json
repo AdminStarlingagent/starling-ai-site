@@ -1,0 +1,399 @@
+{
+  "name": "Starling AI — FUB Panel API",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "starling-fub-panel",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "https://starlingagent.com"
+        }
+      },
+      "id": "7f575adc-1de6-4941-abda-3a16d8077e58",
+      "name": "FUB Panel Request",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        300
+      ],
+      "webhookId": "50d4c536-179e-4c36-b92d-3a36f60a4c7e"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================\n// Starling AI — FUB Embedded App: verify FUB signature + route\n// ============================================================\n// 1) FUB app secret (Admin > Integrations > Embedded Apps > Starling AI > Secret Key)\nconst SECRET = '88619c984a861885e84b5e76d63ab3dc';\n\n// 2) Which FUB accounts are Starling clients.\n//    Key = the FUB account subdomain (the part before .followupboss.com).\n//    To add a client: copy a line, change the subdomain + their table names + plan limit.\nconst CLIENTS = {\n  'jasonhoustonrealty': { name: 'Jason Aguirre Group', chat_table: 'n8n_chat_histories', count_table: 'count_jasonaguirre', monthly_limit: 3000 },\n};\n\n// ---------- pure-JS SHA-256 / HMAC (no modules needed) ----------\nfunction sha256Bytes(bytes) {\n  const K = [0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];\n  let H = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];\n  const l = bytes.length, withPad = ((l + 9 + 63) >> 6) << 6;\n  const m = new Uint8Array(withPad); m.set(bytes); m[l] = 0x80;\n  const bitLen = l * 8; const dv = new DataView(m.buffer);\n  dv.setUint32(withPad - 4, bitLen >>> 0); dv.setUint32(withPad - 8, Math.floor(bitLen / 0x100000000));\n  const w = new Uint32Array(64); const rotr = (x, n) => (x >>> n) | (x << (32 - n));\n  for (let i = 0; i < withPad; i += 64) {\n    for (let t = 0; t < 16; t++) w[t] = dv.getUint32(i + t * 4);\n    for (let t = 16; t < 64; t++) {\n      const s0 = rotr(w[t-15],7) ^ rotr(w[t-15],18) ^ (w[t-15] >>> 3);\n      const s1 = rotr(w[t-2],17) ^ rotr(w[t-2],19) ^ (w[t-2] >>> 10);\n      w[t] = (w[t-16] + s0 + w[t-7] + s1) >>> 0;\n    }\n    let [a,b,c,d,e,f,g,h] = H;\n    for (let t = 0; t < 64; t++) {\n      const S1 = rotr(e,6) ^ rotr(e,11) ^ rotr(e,25), ch = (e & f) ^ (~e & g);\n      const t1 = (h + S1 + ch + K[t] + w[t]) >>> 0;\n      const S0 = rotr(a,2) ^ rotr(a,13) ^ rotr(a,22), mj = (a & b) ^ (a & c) ^ (b & c);\n      const t2 = (S0 + mj) >>> 0;\n      h = g; g = f; f = e; e = (d + t1) >>> 0; d = c; c = b; b = a; a = (t1 + t2) >>> 0;\n    }\n    H = [H[0]+a,H[1]+b,H[2]+c,H[3]+d,H[4]+e,H[5]+f,H[6]+g,H[7]+h].map(x => x >>> 0);\n  }\n  const out = new Uint8Array(32); const odv = new DataView(out.buffer);\n  H.forEach((x, i) => odv.setUint32(i * 4, x)); return out;\n}\nfunction utf8(s) { return new TextEncoder().encode(s); }\nfunction hmacSha256Hex(key, msg) {\n  let k = utf8(key); if (k.length > 64) k = sha256Bytes(k);\n  const kp = new Uint8Array(64); kp.set(k);\n  const ip = kp.map(b => b ^ 0x36), op = kp.map(b => b ^ 0x5c), mb = utf8(msg);\n  const inner = new Uint8Array(64 + mb.length); inner.set(ip); inner.set(mb, 64);\n  const ih = sha256Bytes(inner);\n  const outer = new Uint8Array(96); outer.set(op); outer.set(ih, 64);\n  return Array.from(sha256Bytes(outer)).map(b => b.toString(16).padStart(2, '0')).join('');\n}\nfunction safeEqual(a, b) {\n  if (a.length !== b.length) return false;\n  let r = 0; for (let i = 0; i < a.length; i++) r |= a.charCodeAt(i) ^ b.charCodeAt(i); return r === 0;\n}\nfunction b64urlDecode(s) {\n  let t = String(s).replace(/-/g, '+').replace(/_/g, '/').replace(/\\s/g, '');\n  while (t.length % 4) t += '=';\n  const bin = atob(t); const bytes = new Uint8Array(bin.length);\n  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);\n  return new TextDecoder().decode(bytes);\n}\n\n// ---------- mock data for FUB's review previews ----------\nfunction mock(state) {\n  const now = Date.now(), m = (min) => new Date(now - min * 60000).toISOString();\n  if (state === 'working') return {\n    state: 'working', client_name: 'Demo Realty', lead_first_name: 'Melissa', status: 'meeting_booked', last_activity: m(4),\n    messages: [\n      { from: 'ai', text: 'Hi Melissa! This is Avery with Demo Realty. I saw you were looking at homes in Katy. Are you hoping to buy in the next few months?', at: m(42) },\n      { from: 'lead', text: 'Yes! Ideally by spring. 3 bedrooms, under 350k', at: m(31) },\n      { from: 'ai', text: 'Great timing. Have you had a chance to get pre-approved yet, or would it help to talk with a lender first?', at: m(30) },\n      { from: 'lead', text: 'Not yet. Can we talk tomorrow?', at: m(12) },\n      { from: 'ai', text: 'Absolutely. I have 10:00 AM or 2:30 PM tomorrow. Which works better?', at: m(11) },\n      { from: 'lead', text: '2:30 works', at: m(5) },\n      { from: 'meeting', text: 'Call booked for tomorrow at 2:30 PM', at: m(4) },\n    ],\n    usage: { used: 1284, limit: 3000 },\n  };\n  if (state === 'account_not_found') return { state: 'account_not_found', account_id: 123456789, prefill: { name: 'Louis Tully', email: '' },\n                                               preview: { lead_first_name: 'Melissa', agent_first_name: 'Louis' } };\n  if (state === 'user_not_found') return { state: 'user_not_found' };\n  if (state === 'person_not_found') return { state: 'person_not_found', usage: { used: 1284, limit: 3000 } };\n  if (state === 'unauthorized') return { state: 'unauthorized' };\n  return { state: 'working_unknown_debug', note: String(state) };\n}\n\n// ---------- main ----------\nconst body = ($input.first().json || {}).body || {};\nconst context = String(body.context || '');\nconst signature = String(body.signature || '').trim().toLowerCase();\nconst respond = (status, response) => [{ json: { route: 'respond', status, response } }];\n\nif (!context || !signature) return respond(401, { state: 'invalid' });\nif (!safeEqual(hmacSha256Hex(SECRET, context), signature)) return respond(401, { state: 'invalid' });\n\nlet ctx;\ntry { ctx = JSON.parse(b64urlDecode(context)); } catch (e) { return respond(400, { state: 'invalid' }); }\n\nif (ctx.example === true) return respond(200, mock(String(ctx.debugState || 'working')));\n\nconst domain = String((ctx.account && ctx.account.domain) || '').toLowerCase();\nconst client = CLIENTS[domain] || CLIENTS[String((ctx.account && ctx.account.id) || '')];\nif (!client) {\n  // Not a Starling client yet -> show the pitch, and remember this FUB account as a lead.\n  const acct = ctx.account || {}, owner = acct.owner || {}, user = ctx.user || {};\n  const key = String(acct.id || acct.domain || 'unknown');\n  const now = new Date().toISOString();\n  let isNew = false, rec = null;\n  try {\n    const store = $getWorkflowStaticData('global');\n    store.fub_installs = store.fub_installs || {};\n    if (!store.fub_installs[key]) {\n      isNew = true;\n      store.fub_installs[key] = { account_id: acct.id || null, domain: String(acct.domain || ''), owner_name: String(owner.name || ''),\n                                  owner_email: String(owner.email || ''), first_seen: now, users: {} };\n    }\n    rec = store.fub_installs[key];\n    rec.last_seen = now;\n    if (user.email && Object.keys(rec.users).length < 50) rec.users[String(user.email)] = String(user.name || '');\n  } catch (e) { rec = { account_id: acct.id || null, domain: String(acct.domain || ''), owner_name: String(owner.name || ''), owner_email: String(owner.email || ''), first_seen: now, users: {} }; }\n  return [{ json: {\n    route: isNew ? 'capture_new' : 'respond',\n    status: 200,\n    response: { state: 'account_not_found', account_id: acct.id || null,\n                prefill: { name: String(user.name || owner.name || ''), email: String(user.email || owner.email || '') },\n                preview: { lead_first_name: String((ctx.person && ctx.person.firstName) || '').slice(0, 40),\n                           agent_first_name: String(user.name || owner.name || '').split(' ')[0].slice(0, 40) } },\n    install: rec,\n    user: { name: String(user.name || ''), email: String(user.email || '') },\n  } }];\n}\n\nconst person = ctx.person || null;\nif (!person) return respond(200, { state: 'person_not_found' });\n\nconst phones = Array.isArray(person.phones) ? person.phones : [];\nconst pick = phones.find(p => Number(p.isPrimary) === 1) || phones[0];\nlet digits = String((pick && (pick.normalized || pick.value)) || '').replace(/\\D/g, '');\nif (digits.length === 11 && digits.startsWith('1')) digits = digits.slice(1);\nif (digits.length !== 10) return respond(200, { state: 'person_not_found', reason: 'no_phone' });\n\nreturn [{ json: {\n  route: 'lookup',\n  phone: '+1' + digits,\n  first_name: String(person.firstName || ''),\n  client,\n  month: new Date().toISOString().slice(0, 7),\n} }];\n"
+      },
+      "id": "3e44d423-1135-49ef-ad9b-767a22879c47",
+      "name": "Verify & Route",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.route }}",
+              "value2": "lookup"
+            }
+          ]
+        }
+      },
+      "id": "1d5f8747-b5ca-4db3-943d-fdc389e87ca8",
+      "name": "Needs Lead Data?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "={{ $('Verify & Route').first().json.client.chat_table }}",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "session_id",
+              "condition": "eq",
+              "keyValue": "={{ $('Verify & Route').first().json.phone }}"
+            }
+          ]
+        }
+      },
+      "id": "f73de96b-05f0-4fb2-8039-ed280c24898d",
+      "name": "Get Chat History",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "P1fvlAgdTVq7RErO",
+          "name": "Supabase API"
+        }
+      },
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "optout_blocks",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "chat_table",
+              "condition": "eq",
+              "keyValue": "={{ $('Verify & Route').first().json.client.chat_table }}"
+            },
+            {
+              "keyName": "session_id",
+              "condition": "eq",
+              "keyValue": "={{ $('Verify & Route').first().json.phone }}"
+            },
+            {
+              "keyName": "status",
+              "condition": "eq",
+              "keyValue": "blocked"
+            }
+          ]
+        }
+      },
+      "id": "0e14bda3-9988-42fd-a719-24dcaf779225",
+      "name": "Get Opt-Out",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "P1fvlAgdTVq7RErO",
+          "name": "Supabase API"
+        }
+      },
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "={{ $('Verify & Route').first().json.client.count_table }}",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "month",
+              "condition": "eq",
+              "keyValue": "={{ $('Verify & Route').first().json.month }}"
+            }
+          ]
+        }
+      },
+      "id": "a5795fe4-9f5e-4d6f-9951-09d62350a6fa",
+      "name": "Get Monthly Usage",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        200
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "P1fvlAgdTVq7RErO",
+          "name": "Supabase API"
+        }
+      },
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================\n// Starling AI — FUB Embedded App: build the panel response\n// ============================================================\nconst r = $('Verify & Route').first().json;\nconst client = r.client || {};\n\nconst rowsOf = (name) => { try { return $(name).all().map(i => i.json || {}); } catch (e) { return []; } };\nconst chatRows = rowsOf('Get Chat History').filter(j => j && j.session_id && j.error === undefined);\nconst optRows  = rowsOf('Get Opt-Out').filter(j => j && j.session_id && j.error === undefined);\nconst useRows  = rowsOf('Get Monthly Usage').filter(j => j && j.month !== undefined && j.error === undefined);\n\nfunction textOf(m) {\n  if (m == null) return { kind: '', text: '' };\n  if (typeof m === 'object') return { kind: String(m.type || ''), text: String(m.content || m.text || '') };\n  const s = String(m);\n  if (s.trim().startsWith('{')) { try { const o = JSON.parse(s); return { kind: String(o.type || ''), text: String(o.content || o.text || '') }; } catch (e) {} }\n  return { kind: '', text: s };\n}\n\nconst msgs = [];\nfor (const row of chatRows) {\n  const { kind, text } = textOf(row.message);\n  const t = text.trim(); if (!t) continue;\n  let from = null, clean = t;\n  if (/^starling ai \\/\\s*new lead:/i.test(t)) continue;            // internal lead-intake log (has contact details)\n  if (/^meeting created \\/\\s*/i.test(t)) { from = 'meeting'; clean = 'Meeting booked ' + t.replace(/^meeting created \\/\\s*/i, '').trim(); }\n  else if (/^starling ai\\s*\\/\\s*/i.test(t)) { from = 'ai'; clean = t.replace(/^starling ai\\s*\\/\\s*/i, ''); }\n  else if (/^client\\s*\\/\\s*/i.test(t)) { from = 'lead'; clean = t.replace(/^client\\s*\\/\\s*/i, ''); }\n  else if (kind === 'ai') from = 'ai';\n  else if (kind === 'human') from = 'lead';\n  else continue;\n  msgs.push({ from, text: clean.trim().slice(0, 500), at: row.created_at || null });\n}\nmsgs.sort((a, b) => String(a.at || '').localeCompare(String(b.at || '')));\n\nconst optedOut = optRows.length > 0;\nconst hasMeeting = msgs.some(m => m.from === 'meeting');\nconst hasAi = msgs.some(m => m.from === 'ai');\nconst status = optedOut ? 'opted_out' : hasMeeting ? 'meeting_booked' : hasAi ? 'active' : 'not_contacted';\n\nconst useRow = useRows.find(u => String(u.month) === r.month);\nconst used = useRow ? Number(useRow.total_billable_executions) : null;\nconst usage = Number.isFinite(used) ? { used, limit: Number(client.monthly_limit) || null } : null;\n\nreturn [{ json: { status: 200, response: {\n  state: 'working',\n  client_name: client.name || '',\n  lead_first_name: r.first_name || '',\n  status,\n  last_activity: msgs.length ? msgs[msgs.length - 1].at : null,\n  messages: msgs.slice(-8),\n  usage,\n} } }];\n"
+      },
+      "id": "5b24ec99-da4a-4186-9743-131ea9597938",
+      "name": "Build Panel",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json.response) }}",
+        "options": {
+          "responseCode": "={{ $json.status }}"
+        }
+      },
+      "id": "26ae9f8f-0e0d-43b2-b486-3cf33bc4920e",
+      "name": "Send to Panel",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Starling AI — FUB sidebar panel\nFUB loads starlingagent.com/fub-panel.html → it calls this workflow.\n\n**To add a client:** open **Verify & Route** and add a line to CLIENTS (their FUB subdomain, chat table, count table, monthly limit).\n\nRead-only: this workflow never writes to FUB, Supabase, or Twilio.\n\n**New installs:** when a non-client FUB account turns on the app, they see the pitch + Calendly button and you get ONE email at Admin@starlingagent.com per account.",
+        "height": 300,
+        "width": 420
+      },
+      "id": "0ac224be-2551-41d1-95c5-1c075e30db1d",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -20
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.route }}",
+              "value2": "capture_new"
+            }
+          ]
+        }
+      },
+      "id": "baba549c-1faa-4d3e-aac1-69d2255edd72",
+      "name": "New FUB Install?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        720,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json.response) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "a553a2ec-faa3-4e75-833f-069fec6a7dbd",
+      "name": "Send Pitch to Panel",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        960,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "Admin@starlingagent.com",
+        "subject": "=🐦 New FUB install: {{ $('Verify & Route').first().json.install.owner_name || 'Unknown owner' }} ({{ $('Verify & Route').first().json.install.domain }})",
+        "emailType": "text",
+        "message": "=A Follow Up Boss account just turned on the Starling AI app. They are NOT a Starling client yet.\n\nAccount: {{ $('Verify & Route').first().json.install.domain }}.followupboss.com\nFUB account ID: {{ $('Verify & Route').first().json.install.account_id }}\nOwner: {{ $('Verify & Route').first().json.install.owner_name }} <{{ $('Verify & Route').first().json.install.owner_email }}>\nAgent who opened it: {{ $('Verify & Route').first().json.user.name }} <{{ $('Verify & Route').first().json.user.email }}>\nFirst seen: {{ $('Verify & Route').first().json.install.first_seen }}\n\nThey saw the pitch screen with a 'Book a free demo' button (your Calendly, pre-filled with their name/email).\n\nNext step: reach out by email. To turn on their panel after they sign up, add their account to CLIENTS in the 'Verify & Route' node of the 'Starling AI — FUB Panel API' workflow.",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "b8b70981-5d16-4504-a3e8-87a53404594a",
+      "name": "Email Jason New Install",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1200,
+        420
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "pLMSxg6YRYKlBHDN",
+          "name": "Admin@Starling Gmail account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "FUB Panel Request": {
+      "main": [
+        [
+          {
+            "node": "Verify & Route",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify & Route": {
+      "main": [
+        [
+          {
+            "node": "Needs Lead Data?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Needs Lead Data?": {
+      "main": [
+        [
+          {
+            "node": "Get Chat History",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "New FUB Install?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Chat History": {
+      "main": [
+        [
+          {
+            "node": "Get Opt-Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Opt-Out": {
+      "main": [
+        [
+          {
+            "node": "Get Monthly Usage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Monthly Usage": {
+      "main": [
+        [
+          {
+            "node": "Build Panel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Panel": {
+      "main": [
+        [
+          {
+            "node": "Send to Panel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "New FUB Install?": {
+      "main": [
+        [
+          {
+            "node": "Send Pitch to Panel",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send to Panel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Pitch to Panel": {
+      "main": [
+        [
+          {
+            "node": "Email Jason New Install",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "all",
+    "saveManualExecutions": true
+  },
+  "pinData": {},
+  "tags": []
+}
