@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Starling">
 <title>Starling Portal</title>
-<!-- Starling Portal v1.0.0 -->
+<!-- Starling Portal v1.1.0 -->
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
@@ -293,6 +293,16 @@ tbody tr:hover td{background:var(--surface-2)}
 .mrow small{display:block;color:var(--muted)}
 .form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:8px;align-items:end}
 
+.sw{position:relative;width:46px;height:28px;flex:none}
+.sw input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;z-index:1}
+.sw span{position:absolute;inset:0;border-radius:999px;background:var(--line);transition:.2s}
+.sw span::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:.2s}
+.sw input:checked+span{background:var(--good)}
+.sw input:checked+span::after{transform:translateX(18px)}
+.sw input:focus-visible+span{outline:2px solid var(--peri);outline-offset:2px}
+.push-card{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:var(--navy);color:#fff;border-radius:14px;padding:14px 16px}
+.push-card p{margin:2px 0 0;color:#B9BEDA;font-size:13px}
+.push-card .btn.ghost{color:#B9BEDA}
 /* Toasts */
 .toasts{position:fixed;right:16px;bottom:calc(16px + var(--safe-b));display:grid;gap:8px;z-index:50;max-width:min(380px,calc(100vw - 32px))}
 .toast{background:var(--ink);color:var(--bg);padding:11px 14px;border-radius:12px;font-size:13px;box-shadow:var(--shadow);animation:pop .25s ease-out}
@@ -372,7 +382,9 @@ tbody tr:hover td{background:var(--surface-2)}
       <div><div class="eyebrow" data-i18n="portal"></div><h2 data-i18n="signIn"></h2></div>
       <div class="field"><label for="email" data-i18n="email"></label><input class="input" id="email" type="email" inputmode="email" autocomplete="email" placeholder="you@yourteam.com" required></div>
       <div class="msg err" id="emailErr" role="alert" hidden></div>
+      <div class="field" id="pwWrap" hidden><label for="pw" data-i18n="password"></label><input class="input" id="pw" type="password" autocomplete="current-password"></div>
       <button class="btn primary block" type="submit" id="sendBtn"><span data-i18n="sendCode"></span></button>
+      <button type="button" class="linkbtn" id="pwToggle" style="justify-self:center" data-i18n="usePassword"></button>
       <div class="msg info" data-i18n="howItWorks"></div>
       <div style="display:flex;justify-content:center"><div class="seg" role="group" aria-label="Language"><button type="button" data-lang="en">English</button><button type="button" data-lang="es">Español</button></div></div>
     </form>
@@ -434,7 +446,11 @@ tbody tr:hover td{background:var(--surface-2)}
 
 <script>
 /* ============ Config ============ */
-const VERSION='1.0.0';
+const VERSION='1.1.0';
+const ONESIGNAL_APP_ID='';   // set once the OneSignal app exists; empty = push alerts stay hidden
+const IS_NATIVE=!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
+const PLATFORM=IS_NATIVE?window.Capacitor.getPlatform():'web';
+const NP=(IS_NATIVE&&window.Capacitor.Plugins)||{};
 const SUPABASE_URL='https://ggdlbffzyontccrheyro.supabase.co';           // "Starling Ai messages" project
 const SUPABASE_KEY='sb_publishable_DDfBCzE1feqpV9uhQ-YCEw_uIWvfLbX';     // publishable key (safe in the browser; data is gated by sign-in)
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:'starling-portal-auth'}});
@@ -474,6 +490,12 @@ en:{loginHead:'See every lead your AI is working. <em>Act on the hot ones first.
  admin:'Starling admin',adminHint:'Only Starling admins see this section.',members:'Who can sign in',addMember:'Add someone',role:'Role',roleOwner:'Owner',roleAgent:'Agent',roleAdmin:'Admin (all accounts)',allAccounts:'All accounts',add:'Add',remove:'Remove',
  removeQ:'Remove {e} from {a}?',memberAdded:'Added. They can sign in with that email now.',memberRemoved:'Removed',planCap:'Monthly AI message limit for {a}',planCapHint:'Leave blank for no limit.',
  texting:'Texting from the portal for {a}',textingHint:'The n8n webhook that sends a portal text from this client’s AI number, plus its secret.',webhookUrl:'Webhook URL',webhookSecret:'Secret',textingSaved:'Texting connection saved',
+ password:'Password',usePassword:'Sign in with a password instead',useCode:'Email me a code instead',signInPw:'Sign in',ePw:'Wrong email or password.',
+ pushCardTitle:'Get a ping when a lead is ready to talk',pushCardText:'We only alert you about hot leads, never every text.',pushTurnOn:'Turn on alerts',pushLater:'Not now',
+ pushTitle:'Hot-lead alerts on this phone',pushHint:'A notification when a lead is ready to talk and nobody has booked them yet.',pushOn:'Alerts are on for this phone.',pushOff:'Alerts are off for this phone.',
+ pushDenied:'Notifications are blocked for Starling. Turn them on in your phone Settings → Notifications → Starling.',
+ delTitle:'Delete my account',delHint:'Deletes your sign-in for this portal on every device. It does not cancel your Starling AI service; to cancel, email Admin@starlingagent.com.',delBtn:'Delete my account',
+ delConfirm:'Delete your Starling portal sign-in? You will be signed out everywhere. This cannot be undone.',delDone:'Your sign-in was deleted.',
  badEmailAdmin:'Enter a valid email.'},
 es:{loginHead:'Mira cada prospecto que trabaja tu IA. <em>Atiende primero a los más calientes.</em>',loginSub:'Tu agente de IA de Starling escribe y da seguimiento 24/7. Aquí lees cada conversación, entras cuando un prospecto está listo y ves lo que te está agendando.',
  pt1:'Prospectos calientes ordenados por quién está listo para hablar',pt2:'Cada texto y mensaje de la IA en una sola bandeja',pt3:'Pausa la IA y escríbele tú al prospecto',
@@ -508,6 +530,12 @@ es:{loginHead:'Mira cada prospecto que trabaja tu IA. <em>Atiende primero a los 
  admin:'Administración de Starling',adminHint:'Solo los administradores de Starling ven esta sección.',members:'Quién puede entrar',addMember:'Agregar a alguien',role:'Rol',roleOwner:'Dueño',roleAgent:'Agente',roleAdmin:'Admin (todas las cuentas)',allAccounts:'Todas las cuentas',add:'Agregar',remove:'Quitar',
  removeQ:'¿Quitar a {e} de {a}?',memberAdded:'Agregado. Ya puede entrar con ese correo.',memberRemoved:'Quitado',planCap:'Límite mensual de mensajes de la IA para {a}',planCapHint:'Déjalo vacío para no tener límite.',
  texting:'Envío de textos desde el portal para {a}',textingHint:'El webhook de n8n que envía un texto del portal desde el número de IA de este cliente, y su clave.',webhookUrl:'URL del webhook',webhookSecret:'Clave',textingSaved:'Conexión de textos guardada',
+ password:'Contraseña',usePassword:'Entrar con contraseña',useCode:'Mejor envíame un código',signInPw:'Entrar',ePw:'Correo o contraseña incorrectos.',
+ pushCardTitle:'Recibe un aviso cuando un prospecto quiera hablar',pushCardText:'Solo te avisamos de prospectos calientes, no de cada mensaje.',pushTurnOn:'Activar avisos',pushLater:'Ahora no',
+ pushTitle:'Avisos de prospectos calientes en este teléfono',pushHint:'Una notificación cuando un prospecto quiere hablar y nadie le ha agendado cita.',pushOn:'Los avisos están activados en este teléfono.',pushOff:'Los avisos están apagados en este teléfono.',
+ pushDenied:'Las notificaciones de Starling están bloqueadas. Actívalas en Ajustes del teléfono → Notificaciones → Starling.',
+ delTitle:'Eliminar mi cuenta',delHint:'Elimina tu acceso a este portal en todos tus dispositivos. No cancela tu servicio de Starling AI; para cancelar escribe a Admin@starlingagent.com.',delBtn:'Eliminar mi cuenta',
+ delConfirm:'¿Eliminar tu acceso al portal de Starling? Se cerrará tu sesión en todos lados. No se puede deshacer.',delDone:'Tu acceso fue eliminado.',
  badEmailAdmin:'Escribe un correo válido.'}};
 let lang=(()=>{try{const s=localStorage.getItem('sp-lang');if(s)return s}catch(e){}return (navigator.language||'en').toLowerCase().startsWith('es')?'es':'en'})();
 const t=(k,v)=>{let s=(I18N[lang]&&I18N[lang][k])??I18N.en[k]??k;if(v)for(const x in v)s=s.split('{'+x+'}').join(v[x]);return s};
@@ -551,13 +579,18 @@ function showOnly(id){['login','noaccess','app'].forEach(x=>{$('#'+x).hidden=x!=
 function fieldMsg(id,text){const el=$(id);el.hidden=!text;el.textContent=text||''}
 function btnBusy(btn,on,key){btn.disabled=on;btn.innerHTML=on?'<span class="spinner"></span>':`<span>${esc(t(key))}</span>`}
 async function sendCode(email,again){
-  const {error}=await sb.auth.signInWithOtp({email,options:{shouldCreateUser:true,emailRedirectTo:location.origin+location.pathname}});
+  const {error}=await sb.auth.signInWithOtp({email,options:{shouldCreateUser:true,emailRedirectTo:IS_NATIVE?'https://starlingagent.com/portal/':location.origin+location.pathname}});
   if(error){throw new AppError(/rate|seconds/i.test(error.message)?'eRate':'eSend')}
   if(again)toast(t('codeAgain'));
 }
+let pwMode=false;
+function setPwMode(on){pwMode=on;$('#pwWrap').hidden=!on;$('#pwToggle').dataset.i18n=on?'useCode':'usePassword';$('#sendBtn').innerHTML=`<span>${esc(t(on?'signInPw':'sendCode'))}</span>`;applyI18n();if(on)$('#pw').focus()}
+$('#pwToggle').onclick=()=>setPwMode(!pwMode);
 $('#emailForm').addEventListener('submit',async e=>{e.preventDefault();const email=$('#email').value.trim().toLowerCase();fieldMsg('#emailErr');
   if(!EMAIL_RE.test(email)){fieldMsg('#emailErr',t('eBadEmail'));return}
   const b=$('#sendBtn');btnBusy(b,true);
+  if(pwMode){try{const {error}=await sb.auth.signInWithPassword({email,password:$('#pw').value});if(error)throw new AppError(/rate/i.test(error.message)?'eRate':'ePw');try{localStorage.setItem('sp-email',email)}catch(_){}}
+    catch(err){fieldMsg('#emailErr',errText(err))}finally{btnBusy(b,false,'signInPw')}return}
   try{await sendCode(email);pendingEmail=email;try{localStorage.setItem('sp-email',email)}catch(_){}
     $('#emailForm').hidden=true;$('#codeForm').hidden=false;$('#codeSentTo').textContent=t('codeSent',{e:email});$('#code').value='';$('#code').focus()}
   catch(err){fieldMsg('#emailErr',errText(err))}finally{btnBusy(b,false,'sendCode')}});
@@ -570,7 +603,7 @@ $('#code').addEventListener('input',e=>{const v=e.target.value.replace(/\D/g,'')
 $('#resendBtn').onclick=async()=>{fieldMsg('#codeErr');try{await sendCode(pendingEmail,true)}catch(err){fieldMsg('#codeErr',errText(err))}};
 $('#changeEmail').onclick=()=>{$('#codeForm').hidden=true;$('#emailForm').hidden=false;$('#email').focus()};
 try{const em=localStorage.getItem('sp-email');if(em)$('#email').value=em}catch(e){}
-async function signOut(){clearInterval(state.timer);await sb.auth.signOut().catch(()=>{});Object.assign(state,{user:null,accounts:[],account:null,data:null,threads:{},selected:null});$('#codeForm').hidden=true;$('#emailForm').hidden=false;showOnly('login')}
+async function signOut(){clearInterval(state.timer);try{pushLogout()}catch(_){}await sb.auth.signOut().catch(()=>{});Object.assign(state,{user:null,accounts:[],account:null,data:null,threads:{},selected:null});$('#codeForm').hidden=true;$('#emailForm').hidden=false;showOnly('login')}
 $('#noAccessOut').onclick=signOut;
 
 /* ============ Boot ============ */
@@ -592,6 +625,7 @@ async function boot(session){
     $('#view').innerHTML=`<div class="loading">${t('loading')}</div>`;applyI18n();
     await load();render();
     clearInterval(state.timer);state.timer=setInterval(()=>{if(!document.hidden)refresh(true)},60000);
+    pushLogin(session.user.email);
   }catch(err){toast(errText(err));if(err instanceof AppError&&err.key==='eSession')signOut()}
   finally{booting=false}
 }
@@ -653,6 +687,7 @@ function viewToday(v){
      <div class="kpi kpi-hot"><span class="l">${t('kHot')}</span><span class="v">${h.length}</span></div>
      <div class="kpi"><span class="l">${t('kAi')}</span><span class="v">${nf(ov.ai_texts_30)}</span></div>
    </div>
+   ${pushCardHTML()}
    <div class="section-head"><h2>${t('needsYou')}</h2></div>
    <div class="hot-list">${h.length?h.map(hotCard).join(''):`<div class="empty">${t('allClear')}</div>`}</div>
    <div class="two-col">
@@ -661,6 +696,7 @@ function viewToday(v){
    </div></div>`;
   v.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>openConvo(b.dataset.open));
   v.querySelectorAll('[data-handled]').forEach(b=>b.onclick=()=>markHandled(b.dataset.handled,b));
+  const pc=$('#pushYes');if(pc)pc.onclick=()=>pushEnable(true);const pl=$('#pushLater');if(pl)pl.onclick=()=>{try{localStorage.setItem('sp-push-ask','later')}catch(_){}render()};
 }
 function hotCard(c){const hrs=(Date.now()-new Date(c.last_lead_at))/3600000;
   const keys=(c.reasons||[]).filter(r=>KEY_REASONS.includes(r)),rest=(c.reasons||[]).filter(r=>!KEY_REASONS.includes(r));const link=fubLink(c);
@@ -748,14 +784,14 @@ function detailsHTML(c){const link=fubLink(c);return `<div class="eyebrow">${t('
 
 /* ---------- Actions ---------- */
 async function setAi(c,paused,btn){btn.disabled=true;
-  try{await rpc('portal_set_ai',{p_client:ck(),p_session:c.session_id,p_paused:paused});c.ai_paused=paused;toast(paused?t('pausedNote'):t('resumedNote'));render()}
+  try{await rpc('portal_set_ai',{p_client:ck(),p_session:c.session_id,p_paused:paused});c.ai_paused=paused;tap();toast(paused?t('pausedNote'):t('resumedNote'));render()}
   catch(err){toast(errText(err));btn.disabled=false}}
 async function markHandled(sid,btn){btn.disabled=true;
   try{await rpc('portal_mark_handled',{p_client:ck(),p_session:sid});const c=byId(sid);if(c){c.handled_at=new Date().toISOString();if(c.status==='hot')c.status='warm'}toast(t('handledNote'));render()}
   catch(err){toast(errText(err));btn.disabled=false}}
 async function sendText(c,ta){const body=ta.value.trim();if(!body||state.sending)return;const b=$('#sendMsg');state.sending=true;b.disabled=true;b.innerHTML='<span class="spinner"></span>';
   try{const r=await rpc('portal_send',{p_client:ck(),p_session:c.session_id,p_body:body});const s=r&&r.status;
-    if(s==='queued'){ta.value='';try{sessionStorage.removeItem('sp-draft-'+ck()+'-'+c.session_id)}catch(_){}c.ai_paused=true;toast(t('queuedToast'))}
+    if(s==='queued'){ta.value='';try{sessionStorage.removeItem('sp-draft-'+ck()+'-'+c.session_id)}catch(_){}c.ai_paused=true;tap();toast(t('queuedToast'))}
     else if(s==='not_connected')toast(t('notConnected'));
     else if(s==='not_sms')toast(t('notSms'));
     else if(s==='blocked'){toast(t('optedOut'));ta.value=''}
@@ -803,11 +839,15 @@ async function viewSettings(v){const key=ck();
      <div class="set"><div><b>${t('setLang')}</b><p>${t('setLangHint')}</p></div><div class="seg" role="group" aria-label="${t('setLang')}"><button type="button" data-l="en" aria-pressed="${lang==='en'}">English</button><button type="button" data-l="es" aria-pressed="${lang==='es'}">Español</button></div></div>
    </div></div>
    <div class="panel" id="hotPanel"><h3>${t('setHot')}</h3><p class="muted" style="margin:0">${t('setHotHint')}</p><div class="loading">${t('loading')}</div></div>
-   <div class="panel"><h3>${t('setHome')}</h3><p class="muted" style="margin:0">${t('setHomeIos')}</p><p class="muted" style="margin:0">${t('setHomeAnd')}</p></div>
-   <div class="panel"><h3>${t('setHelp')}</h3><p class="muted" style="margin:0">${t('setHelpHint')} <a href="https://calendly.com/starlingagent/30min" target="_blank" rel="noopener">calendly.com/starlingagent/30min</a></p><p class="mono" style="margin:0;color:var(--faint)">${t('version')} ${VERSION}</p></div>
+   ${pushReady()?`<div class="panel"><div class="set"><div><b>${t('pushTitle')}</b><p>${t('pushHint')}</p></div><label class="sw"><input type="checkbox" id="pushSw" ${pushState()==='on'?'checked':''}><span></span></label></div></div>`:''}
+   ${IS_NATIVE?'':`<div class="panel"><h3>${t('setHome')}</h3><p class="muted" style="margin:0">${t('setHomeIos')}</p><p class="muted" style="margin:0">${t('setHomeAnd')}</p></div>`}
+   <div class="panel"><h3>${t('setHelp')}</h3><p class="muted" style="margin:0">${t('setHelpHint')} <a href="https://calendly.com/starlingagent/30min" target="_blank" rel="noopener">calendly.com/starlingagent/30min</a></p><p class="mono" style="margin:0;color:var(--faint)">${t('version')} ${VERSION} · ${IS_NATIVE?PLATFORM:'web'}</p></div>
+   <div class="panel"><h3>${t('delTitle')}</h3><p class="muted" style="margin:0">${t('delHint')}</p><div><button class="btn sm" id="delBtn" style="color:var(--hot-ink)">${t('delBtn')}</button></div></div>
    ${state.isAdmin?`<div class="panel" id="adminPanel"><h3>${t('admin')}</h3><p class="muted" style="margin:0">${t('adminHint')}</p><div class="loading">${t('loading')}</div></div>`:''}
   </div>`;
   $('#soBtn').onclick=signOut;
+  $('#delBtn').onclick=deleteMe;
+  const ps=$('#pushSw');if(ps)ps.onchange=()=>pushEnable(ps.checked);
   v.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>setLang(b.dataset.l));
   try{const s=await rpc('portal_get_settings',{p_client:key});if(key!==ck()||state.view!=='settings')return;setCache=s||{};hotPanel()}catch(err){const p=$('#hotPanel');if(p)p.innerHTML=`<div class="banner err">${esc(errText(err))}</div>`}
   if(state.isAdmin)adminPanel();
@@ -845,6 +885,51 @@ async function adminPanel(){const p=$('#adminPanel');if(!p)return;let members=[]
   $('#sendForm').onsubmit=async e=>{e.preventDefault();const url=$('#whUrl').value.trim(),sec=$('#whSec').value.trim();
     if(!/^https:\/\/\S+$/.test(url)||!sec){toast(t('eGeneric',{c:'url + secret'}));return}
     try{await rpc('portal_admin_set_sending',{p_client:ck(),p_url:url,p_secret:sec});$('#whSec').value='';toast(t('textingSaved'))}catch(err){toast(errText(err))}};
+}
+
+/* ============ Phone app (Capacitor) ============ */
+const OS=()=>window.plugins&&window.plugins.OneSignal;
+const pushReady=()=>IS_NATIVE&&!!ONESIGNAL_APP_ID&&!!OS();
+const pushState=()=>{try{return localStorage.getItem('sp-push')||''}catch(_){return ''}};
+const tap=()=>{try{NP.Haptics&&NP.Haptics.impact({style:'LIGHT'})}catch(_){}};
+function pushCardHTML(){if(!pushReady()||pushState())return '';let later='';try{later=localStorage.getItem('sp-push-ask')}catch(_){}if(later)return '';
+  return `<div class="push-card"><div style="flex:1;min-width:200px"><b>${t('pushCardTitle')}</b><p>${t('pushCardText')}</p></div><button class="btn primary sm" id="pushYes">${t('pushTurnOn')}</button><button class="btn ghost sm" id="pushLater">${t('pushLater')}</button></div>`}
+let pushInited=false;
+function pushInit(){if(pushInited||!pushReady())return;pushInited=true;const os=OS();
+  try{os.initialize(ONESIGNAL_APP_ID);
+    os.Notifications.addEventListener('click',ev=>{const d=(ev&&ev.notification&&ev.notification.additionalData)||{};if(d.sid)openFromPush(d.ck,d.sid)});
+  }catch(_){}}
+async function openFromPush(ckey,sid){
+  if(!state.account){setTimeout(()=>openFromPush(ckey,sid),800);return}
+  if(ckey&&ckey!==ck()){const a=state.accounts.find(x=>x.client_key===ckey);if(a){state.account=a;try{localStorage.setItem('sp-acct',ckey)}catch(_){}buildAcctPick();state.threads={};await load().catch(()=>{})}}
+  await refresh(true);openConvo(sid)}
+function pushLogin(email){if(!pushReady())return;pushInit();try{OS().login(String(email).toLowerCase())}catch(_){}if(pushState()==='on')rpc('portal_push_register',{p_platform:PLATFORM,p_enabled:true,p_lang:lang}).catch(()=>{})}
+function pushLogout(){if(!pushReady())return;try{OS().logout()}catch(_){}}
+async function pushEnable(on){if(!pushReady())return;const os=OS();
+  try{
+    if(on){const ok=await os.Notifications.requestPermission(true);if(!ok){toast(t('pushDenied'));try{localStorage.setItem('sp-push','off')}catch(_){}render();return}os.User.pushSubscription.optIn()}
+    else os.User.pushSubscription.optOut();
+    await rpc('portal_push_register',{p_platform:PLATFORM,p_enabled:on,p_lang:lang});
+    try{localStorage.setItem('sp-push',on?'on':'off')}catch(_){}tap();toast(t(on?'pushOn':'pushOff'))}
+  catch(err){toast(errText(err))}
+  render()}
+async function deleteMe(){if(!confirm(t('delConfirm')))return;
+  try{await rpc('portal_delete_me');toast(t('delDone'));try{localStorage.removeItem('sp-push');localStorage.removeItem('sp-acct')}catch(_){}await signOut()}
+  catch(err){toast(errText(err))}}
+if(IS_NATIVE){
+  document.documentElement.classList.add('native');
+  document.addEventListener('deviceready',pushInit,false);
+  try{NP.StatusBar&&NP.StatusBar.setStyle({style:'DARK'})}catch(_){}
+  try{NP.SplashScreen&&setTimeout(()=>NP.SplashScreen.hide(),300)}catch(_){}
+  // Web links open in the in-app browser; tel:, sms: and mailto: go to the phone's own apps.
+  document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('a[href]');if(!a)return;const h=a.getAttribute('href');
+    if(/^https?:/i.test(h)&&(a.target==='_blank'||!h.startsWith(location.origin))){e.preventDefault();NP.Browser?NP.Browser.open({url:h}):window.open(h,'_system')}},true);
+  // Android back button: close the open conversation, then go to Hot leads, then leave the app.
+  try{NP.App&&NP.App.addListener('backButton',()=>{const cv=document.querySelector('.convo.open');
+    if(cv&&!matchMedia('(min-width:861px)').matches){cv.classList.remove('open');state.selected=null;return}
+    if(state.account&&state.view!=='today'){state.view='today';render();return}
+    NP.App.exitApp()})}catch(_){}
+  try{NP.App&&NP.App.addListener('appStateChange',s=>{if(s.isActive&&state.account&&state.loadedAt&&Date.now()-state.loadedAt>30000)refresh(true)})}catch(_){}
 }
 
 applyI18n();
