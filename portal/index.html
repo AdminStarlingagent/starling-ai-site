@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Starling">
 <title>Starling Portal</title>
-<!-- Starling Portal v1.1.0 -->
+<!-- Starling Portal v1.1.1 -->
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
@@ -391,7 +391,7 @@ tbody tr:hover td{background:var(--surface-2)}
     <form class="login-card" id="codeForm" novalidate hidden>
       <div><div class="eyebrow" data-i18n="portal"></div><h2 data-i18n="checkEmail"></h2></div>
       <p class="muted" style="margin:0" id="codeSentTo"></p>
-      <div class="field"><label for="code" data-i18n="codeLabel"></label><input class="input code" id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="••••••" required></div>
+      <div class="field"><label for="code" data-i18n="codeLabel"></label><input class="input code" id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="••••••••" required></div>
       <div class="msg err" id="codeErr" role="alert" hidden></div>
       <button class="btn primary block" type="submit" id="verifyBtn"><span data-i18n="verify"></span></button>
       <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
@@ -446,7 +446,7 @@ tbody tr:hover td{background:var(--surface-2)}
 
 <script>
 /* ============ Config ============ */
-const VERSION='1.1.0';
+const VERSION='1.1.1';
 const ONESIGNAL_APP_ID='';   // set once the OneSignal app exists; empty = push alerts stay hidden
 const IS_NATIVE=!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
 const PLATFORM=IS_NATIVE?window.Capacitor.getPlatform():'web';
@@ -599,7 +599,7 @@ $('#codeForm').addEventListener('submit',async e=>{e.preventDefault();fieldMsg('
   const b=$('#verifyBtn');btnBusy(b,true);
   try{const {error}=await sb.auth.verifyOtp({email:pendingEmail,token:code,type:'email'});if(error)throw new AppError(/rate/i.test(error.message)?'eRate':'eBadCode')}
   catch(err){fieldMsg('#codeErr',errText(err))}finally{btnBusy(b,false,'verify')}});
-$('#code').addEventListener('input',e=>{const v=e.target.value.replace(/\D/g,'');e.target.value=v;if(v.length===6||v.length===8)$('#codeForm').requestSubmit()});
+let codeTimer;$('#code').addEventListener('input',e=>{const v=e.target.value.replace(/\D/g,'');e.target.value=v;clearTimeout(codeTimer);if(v.length===8)$('#codeForm').requestSubmit();else if(v.length===6)codeTimer=setTimeout(()=>{if($('#code').value.length===6)$('#codeForm').requestSubmit()},1800)});
 $('#resendBtn').onclick=async()=>{fieldMsg('#codeErr');try{await sendCode(pendingEmail,true)}catch(err){fieldMsg('#codeErr',errText(err))}};
 $('#changeEmail').onclick=()=>{$('#codeForm').hidden=true;$('#emailForm').hidden=false;$('#email').focus()};
 try{const em=localStorage.getItem('sp-email');if(em)$('#email').value=em}catch(e){}
