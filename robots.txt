@@ -1,3 +1,4 @@
 User-agent: *
 Disallow: /live/
 Disallow: /admin/
+Disallow: /portal/

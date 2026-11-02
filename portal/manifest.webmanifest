@@ -1,0 +1,14 @@
+{
+  "name": "Starling Portal",
+  "short_name": "Starling",
+  "description": "Every lead your Starling AI agent is working, with hot leads first.",
+  "start_url": "/portal/",
+  "scope": "/portal/",
+  "display": "standalone",
+  "background_color": "#080C17",
+  "theme_color": "#080C17",
+  "icons": [
+    { "src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

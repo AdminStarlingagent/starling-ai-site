@@ -1,0 +1,853 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#080C17">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Starling">
+<title>Starling Portal</title>
+<!-- Starling Portal v1.0.0 -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=Poppins:wght@700&family=JetBrains+Mono:wght@500&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<style>
+/* Starling brand: navy rail, coral = hot / primary action, periwinkle = the AI, ink = the agent. */
+:root{
+  --navy:#080C17;--navy-2:#111829;--navy-3:#1B2338;
+  --coral:#F15368;--coral-ink:#D8324B;--peri:#868BDF;--blush:#FFA0A8;
+  --bg:#F5F6FB;--surface:#FFFFFF;--surface-2:#EEF0F8;--line:#E2E5EF;
+  --ink:#151B2B;--muted:#5F6780;--faint:#8B92A8;
+  --ai-bubble:#E9EAFB;--ai-ink:#272C63;--lead-bubble:#FFFFFF;--me-bubble:#151B2B;--me-ink:#FFFFFF;
+  --hot-soft:#FDE7EA;--hot-ink:#B8233A;
+  --good:#12935F;--good-soft:#E1F4EB;--warn:#B57A06;--warn-soft:#FBF0D9;--off:#7C8396;--off-soft:#ECEEF3;
+  --shadow:0 1px 2px rgba(17,24,41,.06),0 6px 20px rgba(17,24,41,.06);
+  --f-display:"Plus Jakarta Sans",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --f-word:"Poppins","Plus Jakarta Sans",sans-serif;
+  --safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0A0F1C;--surface:#111829;--surface-2:#18203A;--line:#232C47;
+  --ink:#E8EAF4;--muted:#A3A9C2;--faint:#7A81A0;
+  --ai-bubble:#262C57;--ai-ink:#E4E5FF;--lead-bubble:#1B2338;--me-bubble:#E8EAF4;--me-ink:#0A0F1C;
+  --hot-soft:#3A1622;--hot-ink:#FF9AA8;--good:#3CC98E;--good-soft:#12302A;--warn:#E5B04A;--warn-soft:#33280F;--off:#9097AD;--off-soft:#1E2538;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.25);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0A0F1C;--surface:#111829;--surface-2:#18203A;--line:#232C47;
+  --ink:#E8EAF4;--muted:#A3A9C2;--faint:#7A81A0;
+  --ai-bubble:#262C57;--ai-ink:#E4E5FF;--lead-bubble:#1B2338;--me-bubble:#E8EAF4;--me-ink:#0A0F1C;
+  --hot-soft:#3A1622;--hot-ink:#FF9AA8;--good:#3CC98E;--good-soft:#12302A;--warn:#E5B04A;--warn-soft:#33280F;--off:#9097AD;--off-soft:#1E2538;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.25);color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 var(--f-body);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+button:disabled{cursor:default;opacity:.55}
+:focus-visible{outline:2px solid var(--peri);outline-offset:2px;border-radius:6px}
+h1,h2,h3{font-family:var(--f-display);margin:0;letter-spacing:-.01em;text-wrap:balance}
+a{color:inherit}
+.num{font-variant-numeric:tabular-nums}
+.mono{font-family:var(--f-mono);font-size:12px}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.spacer{flex:1}
+.muted{color:var(--muted)}
+
+/* Buttons & inputs */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:13px;white-space:nowrap;text-decoration:none;color:var(--ink);min-height:38px}
+.btn:hover:not(:disabled){background:var(--surface-2)}
+.btn.primary{background:var(--coral);border-color:var(--coral);color:#fff}
+.btn.primary:hover:not(:disabled){background:var(--coral);filter:brightness(.95)}
+.btn.dark{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.btn.dark:hover:not(:disabled){background:var(--ink);filter:brightness(1.1)}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--muted)}
+.btn.warn{border-color:color-mix(in srgb,var(--warn) 45%,var(--line));color:var(--warn)}
+.btn.sm{padding:6px 10px;font-size:12px;border-radius:8px;min-height:32px}
+.btn.block{width:100%;padding:12px;min-height:46px}
+.btn svg{width:15px;height:15px;flex:none}
+.input,.select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);min-height:44px}
+.input:focus,.select:focus,textarea:focus{border-color:var(--peri);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--peri) 25%,transparent)}
+.field{display:grid;gap:6px}
+.field label{font-size:12px;font-weight:600;color:var(--muted)}
+.msg{font-size:13px;border-radius:10px;padding:10px 12px}
+.msg.err{background:var(--hot-soft);color:var(--hot-ink)}
+.msg.info{background:var(--surface-2);color:var(--muted)}
+.msg.ok{background:var(--good-soft);color:var(--good)}
+.spinner{width:14px;height:14px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .8s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- Sign-in ---------- */
+#login{min-height:100%;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.login-brand{background:var(--navy);color:#fff;padding:48px 40px;padding-top:calc(48px + var(--safe-t));display:flex;flex-direction:column;justify-content:space-between;gap:32px;position:relative;overflow:hidden}
+.login-brand::after{content:"";position:absolute;right:-120px;bottom:-120px;width:420px;height:420px;background:conic-gradient(from 210deg,rgba(241,83,104,.22),rgba(134,139,223,.22),rgba(241,83,104,0) 60%);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+.wordmark{display:flex;align-items:center;gap:12px;font-family:var(--f-word);font-weight:700;font-size:20px}
+.wordmark img{width:40px;height:40px;border-radius:10px}
+.login-brand h1{font-size:clamp(28px,3.4vw,42px);line-height:1.1;max-width:15ch;position:relative;z-index:1}
+.login-brand h1 em{font-style:normal;color:var(--blush)}
+.login-brand p{color:#B9BEDA;max-width:42ch;margin:14px 0 0;position:relative;z-index:1}
+.points{display:grid;gap:10px;position:relative;z-index:1;color:#D3D6EC;font-size:13px}
+.points div{display:flex;gap:10px;align-items:center}
+.dot{width:8px;height:8px;border-radius:50%;flex:none}
+.login-wrap{display:flex;align-items:center;justify-content:center;padding:40px 16px calc(40px + var(--safe-b))}
+.login-card{width:100%;max-width:400px;display:grid;gap:16px}
+.login-card h2{font-size:24px}
+.code{letter-spacing:.4em;font-family:var(--f-mono);font-size:22px;text-align:center}
+.linkbtn{background:none;border:0;padding:0;color:var(--coral-ink);font-weight:600;font-size:13px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.seg button{border:0;background:transparent;padding:6px 12px;font-size:12px;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+
+/* ---------- Shell ---------- */
+#app{height:100%;display:grid;grid-template-columns:232px minmax(0,1fr)}
+.rail{background:var(--navy);color:#C9CDE6;display:flex;flex-direction:column;gap:20px;padding:20px 14px}
+.rail .wordmark{color:#fff;font-size:17px;padding:2px 6px}
+.rail .wordmark img{width:32px;height:32px;border-radius:8px}
+.nav{display:grid;gap:2px}
+.nav button{display:flex;align-items:center;gap:10px;padding:10px;border-radius:9px;background:transparent;border:0;color:inherit;text-align:left;font-weight:500;position:relative}
+.nav button:hover{background:var(--navy-2);color:#fff}
+.nav button[aria-current="page"]{background:var(--navy-3);color:#fff}
+.nav svg{width:19px;height:19px;flex:none}
+.badge{margin-left:auto;background:var(--coral);color:#fff;font-size:11px;font-weight:700;border-radius:999px;padding:1px 7px;min-width:20px;text-align:center}
+.badge:empty{display:none}
+.rail-foot{margin-top:auto;display:grid;gap:10px;font-size:12px}
+.sync{display:flex;align-items:flex-start;gap:8px;background:var(--navy-2);border-radius:10px;padding:10px}
+.sync b{color:#fff;font-weight:600}
+.pulse{width:8px;height:8px;margin-top:4px;border-radius:50%;background:#3CC98E;flex:none;animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(60,201,142,0)}0%{box-shadow:0 0 0 0 rgba(60,201,142,.6)}}
+.me{display:flex;align-items:center;gap:10px;padding:6px;min-width:0}
+.me>div{min-width:0}.me small{display:block;color:#8F96B8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;flex:none;font-family:var(--f-display)}
+.main{display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden}
+.topbar{display:flex;align-items:center;gap:10px;padding:12px 24px;padding-top:calc(12px + var(--safe-t));border-bottom:1px solid var(--line);background:var(--surface);min-height:62px}
+.topbar h1{font-size:18px}
+.topbar .sub{color:var(--muted);font-size:12px}
+.topbar .tb-mark{display:none;width:30px;height:30px;border-radius:8px}
+.acct-pick{max-width:240px;min-height:36px;padding:6px 10px;font-size:13px;font-weight:600}
+.toggle{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--muted);border:1px solid var(--line);border-radius:9px;padding:6px 10px;background:transparent;min-height:34px}
+.toggle[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.icon-btn{width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--muted)}
+.icon-btn svg{width:17px;height:17px}
+.view{flex:1;overflow:auto;padding:22px 24px 40px;-webkit-overflow-scrolling:touch}
+.view.flush{padding:0;overflow:hidden}
+.view-inner{max-width:1180px;margin:0 auto;display:grid;gap:22px}
+.banner{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:13px;border-radius:12px;padding:10px 12px;background:var(--surface-2);color:var(--muted)}
+.banner.err{background:var(--hot-soft);color:var(--hot-ink)}
+.banner.warn{background:var(--warn-soft);color:var(--warn)}
+
+/* KPIs & sections */
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.kpi{background:var(--surface);padding:14px 16px;display:grid;gap:2px;min-width:0;align-content:start}
+.kpi .v{font-family:var(--f-display);font-size:24px;font-weight:700;letter-spacing:-.02em}
+.kpi .l{font-size:12px;color:var(--muted)}
+.kpi .d{font-size:11px;font-weight:600;color:var(--good)}
+.kpi .d.down{color:var(--hot-ink)}
+.kpi.kpi-hot .v{color:var(--coral)}
+.section-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.section-head h2{font-size:16px}
+.section-head .sub{color:var(--muted);font-size:13px}
+
+/* Hot cards */
+.hot-list{display:grid;gap:12px}
+.hot{background:var(--surface);border:1px solid var(--line);border-radius:14px;display:grid;grid-template-columns:6px minmax(0,1fr) 290px;overflow:hidden;box-shadow:var(--shadow)}
+.hot .stripe{background:var(--coral)}
+.hot.cooling .stripe{background:var(--warn)}
+.hot-body{padding:16px 18px;display:grid;gap:10px;min-width:0;align-content:start}
+.hot-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hot-top h3{font-size:16px}
+.heat{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:12px;color:var(--hot-ink);background:var(--hot-soft);padding:3px 8px;border-radius:999px}
+.waiting{font-size:12px;color:var(--muted)}
+.waiting b{color:var(--hot-ink)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;padding:3px 9px;border-radius:999px;background:var(--surface-2);color:var(--muted);border:1px solid var(--line)}
+.chip.key{border-style:dashed;color:var(--hot-ink);border-color:color-mix(in srgb,var(--coral) 45%,transparent);background:transparent}
+.quote{border-left:3px solid var(--peri);padding:2px 0 2px 12px;font-size:13px;overflow-wrap:anywhere}
+.quote small{display:block;color:var(--faint);font-size:11px;margin-top:2px}
+.hot-side{border-left:1px solid var(--line);background:var(--surface-2);padding:16px;display:flex;flex-direction:column;gap:10px}
+.rec{font-size:13px}
+.rec b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-bottom:4px}
+.hot-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:auto}
+.hot-actions .primary{grid-column:1/-1}
+.empty{padding:28px;text-align:center;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:14px}
+.ch{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:2px 7px;border-radius:6px;background:var(--surface-2);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
+.two-col{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:22px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:grid;gap:12px;min-width:0;align-content:start}
+.panel h3{font-size:14px}
+.feed{display:grid;margin:0;padding:0;list-style:none}
+.feed li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--line);font-size:13px;cursor:pointer}
+.feed li:first-child{border-top:0}
+.feed .txt{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.feed .who{font-weight:600;color:var(--ink)}
+.tag{font-size:11px;font-weight:600;padding:2px 7px;border-radius:6px;white-space:nowrap}
+.tag.ai{background:var(--ai-bubble);color:var(--ai-ink)}
+.tag.lead{background:var(--surface-2);color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.pill.hot{background:var(--hot-soft);color:var(--hot-ink)}
+.pill.booked{background:var(--good-soft);color:var(--good)}
+.pill.warm{background:var(--warn-soft);color:var(--warn)}
+.pill.nurture{background:var(--ai-bubble);color:var(--ai-ink)}
+.pill.stopped{background:var(--off-soft);color:var(--off)}
+.ai-chip{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--ai-ink);background:var(--ai-bubble);padding:2px 8px;border-radius:999px;white-space:nowrap}
+.ai-chip i{width:7px;height:7px;border-radius:50%;background:var(--peri)}
+.ai-chip.paused{color:var(--warn);background:var(--warn-soft)}
+.ai-chip.paused i{background:var(--warn)}
+
+/* Inbox */
+.convo{display:grid;grid-template-columns:320px minmax(0,1fr) 280px;height:100%;min-height:0;background:var(--surface)}
+.clist{border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+.clist-head{padding:12px;border-bottom:1px solid var(--line);display:grid;gap:8px}
+.clist-scroll{overflow:auto;flex:1}
+.citem{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:10px;padding:12px;border:0;border-bottom:1px solid var(--line);background:transparent;text-align:left;width:100%}
+.citem:hover{background:var(--surface-2)}
+.citem[aria-current="true"]{background:var(--surface-2);box-shadow:inset 3px 0 0 var(--peri)}
+.citem .nm{font-weight:600;display:flex;gap:6px;align-items:center;min-width:0}
+.citem .nm span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.citem .pv{display:block;color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.citem .tm{font-size:11px;color:var(--faint);white-space:nowrap;display:grid;gap:4px;justify-items:end}
+.hotdot{width:8px;height:8px;border-radius:50%;background:var(--coral);flex:none}
+.pausedot{width:8px;height:8px;border-radius:2px;background:var(--warn);flex:none}
+.thread{display:flex;flex-direction:column;min-height:0;min-width:0;background:var(--bg)}
+.thread-head{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--surface);flex-wrap:wrap}
+.thread-head h3{font-size:15px}
+.thread-actions{display:flex;gap:6px;flex-wrap:wrap;padding:8px 16px;border-bottom:1px solid var(--line);background:var(--surface)}
+.back{display:none}
+.msgs{flex:1;overflow:auto;padding:18px 16px;display:flex;flex-direction:column;gap:10px}
+.daysep{align-self:center;font-size:11px;color:var(--faint);padding:2px 10px;background:var(--surface);border:1px solid var(--line);border-radius:999px}
+.event{align-self:center;font-size:12px;font-weight:600;color:var(--good);background:var(--good-soft);border-radius:999px;padding:4px 12px;text-align:center}
+.event.cancel{color:var(--off);background:var(--off-soft)}
+.b{max-width:min(72%,520px);padding:9px 12px;border-radius:14px;font-size:14px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
+.b .meta{display:block;font-size:11px;margin-top:4px;opacity:.75}
+.b.lead{align-self:flex-start;background:var(--lead-bubble);border:1px solid var(--line);border-bottom-left-radius:4px}
+.b.ai{align-self:flex-end;background:var(--ai-bubble);color:var(--ai-ink);border-bottom-right-radius:4px}
+.b.agent{align-self:flex-end;background:var(--me-bubble);color:var(--me-ink);border-bottom-right-radius:4px}
+.b.agent.blocked,.b.agent.failed{background:var(--hot-soft);color:var(--hot-ink)}
+.composer{border-top:1px solid var(--line);background:var(--surface);padding:10px 12px calc(10px + var(--safe-b));display:grid;gap:6px}
+.composer-row{display:flex;gap:8px;align-items:flex-end}
+.composer textarea{flex:1;resize:none;min-height:44px;max-height:140px;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);line-height:1.4}
+.composer small{color:var(--muted);font-size:11px}
+.composer .note-off{font-size:12px;color:var(--muted)}
+.details{border-left:1px solid var(--line);overflow:auto;padding:16px;display:grid;gap:16px;align-content:start}
+.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 12px;font-size:13px;margin:0}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;text-align:right;overflow-wrap:anywhere}
+.bar{height:6px;border-radius:999px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--peri),var(--coral));border-radius:999px}
+.why{margin:0;padding-left:18px;font-size:13px;color:var(--muted);display:grid;gap:4px}
+.loading{padding:24px;color:var(--muted);text-align:center;font-size:13px}
+
+/* Leads */
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.toolbar .input{max-width:260px;min-height:38px;padding:8px 12px}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.filters button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 11px;font-size:12px;font-weight:600;color:var(--muted)}
+.filters button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.table-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:13px}
+th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);text-align:left;font-weight:600;padding:10px 14px;border-bottom:1px solid var(--line)}
+td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+tbody tr{cursor:pointer}
+tbody tr:hover td{background:var(--surface-2)}
+.heatcell{display:flex;align-items:center;gap:8px}
+.heatcell .bar{width:60px}
+.tfoot{font-size:12px;color:var(--muted);padding:10px 14px}
+.lcards{display:none;gap:8px}
+.lcard{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;text-align:left;width:100%}
+.lcard b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lcard small{color:var(--muted);font-size:12px}
+
+/* Results */
+.stat-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:22px}
+.chart svg{width:100%;height:auto;display:block}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:3px}
+.funnel{display:grid;gap:8px}
+.frow{display:grid;grid-template-columns:140px minmax(0,1fr) 52px;gap:10px;align-items:center;font-size:13px}
+.frow .track{height:22px;background:var(--surface-2);border-radius:6px;overflow:hidden}
+.frow .track i{display:block;height:100%;background:var(--peri);border-radius:6px}
+.frow .n{text-align:right;font-weight:600}
+.meter{height:12px;background:var(--surface-2);border-radius:999px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--peri)}
+.meter i.high{background:var(--coral)}
+
+/* Settings */
+.set-list{display:grid}
+.set{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
+.set:first-child{border-top:0;padding-top:4px}
+.set p{margin:2px 0 0;color:var(--muted);font-size:13px}
+.range-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.range-row input[type=range]{flex:1;min-width:180px;accent-color:var(--coral)}
+.mlist{display:grid}
+.mrow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line);font-size:13px}
+.mrow:first-child{border-top:0}
+.mrow small{display:block;color:var(--muted)}
+.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:8px;align-items:end}
+
+/* Toasts */
+.toasts{position:fixed;right:16px;bottom:calc(16px + var(--safe-b));display:grid;gap:8px;z-index:50;max-width:min(380px,calc(100vw - 32px))}
+.toast{background:var(--ink);color:var(--bg);padding:11px 14px;border-radius:12px;font-size:13px;box-shadow:var(--shadow);animation:pop .25s ease-out}
+@keyframes pop{from{transform:translateY(6px);opacity:.3}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- Tablet ---------- */
+@media (max-width:1100px){
+  .convo{grid-template-columns:290px minmax(0,1fr)}
+  .details{display:none}
+  .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .kpi:nth-child(5){grid-column:span 2}
+  .hot{grid-template-columns:6px minmax(0,1fr)}
+  .hot-side{grid-column:2;border-left:0;border-top:1px solid var(--line)}
+}
+/* ---------- Phone ---------- */
+@media (max-width:860px){
+  #login{grid-template-columns:1fr;align-content:start}
+  .login-brand{padding:28px 16px;padding-top:calc(28px + var(--safe-t))}
+  .login-brand::after,.points{display:none}
+  #app{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto}
+  .rail{order:2;flex-direction:row;padding:6px 8px calc(6px + var(--safe-b));gap:0;border-top:1px solid var(--navy-3)}
+  .rail .wordmark,.rail-foot{display:none}
+  .nav{grid-auto-flow:column;grid-auto-columns:1fr;width:100%}
+  .nav button{flex-direction:column;gap:3px;font-size:10.5px;padding:6px 2px;justify-content:center;text-align:center;min-height:50px}
+  .nav .badge{position:absolute;top:2px;left:calc(50% + 6px);margin:0;font-size:10px;padding:0 5px;min-width:16px}
+  .topbar{padding:10px 16px;padding-top:calc(10px + var(--safe-t));min-height:56px}
+  .topbar .tb-mark{display:block}
+  .topbar .sub,.desk-only{display:none!important}
+  .topbar h1{font-size:17px}
+  .acct-pick{max-width:150px}
+  .view{padding:16px 16px 32px}
+  .two-col,.stat-grid{grid-template-columns:1fr}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kpi:nth-child(5){grid-column:1/-1}
+  .kpi .v{font-size:22px}
+  .hot-body{padding:14px}
+  .hot-side{padding:14px}
+  .convo{grid-template-columns:1fr}
+  .convo.open .clist{display:none}
+  .convo:not(.open) .thread{display:none}
+  .back{display:inline-flex}
+  .thread-actions{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  .thread-actions::-webkit-scrollbar{display:none}
+  .thread-actions .spacer{display:none}
+  .thread-head{padding:8px 12px}
+  .b{max-width:86%}
+  .table-wrap{display:none}
+  .lcards{display:grid}
+  .toolbar .input{max-width:none}
+  .frow{grid-template-columns:110px minmax(0,1fr) 44px}
+  .form-grid{grid-template-columns:1fr}
+  .mrow{grid-template-columns:minmax(0,1fr) auto}
+  .mrow .role{display:none}
+  .toasts{bottom:calc(76px + var(--safe-b));left:16px;right:16px;max-width:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ SIGN-IN ============ -->
+<section id="login" hidden>
+  <div class="login-brand">
+    <div class="wordmark"><img src="../android-chrome-192x192.png" alt="">Starling Ai</div>
+    <div>
+      <h1 data-i18n="loginHead"></h1>
+      <p data-i18n="loginSub"></p>
+    </div>
+    <div class="points">
+      <div><span class="dot" style="background:var(--coral)"></span><span data-i18n="pt1"></span></div>
+      <div><span class="dot" style="background:var(--peri)"></span><span data-i18n="pt2"></span></div>
+      <div><span class="dot" style="background:var(--blush)"></span><span data-i18n="pt3"></span></div>
+    </div>
+  </div>
+  <div class="login-wrap">
+    <form class="login-card" id="emailForm" novalidate>
+      <div><div class="eyebrow" data-i18n="portal"></div><h2 data-i18n="signIn"></h2></div>
+      <div class="field"><label for="email" data-i18n="email"></label><input class="input" id="email" type="email" inputmode="email" autocomplete="email" placeholder="you@yourteam.com" required></div>
+      <div class="msg err" id="emailErr" role="alert" hidden></div>
+      <button class="btn primary block" type="submit" id="sendBtn"><span data-i18n="sendCode"></span></button>
+      <div class="msg info" data-i18n="howItWorks"></div>
+      <div style="display:flex;justify-content:center"><div class="seg" role="group" aria-label="Language"><button type="button" data-lang="en">English</button><button type="button" data-lang="es">Español</button></div></div>
+    </form>
+    <form class="login-card" id="codeForm" novalidate hidden>
+      <div><div class="eyebrow" data-i18n="portal"></div><h2 data-i18n="checkEmail"></h2></div>
+      <p class="muted" style="margin:0" id="codeSentTo"></p>
+      <div class="field"><label for="code" data-i18n="codeLabel"></label><input class="input code" id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="••••••" required></div>
+      <div class="msg err" id="codeErr" role="alert" hidden></div>
+      <button class="btn primary block" type="submit" id="verifyBtn"><span data-i18n="verify"></span></button>
+      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <button type="button" class="linkbtn" id="resendBtn" data-i18n="resend"></button>
+        <button type="button" class="linkbtn" id="changeEmail" data-i18n="otherEmail"></button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ============ NO ACCESS ============ -->
+<section id="noaccess" class="login-wrap" style="min-height:100%" hidden>
+  <div class="login-card">
+    <div class="wordmark" style="color:var(--ink)"><img src="../android-chrome-192x192.png" alt="">Starling Ai</div>
+    <h2 data-i18n="noAccessTitle"></h2>
+    <p class="muted" style="margin:0" id="noAccessTxt"></p>
+    <a class="btn dark block" href="mailto:Admin@starlingagent.com?subject=Starling%20portal%20access" data-i18n="emailUs"></a>
+    <button class="btn block" id="noAccessOut" data-i18n="signOut"></button>
+  </div>
+</section>
+
+<!-- ============ APP ============ -->
+<section id="app" hidden>
+  <aside class="rail">
+    <div class="wordmark"><img src="../android-chrome-192x192.png" alt="">Starling Ai</div>
+    <nav class="nav" aria-label="Main">
+      <button data-view="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 3 4 5 4 9a4 4 0 0 1-8 0c0-2 1-3 1-3s0 2 2 2c0-3-1-5 1-8z"/><path d="M6 15a6 6 0 0 0 12 0"/></svg><span data-i18n="navToday"></span><span class="badge" id="hotBadge"></span></button>
+      <button data-view="convos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span data-i18n="navConvos"></span></button>
+      <button data-view="leads"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span data-i18n="navLeads"></span></button>
+      <button data-view="stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg><span data-i18n="navStats"></span></button>
+      <button data-view="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span data-i18n="navSettings"></span></button>
+    </nav>
+    <div class="rail-foot">
+      <div class="sync"><span class="pulse"></span><div><b data-i18n="liveData"></b><br><span id="syncTxt"></span></div></div>
+      <div class="me"><div class="avatar" id="meAv" style="background:var(--coral)"></div><div><b id="meName" style="color:#fff"></b><small id="meEmail"></small></div></div>
+    </div>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <img class="tb-mark" src="../android-chrome-192x192.png" alt="">
+      <div style="min-width:0"><h1 id="viewTitle"></h1><div class="sub" id="viewSub"></div></div>
+      <div class="spacer"></div>
+      <label class="sr" for="acctPick" data-i18n="account"></label>
+      <select class="select acct-pick" id="acctPick" hidden></select>
+      <button class="toggle desk-only" id="privBtn" aria-pressed="false"><span data-i18n="privacy"></span></button>
+      <button class="icon-btn" id="refreshBtn" aria-label="Refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg></button>
+    </header>
+    <main class="view" id="view"></main>
+  </div>
+</section>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+/* ============ Config ============ */
+const VERSION='1.0.0';
+const SUPABASE_URL='https://ggdlbffzyontccrheyro.supabase.co';           // "Starling Ai messages" project
+const SUPABASE_KEY='sb_publishable_DDfBCzE1feqpV9uhQ-YCEw_uIWvfLbX';     // publishable key (safe in the browser; data is gated by sign-in)
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:'starling-portal-auth'}});
+
+/* ============ Language ============ */
+const I18N={
+en:{loginHead:'See every lead your AI is working. <em>Act on the hot ones first.</em>',loginSub:'Your Starling AI agent texts and follows up 24/7. This is where you read every conversation, step in when a lead is ready, and see what it is booking for you.',
+ pt1:'Hot leads ranked by who is ready to talk now',pt2:'Every AI text and DM in one inbox',pt3:'Pause the AI and text the lead yourself',
+ portal:'Starling portal',signIn:'Sign in',email:'Work email',sendCode:'Email me a sign-in code',howItWorks:'No password needed. We email you a one-time code. Use the email your Starling account is under.',
+ checkEmail:'Check your email',codeSent:'We sent a sign-in code to {e}. It can take a minute to arrive; check spam too.',codeLabel:'Sign-in code',verify:'Sign in',resend:'Send a new code',otherEmail:'Use a different email',
+ eBadEmail:'Enter a valid email address.',eBadCode:'That code did not work. Check it, or send a new one.',eRate:'Too many tries. Wait a minute, then try again.',eSend:'We could not send the code. Try again, or email Admin@starlingagent.com.',codeAgain:'New code sent.',
+ noAccessTitle:'This email is not connected yet',noAccess:'You signed in as {e}, but it is not linked to a Starling account. Email us and we will connect it.',emailUs:'Email Starling support',
+ navToday:'Hot leads',navConvos:'Inbox',navLeads:'Leads',navStats:'Results',navSettings:'Settings',liveData:'Live data',signOut:'Sign out',privacy:'Presentation mode',account:'Account',refresh:'Refresh',
+ tToday:'Hot leads',sToday:'Ready to talk, not booked yet. Longest wait first.',tConvos:'Inbox',sConvos:'Every text and DM your AI agent handled, last 30 days',tLeads:'Leads',sLeads:'Every contact the AI worked in the last 30 days',tStats:'Results',sStats:'Last 30 days',tSettings:'Settings',sSettings:'Your account and how the portal works for you',
+ kNew:'New leads',kReply:'Reply rate',kMeet:'Meetings booked',kHot:'Hot, not booked',kAi:'AI messages sent',vsPrev:'vs prior 30 days',
+ needsYou:'Needs you now',waiting:'Waiting',next:'Recommended next step',viewConvo:'Open conversation',call:'Call',openFub:'Open in Follow Up Boss',allClear:'No hot leads right now. The AI is handling everything.',feedTitle:'Latest activity',whatBooked:'What booked your meetings',
+ search:'Search name or phone',fAll:'All',fHot:'Hot',fWarm:'Talking',fBooked:'Booked',fNurture:'No reply yet',fStopped:'Opted out',
+ thName:'Lead',thChannel:'Channel',thHeat:'Heat',thStatus:'Status',thMsgs:'Replies',thLast:'Last activity',showing:'Showing {a} of {b}',
+ leadDetails:'Lead details',heatScore:'Heat score',whyHot:'Why it scored this way',back:'Back',phone:'Phone',
+ aiOn:'AI is working this lead',aiOff:'AI paused',pauseAi:'Pause AI',resumeAi:'Resume AI',markHandled:'Mark handled',handled:'Handled',
+ pausedNote:'Paused. The AI will not text this lead until you resume it.',resumedNote:'The AI is back on this lead.',handledNote:'Marked handled. It drops off Hot leads until they reply again.',
+ composePh:'Text {n}…',send:'Send',sendHint:'Sends from your Starling AI number. Sending pauses the AI on this lead so you do not talk over each other.',
+ notSms:'This lead came in through a social DM. Reply to them in that app.',notConnected:'Texting from the portal is not turned on for this account yet. Email Admin@starlingagent.com to turn it on.',
+ optedOut:'This lead opted out. You cannot text them.',sQueued:'Sending…',sSent:'Sent',sBlocked:'Not sent: lead opted out',sFailed:'Not sent',queuedToast:'Text queued. The AI is paused on this lead.',
+ msgsChart:'Messages per day · last 14 days',aiSent:'AI sent',replies:'Lead replies',funnel:'From first text to booked',usage:'AI messages this month',resets:'Resets on the 1st of each month.',noCap:'No plan limit set',nearCap:'You are close to your monthly limit. Email Admin@starlingagent.com about a higher plan.',
+ fContacted:'AI reached out',fReplied:'Replied',fEngaged:'3+ replies',fHotL:'Hot now',fBookedL:'Booked',
+ dNew:'First text to a new lead',dOld:'Old lead follow-up',dSocial:'Social DMs',dInbound:'Lead texted first',dOngoing:'Ongoing conversation',dOther:'Other',
+ rBooking:'AI offered times, no pick yet',rFinancing:'Asked about financing',rShowing:'Wants to see a home',rUrgent:'Short timeline',rCall:'Asked for a call',rOffer:'Talked cash or offer',rEngaged:'3+ replies',rRecent:'Replied in last 24h',
+ nCall:'They asked for a call. Call them now while they are expecting it.',nBooking:'The AI offered meeting times and they have not picked one. Call or text to lock in a time.',nShowing:'They want to see a home. Offer two showing times.',nFinancing:'They are asking about financing. Connect them with your lender and send the application.',nUrgent:'They are on a short timeline. Reach out today.',nDefault:'They are engaged. A personal call now will move them forward.',
+ justNow:'just now',mAgo:'{x}m ago',hAgo:'{x}h ago',dAgo:'{x}d ago',today:'Today',yesterday:'Yesterday',lead:'Lead',ai:'AI',agent:'You',socialLead:'Social lead',
+ meetCreated:'Meeting booked',meetResched:'Meeting rescheduled',meetCancel:'Meeting canceled',asOf:'As of {t} · updates every 5 min',loading:'Loading…',updated:'Updated',saved:'Saved',
+ eGeneric:'Something went wrong ({c}). Try again.',eAllowed:'You do not have access to that account.',stale:'Could not refresh. Showing data from {t}.',eSession:'Your sign-in expired. Sign in again.',
+ setAccount:'Your account',setSignedIn:'Signed in as',setLang:'Language',setLangHint:'Changes the portal only. Your AI keeps texting each lead in their own language.',
+ setHot:'Hot-lead sensitivity',setHotHint:'Lower shows more leads as hot. Higher shows only the strongest. Default is 40.',setHotNow:'At {x}, {n} leads are hot right now.',save:'Save',
+ setHome:'Put the portal on your phone',setHomeIos:'iPhone: open this page in Safari, tap Share, then Add to Home Screen.',setHomeAnd:'Android: open the Chrome menu (⋮), then Add to Home screen.',
+ setHelp:'Need help?',setHelpHint:'Questions about your AI agent or your account: Admin@starlingagent.com. Book a call:',version:'Version',
+ admin:'Starling admin',adminHint:'Only Starling admins see this section.',members:'Who can sign in',addMember:'Add someone',role:'Role',roleOwner:'Owner',roleAgent:'Agent',roleAdmin:'Admin (all accounts)',allAccounts:'All accounts',add:'Add',remove:'Remove',
+ removeQ:'Remove {e} from {a}?',memberAdded:'Added. They can sign in with that email now.',memberRemoved:'Removed',planCap:'Monthly AI message limit for {a}',planCapHint:'Leave blank for no limit.',
+ texting:'Texting from the portal for {a}',textingHint:'The n8n webhook that sends a portal text from this client’s AI number, plus its secret.',webhookUrl:'Webhook URL',webhookSecret:'Secret',textingSaved:'Texting connection saved',
+ badEmailAdmin:'Enter a valid email.'},
+es:{loginHead:'Mira cada prospecto que trabaja tu IA. <em>Atiende primero a los más calientes.</em>',loginSub:'Tu agente de IA de Starling escribe y da seguimiento 24/7. Aquí lees cada conversación, entras cuando un prospecto está listo y ves lo que te está agendando.',
+ pt1:'Prospectos calientes ordenados por quién está listo para hablar',pt2:'Cada texto y mensaje de la IA en una sola bandeja',pt3:'Pausa la IA y escríbele tú al prospecto',
+ portal:'Portal de Starling',signIn:'Iniciar sesión',email:'Correo de trabajo',sendCode:'Envíame un código',howItWorks:'No necesitas contraseña. Te enviamos un código de un solo uso. Usa el correo de tu cuenta de Starling.',
+ checkEmail:'Revisa tu correo',codeSent:'Enviamos un código a {e}. Puede tardar un minuto; revisa también el spam.',codeLabel:'Código',verify:'Entrar',resend:'Enviar un código nuevo',otherEmail:'Usar otro correo',
+ eBadEmail:'Escribe un correo válido.',eBadCode:'Ese código no funcionó. Revísalo o pide uno nuevo.',eRate:'Demasiados intentos. Espera un minuto y vuelve a intentar.',eSend:'No pudimos enviar el código. Intenta de nuevo o escribe a Admin@starlingagent.com.',codeAgain:'Código nuevo enviado.',
+ noAccessTitle:'Este correo todavía no está conectado',noAccess:'Entraste como {e}, pero no está ligado a una cuenta de Starling. Escríbenos y lo conectamos.',emailUs:'Escribir a soporte de Starling',
+ navToday:'Calientes',navConvos:'Bandeja',navLeads:'Prospectos',navStats:'Resultados',navSettings:'Ajustes',liveData:'Datos en vivo',signOut:'Cerrar sesión',privacy:'Modo presentación',account:'Cuenta',refresh:'Actualizar',
+ tToday:'Prospectos calientes',sToday:'Listos para hablar, sin cita todavía. Primero los que más esperan.',tConvos:'Bandeja',sConvos:'Cada texto y mensaje que manejó tu IA, últimos 30 días',tLeads:'Prospectos',sLeads:'Cada contacto que trabajó la IA en los últimos 30 días',tStats:'Resultados',sStats:'Últimos 30 días',tSettings:'Ajustes',sSettings:'Tu cuenta y cómo funciona el portal para ti',
+ kNew:'Prospectos nuevos',kReply:'Tasa de respuesta',kMeet:'Citas agendadas',kHot:'Calientes sin cita',kAi:'Mensajes de la IA',vsPrev:'vs 30 días anteriores',
+ needsYou:'Te necesitan ahora',waiting:'Esperando',next:'Siguiente paso recomendado',viewConvo:'Abrir conversación',call:'Llamar',openFub:'Abrir en Follow Up Boss',allClear:'No hay prospectos calientes ahora. La IA se está encargando de todo.',feedTitle:'Actividad reciente',whatBooked:'Qué agendó tus citas',
+ search:'Buscar nombre o teléfono',fAll:'Todos',fHot:'Calientes',fWarm:'En conversación',fBooked:'Con cita',fNurture:'Sin respuesta',fStopped:'Dados de baja',
+ thName:'Prospecto',thChannel:'Canal',thHeat:'Interés',thStatus:'Estado',thMsgs:'Respuestas',thLast:'Última actividad',showing:'Mostrando {a} de {b}',
+ leadDetails:'Datos del prospecto',heatScore:'Nivel de interés',whyHot:'Por qué tiene esta calificación',back:'Atrás',phone:'Teléfono',
+ aiOn:'La IA está trabajando este prospecto',aiOff:'IA en pausa',pauseAi:'Pausar IA',resumeAi:'Reanudar IA',markHandled:'Marcar atendido',handled:'Atendido',
+ pausedNote:'En pausa. La IA no le escribirá a este prospecto hasta que la reanudes.',resumedNote:'La IA volvió a trabajar este prospecto.',handledNote:'Marcado como atendido. Sale de Calientes hasta que vuelva a responder.',
+ composePh:'Escribe a {n}…',send:'Enviar',sendHint:'Se envía desde tu número de Starling AI. Al enviar, la IA se pausa con este prospecto para que no se encimen.',
+ notSms:'Este prospecto llegó por un mensaje en redes sociales. Respóndele en esa aplicación.',notConnected:'El envío de textos desde el portal aún no está activado en esta cuenta. Escribe a Admin@starlingagent.com para activarlo.',
+ optedOut:'Este prospecto se dio de baja. No le puedes escribir.',sQueued:'Enviando…',sSent:'Enviado',sBlocked:'No enviado: se dio de baja',sFailed:'No enviado',queuedToast:'Texto en camino. La IA quedó en pausa con este prospecto.',
+ msgsChart:'Mensajes por día · últimos 14 días',aiSent:'Enviados por la IA',replies:'Respuestas',funnel:'Del primer texto a la cita',usage:'Mensajes de la IA este mes',resets:'Se reinicia el día 1 de cada mes.',noCap:'Sin límite de plan',nearCap:'Estás cerca de tu límite mensual. Escribe a Admin@starlingagent.com para un plan más alto.',
+ fContacted:'La IA escribió',fReplied:'Respondieron',fEngaged:'3+ respuestas',fHotL:'Calientes',fBookedL:'Con cita',
+ dNew:'Primer texto a un prospecto nuevo',dOld:'Seguimiento a prospectos viejos',dSocial:'Mensajes en redes',dInbound:'El prospecto escribió primero',dOngoing:'Conversación en curso',dOther:'Otro',
+ rBooking:'La IA ofreció horarios, sin respuesta',rFinancing:'Preguntó por financiamiento',rShowing:'Quiere ver una casa',rUrgent:'Tiene prisa',rCall:'Pidió una llamada',rOffer:'Habló de contado u oferta',rEngaged:'3+ respuestas',rRecent:'Respondió en las últimas 24h',
+ nCall:'Pidió una llamada. Llámale ahora que la está esperando.',nBooking:'La IA ofreció horarios y no ha escogido. Llama o escribe para fijar la cita.',nShowing:'Quiere ver una casa. Ofrécele dos horarios.',nFinancing:'Pregunta por financiamiento. Conéctalo con tu prestamista y mándale la aplicación.',nUrgent:'Tiene prisa. Contáctalo hoy.',nDefault:'Está interesado. Una llamada personal ahora lo hará avanzar.',
+ justNow:'ahora',mAgo:'hace {x} min',hAgo:'hace {x} h',dAgo:'hace {x} d',today:'Hoy',yesterday:'Ayer',lead:'Prospecto',ai:'IA',agent:'Tú',socialLead:'Prospecto de redes',
+ meetCreated:'Cita agendada',meetResched:'Cita reprogramada',meetCancel:'Cita cancelada',asOf:'A las {t} · se actualiza cada 5 min',loading:'Cargando…',updated:'Actualizado',saved:'Guardado',
+ eGeneric:'Algo salió mal ({c}). Intenta de nuevo.',eAllowed:'No tienes acceso a esa cuenta.',stale:'No se pudo actualizar. Datos de las {t}.',eSession:'Tu sesión venció. Vuelve a entrar.',
+ setAccount:'Tu cuenta',setSignedIn:'Sesión iniciada como',setLang:'Idioma',setLangHint:'Solo cambia el portal. Tu IA sigue escribiendo a cada prospecto en su propio idioma.',
+ setHot:'Sensibilidad de prospectos calientes',setHotHint:'Más bajo muestra más prospectos calientes. Más alto, solo los más fuertes. El valor normal es 40.',setHotNow:'Con {x}, hay {n} prospectos calientes ahora.',save:'Guardar',
+ setHome:'Pon el portal en tu teléfono',setHomeIos:'iPhone: abre esta página en Safari, toca Compartir y luego Agregar a inicio.',setHomeAnd:'Android: abre el menú de Chrome (⋮) y luego Agregar a la pantalla principal.',
+ setHelp:'¿Necesitas ayuda?',setHelpHint:'Preguntas sobre tu agente de IA o tu cuenta: Admin@starlingagent.com. Agenda una llamada:',version:'Versión',
+ admin:'Administración de Starling',adminHint:'Solo los administradores de Starling ven esta sección.',members:'Quién puede entrar',addMember:'Agregar a alguien',role:'Rol',roleOwner:'Dueño',roleAgent:'Agente',roleAdmin:'Admin (todas las cuentas)',allAccounts:'Todas las cuentas',add:'Agregar',remove:'Quitar',
+ removeQ:'¿Quitar a {e} de {a}?',memberAdded:'Agregado. Ya puede entrar con ese correo.',memberRemoved:'Quitado',planCap:'Límite mensual de mensajes de la IA para {a}',planCapHint:'Déjalo vacío para no tener límite.',
+ texting:'Envío de textos desde el portal para {a}',textingHint:'El webhook de n8n que envía un texto del portal desde el número de IA de este cliente, y su clave.',webhookUrl:'URL del webhook',webhookSecret:'Clave',textingSaved:'Conexión de textos guardada',
+ badEmailAdmin:'Escribe un correo válido.'}};
+let lang=(()=>{try{const s=localStorage.getItem('sp-lang');if(s)return s}catch(e){}return (navigator.language||'en').toLowerCase().startsWith('es')?'es':'en'})();
+const t=(k,v)=>{let s=(I18N[lang]&&I18N[lang][k])??I18N.en[k]??k;if(v)for(const x in v)s=s.split('{'+x+'}').join(v[x]);return s};
+function applyI18n(){document.querySelectorAll('[data-i18n]').forEach(el=>{el.innerHTML=t(el.dataset.i18n)});document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===lang)));document.documentElement.lang=lang}
+function setLang(l){lang=l;try{localStorage.setItem('sp-lang',l)}catch(e){}applyI18n();if(state.account)render()}
+document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
+
+/* ============ Helpers ============ */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(m){const d=document.createElement('div');d.className='toast';d.textContent=m;$('#toasts').append(d);setTimeout(()=>d.remove(),3800)}
+const AVC=['#F15368','#868BDF','#E08A5B','#3C9E86','#6C76C9','#C2577A','#4F8CC9'];
+const avColor=id=>AVC[[...String(id)].reduce((a,c)=>a+c.charCodeAt(0),0)%AVC.length];
+const isPhone=s=>/^\+?\d{10,15}$/.test(String(s||''));
+function fmtPhone(s){const d=String(s||'').replace(/\D/g,'').replace(/^1(?=\d{10}$)/,'');return d.length===10?`(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}`:String(s||'')}
+const telHref=s=>'tel:+'+(String(s).replace(/\D/g,'').length===10?'1':'')+String(s).replace(/\D/g,'');
+let priv=false;try{priv=localStorage.getItem('sp-priv')==='1'}catch(e){}
+function showName(c){const raw=c.name&&c.name!==c.session_id?c.name:(isPhone(c.session_id)?fmtPhone(c.session_id):t('socialLead'));if(!priv)return raw;
+  if(raw.startsWith('(')||raw===t('socialLead'))return t('lead');const p=raw.trim().split(/\s+/);return p[0]+(p[1]?' '+p[1][0]+'.':'')}
+function showPhone(s){if(!isPhone(s))return '';const f=fmtPhone(s);return priv?'(•••) •••-'+f.slice(-4):f}
+function maskText(s){return priv?String(s||'').replace(/\+?1?[\s.-]?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/g,'•••-••••').replace(/[\w.+-]+@[\w-]+\.[\w.]+/g,'•••@•••'):String(s||'')}
+function initials(c){const w=showName(c).replace(/[^\p{L}\s]/gu,'').trim().split(/\s+/).filter(Boolean);return (w[0]?.[0]||'•')+(w[1]?.[0]||'')}
+function ago(iso){if(!iso)return '';const m=(Date.now()-new Date(iso))/60000;if(m<1)return t('justNow');if(m<60)return t('mAgo',{x:Math.round(m)});if(m<1440)return t('hAgo',{x:Math.round(m/60)});return t('dAgo',{x:Math.round(m/1440)})}
+const loc=()=>lang==='es'?'es-US':'en-US';
+const fmtTime=iso=>new Date(iso).toLocaleTimeString(loc(),{hour:'numeric',minute:'2-digit'});
+const fmtDay=iso=>{const d=new Date(iso),n=new Date(),k=x=>x.toDateString(),y=new Date(n);y.setDate(n.getDate()-1);if(k(d)===k(n))return t('today');if(k(d)===k(y))return t('yesterday');return d.toLocaleDateString(loc(),{weekday:'short',month:'short',day:'numeric'})};
+const nf=n=>Number(n||0).toLocaleString(loc());
+const EMAIL_RE=/^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+class AppError extends Error{constructor(key,vars){super(key);this.key=key;this.vars=vars||{}}}
+const errText=e=>e instanceof AppError?t(e.key,e.vars):(/not_allowed/.test(String(e?.message))?t('eAllowed'):t('eGeneric',{c:String(e?.code||e?.message||'?').slice(0,60)}));
+async function rpc(fn,args){const {data,error}=await sb.rpc(fn,args||{});if(error){if(/JWT|jwt|401/.test(String(error.message))||error.code==='PGRST301')throw new AppError('eSession');throw error}return data}
+
+/* ============ State ============ */
+const state={user:null,accounts:[],account:null,isAdmin:false,data:null,loadedAt:null,view:'today',filter:'all',q:'',selected:null,threads:{},refreshErr:null,timer:null,sending:false};
+const ck=()=>state.account.client_key;
+const VIEWS=['today','convos','leads','stats','settings'];
+
+/* ============ Sign-in ============ */
+let pendingEmail='';
+function showOnly(id){['login','noaccess','app'].forEach(x=>{$('#'+x).hidden=x!==id})}
+function fieldMsg(id,text){const el=$(id);el.hidden=!text;el.textContent=text||''}
+function btnBusy(btn,on,key){btn.disabled=on;btn.innerHTML=on?'<span class="spinner"></span>':`<span>${esc(t(key))}</span>`}
+async function sendCode(email,again){
+  const {error}=await sb.auth.signInWithOtp({email,options:{shouldCreateUser:true,emailRedirectTo:location.origin+location.pathname}});
+  if(error){throw new AppError(/rate|seconds/i.test(error.message)?'eRate':'eSend')}
+  if(again)toast(t('codeAgain'));
+}
+$('#emailForm').addEventListener('submit',async e=>{e.preventDefault();const email=$('#email').value.trim().toLowerCase();fieldMsg('#emailErr');
+  if(!EMAIL_RE.test(email)){fieldMsg('#emailErr',t('eBadEmail'));return}
+  const b=$('#sendBtn');btnBusy(b,true);
+  try{await sendCode(email);pendingEmail=email;try{localStorage.setItem('sp-email',email)}catch(_){}
+    $('#emailForm').hidden=true;$('#codeForm').hidden=false;$('#codeSentTo').textContent=t('codeSent',{e:email});$('#code').value='';$('#code').focus()}
+  catch(err){fieldMsg('#emailErr',errText(err))}finally{btnBusy(b,false,'sendCode')}});
+$('#codeForm').addEventListener('submit',async e=>{e.preventDefault();fieldMsg('#codeErr');const code=$('#code').value.replace(/\D/g,'');
+  if(code.length<6){fieldMsg('#codeErr',t('eBadCode'));return}
+  const b=$('#verifyBtn');btnBusy(b,true);
+  try{const {error}=await sb.auth.verifyOtp({email:pendingEmail,token:code,type:'email'});if(error)throw new AppError(/rate/i.test(error.message)?'eRate':'eBadCode')}
+  catch(err){fieldMsg('#codeErr',errText(err))}finally{btnBusy(b,false,'verify')}});
+$('#code').addEventListener('input',e=>{const v=e.target.value.replace(/\D/g,'');e.target.value=v;if(v.length===6||v.length===8)$('#codeForm').requestSubmit()});
+$('#resendBtn').onclick=async()=>{fieldMsg('#codeErr');try{await sendCode(pendingEmail,true)}catch(err){fieldMsg('#codeErr',errText(err))}};
+$('#changeEmail').onclick=()=>{$('#codeForm').hidden=true;$('#emailForm').hidden=false;$('#email').focus()};
+try{const em=localStorage.getItem('sp-email');if(em)$('#email').value=em}catch(e){}
+async function signOut(){clearInterval(state.timer);await sb.auth.signOut().catch(()=>{});Object.assign(state,{user:null,accounts:[],account:null,data:null,threads:{},selected:null});$('#codeForm').hidden=true;$('#emailForm').hidden=false;showOnly('login')}
+$('#noAccessOut').onclick=signOut;
+
+/* ============ Boot ============ */
+let booting=false;
+async function boot(session){
+  if(!session){showOnly('login');applyI18n();return}
+  if(booting||state.user?.id===session.user.id&&state.account)return;booting=true;
+  try{
+    state.user=session.user;
+    const accts=await rpc('portal_my_accounts');
+    state.accounts=accts||[];
+    state.isAdmin=state.accounts.some(a=>a.role==='admin');
+    if(!state.accounts.length){$('#noAccessTxt').textContent=t('noAccess',{e:session.user.email});applyI18n();showOnly('noaccess');return}
+    let saved=null;try{saved=localStorage.getItem('sp-acct')}catch(e){}
+    const own=state.accounts.filter(a=>a.role==='owner'||a.role==='agent');
+    state.account=state.accounts.find(a=>a.client_key===saved)||own[0]||state.accounts.find(a=>a.active)||state.accounts[0];
+    try{const v=localStorage.getItem('sp-view');if(VIEWS.includes(v))state.view=v}catch(e){}
+    showOnly('app');buildAcctPick();$('#meEmail').textContent=session.user.email;
+    $('#view').innerHTML=`<div class="loading">${t('loading')}</div>`;applyI18n();
+    await load();render();
+    clearInterval(state.timer);state.timer=setInterval(()=>{if(!document.hidden)refresh(true)},60000);
+  }catch(err){toast(errText(err));if(err instanceof AppError&&err.key==='eSession')signOut()}
+  finally{booting=false}
+}
+sb.auth.onAuthStateChange((ev,session)=>{if(ev==='SIGNED_OUT'){showOnly('login');applyI18n();return}if(ev==='SIGNED_IN'||ev==='INITIAL_SESSION')setTimeout(()=>boot(session),0)});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&state.account&&state.loadedAt&&Date.now()-state.loadedAt>45000)refresh(true)});
+
+function buildAcctPick(){const s=$('#acctPick');
+  if(state.accounts.length<2){s.hidden=true}else{s.hidden=false;s.innerHTML=state.accounts.map(a=>`<option value="${esc(a.client_key)}"${a.client_key===ck()?' selected':''}>${esc(a.display_name)}${a.active===false?' ·':''}</option>`).join('')}
+  $('#meName').textContent=state.account.display_name;$('#meAv').textContent=state.account.display_name.split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase()}
+$('#acctPick').onchange=async e=>{state.account=state.accounts.find(a=>a.client_key===e.target.value);try{localStorage.setItem('sp-acct',ck())}catch(_){}
+  state.threads={};state.selected=null;buildAcctPick();$('#view').innerHTML=`<div class="loading">${t('loading')}</div>`;try{await load();render()}catch(err){toast(errText(err))}};
+
+/* ============ Data ============ */
+async function load(){const key=ck();
+  const [ov,convos]=await Promise.all([rpc('portal_overview',{p_client:key}),rpc('portal_conversations',{p_client:key,p_days:30,p_search:null,p_limit:1500})]);
+  if(key!==ck())return;
+  state.data={ov:ov||{},convos:convos||[]};state.loadedAt=Date.now();state.refreshErr=null}
+async function refresh(quiet){const b=$('#refreshBtn');if(state.sending)return;b.disabled=true;
+  try{await load();if(state.view==='convos'&&state.selected){delete state.threads[state.selected]}
+    const typing=document.activeElement&&/TEXTAREA|INPUT|SELECT/.test(document.activeElement.tagName)&&document.activeElement.value;
+    if(!typing||state.view==='today'||state.view==='stats')render();else updateBadge();if(!quiet)toast(t('updated'))}
+  catch(err){state.refreshErr=errText(err);if(err instanceof AppError&&err.key==='eSession'){toast(t('eSession'));signOut();return}render()}
+  finally{b.disabled=false}}
+$('#refreshBtn').onclick=()=>refresh(false);
+$('#privBtn').onclick=()=>{priv=!priv;try{localStorage.setItem('sp-priv',priv?'1':'0')}catch(e){}render()};
+const hot=()=>state.data.convos.filter(c=>c.status==='hot').sort((a,b)=>new Date(a.last_lead_at)-new Date(b.last_lead_at));
+const byId=sid=>state.data.convos.find(c=>c.session_id===sid);
+function updateBadge(){$('#hotBadge').textContent=hot().length||''}
+
+/* ============ Render ============ */
+document.querySelectorAll('.nav [data-view]').forEach(b=>b.onclick=()=>{state.view=b.dataset.view;try{localStorage.setItem('sp-view',state.view)}catch(e){}if(state.view!=='convos')document.querySelector('.convo')?.classList.remove('open');render();$('#view').scrollTop=0});
+function render(){if(!state.data)return;
+  applyI18n();$('#privBtn').setAttribute('aria-pressed',String(priv));
+  document.querySelectorAll('.nav [data-view]').forEach(b=>{if(b.dataset.view===state.view)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
+  updateBadge();
+  const sync=state.data.ov.last_sync||state.loadedAt;$('#syncTxt').textContent=t('asOf',{t:fmtTime(sync)});
+  const map={today:['tToday','sToday'],convos:['tConvos','sConvos'],leads:['tLeads','sLeads'],stats:['tStats','sStats'],settings:['tSettings','sSettings']};
+  $('#viewTitle').textContent=t(map[state.view][0]);$('#viewSub').textContent=t(map[state.view][1]);
+  const v=$('#view');v.classList.toggle('flush',state.view==='convos');
+  ({today:viewToday,convos:viewConvos,leads:viewLeads,stats:viewStats,settings:viewSettings})[state.view](v);
+}
+const errBanner=()=>state.refreshErr?`<div class="banner err">${esc(t('stale',{t:fmtTime(state.loadedAt)}))} ${esc(state.refreshErr)}</div>`:'';
+const REASON={booking:'rBooking',financing:'rFinancing',showing:'rShowing',urgent:'rUrgent',call:'rCall',offer:'rOffer',engaged:'rEngaged',recent:'rRecent'};
+const KEY_REASONS=['booking','call','showing','financing','offer'];
+function nextStep(r){r=r||[];if(r.includes('call'))return t('nCall');if(r.includes('booking'))return t('nBooking');if(r.includes('showing'))return t('nShowing');if(r.includes('financing'))return t('nFinancing');if(r.includes('urgent'))return t('nUrgent');return t('nDefault')}
+const fubLink=c=>c.crm==='FUB'&&/^\d+$/.test(String(c.crm_contact_id||''))?`https://app.followupboss.com/2/people/view/${c.crm_contact_id}`:null;
+const statusKey=s=>({hot:'fHot',warm:'fWarm',booked:'fBooked',nurture:'fNurture',stopped:'fStopped'}[s]||'fWarm');
+const aiChip=c=>c.status==='stopped'?'':c.ai_paused?`<span class="ai-chip paused"><i></i>${t('aiOff')}</span>`:'';
+
+function viewToday(v){
+  const ov=state.data.ov,h=hot();const delta=(ov.meetings_30||0)-(ov.meetings_prev||0);
+  const recent=[...state.data.convos].filter(c=>c.last_body).sort((a,b)=>new Date(b.last_at)-new Date(a.last_at)).slice(0,8);
+  const dr=ov.drivers||{};const drivers=[['dNew',dr.new_lead_text],['dOld',dr.old_lead],['dSocial',dr.social],['dInbound',dr.inbound],['dOngoing',dr.ongoing],['dOther',dr.other]].filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]);const dmax=Math.max(1,...drivers.map(x=>x[1]));
+  v.innerHTML=`<div class="view-inner">${errBanner()}
+   <div class="kpis num">
+     <div class="kpi"><span class="l">${t('kNew')}</span><span class="v">${nf(ov.new_leads_30)}</span></div>
+     <div class="kpi"><span class="l">${t('kReply')}</span><span class="v">${ov.reply_rate??'–'}%</span></div>
+     <div class="kpi"><span class="l">${t('kMeet')}</span><span class="v">${nf(ov.meetings_30)}</span><span class="d ${delta<0?'down':''}">${delta>=0?'+':''}${nf(delta)} ${t('vsPrev')}</span></div>
+     <div class="kpi kpi-hot"><span class="l">${t('kHot')}</span><span class="v">${h.length}</span></div>
+     <div class="kpi"><span class="l">${t('kAi')}</span><span class="v">${nf(ov.ai_texts_30)}</span></div>
+   </div>
+   <div class="section-head"><h2>${t('needsYou')}</h2></div>
+   <div class="hot-list">${h.length?h.map(hotCard).join(''):`<div class="empty">${t('allClear')}</div>`}</div>
+   <div class="two-col">
+     <div class="panel"><h3>${t('feedTitle')}</h3><ul class="feed">${recent.map(c=>`<li data-open="${esc(c.session_id)}"><span class="tag ${c.last_role==='ai'?'ai':'lead'}">${t(c.last_role==='ai'?'ai':'lead')}</span><span class="txt"><span class="who">${esc(showName(c))}</span> · ${esc(maskText(c.last_body))}</span><span class="mono" style="color:var(--faint)">${ago(c.last_at)}</span></li>`).join('')||`<li class="muted">–</li>`}</ul></div>
+     <div class="panel"><h3>${t('whatBooked')}</h3><div class="funnel num">${drivers.map(d=>`<div class="frow"><span>${t(d[0])}</span><div class="track"><i style="width:${d[1]/dmax*100}%;background:var(--blush)"></i></div><span class="n">${nf(d[1])}</span></div>`).join('')||'<span class="muted">–</span>'}</div></div>
+   </div></div>`;
+  v.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>openConvo(b.dataset.open));
+  v.querySelectorAll('[data-handled]').forEach(b=>b.onclick=()=>markHandled(b.dataset.handled,b));
+}
+function hotCard(c){const hrs=(Date.now()-new Date(c.last_lead_at))/3600000;
+  const keys=(c.reasons||[]).filter(r=>KEY_REASONS.includes(r)),rest=(c.reasons||[]).filter(r=>!KEY_REASONS.includes(r));const link=fubLink(c);
+  return `<article class="hot ${hrs>48?'cooling':''}"><div class="stripe"></div>
+   <div class="hot-body">
+     <div class="hot-top"><span class="avatar" style="background:${avColor(c.session_id)}">${esc(initials(c))}</span><h3>${esc(showName(c))}</h3><span class="heat num">${c.heat}</span><span class="ch">${esc(c.channel)}</span>${aiChip(c)}<span class="waiting">${t('waiting')} <b class="num">${esc(ago(c.last_lead_at).replace(/^hace /,''))}</b></span></div>
+     ${c.last_body?`<div class="quote">${c.last_role==='ai'?'<b>'+t('ai')+':</b> ':''}“${esc(maskText(c.last_body))}”<small>${ago(c.last_at)}</small></div>`:''}
+     <div class="chips">${keys.map(r=>`<span class="chip key">${t(REASON[r])}</span>`).join('')}${rest.map(r=>`<span class="chip">${t(REASON[r])}</span>`).join('')}</div>
+   </div>
+   <div class="hot-side">
+     <div class="rec"><b>${t('next')}</b>${esc(nextStep(c.reasons))}</div>
+     <div class="hot-actions">
+       <button class="btn primary sm" data-open="${esc(c.session_id)}">${t('viewConvo')}</button>
+       ${isPhone(c.session_id)&&!priv?`<a class="btn sm" href="${telHref(c.session_id)}">${t('call')}</a>`:''}
+       <button class="btn sm" data-handled="${esc(c.session_id)}">${t('markHandled')}</button>
+       ${link?`<a class="btn sm" style="grid-column:1/-1" href="${link}" target="_blank" rel="noopener">${t('openFub')}</a>`:''}
+     </div>
+   </div></article>`}
+
+/* ---------- Inbox ---------- */
+function openConvo(sid){state.selected=sid;state.view='convos';try{localStorage.setItem('sp-view','convos')}catch(e){}render();document.querySelector('.convo')?.classList.add('open')}
+const match=c=>{const q=state.q.trim();if(!q)return true;const d=q.replace(/\D/g,'');return showName(c).toLowerCase().includes(q.toLowerCase())||(d.length>2&&String(c.session_id).includes(d))};
+function viewConvos(v){
+  const list=[...state.data.convos].sort((a,b)=>new Date(b.last_at)-new Date(a.last_at));
+  const wide=matchMedia('(min-width:861px)').matches;
+  if(wide&&(!state.selected||!byId(state.selected)))state.selected=list[0]?.session_id;
+  const c=state.selected&&byId(state.selected);
+  const wasOpen=document.querySelector('.convo')?.classList.contains('open');
+  const shown=list.filter(match).slice(0,300);
+  v.innerHTML=`<div class="convo ${wasOpen&&c?'open':''}">
+   <div class="clist"><div class="clist-head"><label class="sr" for="cq">${t('search')}</label><input class="input" id="cq" type="search" placeholder="${t('search')}" value="${esc(state.q)}"></div>
+    <div class="clist-scroll">${shown.map(x=>`<button class="citem" data-c="${esc(x.session_id)}" aria-current="${x.session_id===state.selected}"><span class="avatar" style="background:${avColor(x.session_id)}">${esc(initials(x))}</span><span style="min-width:0"><span class="nm">${x.status==='hot'?'<i class="hotdot"></i>':''}${x.ai_paused?'<i class="pausedot" title="'+esc(t('aiOff'))+'"></i>':''}<span>${esc(showName(x))}</span></span><span class="pv">${x.last_role==='ai'?t('ai')+': ':''}${esc(maskText(x.last_body||''))}</span></span><span class="tm"><span>${ago(x.last_at)}</span><span class="ch">${esc(x.channel)}</span></span></button>`).join('')||`<div class="loading">–</div>`}</div></div>
+   <div class="thread">${c?threadShell(c):''}</div>
+   <aside class="details">${c?detailsHTML(c):''}</aside></div>`;
+  v.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{state.selected=b.dataset.c;viewConvos(v);document.querySelector('.convo').classList.add('open')});
+  $('#cq').oninput=e=>{state.q=e.target.value;const p=e.target.selectionStart;viewConvos(v);const i=$('#cq');i.focus();try{i.setSelectionRange(p,p)}catch(_){}};
+  if(c)wireThread(c);
+}
+function threadShell(c){const link=fubLink(c);const sms=isPhone(c.session_id);const stopped=c.status==='stopped';
+  return `<div class="thread-head"><button class="btn sm back" id="backBtn">‹ ${t('back')}</button><span class="avatar" style="background:${avColor(c.session_id)}">${esc(initials(c))}</span><div style="min-width:0"><h3>${esc(showName(c))}</h3><span style="font-size:12px;color:var(--muted)">${esc(c.channel)}${sms?' · '+esc(showPhone(c.session_id)):''}</span></div><span class="spacer"></span><span class="pill ${esc(c.status)}">${t(statusKey(c.status))}</span></div>
+   <div class="thread-actions">
+     ${stopped?'':`<button class="btn sm ${c.ai_paused?'dark':'warn'}" id="aiBtn">${c.ai_paused?t('resumeAi'):t('pauseAi')}</button>`}
+     ${c.status==='hot'?`<button class="btn sm" id="handledBtn">${t('markHandled')}</button>`:''}
+     ${sms&&!priv&&!stopped?`<a class="btn sm" href="${telHref(c.session_id)}">${t('call')}</a>`:''}
+     ${link?`<a class="btn sm" href="${link}" target="_blank" rel="noopener">${t('openFub')}</a>`:''}
+     <span class="spacer"></span>${stopped?'':`<span class="ai-chip ${c.ai_paused?'paused':''}" style="align-self:center"><i></i>${c.ai_paused?t('aiOff'):t('aiOn')}</span>`}
+   </div>
+   <div class="msgs" id="msgs"><div class="loading">${t('loading')}</div></div>
+   ${composerHTML(c)}`}
+function composerHTML(c){
+  if(c.status==='stopped')return `<div class="composer"><span class="note-off">${t('optedOut')}</span></div>`;
+  if(!isPhone(c.session_id))return `<div class="composer"><span class="note-off">${t('notSms')}</span></div>`;
+  return `<form class="composer" id="composer"><div class="composer-row"><label class="sr" for="draft">${t('send')}</label><textarea id="draft" rows="1" maxlength="1000" placeholder="${esc(t('composePh',{n:showName(c).split(' ')[0]}))}"></textarea><button class="btn primary" id="sendMsg" type="submit">${t('send')}</button></div><small>${t('sendHint')}</small></form>`}
+function wireThread(c){const sid=c.session_id;
+  const bb=$('#backBtn');if(bb)bb.onclick=()=>{document.querySelector('.convo').classList.remove('open');if(!matchMedia('(min-width:861px)').matches)state.selected=null};
+  const ab=$('#aiBtn');if(ab)ab.onclick=()=>setAi(c,!c.ai_paused,ab);
+  const hb=$('#handledBtn');if(hb)hb.onclick=()=>markHandled(sid,hb);
+  const f=$('#composer');if(f){const ta=$('#draft');
+    let d='';try{d=sessionStorage.getItem('sp-draft-'+ck()+'-'+sid)||''}catch(_){}ta.value=d;
+    const grow=()=>{ta.style.height='auto';ta.style.height=Math.min(140,ta.scrollHeight)+'px'};grow();
+    ta.oninput=()=>{grow();try{sessionStorage.setItem('sp-draft-'+ck()+'-'+sid,ta.value)}catch(_){}};
+    ta.onkeydown=e=>{if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){e.preventDefault();f.requestSubmit()}};
+    f.onsubmit=e=>{e.preventDefault();sendText(c,ta)}}
+  loadThread(c)}
+async function loadThread(c,force){const sid=c.session_id;
+  try{if(force||!state.threads[sid])state.threads[sid]=await rpc('portal_thread',{p_client:ck(),p_session:sid});
+    const box=$('#msgs');if(state.selected!==sid||!box)return;box.innerHTML=threadHTML(c,state.threads[sid]);box.scrollTop=box.scrollHeight}
+  catch(err){const box=$('#msgs');if(box&&state.selected===sid)box.innerHTML=`<div class="banner err">${esc(errText(err))}</div>`}}
+function threadHTML(c,rows){const list=[...(rows||[])].reverse();let html='',lastDay='';
+  for(const m of list){const d=fmtDay(m.at);if(d!==lastDay){html+=`<div class="daysep">${esc(d)}</div>`;lastDay=d}
+    if(m.who==='event'){const ch=String(m.channel||'');const cancel=ch.includes('Cancel');const lbl=cancel?t('meetCancel'):ch.includes('Resched')?t('meetResched'):t('meetCreated');
+      const when=/^\d{4}-\d{2}-\d{2}T/.test(m.body||'')?' · '+new Date(m.body).toLocaleString(loc(),{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}):'';
+      html+=`<div class="event ${cancel?'cancel':''}">${esc(lbl+when)}</div>`;continue}
+    const cls=m.who==='ai'?'ai':m.who==='agent'?'agent':'lead';
+    const who=m.who==='ai'?'Starling AI':m.who==='agent'?t('agent'):esc(showName(c).split(' ')[0]);
+    const st=m.status?({queued:t('sQueued'),sent:t('sSent'),blocked:t('sBlocked'),failed:t('sFailed')}[m.status]||''):'';
+    html+=`<div class="b ${cls} ${esc(m.status||'')}">${esc(maskText(m.body))}<span class="meta">${who} · ${fmtTime(m.at)}${st?' · '+esc(st):''}</span></div>`}
+  return html||`<div class="loading">–</div>`}
+function detailsHTML(c){const link=fubLink(c);return `<div class="eyebrow">${t('leadDetails')}</div>
+  <dl class="kv num">${isPhone(c.session_id)?`<dt>${t('phone')}</dt><dd class="mono">${esc(showPhone(c.session_id))}</dd>`:''}<dt>${t('thChannel')}</dt><dd>${esc(c.channel)}</dd><dt>CRM</dt><dd>${esc(c.crm||'–')}</dd><dt>${t('thStatus')}</dt><dd><span class="pill ${esc(c.status)}">${t(statusKey(c.status))}</span></dd><dt>${t('thMsgs')}</dt><dd>${c.lead_msgs}</dd><dt>${t('thLast')}</dt><dd>${ago(c.last_at)}</dd>${c.handled_at?`<dt>${t('handled')}</dt><dd>${ago(c.handled_at)}</dd>`:''}</dl>
+  <div style="display:grid;gap:6px"><div style="display:flex;justify-content:space-between"><span class="eyebrow">${t('heatScore')}</span><b class="num">${c.heat}/100</b></div><div class="bar"><i style="width:${c.heat}%"></i></div></div>
+  ${(c.reasons||[]).length?`<div><div class="eyebrow" style="margin-bottom:6px">${t('whyHot')}</div><ul class="why">${c.reasons.map(r=>`<li>${t(REASON[r])}</li>`).join('')}</ul></div>`:''}
+  ${c.status==='hot'?`<div class="rec" style="background:var(--surface-2);padding:12px;border-radius:10px"><b>${t('next')}</b>${esc(nextStep(c.reasons))}</div>`:''}
+  ${link?`<a class="btn sm" href="${link}" target="_blank" rel="noopener">${t('openFub')}</a>`:''}`}
+
+/* ---------- Actions ---------- */
+async function setAi(c,paused,btn){btn.disabled=true;
+  try{await rpc('portal_set_ai',{p_client:ck(),p_session:c.session_id,p_paused:paused});c.ai_paused=paused;toast(paused?t('pausedNote'):t('resumedNote'));render()}
+  catch(err){toast(errText(err));btn.disabled=false}}
+async function markHandled(sid,btn){btn.disabled=true;
+  try{await rpc('portal_mark_handled',{p_client:ck(),p_session:sid});const c=byId(sid);if(c){c.handled_at=new Date().toISOString();if(c.status==='hot')c.status='warm'}toast(t('handledNote'));render()}
+  catch(err){toast(errText(err));btn.disabled=false}}
+async function sendText(c,ta){const body=ta.value.trim();if(!body||state.sending)return;const b=$('#sendMsg');state.sending=true;b.disabled=true;b.innerHTML='<span class="spinner"></span>';
+  try{const r=await rpc('portal_send',{p_client:ck(),p_session:c.session_id,p_body:body});const s=r&&r.status;
+    if(s==='queued'){ta.value='';try{sessionStorage.removeItem('sp-draft-'+ck()+'-'+c.session_id)}catch(_){}c.ai_paused=true;toast(t('queuedToast'))}
+    else if(s==='not_connected')toast(t('notConnected'));
+    else if(s==='not_sms')toast(t('notSms'));
+    else if(s==='blocked'){toast(t('optedOut'));ta.value=''}
+    state.threads[c.session_id]=await rpc('portal_thread',{p_client:ck(),p_session:c.session_id});
+    if(state.selected===c.session_id){const keep=ta.value;render();const nt=$('#draft');if(nt&&keep)nt.value=keep}}
+  catch(err){toast(errText(err))}
+  finally{state.sending=false;const nb=$('#sendMsg');if(nb){nb.disabled=false;nb.textContent=t('send')}}}
+
+/* ---------- Leads ---------- */
+function viewLeads(v){const fl=['all','hot','warm','booked','nurture','stopped'];const all=state.data.convos;
+  const rows=all.filter(c=>(state.filter==='all'||c.status===state.filter)&&match(c)).sort((a,b)=>b.heat-a.heat||new Date(b.last_at)-new Date(a.last_at));const shown=rows.slice(0,200);
+  v.innerHTML=`<div class="view-inner">${errBanner()}<div class="toolbar"><label class="sr" for="lq">${t('search')}</label><input class="input" id="lq" type="search" placeholder="${t('search')}" value="${esc(state.q)}"><div class="filters">${fl.map(f=>`<button aria-pressed="${state.filter===f}" data-f="${f}">${t(f==='all'?'fAll':statusKey(f))} <span class="num">${nf(f==='all'?all.length:all.filter(c=>c.status===f).length)}</span></button>`).join('')}</div></div>
+  <div class="table-wrap"><table><thead><tr><th>${t('thName')}</th><th>${t('thChannel')}</th><th>${t('thHeat')}</th><th>${t('thStatus')}</th><th>${t('thMsgs')}</th><th>${t('thLast')}</th></tr></thead><tbody>
+  ${shown.map(c=>`<tr data-row="${esc(c.session_id)}" tabindex="0"><td><div style="display:flex;gap:10px;align-items:center"><span class="avatar" style="background:${avColor(c.session_id)};width:30px;height:30px;font-size:11px">${esc(initials(c))}</span><div style="min-width:0"><b>${esc(showName(c))}</b>${isPhone(c.session_id)?`<div class="mono" style="color:var(--faint)">${esc(showPhone(c.session_id))}</div>`:''}</div></div></td><td><span class="ch">${esc(c.channel)}</span></td><td><div class="heatcell num"><div class="bar"><i style="width:${c.heat}%"></i></div>${c.heat}</div></td><td><span class="pill ${esc(c.status)}">${t(statusKey(c.status))}</span> ${aiChip(c)}</td><td class="num">${c.lead_msgs}</td><td class="num" style="color:var(--muted)">${ago(c.last_at)}</td></tr>`).join('')||`<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:28px">–</td></tr>`}
+  </tbody></table>${rows.length>shown.length?`<div class="tfoot">${t('showing',{a:nf(shown.length),b:nf(rows.length)})}</div>`:''}</div>
+  <div class="lcards">${shown.map(c=>`<button class="lcard" data-row="${esc(c.session_id)}"><span class="avatar" style="background:${avColor(c.session_id)}">${esc(initials(c))}</span><span style="min-width:0"><b>${esc(showName(c))}</b><small>${esc(c.channel)} · ${ago(c.last_at)}</small></span><span style="display:grid;gap:4px;justify-items:end"><span class="pill ${esc(c.status)}">${t(statusKey(c.status))}</span><span class="mono" style="color:var(--faint)">${c.heat}</span></span></button>`).join('')||`<div class="empty">–</div>`}${rows.length>shown.length?`<div class="tfoot">${t('showing',{a:nf(shown.length),b:nf(rows.length)})}</div>`:''}</div></div>`;
+  v.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{state.filter=b.dataset.f;viewLeads(v)});
+  $('#lq').oninput=e=>{state.q=e.target.value;const p=e.target.selectionStart;viewLeads(v);const i=$('#lq');i.focus();try{i.setSelectionRange(p,p)}catch(_){}};
+  v.querySelectorAll('[data-row]').forEach(r=>{r.onclick=()=>openConvo(r.dataset.row);r.onkeydown=e=>{if(e.key==='Enter')openConvo(r.dataset.row)}});
+}
+
+/* ---------- Results ---------- */
+function niceMax(v){if(v<=10)return 10;const p=Math.pow(10,Math.floor(Math.log10(v)));const n=v/p;return (n<=2?2:n<=5?5:10)*p}
+function viewStats(v){const ov=state.data.ov;const pd=ov.per_day||[];
+  const W=640,H=230,P={l:40,r:8,t:12,b:28};const n=Math.max(pd.length,1);const max=niceMax(Math.max(1,...pd.map(d=>Math.max(d.ai||0,d.lead||0))));
+  const cw=(W-P.l-P.r)/n,bw=Math.max(3,Math.min(14,cw/2-3));const y=val=>P.t+(H-P.t-P.b)*(1-val/max);
+  let g='';for(let i=0;i<=4;i++){const val=max*i/4;g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${y(val)}" y2="${y(val)}" stroke="var(--line)"/><text x="${P.l-6}" y="${y(val)+4}" text-anchor="end" font-size="11" fill="var(--faint)">${nf(val)}</text>`}
+  let bars='';pd.forEach((d,i)=>{const x=P.l+cw*i+cw/2;bars+=`<rect x="${x-bw-1}" y="${y(d.ai||0)}" width="${bw}" height="${y(0)-y(d.ai||0)}" rx="2" fill="var(--peri)"><title>${nf(d.ai)}</title></rect><rect x="${x+1}" y="${y(d.lead||0)}" width="${bw}" height="${y(0)-y(d.lead||0)}" rx="2" fill="var(--coral)"><title>${nf(d.lead)}</title></rect>`;
+    if(i%2===1||i===n-1){const dt=new Date(d.day+'T12:00:00');bars+=`<text x="${x}" y="${H-8}" text-anchor="middle" font-size="11" fill="var(--faint)">${dt.getMonth()+1}/${dt.getDate()}</text>`}});
+  const fn=[['fContacted',ov.contacted],['fReplied',ov.replied],['fEngaged',ov.engaged],['fHotL',ov.hot_now],['fBookedL',ov.booked_convos]];const fmax=Math.max(1,fn[0][1]||1);
+  const cap=ov.plan_cap;const pct=cap?Math.min(100,Math.round((ov.used_month||0)/cap*100)):null;
+  v.innerHTML=`<div class="view-inner">${errBanner()}${pct!==null&&pct>=85?`<div class="banner warn">${t('nearCap')}</div>`:''}<div class="stat-grid">
+   <div class="panel chart"><div class="section-head"><h3>${t('msgsChart')}</h3><span class="spacer"></span><div class="legend"><span><i style="background:var(--peri)"></i>${t('aiSent')}</span><span><i style="background:var(--coral)"></i>${t('replies')}</span></div></div><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${t('msgsChart')}" class="num">${g}${bars}</svg></div>
+   <div class="panel"><h3>${t('funnel')}</h3><div class="funnel num">${fn.map((f,i)=>`<div class="frow"><span>${t(f[0])}</span><div class="track"><i style="width:${(f[1]||0)/fmax*100}%;${i===4?'background:var(--coral)':''}"></i></div><span class="n">${nf(f[1])}</span></div>`).join('')}</div></div>
+   <div class="panel"><h3>${t('kReply')}</h3><div style="font-family:var(--f-display);font-size:34px;font-weight:700" class="num">${ov.reply_rate??'–'}%</div><div style="font-size:13px;color:var(--muted)" class="num">${nf(ov.replied)} / ${nf(ov.contacted)}</div></div>
+   <div class="panel"><h3>${t('usage')}</h3><div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap"><span class="num" style="font-family:var(--f-display);font-size:28px;font-weight:700">${nf(ov.used_month)}</span><span class="muted num">${cap?'/ '+nf(cap)+' · '+pct+'%':t('noCap')}</span></div>${cap?`<div class="meter"><i class="${pct>=85?'high':''}" style="width:${pct}%"></i></div>`:''}<div style="font-size:12px;color:var(--muted)">${t('resets')}</div></div>
+  </div></div>`}
+
+/* ---------- Settings ---------- */
+let setCache={};
+async function viewSettings(v){const key=ck();
+  v.innerHTML=`<div class="view-inner" style="max-width:760px">${errBanner()}
+   <div class="panel"><h3>${t('setAccount')}</h3><div class="set-list">
+     <div class="set"><div><b>${esc(state.account.display_name)}</b><p>${t('setSignedIn')} ${esc(state.user.email)}</p></div><button class="btn sm" id="soBtn">${t('signOut')}</button></div>
+     <div class="set"><div><b>${t('setLang')}</b><p>${t('setLangHint')}</p></div><div class="seg" role="group" aria-label="${t('setLang')}"><button type="button" data-l="en" aria-pressed="${lang==='en'}">English</button><button type="button" data-l="es" aria-pressed="${lang==='es'}">Español</button></div></div>
+   </div></div>
+   <div class="panel" id="hotPanel"><h3>${t('setHot')}</h3><p class="muted" style="margin:0">${t('setHotHint')}</p><div class="loading">${t('loading')}</div></div>
+   <div class="panel"><h3>${t('setHome')}</h3><p class="muted" style="margin:0">${t('setHomeIos')}</p><p class="muted" style="margin:0">${t('setHomeAnd')}</p></div>
+   <div class="panel"><h3>${t('setHelp')}</h3><p class="muted" style="margin:0">${t('setHelpHint')} <a href="https://calendly.com/starlingagent/30min" target="_blank" rel="noopener">calendly.com/starlingagent/30min</a></p><p class="mono" style="margin:0;color:var(--faint)">${t('version')} ${VERSION}</p></div>
+   ${state.isAdmin?`<div class="panel" id="adminPanel"><h3>${t('admin')}</h3><p class="muted" style="margin:0">${t('adminHint')}</p><div class="loading">${t('loading')}</div></div>`:''}
+  </div>`;
+  $('#soBtn').onclick=signOut;
+  v.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>setLang(b.dataset.l));
+  try{const s=await rpc('portal_get_settings',{p_client:key});if(key!==ck()||state.view!=='settings')return;setCache=s||{};hotPanel()}catch(err){const p=$('#hotPanel');if(p)p.innerHTML=`<div class="banner err">${esc(errText(err))}</div>`}
+  if(state.isAdmin)adminPanel();
+}
+function hotPanel(){const p=$('#hotPanel');if(!p)return;const s=setCache;const thr=s.hot_threshold??40;
+  p.innerHTML=`<h3>${t('setHot')}</h3><p class="muted" style="margin:0">${t('setHotHint')}</p>
+   <div class="range-row"><label class="sr" for="thr">${t('setHot')}</label><input type="range" id="thr" min="30" max="100" step="5" value="${thr}"><b class="num" id="thrVal" style="min-width:32px;text-align:right">${thr}</b><button class="btn primary sm" id="thrSave">${t('save')}</button></div>
+   <p class="muted num" style="margin:0" id="thrNow"></p>`;
+  const upd=()=>{const x=+$('#thr').value;$('#thrVal').textContent=x;const n=state.data.convos.filter(c=>c.lead_msgs>0&&c.status!=='stopped'&&c.status!=='booked'&&!(c.handled_at&&new Date(c.handled_at)>=new Date(c.last_lead_at))&&c.heat>=x&&Date.now()-new Date(c.last_lead_at)<7*864e5).length;$('#thrNow').textContent=t('setHotNow',{x,n})};
+  $('#thr').oninput=upd;upd();
+  $('#thrSave').onclick=async e=>{const b=e.currentTarget;b.disabled=true;
+    try{await rpc('portal_save_settings',{p_client:ck(),p_threshold:+$('#thr').value,p_sms:s.alert_sms??true,p_email:s.alert_email??true,p_crm_task:s.alert_crm_task??true,p_quiet_start:s.quiet_start||'21:00',p_quiet_end:s.quiet_end||'08:00'});
+      setCache.hot_threshold=+$('#thr').value;await load();toast(t('saved'));updateBadge()}catch(err){toast(errText(err))}finally{b.disabled=false}}}
+async function adminPanel(){const p=$('#adminPanel');if(!p)return;let members=[];
+  try{members=await rpc('portal_admin_members')||[]}catch(err){p.innerHTML=`<h3>${t('admin')}</h3><div class="banner err">${esc(errText(err))}</div>`;return}
+  if(state.view!=='settings')return;
+  const name=state.account.display_name;const opts=`<option value="*">${t('allAccounts')}</option>`+state.accounts.map(a=>`<option value="${esc(a.client_key)}"${a.client_key===ck()?' selected':''}>${esc(a.display_name)}</option>`).join('');
+  const roleTxt=r=>t(r==='admin'?'roleAdmin':r==='agent'?'roleAgent':'roleOwner');
+  p.innerHTML=`<h3>${t('admin')}</h3><p class="muted" style="margin:0">${t('adminHint')}</p>
+   <div><div class="eyebrow" style="margin-bottom:4px">${t('members')}</div><div class="mlist">${members.map(m=>`<div class="mrow"><div style="min-width:0"><b style="overflow-wrap:anywhere">${esc(m.email)}</b><small>${esc(m.display_name||m.client_key)}</small></div><span class="role muted" style="font-size:12px">${esc(roleTxt(m.role))}</span><button class="btn sm ghost" data-rm="${esc(m.id)}" data-e="${esc(m.email)}" data-a="${esc(m.display_name||m.client_key)}"${m.email.toLowerCase()===state.user.email.toLowerCase()?' disabled':''}>${t('remove')}</button></div>`).join('')}</div></div>
+   <form id="addForm" style="display:grid;gap:8px"><div class="eyebrow">${t('addMember')}</div><div class="form-grid">
+     <div class="field"><label for="amEmail">${t('email')}</label><input class="input" id="amEmail" type="email" placeholder="agent@example.com"></div>
+     <div class="field"><label for="amAcct">${t('account')}</label><select class="select" id="amAcct">${opts}</select></div>
+     <div class="field"><label for="amRole">${t('role')}</label><select class="select" id="amRole"><option value="owner">${t('roleOwner')}</option><option value="agent">${t('roleAgent')}</option></select></div>
+     <button class="btn dark" type="submit" style="min-height:44px">${t('add')}</button></div></form>
+   <form id="capForm" style="display:grid;gap:8px"><div class="eyebrow">${esc(t('planCap',{a:name}))}</div><div class="range-row"><label class="sr" for="capIn">${esc(t('planCap',{a:name}))}</label><input class="input" id="capIn" type="number" min="0" step="100" style="max-width:180px" value="${setCache.plan_cap??''}" placeholder="1000"><button class="btn dark" type="submit">${t('save')}</button><span class="muted" style="font-size:12px">${t('planCapHint')}</span></div></form>
+   <form id="sendForm" style="display:grid;gap:8px"><div class="eyebrow">${esc(t('texting',{a:name}))}</div><p class="muted" style="margin:0;font-size:13px">${t('textingHint')}</p>
+     <div class="form-grid" style="grid-template-columns:minmax(0,2fr) minmax(0,1fr) auto"><div class="field"><label for="whUrl">${t('webhookUrl')}</label><input class="input" id="whUrl" type="url" placeholder="https://starlingagent.app.n8n.cloud/webhook/…"></div><div class="field"><label for="whSec">${t('webhookSecret')}</label><input class="input" id="whSec" type="password" autocomplete="off"></div><button class="btn dark" type="submit" style="min-height:44px">${t('save')}</button></div></form>`;
+  p.querySelectorAll('[data-rm]').forEach(b=>b.onclick=async()=>{if(!confirm(t('removeQ',{e:b.dataset.e,a:b.dataset.a})))return;b.disabled=true;try{await rpc('portal_admin_remove_member',{p_id:b.dataset.rm});toast(t('memberRemoved'));adminPanel()}catch(err){toast(errText(err));b.disabled=false}});
+  $('#amAcct').onchange=e=>{$('#amRole').disabled=e.target.value==='*'};
+  $('#addForm').onsubmit=async e=>{e.preventDefault();const em=$('#amEmail').value.trim();if(!EMAIL_RE.test(em)){toast(t('badEmailAdmin'));return}
+    try{await rpc('portal_admin_add_member',{p_email:em,p_client:$('#amAcct').value,p_role:$('#amRole').value});toast(t('memberAdded'));adminPanel()}catch(err){toast(errText(err))}};
+  $('#capForm').onsubmit=async e=>{e.preventDefault();const raw=$('#capIn').value.trim();const cap=raw===''?null:Math.max(0,parseInt(raw,10)||0);
+    try{await rpc('portal_admin_set_cap',{p_client:ck(),p_cap:cap});setCache.plan_cap=cap;toast(t('saved'));await load()}catch(err){toast(errText(err))}};
+  $('#sendForm').onsubmit=async e=>{e.preventDefault();const url=$('#whUrl').value.trim(),sec=$('#whSec').value.trim();
+    if(!/^https:\/\/\S+$/.test(url)||!sec){toast(t('eGeneric',{c:'url + secret'}));return}
+    try{await rpc('portal_admin_set_sending',{p_client:ck(),p_url:url,p_secret:sec});$('#whSec').value='';toast(t('textingSaved'))}catch(err){toast(errText(err))}};
+}
+
+applyI18n();
+</script>
+</body>
+</html>
