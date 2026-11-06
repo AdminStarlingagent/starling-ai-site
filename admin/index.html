@@ -180,6 +180,18 @@
 .bgedit textarea{min-height:110px;margin-top:8px}
 .bgedit .editbar{margin-top:8px}
 .chiprow{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.obchk{margin-top:14px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.obhead{font:600 11px "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;opacity:.6;padding:9px 12px;border-bottom:1px solid var(--line)}
+.obrow{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.obrow:last-child{border-bottom:0}
+.obn{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;border:1px solid var(--line);opacity:.8}
+.obrow.got .obn{background:rgba(52,199,123,.15);border-color:rgba(52,199,123,.5);color:#34C77B}
+.obrow.half .obn{border-color:#E8B44A;color:#E8B44A}
+.obtx{flex:1;min-width:0}
+.obtx b{display:block;font-size:13px}
+.obst{font-size:12px;font-weight:600;margin-right:6px}
+.obrow.got .obst{color:#34C77B}.obrow.half .obst{color:#E8B44A}.obrow.sent .obst{color:#8B8DF2}.obrow.none .obst{opacity:.6}
+.obtx small{font-size:11.5px;opacity:.6}
 @media(max-width:1150px){.dgrid{grid-template-columns:1fr}.drail{position:static}}
 .grp h3 .ebtn{margin-left:auto;font:600 11px/1 "IBM Plex Sans",sans-serif;letter-spacing:.03em;color:var(--peri);
   background:none;border:1px solid var(--line-2);border-radius:7px;padding:5px 10px;cursor:pointer;text-transform:none}
@@ -895,10 +907,8 @@ async function openClient(id, quiet){
           `<option value="${s}"${r.status===s?" selected":""}>${s.replace("_"," ")}</option>`).join("")}
       </select>
       <button class="btn ghost sm" id="copyCfg">Copy CONFIG block</button>
-      ${(r.sources||[]).includes("build_your_agent") ? "" : `<button class="btn peri sm" id="sendBYA">${r.bya_invite_sent_at ? "Resend agent build email" : "🧭 Agent build email"}</button>`}
-      ${(r.sources||[]).includes("a2p_compliance") ? "" : `<button class="btn peri sm" id="sendA2P">${r.a2p_invite_sent_at ? "Resend compliance email" : "📧 Compliance email"}</button>`}
-      ${((r.sources||[]).includes("crm_access") || r.active_crm === "Starling") ? "" : `<button class="btn peri sm" id="sendCRM">${r.crm_invite_sent_at ? "Resend CRM access email" : "🔗 CRM access email"}</button>`}
     </div>
+    ${onboardChecklistHTML(r)}
     <div class="chiprow">
       <span class="chip">v${r.submission_count}</span>
       <span class="chip">${esc(r.active_crm || "no crm")}</span>
@@ -1051,12 +1061,12 @@ function wire(r){
     if(!w) return toast("Popup blocked", "Allow popups for this site, then click again.");
     const ts = new Date().toISOString();
     const { error } = await sb.from("starling_onboarding_clients")
-      .update({ bya_invite_sent_at: ts }).eq("id", r.id);
+      .update({ bya_invite_sent_at: ts, crm_invite_sent_at: ts }).eq("id", r.id);
     if(error) return toast("Compose opened", "Couldn't stamp the record: " + error.message);
-    r.bya_invite_sent_at = ts;
+    r.bya_invite_sent_at = ts; r.crm_invite_sent_at = ts;
     render();
     toast("Compose opened — " + (r.team_name || r.agent_name || r.email),
-          "This wizard link is tied to them only. Review, personalize, send. Marked as build-invited.");
+          "This setup link (agent + CRM) is tied to them only. Review, personalize, send. Marked as invited.");
     openClient(r.id, true);
   });
 
@@ -1665,19 +1675,52 @@ function wireEdit(r, gid){
   });
 }
 
+/* ── Onboarding checklist ──────────────────────────────────────────────
+   Every client shows the same two rows, always, so nothing appears or vanishes.
+   1. Setup form  = agent build + CRM connection (one combined form since Nov 2026)
+   2. Texting registration (A2P)
+   Each row reads: ✓ received · ◐ half done · ✉ sent <date> · ○ not sent, plus one button. */
+function setupState(r){
+  const s = r.sources || [];
+  const agent = s.includes("build_your_agent");
+  const crm   = s.includes("crm_access") || r.active_crm === "Starling";
+  if(agent && crm)  return { k:"got",  txt:"✓ Received", sub:"Agent + CRM both in" };
+  if(agent)         return { k:"half", txt:"◐ Half done", sub:"Agent is in — CRM connection missing" };
+  if(s.includes("crm_access")) return { k:"half", txt:"◐ Half done", sub:"CRM is in — agent setup missing" };
+  if(r.bya_invite_sent_at)     return { k:"sent", txt:"✉ Sent " + when(r.bya_invite_sent_at), sub:"Waiting on them" };
+  return { k:"none", txt:"○ Not sent", sub:"Send the setup email to start" };
+}
+function a2pState(r){
+  if((r.sources||[]).includes("a2p_compliance")) return { k:"got", txt:"✓ Received", sub: r.a2p_status && A2P[r.a2p_status] ? "Carrier status: " + A2P[r.a2p_status][1] : "Submitted" };
+  if(r.a2p_invite_sent_at) return { k:"sent", txt:"✉ Sent " + when(r.a2p_invite_sent_at), sub:"Waiting on them" };
+  return { k:"none", txt:"○ Not sent", sub:"Send once setup is in" };
+}
+function onboardChecklistHTML(r){
+  const a = setupState(r), b = a2pState(r);
+  const row = (n, label, st, id, verb) => `<div class="obrow ${st.k}">
+      <span class="obn">${st.k === "got" ? "✓" : n}</span>
+      <div class="obtx"><b>${label}</b><span class="obst">${st.txt}</span><small>${esc(st.sub)}</small></div>
+      <button class="btn ${st.k === "got" ? "ghost" : "peri"} sm" id="${id}" title="${st.k === "got" ? "Already received. Click to send the link again anyway." : ""}">${st.k === "got" ? "Resend" : st.k === "half" ? "Send to finish" : st.k === "none" ? verb : "Resend"}</button>
+    </div>`;
+  return `<div class="obchk">
+    <div class="obhead">Onboarding checklist</div>
+    ${row(1, "Setup form (agent + CRM)", a, "sendBYA", "Send setup email")}
+    ${row(2, "Texting registration (A2P)", b, "sendA2P", "Send A2P email")}
+  </div>`;
+}
+
 const FORM_LINKS = [
-  ["Build your agent", "https://starlingagent.com/build-your-agent.html", "build_your_agent"],
-  ["CRM access",       "https://starlingagent.com/crm-access.html",       "crm_access"],
-  ["A2P compliance",   "https://starlingagent.com/compliance",            "a2p_compliance"]
+  ["Setup form (agent + CRM)", "https://starlingagent.com/build-your-agent.html", "build_your_agent"],
+  ["A2P compliance",           "https://starlingagent.com/compliance",            "a2p_compliance"]
 ];
 const formURL = (url, r) => url + "?c=" + r.id;
 
 function quickLinksHTML(r){
   const src = r.sources || [];
   const rows = FORM_LINKS.map(([label, url, key]) => {
-    const got = src.includes(key) || (key === "crm_access" && r.active_crm === "Starling");
-    const why = key === "crm_access" && r.active_crm === "Starling" && !src.includes(key)
-      ? "n/a — Starling CRM" : (got ? "received" : "not yet");
+    const st = key === "build_your_agent" ? setupState(r) : a2pState(r);
+    const got = st.k === "got";
+    const why = st.k === "got" ? "received" : st.k === "half" ? "half done" : "not yet";
     return `<div class="qlrow">
       <div class="ql"><b>${label}</b><span class="qlstate${got ? " got" : ""}">${why}</span></div>
       <a class="qlopen" href="${formURL(url, r)}" target="_blank" rel="noopener" title="Open in a new tab">↗</a>
@@ -1687,7 +1730,7 @@ function quickLinksHTML(r){
   return `<h3>Quick links</h3>
     <p class="qlhint">Personal to this client only. A link sent to anyone else now forks a flagged duplicate instead of landing here — for brand-new people use ＋ New client invite.</p>
     ${rows}
-    <button class="btn ghost sm qlall" data-copyall="${r.id}" data-owner="${esc(r.team_name || r.agent_name || r.email)}">Copy all three</button>`;
+    <button class="btn ghost sm qlall" data-copyall="${r.id}" data-owner="${esc(r.team_name || r.agent_name || r.email)}">Copy both</button>`;
 }
 
 function complianceMail(r){
@@ -1721,23 +1764,26 @@ function complianceMail(r){
        + "&su=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
 }
 function byaMail(r){
-  const biz = r.team_name || r.agent_name || "your business";
-  const subject = biz + " — let's build your AI agent (about 5 minutes)";
+  /* One email covers the whole setup: agent + CRM are one form since Nov 2026. */
+  const first = (r.agent_name || "").split(/\s+/)[0];
+  const subject = "Let's set up your Starling AI (about 4 minutes)";
   const body = [
-    "Hi there,",
+    "Hi " + (first || "there") + ",",
     "",
-    "Welcome to Starling AI — your account is set up, and the next step is the fun one: building your AI agent.",
-    "",
-    "It's a 5-minute wizard. You name your agent, teach it how to introduce itself, set your hours and markets, and watch it come to life in a live preview as you type:",
+    "Welcome to Starling AI! One short form sets up your AI and connects it to your CRM. Most agents finish in about 4 minutes:",
     "https://starlingagent.com/build-your-agent.html?c=" + r.id,
     "",
-    "Everything you enter becomes your agent's personality and rules — how it greets leads, when it books appointments, and who it hands off to.",
+    "What you'll do:",
+    "1. Tell us about you (name, brokerage, cell, the areas you serve)",
+    "2. Approve your AI's first text. We've already written one that's getting great replies",
+    "3. Pick when it can book calls",
+    "4. Choose your CRM and paste your API key. The form shows exactly where to find it. Stuck? Leave it blank and we'll do it with you on your launch call",
     "",
-    "This link is personal to your account — use whichever email you like on the form. Please don't forward it to teammates: if someone else needs their own setup link, just reply and we'll send one over.",
+    "When you finish, you'll get a link to book your launch call, where we test your AI live together and switch it on.",
     "",
-    "Once your build is in, we configure the agent on our side and send you the final compliance step so carriers approve your number for texting.",
+    "This link is tied to your account, so please don't forward it. If a teammate needs their own, just reply and we'll send one.",
     "",
-    "Questions? Just reply to this email — we answer fast.",
+    "Questions? Just reply to this email.",
     "",
     "— The Starling AI Team",
     "Admin@starlingagent.com · starlingagent.com"
@@ -1748,20 +1794,18 @@ function byaMail(r){
 const byaTag = r => (!((r.sources||[]).includes("build_your_agent")) && r.bya_invite_sent_at)
   ? `<span>·</span><span class="a2ptag" style="opacity:.6">build invited ${when(r.bya_invite_sent_at)}</span>` : "";
 function newClientMail(){
-  const subject = "Welcome to Starling AI — let's build your AI agent (about 5 minutes)";
+  const subject = "Let's set up your Starling AI (about 4 minutes)";
   const body = [
     "Hi there,",
     "",
-    "Welcome to Starling AI — the first step is the fun one: building your AI agent.",
-    "",
-    "It's a 5-minute wizard. You name your agent, teach it how to introduce itself, set your hours and markets, and watch it come to life in a live preview as you type:",
+    "Welcome to Starling AI! One short form sets up your AI and connects it to your CRM. Most agents finish in about 4 minutes:",
     "https://starlingagent.com/build-your-agent.html",
     "",
-    "Use your best email on the form — that's how your account gets created, and every step after this stays tied to it.",
+    "Use your best email on the form. That's how your account is created, and everything after this stays tied to it.",
     "",
-    "Once your build is in, we configure the agent on our side and send you the next steps from there.",
+    "When you finish, you'll get a link to book your launch call, where we test your AI live together and switch it on.",
     "",
-    "Questions? Just reply to this email — we answer fast.",
+    "Questions? Just reply to this email.",
     "",
     "— The Starling AI Team",
     "Admin@starlingagent.com · starlingagent.com"
@@ -1845,7 +1889,7 @@ document.addEventListener("click", e => {
     if(!r) return;
     const who = all.dataset.owner || r.team_name || r.email;
     copyText(FORM_LINKS.map(([l,u]) => l + ": " + formURL(u, r)).join("\n"), all,
-      "All three copied — " + who + "'s links",
+      "Both links copied — " + who,
       "Personal to " + who + " only. For a brand-new client use ＋ New client invite instead.");
   }
 });
