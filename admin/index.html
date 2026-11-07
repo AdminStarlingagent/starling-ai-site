@@ -1079,7 +1079,7 @@ function wire(r){
     r.bya_invite_sent_at = ts; r.crm_invite_sent_at = ts;
     render();
     toast(copied ? "Branded email copied. Paste it into Gmail" : "Gmail opened (plain-text version)",
-          copied ? "Click in the Gmail message body, press Ctrl+V (⌘V on Mac), then Send. Marked as invited."
+          copied ? "In Gmail: click above your signature, press Ctrl+V (⌘V on Mac), then hit Send. It isn't sent until you do."
                  : "Couldn't copy the branded version, so the plain text is in the draft. Marked as invited.");
     openClient(r.id, true);
   });
@@ -1859,12 +1859,12 @@ function setupState(r){
   if(agent && crm)  return { k:"got",  txt:"✓ Received", sub:"Agent + CRM both in" };
   if(agent)         return { k:"half", txt:"◐ Half done", sub:"Agent is in — CRM connection missing" };
   if(s.includes("crm_access")) return { k:"half", txt:"◐ Half done", sub:"CRM is in — agent setup missing" };
-  if(r.bya_invite_sent_at)     return { k:"sent", txt:"✉ Sent " + when(r.bya_invite_sent_at), sub:"Waiting on them" };
+  if(r.bya_invite_sent_at)     return { k:"sent", txt:"✉ Email opened " + when(r.bya_invite_sent_at), sub:"Make sure you hit Send in Gmail" };
   return { k:"none", txt:"○ Not sent", sub:"Send the setup email to start" };
 }
 function a2pState(r){
   if((r.sources||[]).includes("a2p_compliance")) return { k:"got", txt:"✓ Received", sub: r.a2p_status && A2P[r.a2p_status] ? "Carrier status: " + A2P[r.a2p_status][1] : "Submitted" };
-  if(r.a2p_invite_sent_at) return { k:"sent", txt:"✉ Sent " + when(r.a2p_invite_sent_at), sub:"Waiting on them" };
+  if(r.a2p_invite_sent_at) return { k:"sent", txt:"✉ Email opened " + when(r.a2p_invite_sent_at), sub:"Make sure you hit Send in Gmail" };
   return { k:"none", txt:"○ Not sent", sub:"Send once setup is in" };
 }
 function onboardChecklistHTML(r){
