@@ -1612,7 +1612,7 @@ function starlingEmail(o){
       pre: 'One short form builds your AI and connects it to your CRM.',
       eyebrow: 'Welcome to Starling AI',
       h1: "Let's build your AI agent",
-      lead: 'One short form builds your AI and connects it to your CRM. Most agents finish in about 4 minutes, and you can watch your AI come to life as you type.',
+      lead: (crm === 'Starling' ? 'One short form builds your AI agent inside your Starling CRM.' : 'One short form builds your AI and connects it to your CRM.') + ' Most agents finish in about 4 minutes, and you can watch your AI come to life as you type.',
       cta: 'Build my AI agent',
       steps: [
         ['Tell us about you', 'Your name, brokerage, cell and the areas you serve.'],
@@ -1653,6 +1653,10 @@ function starlingEmail(o){
     }
   }[kind];
 
+  // Starling CRM clients have nothing to paste: say so instead of asking for an API key.
+  if (crm === 'Starling' && kind !== 'finish_crm') {
+    C.steps[C.steps.length - 1] = ['Pick Starling CRM', "You're already on Starling CRM, so there's nothing to paste. Just pick it and sign off."];
+  }
   var stepRows = C.steps.map(function(s, i){
     return '<tr><td valign="top" style="padding:0 0 16px 0;width:40px">'
       + '<div style="width:28px;height:28px;border-radius:14px;background:#FFE9EC;color:' + CORAL + ';font:700 13px/28px ' + F + ';text-align:center">' + (i + 1) + '</div></td>'
