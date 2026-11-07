@@ -1027,8 +1027,7 @@ function wire(r){
 
   const sBtn = $("sendA2P");
   if(sBtn) sBtn.addEventListener("click", async () => {
-    const w = window.open(complianceMail(r), "_blank", "noopener");
-    if(!w) return toast("Popup blocked", "Allow popups for this site, then click again.");
+    window.open(complianceMail(r), "_blank", "noopener");
     const ts = new Date().toISOString();
     const { error } = await sb.from("starling_onboarding_clients")
       .update({ a2p_invite_sent_at: ts }).eq("id", r.id);
@@ -1042,8 +1041,7 @@ function wire(r){
 
   const cBtn = $("sendCRM");
   if(cBtn) cBtn.addEventListener("click", async () => {
-    const w = window.open(crmAccessMail(r), "_blank", "noopener");
-    if(!w) return toast("Popup blocked", "Allow popups for this site, then click again.");
+    window.open(crmAccessMail(r), "_blank", "noopener");
     const ts = new Date().toISOString();
     const { error } = await sb.from("starling_onboarding_clients")
       .update({ crm_invite_sent_at: ts }).eq("id", r.id);
@@ -1057,16 +1055,32 @@ function wire(r){
 
   const bBtn = $("sendBYA");
   if(bBtn) bBtn.addEventListener("click", async () => {
-    const w = window.open(byaMail(r), "_blank", "noopener");
-    if(!w) return toast("Popup blocked", "Allow popups for this site, then click again.");
+    // Pick the right email for where this client is: full setup, CRM-only, or agent-only.
+    const st = setupState(r), src = r.sources || [];
+    const kind = st.k === "half" ? (src.includes("build_your_agent") ? "finish_crm" : "finish_agent") : "setup";
+    const first = ((r.agent_name || "").trim().split(/\s+/)[0] || "");
+    const link = "https://starlingagent.com/build-your-agent.html" + (kind === "finish_crm" ? "?only=crm&c=" : "?c=") + r.id;
+    const em = starlingEmail({ kind, link, crm: r.active_crm,
+      first: first ? first.charAt(0).toUpperCase() + first.slice(1) : "there",
+      note: "This link is tied to your account, so please don't forward it." });
+    let copied = false;
+    try{
+      await navigator.clipboard.write([new ClipboardItem({
+        "text/html":  new Blob([em.html], { type: "text/html" }),
+        "text/plain": new Blob([em.text], { type: "text/plain" }) })]);
+      copied = true;
+    }catch(err){}
+    window.open(GMAIL_COMPOSE + "to=" + encodeURIComponent(r.email) + "&su=" + encodeURIComponent(em.subject)
+      + (copied ? "" : "&body=" + encodeURIComponent(em.text)), "_blank", "noopener");
     const ts = new Date().toISOString();
     const { error } = await sb.from("starling_onboarding_clients")
       .update({ bya_invite_sent_at: ts, crm_invite_sent_at: ts }).eq("id", r.id);
     if(error) return toast("Compose opened", "Couldn't stamp the record: " + error.message);
     r.bya_invite_sent_at = ts; r.crm_invite_sent_at = ts;
     render();
-    toast("Compose opened — " + (r.team_name || r.agent_name || r.email),
-          "This setup link (agent + CRM) is tied to them only. Review, personalize, send. Marked as invited.");
+    toast(copied ? "Branded email copied. Paste it into Gmail" : "Gmail opened (plain-text version)",
+          copied ? "Click in the Gmail message body, press Ctrl+V (⌘V on Mac), then Send. Marked as invited."
+                 : "Couldn't copy the branded version, so the plain text is in the draft. Marked as invited.");
     openClient(r.id, true);
   });
 
@@ -1553,11 +1567,165 @@ $("refresh").addEventListener("click", async () => {
   toast("Up to date", "List and open record re-pulled from the database just now.");
 });
 
-$("newInvite").addEventListener("click", () => {
-  const w = window.open(newClientMail(), "_blank", "noopener");
-  if(!w) return toast("Popup blocked", "Allow popups for this site, then click again.");
-  toast("Blank invite opened", "No client token in this link — their record is created from whatever email they enter on the form.");
+$("newInvite").addEventListener("click", async () => {
+  const em = starlingEmail({ kind: "setup", first: "there", link: "https://starlingagent.com/build-your-agent.html",
+    note: "Use your best email on the form. That's how we set up your account." });
+  let copied = false;
+  try{
+    await navigator.clipboard.write([new ClipboardItem({
+      "text/html":  new Blob([em.html], { type: "text/html" }),
+      "text/plain": new Blob([em.text], { type: "text/plain" }) })]);
+    copied = true;
+  }catch(err){}
+  window.open(copied ? GMAIL_COMPOSE + "su=" + encodeURIComponent(em.subject) : newClientMail(), "_blank", "noopener");
+  toast(copied ? "Branded invite copied. Paste it into Gmail" : "Blank invite opened",
+        copied ? "Add their email, click in the message body, press Ctrl+V (⌘V on Mac), then Send."
+               : "No client token in this link. Their record is created from whatever email they enter on the form.");
 });
+
+/* Starling AI onboarding emails — one template, used by the console and by n8n.
+   Table layout + inline styles so it renders the same in Gmail, Outlook and Apple Mail. */
+function starlingEmail(o){
+  o = o || {};
+  var kind  = o.kind || 'setup';                // 'setup' | 'finish_crm' | 'finish_agent'
+  var first = o.first || 'there';
+  var link  = o.link || 'https://starlingagent.com/build-your-agent.html';
+  var crm   = o.crm || '';
+  var note  = o.note || '';                     // small line under the button
+  var LOGO  = 'https://starlingagent.com/email/starling-mark.png';
+  var F = "'Plus Jakarta Sans','Poppins',Helvetica,Arial,sans-serif";
+  var NAVY = '#080C17', CORAL = '#F15368', PERI = '#868BDF', MUTED = '#5B6475', LINE = '#E7E9F0';
+
+  var KEY_WHERE = {
+    'FUB':       'In Follow Up Boss: <b>Admin &rarr; API &rarr; Create API Key</b>, and name it "Starling AI".',
+    'BoldTrail': 'In BoldTrail: <b>Lead Engine &rarr; Lead Dropbox &rarr; My API Tokens</b>, then generate a Contacts token.',
+    'Lofty':     'In Lofty: <b>Settings &rarr; Integrations &rarr; API</b>. Set the expiration to <b>Never</b>.',
+    'GHL':       'In GoHighLevel: <b>Settings &rarr; Private Integrations &rarr; Create</b>.',
+    'RealGeeks': 'For Real Geeks: ask your rep for <b>Lead Router API access</b>.',
+    'Jungo':     'For Jungo, we connect it together on a quick screen share. Just tell us who manages your Salesforce.'
+  };
+  var CRM_NAME = {FUB:'Follow Up Boss', BoldTrail:'BoldTrail', Lofty:'Lofty', GHL:'GoHighLevel', RealGeeks:'Real Geeks', Jungo:'Jungo'};
+
+  var C = {
+    setup: {
+      subject: "Let's build your AI agent (about 4 minutes)",
+      pre: 'One short form builds your AI and connects it to your CRM.',
+      eyebrow: 'Welcome to Starling AI',
+      h1: "Let's build your AI agent",
+      lead: 'One short form builds your AI and connects it to your CRM. Most agents finish in about 4 minutes, and you can watch your AI come to life as you type.',
+      cta: 'Build my AI agent',
+      steps: [
+        ['Tell us about you', 'Your name, brokerage, cell and the areas you serve.'],
+        ['Approve your first text', "We've already written one that's getting great replies. Keep it or tweak it."],
+        ['Pick when it can book', 'Your AI books phone calls only inside your hours.'],
+        ['Connect your CRM', "Paste your API key. The form shows exactly where to find it. Stuck? Leave it blank and we'll do it with you."]
+      ],
+      bubble: true
+    },
+    finish_agent: {
+      subject: 'Finish setting up your Starling AI (about 4 minutes)',
+      pre: "Your CRM is connected. Now let's build the AI that works it.",
+      eyebrow: 'Almost there',
+      h1: "Now let's build your AI",
+      lead: "Your CRM is connected. The last piece is the AI itself: how it introduces itself, its first text, and when it can book calls. About 4 minutes.",
+      cta: 'Build my AI agent',
+      steps: [
+        ['Tell us about you', 'Your name, brokerage, cell and the areas you serve.'],
+        ['Approve your first text', "We've already written one that's getting great replies."],
+        ['Pick when it can book', 'Your AI books phone calls only inside your hours.'],
+        ['Confirm your CRM', 'Already connected, so just pick it again. No key needed unless it changed.']
+      ],
+      bubble: true
+    },
+    finish_crm: {
+      subject: 'One step left: connect your CRM to Starling AI',
+      pre: 'Your AI agent is built. Connect your CRM so it can start texting your leads.',
+      eyebrow: 'One step left',
+      h1: 'Connect your CRM',
+      lead: 'Your AI agent is built and ready. Connect ' + (CRM_NAME[crm] || 'your CRM') + ' so it can start texting your leads. It takes about 2 minutes.',
+      cta: 'Connect my CRM',
+      steps: [
+        ['Confirm your name and email', 'So we match it to your account.'],
+        ['Paste your API key', KEY_WHERE[crm] || "The form shows exactly where to find it in your CRM."],
+        ['Sign off', "Two checkboxes and your name, and you're done."]
+      ],
+      bubble: false
+    }
+  }[kind];
+
+  var stepRows = C.steps.map(function(s, i){
+    return '<tr><td valign="top" style="padding:0 0 16px 0;width:40px">'
+      + '<div style="width:28px;height:28px;border-radius:14px;background:#FFE9EC;color:' + CORAL + ';font:700 13px/28px ' + F + ';text-align:center">' + (i + 1) + '</div></td>'
+      + '<td valign="top" style="padding:3px 0 16px 0;font:400 14px/1.5 ' + F + ';color:' + MUTED + '">'
+      + '<b style="display:block;color:' + NAVY + ';font-size:15px;margin-bottom:2px">' + s[0] + '</b>' + s[1] + '</td></tr>';
+  }).join('');
+
+  var bubble = !C.bubble ? '' :
+    '<tr><td style="padding:8px 40px 4px 40px">'
+    + '<p style="margin:0 0 10px 0;font:600 12px/1.4 ' + F + ';letter-spacing:.06em;text-transform:uppercase;color:' + MUTED + '">The kind of first text your AI sends</p>'
+    + '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#F7F7FB;border-radius:16px"><tr><td style="padding:16px">'
+    + '<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="left" style="max-width:76%"><tr><td style="background:#ECEEF3;border-radius:16px 16px 16px 4px;padding:10px 14px;font:400 14px/1.45 ' + F + ';color:#1E293B">Hi, is this home still available?</td></tr></table>'
+    + '<div style="clear:both;height:10px;line-height:10px;font-size:1px">&nbsp;</div>'
+    + '<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="right" style="max-width:82%"><tr><td style="background:' + PERI + ';background-image:linear-gradient(135deg,#868BDF,#F15368);border-radius:16px 16px 4px 16px;padding:11px 14px;font:400 14px/1.45 ' + F + ';color:#ffffff">Hi Sarah, thanks for reaching out! Quick question so I can point you the right way: are you looking to buy, sell, or just exploring your options right now?</td></tr></table>'
+    + '<div style="clear:both;font-size:1px;line-height:1px">&nbsp;</div>'
+    + '<p style="margin:8px 0 0 0;text-align:right;font:500 11px/1.4 ' + F + ';color:#10B981">Sent in 4 seconds</p>'
+    + '</td></tr></table></td></tr>';
+
+  var html = '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>' + C.subject + '</title></head>'
+  + '<body style="margin:0;padding:0;background:#F2F3F8">'
+  + '<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#F2F3F8">' + C.pre + '&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;</div>'
+  + '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F2F3F8"><tr><td align="center" style="padding:28px 12px">'
+  + '<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px">'
+  // header
+  + '<tr><td style="background:' + NAVY + ';border-radius:18px 18px 0 0;padding:22px 32px">'
+  +   '<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>'
+  +   '<td style="padding-right:12px"><img src="' + LOGO + '" width="40" height="40" alt="Starling AI" style="display:block;border:0;border-radius:10px"></td>'
+  +   '<td style="font:700 19px/1 ' + F + ';color:#ffffff;letter-spacing:-.01em">Starling AI</td></tr></table>'
+  + '</td></tr>'
+  // accent rule
+  + '<tr><td style="height:4px;line-height:4px;font-size:1px;background:' + CORAL + ';background-image:linear-gradient(90deg,#868BDF,#F15368,#FFA0A8)">&nbsp;</td></tr>'
+  // body card
+  + '<tr><td style="background:#ffffff;border-left:1px solid ' + LINE + ';border-right:1px solid ' + LINE + '">'
+  +   '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">'
+  +   '<tr><td style="padding:36px 40px 8px 40px">'
+  +     '<p style="margin:0 0 10px 0;font:700 12px/1.4 ' + F + ';letter-spacing:.09em;text-transform:uppercase;color:' + CORAL + '">' + C.eyebrow + '</p>'
+  +     '<h1 style="margin:0 0 14px 0;font:700 28px/1.2 ' + F + ';letter-spacing:-.02em;color:' + NAVY + '">' + C.h1 + '</h1>'
+  +     '<p style="margin:0 0 6px 0;font:400 16px/1.6 ' + F + ';color:' + MUTED + '">Hi ' + first + ',</p>'
+  +     '<p style="margin:0 0 26px 0;font:400 16px/1.6 ' + F + ';color:' + MUTED + '">' + C.lead + '</p>'
+  // button
+  +     '<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" bgcolor="' + CORAL + '" style="border-radius:999px">'
+  +     '<a href="' + link + '" target="_blank" style="display:inline-block;padding:15px 34px;font:700 16px/1 ' + F + ';color:#ffffff;text-decoration:none;border-radius:999px">' + C.cta + ' &rarr;</a>'
+  +     '</td></tr></table>'
+  +     (note ? '<p style="margin:12px 0 0 0;font:400 12.5px/1.5 ' + F + ';color:#8A93A6">' + note + '</p>' : '')
+  +   '</td></tr>'
+  // steps
+  +   '<tr><td style="padding:30px 40px 6px 40px">'
+  +     '<p style="margin:0 0 16px 0;font:600 12px/1.4 ' + F + ';letter-spacing:.06em;text-transform:uppercase;color:' + MUTED + '">What you\'ll do</p>'
+  +     '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">' + stepRows + '</table>'
+  +   '</td></tr>'
+  +   bubble
+  // next
+  +   '<tr><td style="padding:22px 40px 34px 40px">'
+  +     '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid ' + LINE + ';border-radius:14px"><tr><td style="padding:16px 18px;font:400 14px/1.55 ' + F + ';color:' + MUTED + '">'
+  +     '<b style="color:' + NAVY + '">What happens next:</b> when you finish, you\'ll pick a time for your <b style="color:' + NAVY + '">launch call</b>. We test your AI live together, then switch it on.'
+  +     '</td></tr></table>'
+  +   '</td></tr>'
+  +   '</table>'
+  + '</td></tr>'
+  // footer
+  + '<tr><td style="background:#ffffff;border:1px solid ' + LINE + ';border-top:0;border-radius:0 0 18px 18px;padding:0 40px 30px 40px">'
+  +   '<p style="margin:0;padding-top:20px;border-top:1px solid ' + LINE + ';font:400 14px/1.6 ' + F + ';color:' + MUTED + '">Questions? Just reply to this email.<br><b style="color:' + NAVY + '">The Starling AI Team</b></p>'
+  + '</td></tr>'
+  + '<tr><td align="center" style="padding:18px 20px 0 20px;font:400 12px/1.6 ' + F + ';color:#9AA3B5">'
+  +   '<a href="mailto:Admin@starlingagent.com" style="color:#9AA3B5;text-decoration:none">Admin@starlingagent.com</a> &nbsp;·&nbsp; <a href="https://starlingagent.com" style="color:#9AA3B5;text-decoration:none">starlingagent.com</a><br>Starling AI LLC'
+  + '</td></tr>'
+  + '</table></td></tr></table></body></html>';
+
+  var text = 'Hi ' + first + ',\n\n' + C.lead.replace(/<[^>]+>/g, '') + '\n\n' + C.cta + ': ' + link + '\n\n'
+    + C.steps.map(function(s, i){ return (i + 1) + '. ' + s[0] + ': ' + s[1].replace(/<[^>]+>/g, '').replace(/&rarr;/g, '>'); }).join('\n')
+    + "\n\nWhen you finish, you'll pick a time for your launch call. We test your AI live together, then switch it on.\n\nQuestions? Just reply to this email.\n\nThe Starling AI Team\nAdmin@starlingagent.com · starlingagent.com";
+  return { subject: C.subject, html: html, text: text };
+}
 
 /* ─────────── helpers ─────────── */
 const SRC_LABEL = { build_your_agent:"wizard", crm_access:"CRM access", a2p_compliance:"A2P", starling_crm:"Starling CRM" };
@@ -1709,6 +1877,8 @@ function onboardChecklistHTML(r){
   </div>`;
 }
 
+const GMAIL_COMPOSE = "https://mail.google.com/mail/?authuser=" + encodeURIComponent("Admin@starlingagent.com") + "&view=cm&fs=1&";
+
 const FORM_LINKS = [
   ["Setup form (agent + CRM)", "https://starlingagent.com/build-your-agent.html", "build_your_agent"],
   ["A2P compliance",           "https://starlingagent.com/compliance",            "a2p_compliance"]
@@ -1760,7 +1930,7 @@ function complianceMail(r){
     "— The Starling AI Team",
     "Admin@starlingagent.com · starlingagent.com"
   ].join("\n");
-  return "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent(r.email)
+  return GMAIL_COMPOSE + "to=" + encodeURIComponent(r.email)
        + "&su=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
 }
 function byaMail(r){
@@ -1788,7 +1958,7 @@ function byaMail(r){
     "— The Starling AI Team",
     "Admin@starlingagent.com · starlingagent.com"
   ].join("\n");
-  return "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent(r.email)
+  return GMAIL_COMPOSE + "to=" + encodeURIComponent(r.email)
        + "&su=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
 }
 const byaTag = r => (!((r.sources||[]).includes("build_your_agent")) && r.bya_invite_sent_at)
@@ -1810,7 +1980,7 @@ function newClientMail(){
     "— The Starling AI Team",
     "Admin@starlingagent.com · starlingagent.com"
   ].join("\n");
-  return "https://mail.google.com/mail/?view=cm&fs=1&su=" + encodeURIComponent(subject)
+  return GMAIL_COMPOSE + "su=" + encodeURIComponent(subject)
        + "&body=" + encodeURIComponent(body);
 }
 function crmAccessMail(r){
@@ -1837,7 +2007,7 @@ function crmAccessMail(r){
     "— The Starling AI Team",
     "Admin@starlingagent.com · starlingagent.com"
   ].join("\n");
-  return "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent(r.email)
+  return GMAIL_COMPOSE + "to=" + encodeURIComponent(r.email)
        + "&su=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
 }
 const crmTag = r => (!((r.sources||[]).includes("crm_access")) && r.crm_invite_sent_at)

@@ -197,6 +197,10 @@ details.more .inner{padding-top:12px}
 .summary{margin-top:14px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
 .summary span{font-size:11.5px;font-weight:600;color:#475569;background:#fff;border:1px solid var(--line2);border-radius:99px;padding:4px 10px}
 .mini{display:none}
+/* "Connect CRM only" mode (?only=crm): for clients whose agent is already built */
+html.crm-only .pv, html.crm-only [data-step="2"], html.crm-only [data-step="3"], html.crm-only .crm-hide,
+html.crm-only .steps__i[data-go="2"], html.crm-only .steps__i[data-go="3"], html.crm-only .steps__ln.l2, html.crm-only .steps__ln.l3{display:none!important}
+html.crm-only .shell{grid-template-columns:minmax(0,760px);justify-content:center}
 
 /* ---------- done ---------- */
 .done{display:none;max-width:720px;margin:0 auto;padding:60px 28px 90px}
@@ -250,8 +254,8 @@ window.starlingClientToken = function(p){
     <div class="brand"><span class="brand__mark" role="img" aria-label="Starling AI"></span><span>Starling AI</span></div>
     <nav class="steps" aria-label="Progress">
       <button type="button" class="steps__i on" data-go="1"><span class="steps__n">1</span><span class="steps__t">About you</span></button><span class="steps__ln"></span>
-      <button type="button" class="steps__i" data-go="2" disabled><span class="steps__n">2</span><span class="steps__t">First text</span></button><span class="steps__ln"></span>
-      <button type="button" class="steps__i" data-go="3" disabled><span class="steps__n">3</span><span class="steps__t">Booking</span></button><span class="steps__ln"></span>
+      <button type="button" class="steps__i" data-go="2" disabled><span class="steps__n">2</span><span class="steps__t">First text</span></button><span class="steps__ln l2"></span>
+      <button type="button" class="steps__i" data-go="3" disabled><span class="steps__n">3</span><span class="steps__t">Booking</span></button><span class="steps__ln l3"></span>
       <button type="button" class="steps__i" data-go="4" disabled><span class="steps__n">4</span><span class="steps__t">Connect &amp; launch</span></button>
     </nav>
     <div class="saved" id="saved"><i></i><span>About 4 minutes · saves as you go</span></div>
@@ -265,9 +269,9 @@ window.starlingClientToken = function(p){
 
   <!-- ================= STEP 1 ================= -->
   <section class="step on" data-step="1">
-    <p class="eyebrow">Step 1 of 4</p>
-    <h1>Let's start with you</h1>
-    <p class="lede">Your AI texts your leads as you, so we just need the basics.</p>
+    <p class="eyebrow" id="eb1">Step 1 of 4</p>
+    <h1 id="h1a">Let's start with you</h1>
+    <p class="lede" id="lede1">Your AI texts your leads as you, so we just need the basics.</p>
 
     <div class="g2">
       <div class="f" data-req>
@@ -282,13 +286,13 @@ window.starlingClientToken = function(p){
       </div>
     </div>
 
-    <div class="f">
+    <div class="f crm-hide">
       <label for="biz">Name your clients know you by <span class="opt">optional</span></label>
       <p class="help">Your team or business name. Solo? Leave it blank and we'll use your brokerage.</p>
       <input type="text" id="biz" autocomplete="organization" placeholder="The Aguirre Group">
     </div>
 
-    <div class="f" data-req>
+    <div class="f crm-hide" data-req>
       <label for="brokerage">Brokerage or company</label>
       <input type="text" id="brokerage" placeholder="eXp Realty">
       <p class="lender-note" id="lenderNote">Looks like you're a loan officer, so we'll set your AI up for loan leads. <button type="button" class="linkbtn" id="lenderUndo">I'm a real estate agent</button></p>
@@ -301,7 +305,7 @@ window.starlingClientToken = function(p){
         <input type="email" id="email" autocomplete="email" inputmode="email" placeholder="you@yourteam.com">
         <p class="err">Enter a valid email. This is how we find your account.</p>
       </div>
-      <div class="f" data-req data-type="phone">
+      <div class="f crm-hide" data-req data-type="phone">
         <label for="cell">Cell phone</label>
         <input type="tel" id="cell" autocomplete="tel" inputmode="tel" placeholder="(713) 555-0192">
         <p class="hint">We text you the second your AI books a meeting.</p>
@@ -309,14 +313,14 @@ window.starlingClientToken = function(p){
       </div>
     </div>
 
-    <label class="chk" style="margin:-4px 0 18px"><input type="checkbox" id="leadsCall" checked><span>Leads can call this number too<small>If a lead asks for your number, your AI shares this one.</small></span></label>
+    <label class="chk crm-hide" style="margin:-4px 0 18px"><input type="checkbox" id="leadsCall" checked><span>Leads can call this number too<small>If a lead asks for your number, your AI shares this one.</small></span></label>
     <div class="f" id="altPhoneWrap" style="display:none" data-type="phone">
       <label for="altPhone">Number leads should call instead</label>
       <input type="tel" id="altPhone" inputmode="tel" placeholder="Office or team line">
       <p class="err">Enter a 10-digit number, or tick the box above.</p>
     </div>
 
-    <div class="g2">
+    <div class="g2 crm-hide">
       <div class="f" data-req>
         <label for="markets">Cities or areas you serve</label>
         <input type="text" id="markets" placeholder="Houston, Katy, Cypress">
@@ -336,7 +340,7 @@ window.starlingClientToken = function(p){
       </div>
     </div>
 
-    <div class="f">
+    <div class="f crm-hide">
       <span class="lbl">Your AI texts in</span>
       <div class="seg" role="radiogroup" aria-label="Language">
         <label><input type="radio" name="lang" value="en" checked><span>English</span></label>
@@ -442,13 +446,13 @@ window.starlingClientToken = function(p){
 
   <!-- ================= STEP 4 ================= -->
   <section class="step" data-step="4">
-    <p class="eyebrow">Step 4 of 4</p>
+    <p class="eyebrow" id="eb4">Step 4 of 4</p>
     <h1>Connect your CRM &amp; launch</h1>
     <p class="lede">Last step. Pick where your leads live, and we'll connect your AI to it.</p>
 
     <div class="grp" id="crmGrp">
       <div class="crms" role="radiogroup" aria-label="CRM">
-        <label class="crm"><input type="radio" name="crm" value="Starling"><span><em class="rec">Best</em>Starling CRM<small>included · answers DMs too</small></span></label>
+        <label class="crm crm-hide"><input type="radio" name="crm" value="Starling"><span><em class="rec">Best</em>Starling CRM<small>included · answers DMs too</small></span></label>
         <label class="crm"><input type="radio" name="crm" value="FUB"><span>Follow Up Boss<small>API key</small></span></label>
         <label class="crm"><input type="radio" name="crm" value="BoldTrail"><span>BoldTrail<small>formerly kvCORE</small></span></label>
         <label class="crm"><input type="radio" name="crm" value="Lofty"><span>Lofty<small>formerly Chime</small></span></label>
@@ -554,6 +558,7 @@ window.starlingClientToken = function(p){
       <p class="hint">No CRM yet? Starling CRM is included with your plan and we'll set it up for you.</p>
     </div>
 
+    <div class="crm-hide">
     <h3>Partners <span class="opt">optional</span></h3>
     <p class="sub">People your AI can send leads to when it makes sense. Skip this if you don't have any.</p>
     <details class="more"><summary>Add a lender, credit repair or referral partner</summary><div class="inner">
@@ -566,6 +571,7 @@ window.starlingClientToken = function(p){
       <div class="f"><label for="refLink">Agent referral link</label><input type="url" id="refLink" placeholder="https://"></div>
       <div class="f"><label for="notes">Anything else we should know?</label><textarea id="notes" style="min-height:76px"></textarea></div>
     </div></details>
+    </div>
 
     <h3>Sign off</h3>
     <p class="sub">Two boxes and your name, and we start building.</p>
@@ -640,8 +646,15 @@ var BRAND = document.documentElement.getAttribute('data-brand') || 'starling';
 var SB_URL  = "https://xrcakqiwprrlznmfevrc.supabase.co";
 var SB_ANON = "sb_publishable_cfmwICjuYz3duCf75yWcag_jOI4DPSC";
 var W3F_KEY = "141e743a-9449-4980-b0dc-d37061594328";
+var DRAFT_KEY_SUFFIX = '';
 var DRAFT_KEY = 'starling_bya_draft_v2';
 var TOTAL = 4, step = 1, maxStep = 1;
+var CRM_ONLY = false;
+try{ CRM_ONLY = new URLSearchParams(location.search).get('only') === 'crm'; }catch(e){}
+if(CRM_ONLY){
+  document.documentElement.classList.add('crm-only');
+  DRAFT_KEY_SUFFIX = '_crm';
+}
 
 var $ = function(id){ return document.getElementById(id); };
 var form = $('wiz');
@@ -834,19 +847,24 @@ function render(){
     b.disabled = n > maxStep;
   });
   document.querySelectorAll('.steps__ln').forEach(function(l, i){ l.classList.toggle('done', i + 1 < step); });
-  $('rail').style.width = (step / TOTAL * 100) + '%';
+  $('rail').style.width = (CRM_ONLY ? (step === 1 ? 50 : 100) : (step / TOTAL * 100)) + '%';
+  if(CRM_ONLY){
+    var s4 = document.querySelector('.steps__i[data-go="4"] .steps__n'); if(s4) s4.textContent = '2';
+    var t4 = document.querySelector('.steps__i[data-go="4"] .steps__t'); if(t4) t4.textContent = 'Connect CRM';
+    var t1 = document.querySelector('.steps__i[data-go="1"] .steps__t'); if(t1) t1.textContent = 'You';
+  }
   backBtn.disabled = step === 1;
-  nextBtn.innerHTML = step === TOTAL ? 'Launch my AI ' + CHECK : 'Continue ' + ARROW;
+  nextBtn.innerHTML = step === TOTAL ? (CRM_ONLY ? 'Connect my CRM ' : 'Launch my AI ') + CHECK : 'Continue ' + ARROW;
   if(step === 2 && !msgDirty) syncMsg();
   if(step === 4) fillSig();
   window.scrollTo({top:0, behavior:'smooth'});
 }
 nextBtn.addEventListener('click', function(){
   if(!validate()) return;
-  if(step < TOTAL){ step++; maxStep = Math.max(maxStep, step); save(); render(); }
+  if(step < TOTAL){ step = CRM_ONLY ? TOTAL : step + 1; maxStep = Math.max(maxStep, step); save(); render(); }
   else submit();
 });
-backBtn.addEventListener('click', function(){ if(step > 1){ step--; render(); } });
+backBtn.addEventListener('click', function(){ if(step > 1){ step = CRM_ONLY ? 1 : step - 1; render(); } });
 document.querySelectorAll('.steps__i').forEach(function(b){
   b.addEventListener('click', function(){ var n = +b.dataset.go; if(n <= maxStep && (n < step || validate())){ step = n; render(); } });
 });
@@ -858,6 +876,7 @@ form.addEventListener('keydown', function(e){
 var DRAFT_IDS = ['first','last','biz','brokerage','email','cell','altPhone','markets','tz','asst','firstMsg','guard','hStart','hEnd','len','notice','ahead','blackout','othName','lender','lenderLink','credit','creditLink','refLink','notes',
   'fubInvitee','fubOld','btNew','btOld','lofNew','lofOld','ghlLoc','ghlCal','ghlUser','ghlPipe','rgSite','rgUser','jgAdmin','jgOrg'];
 var saveT = null;
+DRAFT_KEY = DRAFT_KEY + DRAFT_KEY_SUFFIX;
 function save(){
   clearTimeout(saveT);
   saveT = setTimeout(function(){
@@ -992,24 +1011,26 @@ function submit(){
   nextBtn.setAttribute('aria-busy', 'true'); nextBtn.textContent = 'Launching…';
   var crm = effectiveCrm();
   var needsCrmRecord = crm && crm !== 'Starling';
-  var agent = window.starlingClientToken(agentPayload());
   var firstRes = null;
-
-  rpc({ p_payload: agent })
-    .then(function(res){
-      firstRes = res;
-      if(!needsCrmRecord) return null;
-      return rpc({ p_payload: window.starlingClientToken(crmPayload()), p_credentials: crmSecrets(), p_config: crmConfig(crm) });
-    })
+  var chain = CRM_ONLY
+    ? rpc({ p_payload: window.starlingClientToken(crmPayload()), p_credentials: crmSecrets(), p_config: crmConfig(crm) })
+        .then(function(res){ firstRes = res; })
+    : rpc({ p_payload: window.starlingClientToken(agentPayload()) })
+        .then(function(res){
+          firstRes = res;
+          if(!needsCrmRecord) return null;
+          return rpc({ p_payload: window.starlingClientToken(crmPayload()), p_credentials: crmSecrets(), p_config: crmConfig(crm) });
+        });
+  chain
     .then(function(){
-      var who = val('biz') || (val('first') + ' ' + val('last'));
+      var who = val('biz') || (cap(val('first')) + ' ' + cap(val('last')));
       var flags = [];
       if(radio('crm') === 'Jungo') flags.push('NEEDS SF CALL');
       if(needsCrmRecord && !crmSecrets() && radio('crm') !== 'Jungo') flags.push('NO KEY YET');
       if(radio('cal') === 'Google') flags.push('GOOGLE CAL');
       var note = {
         access_key: W3F_KEY,
-        subject: (firstRes && firstRes.is_new === false ? 'UPDATE — ' : '') + (BRAND === 'cofounders' ? '🐦 CoFounders' : '🐦 Starling') + ' signup — ' + who + ' · ' + (crm || 'no CRM') + (flags.length ? ' [' + flags.join('] [') + ']' : ''),
+        subject: (firstRes && firstRes.is_new === false ? 'UPDATE — ' : '') + (BRAND === 'cofounders' ? '🐦 CoFounders' : '🐦 Starling') + (CRM_ONLY ? ' CRM connected — ' : ' signup — ') + who + ' · ' + (crm || 'no CRM') + (flags.length ? ' [' + flags.join('] [') + ']' : ''),
         from_name: 'Starling AI — Build Your Agent',
         email: val('email'), replyto: val('email'),
         Name: (cap(val('first')) + ' ' + cap(val('last'))).trim(), Business: who, Brokerage: val('brokerage'),
@@ -1036,7 +1057,11 @@ function done(){
   $('shell').style.display = 'none';
   document.querySelector('.steps').style.visibility = 'hidden';
   $('rail').style.width = '100%';
-  $('doneTitle').textContent = "You're all set, " + (cap(val('first')) || 'friend') + '!';
+  $('doneTitle').textContent = (CRM_ONLY ? "CRM connected, " : "You're all set, ") + (cap(val('first')) || 'friend') + '!';
+  if(CRM_ONLY){
+    var ck = document.querySelector('.nx.check b'); if(ck) ck.textContent = 'CRM details received';
+    var ld = document.querySelector('#done .lede'); if(ld) ld.textContent = "That's the last piece. Here's what happens next.";
+  }
   $('nxGoogle').classList.toggle('hide', radio('cal') !== 'Google');
   var cid = null; try{ cid = new URLSearchParams(location.search).get('c'); }catch(e){}
   $('a2pLink').href = '/compliance.html' + (cid ? '?c=' + encodeURIComponent(cid) : '');
@@ -1046,6 +1071,12 @@ function done(){
 }
 
 /* ---------- init ---------- */
+if(CRM_ONLY){
+  $('eb1').textContent = 'Step 1 of 2'; $('eb4').textContent = 'Step 2 of 2';
+  $('h1a').textContent = 'Connect your CRM';
+  $('lede1').textContent = "Your AI agent is already built. This just connects it to your CRM. About 2 minutes.";
+  var sv = $('saved').querySelector('span'); if(sv) sv.textContent = 'About 2 minutes';
+}
 restore();
 syncMsg();
 showCrm();
